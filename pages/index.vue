@@ -10,7 +10,7 @@
 
 				<!-- Subheading - Proximity to title, lighter contrast -->
 				<p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto">
-					Solo music project exploring [your genre/style]
+					Music by Stefan Auvache Bradley
 				</p>
 
 				<!-- CTA Buttons - Repetition of style, proper spacing -->
@@ -21,108 +21,63 @@
 					>
 						Listen Now
 					</a>
-					<a
-							href="#about"
-							class="px-8 py-4 border-2 border-white text-white font-semibold hover:bg-white hover:text-black transition-colors"
-					>
-						About
-					</a>
 				</div>
 			</div>
 		</section>
 
-		<!-- Listen Section - Repetition & Alignment -->
 		<section id="listen" class="py-24 px-6 bg-zinc-900">
-			<div class="max-w-6xl mx-auto">
-				<!-- Section Header - Consistent alignment -->
+			<div class="max-w-4xl mx-auto text-center">
 				<h2 class="text-4xl md:text-5xl font-bold mb-4">
-					Listen
+					Music
 				</h2>
-				<div class="w-24 h-1 bg-white mb-12"></div>
+				<div class="w-24 h-1 bg-white mb-12 mx-auto"></div>
 
-				<!-- Content Grid - Proximity grouping -->
-				<div class="grid md:grid-cols-2 gap-8">
-					<!-- Latest Release -->
+				<div>
 					<div class="space-y-4">
-						<h3 class="text-2xl font-semibold text-gray-300">Latest Release</h3>
-						<div class="aspect-square bg-zinc-800 flex items-center justify-center">
-							<!-- Replace with album art -->
-							<span class="text-gray-600 text-sm">Album Art</span>
+						<div class="mb-4">
+							<div class="abg-zinc-800 flex items-center justify-center mb-4">
+								<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/4Jnsd2fzJvuRdIAU4wRK1e?utm_source=generator&theme=0" width="100%" height="700" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+							</div>
+							<p class="text-sm text-gray-400">
+								Latest Release: I Want to Be Yours and Other Songs • Released July 2025
+							</p>
 						</div>
-						<div>
-							<p class="text-xl font-semibold">Song Title</p>
-							<p class="text-gray-400">Album Name • 2025</p>
-						</div>
-						<!-- Streaming Links - Repetition -->
-						<div class="flex gap-4 pt-4">
-							<a href="#" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
-							<a href="#" class="text-gray-400 hover:text-white transition-colors">Apple Music</a>
-							<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>
+						<div class="flex gap-4 align-middle justify-center text-sm">
+							<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=AsSUN9OuQEitWor2eZoZYg" target="_blank" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
+							<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="text-gray-400 hover:text-white transition-colors">Apple Music</a>
+							<!--							<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>-->
 						</div>
 					</div>
-
-					<!-- Embedded Player or Second Release -->
-					<div class="space-y-4">
-						<h3 class="text-2xl font-semibold text-gray-300">Featured Track</h3>
-						<div class="aspect-square bg-zinc-800 flex items-center justify-center">
-							<!-- Embed Spotify/Bandcamp player here -->
-							<span class="text-gray-600 text-sm">Embed Player</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- About Section - Contrast with background change -->
-		<section id="about" class="py-24 px-6 bg-black">
-			<div class="max-w-4xl mx-auto">
-				<!-- Section Header - Repetition of style -->
-				<h2 class="text-4xl md:text-5xl font-bold mb-4">
-					About
-				</h2>
-				<div class="w-24 h-1 bg-white mb-12"></div>
-
-				<!-- Content - Left-aligned for readability, proper line length -->
-				<div class="space-y-6 text-lg text-gray-300 leading-relaxed">
-					<p>
-						Havre De Grace is the solo project of [Your Name], creating [describe your sound/style].
-					</p>
-					<p>
-						[Add more about your musical journey, influences, or what drives your music]
-					</p>
-					<p>
-						[Perhaps mention instruments, recording process, or what makes your music unique]
-					</p>
 				</div>
 			</div>
 		</section>
 
 		<!-- Shows/Events Section - Repetition of layout pattern -->
-		<section id="shows" class="py-24 px-6 bg-zinc-900">
-			<div class="max-w-6xl mx-auto">
-				<h2 class="text-4xl md:text-5xl font-bold mb-4">
-					Shows
-				</h2>
-				<div class="w-24 h-1 bg-white mb-12"></div>
+<!--		<section id="shows" class="py-24 px-6 bg-zinc-900">-->
+<!--			<div class="max-w-6xl mx-auto">-->
+<!--				<h2 class="text-4xl md:text-5xl font-bold mb-4">-->
+<!--					Shows-->
+<!--				</h2>-->
+<!--				<div class="w-24 h-1 bg-white mb-12"></div>-->
 
-				<!-- Show listings - Alignment & Proximity -->
-				<div class="space-y-6">
-					<div class="border-l-4 border-white pl-6 py-4">
-						<p class="text-sm text-gray-400 mb-1">January 15, 2025</p>
-						<h3 class="text-2xl font-semibold mb-1">Venue Name</h3>
-						<p class="text-gray-400">City, State</p>
-					</div>
+<!--				&lt;!&ndash; Show listings - Alignment & Proximity &ndash;&gt;-->
+<!--				<div class="space-y-6">-->
+<!--					<div class="border-l-4 border-white pl-6 py-4">-->
+<!--						<p class="text-sm text-gray-400 mb-1">January 15, 2025</p>-->
+<!--						<h3 class="text-2xl font-semibold mb-1">Venue Name</h3>-->
+<!--						<p class="text-gray-400">City, State</p>-->
+<!--					</div>-->
 
-					<div class="border-l-4 border-white pl-6 py-4">
-						<p class="text-sm text-gray-400 mb-1">February 20, 2025</p>
-						<h3 class="text-2xl font-semibold mb-1">Another Venue</h3>
-						<p class="text-gray-400">City, State</p>
-					</div>
+<!--					<div class="border-l-4 border-white pl-6 py-4">-->
+<!--						<p class="text-sm text-gray-400 mb-1">February 20, 2025</p>-->
+<!--						<h3 class="text-2xl font-semibold mb-1">Another Venue</h3>-->
+<!--						<p class="text-gray-400">City, State</p>-->
+<!--					</div>-->
 
-					<!-- Add more shows or "No upcoming shows" message -->
-				</div>
-			</div>
-		</section>
+<!--					&lt;!&ndash; Add more shows or "No upcoming shows" message &ndash;&gt;-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</section>-->
 
 		<!-- Contact/Social Section - Strong contrast footer -->
 		<section class="py-24 px-6 bg-black border-t border-zinc-800">
@@ -134,21 +89,15 @@
 
 				<!-- Social Links - Repetition of spacing -->
 				<div class="flex flex-wrap justify-center gap-8 text-lg">
-					<a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
-					<a href="#" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
-					<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>
-					<a href="#" class="text-gray-400 hover:text-white transition-colors">YouTube</a>
-					<a href="mailto:contact@havredegracemusic.com" class="text-gray-400 hover:text-white transition-colors">Email</a>
+<!--					<a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>-->
+					<a href="https://open.spotify.com/artist/4Jnsd2fzJvuRdIAU4wRK1e?si=nBcKfpp2TUeM3tBRmyCUDA" target="_blank" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
+<!--					<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>-->
+<!--					<a href="#" class="text-gray-400 hover:text-white transition-colors">YouTube</a>-->
+					<a href="mailto:booking@havredegracemusic.com" class="text-gray-400 hover:text-white transition-colors">Email</a>
+					<NuxtLink to="/press" class="text-gray-400 hover:text-white transition-colors">Press Kit</NuxtLink>
 				</div>
 			</div>
 		</section>
-
-		<!-- Footer - Subtle, aligned -->
-		<footer class="py-8 px-6 bg-black border-t border-zinc-900">
-			<div class="max-w-6xl mx-auto text-center text-gray-600 text-sm">
-				<p>&copy; 2025 Havre De Grace. All rights reserved.</p>
-			</div>
-		</footer>
 	</div>
 </template>
 

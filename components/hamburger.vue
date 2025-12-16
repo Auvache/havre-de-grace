@@ -69,15 +69,6 @@
 						</li>
 						<li>
 							<NuxtLink
-									to="/#about"
-									@click="closeMenu"
-									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
-							>
-								About
-							</NuxtLink>
-						</li>
-						<li>
-							<NuxtLink
 									to="/#listen"
 									@click="closeMenu"
 									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
@@ -85,22 +76,22 @@
 								Listen
 							</NuxtLink>
 						</li>
-						<li>
-							<NuxtLink
-									to="/#shows"
-									@click="closeMenu"
-									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
-							>
-								Shows
-							</NuxtLink>
-						</li>
+<!--						<li>-->
+<!--							<NuxtLink-->
+<!--									to="/#shows"-->
+<!--									@click="closeMenu"-->
+<!--									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"-->
+<!--							>-->
+<!--								Shows-->
+<!--							</NuxtLink>-->
+<!--						</li>-->
 						<li>
 							<NuxtLink
 									to="/press"
 									@click="closeMenu"
 									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
 							>
-								Press Kit
+								About
 							</NuxtLink>
 						</li>
 					</ul>
