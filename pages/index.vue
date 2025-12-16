@@ -103,10 +103,10 @@
 
 <script setup lang="ts">
 useSeoMeta({
-	title: 'Havre De Grace - Solo Music Project',
-	description: 'Official website of Havre De Grace - Solo music project featuring original songs and recordings',
-	ogTitle: 'Havre De Grace',
-	ogDescription: 'Official website of Havre De Grace - Solo music project featuring original songs and recordings',
-	ogImage: '/og-image.jpg', // Add an Open Graph image later
+	title: 'Havre De Grace - Official',
+	description: 'Official website of Havre De Grace - Music by Stefan Auvache Bradley',
+	ogTitle: 'Havre De Grace - Official',
+	ogDescription: 'Official website of Havre De Grace  - Music by Stefan Auvache Bradley',
+	ogImage: '/images/media-pic-square.jpg',
 })
 </script>
