@@ -117,9 +117,16 @@
 				<div class="space-y-6">
 
 					<div>
-						<p class="text-sm text-gray-400 mb-1">Booking and Other Inquiries</p>
-						<a href="mailto:booking@havredegracemusic.com" class="text-xl text-white hover:text-gray-300">
+						<p class="text-sm text-gray-400 mb-1">Booking</p>
+						<a href="mailto:booking@havredegracemusic.com" class="text-lg text-white hover:text-gray-300">
 							booking@havredegracemusic.com
+						</a>
+					</div>
+
+					<div>
+						<p class="text-sm text-gray-400 mb-1">Other Inquiries</p>
+						<a href="mailto:stefan.bradley14@gmail.com" class="text-lg text-white hover:text-gray-300">
+							stefan.bradley14@gmail.com
 						</a>
 					</div>
 
