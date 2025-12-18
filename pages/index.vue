@@ -30,7 +30,8 @@
 				<h2 class="text-4xl md:text-5xl font-bold mb-4">
 					Music
 				</h2>
-				<div class="w-24 h-1 bg-white mb-12 mx-auto"></div>
+				<div class="w-24 h-1 bg-white mb-4 mx-auto"></div>
+				<p class="text-sm text-gray-400 text-balance mb-12">note: Havre De Grace is a newer title for an existing project - Stefan Auvache. Music can be found under both names. The official name is Havre De Grace.</p>
 
 				<div>
 					<div class="space-y-4">
@@ -46,6 +47,29 @@
 							<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=AsSUN9OuQEitWor2eZoZYg" target="_blank" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
 							<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="text-gray-400 hover:text-white transition-colors">Apple Music</a>
 							<!--							<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="py-24 px-6 bg-zinc-900">
+			<div class="max-w-4xl mx-auto text-center">
+				<h2 class="text-4xl md:text-5xl font-bold mb-4">
+					Live Performances
+				</h2>
+				<div class="w-24 h-1 bg-white mb-12 mx-auto"></div>
+
+				<div>
+					<div class="space-y-4">
+						<div>
+							<iframe width="100%" height="400" src="https://www.youtube.com/embed/3ro2I9rvQj8?si=w533QpFQK6WmQVjb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+						</div>
+						<div>
+							<iframe width="100%" height="400" src="https://www.youtube.com/embed/kZckptQidYk?si=OIKBZF0Ytl93oL7S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+						</div>
+						<div>
+							<iframe width="100%" height="400" src="https://www.youtube.com/embed/0JF4Pm_-mPs?si=Xybe8lcC7zaKnOvF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 						</div>
 					</div>
 				</div>
@@ -92,7 +116,7 @@
 <!--					<a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>-->
 					<a href="https://open.spotify.com/artist/4Jnsd2fzJvuRdIAU4wRK1e?si=nBcKfpp2TUeM3tBRmyCUDA" target="_blank" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
 <!--					<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>-->
-<!--					<a href="#" class="text-gray-400 hover:text-white transition-colors">YouTube</a>-->
+					<a href="https://youtube.com/@havredegracemusic?si=h8No7fUu70yMH7Bp" target="_blank" class="text-gray-400 hover:text-white transition-colors">YouTube</a>
 					<a href="mailto:booking@havredegracemusic.com" class="text-gray-400 hover:text-white transition-colors">Email</a>
 					<NuxtLink to="/press" class="text-gray-400 hover:text-white transition-colors">Press Kit</NuxtLink>
 				</div>
