@@ -53,45 +53,18 @@
 		>
 			<nav
 					v-if="isOpen"
-					class="fixed top-0 left-0 h-full w-64 bg-slate-700 z-40 shadow-2xl overflow-y-auto"
+					class="fixed top-0 left-0 h-full w-64 forest-bg z-40 shadow-2xl overflow-y-auto"
 			>
 				<div class="flex flex-col h-full pt-24 px-8 pb-8">
 					<!-- Menu Links -->
 					<ul class="space-y-6">
-						<li>
+						<li v-for="link in menuLinks" :key="link.path">
 							<NuxtLink
-									to="/"
+									:to="link.path"
 									@click="closeMenu"
 									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
 							>
-								Home
-							</NuxtLink>
-						</li>
-						<li>
-							<NuxtLink
-									to="/#listen"
-									@click="closeMenu"
-									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
-							>
-								Listen
-							</NuxtLink>
-						</li>
-<!--						<li>-->
-<!--							<NuxtLink-->
-<!--									to="/#shows"-->
-<!--									@click="closeMenu"-->
-<!--									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"-->
-<!--							>-->
-<!--								Shows-->
-<!--							</NuxtLink>-->
-<!--						</li>-->
-						<li>
-							<NuxtLink
-									to="/press"
-									@click="closeMenu"
-									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
-							>
-								About
+								{{ link.name }}
 							</NuxtLink>
 						</li>
 					</ul>
@@ -102,6 +75,14 @@
 </template>
 
 <script setup lang="ts">
+const menuLinks = [
+	{ name: 'Home', path: '/' },
+	{ name: 'Listen', path: '/#listen' },
+	{ name: 'Live Performances', path: '/#live' },
+	{ name: 'About', path: '/press' },
+	{ name: 'Connect', path: '/#connect' },
+]
+
 const isOpen = ref(false)
 
 const toggleMenu = () => {

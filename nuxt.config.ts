@@ -8,6 +8,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
   ],
 
+  css: ['/assets/styles/main.css'],
+
   app: {
     head: {
       title: 'Havre De Grace',

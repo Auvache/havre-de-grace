@@ -22,7 +22,7 @@
 				<div class="flex flex-col sm:flex-row sm:items-center gap-6">
 					<img
 							src="/images/media-pic-square.jpg"
-							alt="Stefan Auvache Bradley"
+							alt="Havre De Grace"
 							class="w-full sm:w-auto sm:max-w-[300px]"
 					>
 					<div class="text-lg text-gray-300 leading-relaxed">
@@ -85,7 +85,7 @@
 						<h3 class="text-2xl font-semibold mb-1">I Want to Be Yours and Other Songs</h3>
 						<p class="text-gray-400 mb-3">Album • 9 tracks</p>
 						<div class="flex gap-4 text-sm">
-							<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=cWuel9X8SyCsaR9G1NfFmQ" target="_blank" class="text-white hover:text-gray-300 underline">Spotify</a>
+							<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=Fbw9sIJKTGy3YCJvq3IfMQ" target="_blank" class="text-white hover:text-gray-300 underline">Spotify</a>
 							<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="text-white hover:text-gray-300 underline">Apple Music</a>
 						</div>
 
@@ -166,9 +166,16 @@
 
 <script setup lang="ts">
 useSeoMeta({
-	title: 'Press Kit - Havre De Grace',
-	description: 'Official press kit for Havre De Grace including bio, photos, music, and contact information for media and booking inquiries',
-	ogTitle: 'Press Kit - Havre De Grace',
-	ogDescription: 'Official press kit for Havre De Grace including bio, photos, music, and contact information',
+	title: 'Press Kit | Havre De Grace',
+	description: 'Official press kit for Havre De Grace (Stefan Auvache Bradley) - Independent singer-songwriter from Vancouver, WA. Bio, photos, music, and booking information for media inquiries.',
+	ogTitle: 'Press Kit | Havre De Grace',
+	ogDescription: 'Official press kit including bio, press photos, discography, and contact information for Havre De Grace.',
+	ogImage: '/images/media-pic-square.jpg',
+	keywords: 'Havre De Grace press kit, Stefan Auvache Bradley, Havre De Grace bio, Havre De Grace booking, independent artist press kit, music press photos',
+	author: 'Havre De Grace',
+	twitterCard: 'summary_large_image',
+	twitterTitle: 'Press Kit - Havre De Grace',
+	twitterDescription: 'Official press kit for independent singer-songwriter Havre De Grace',
+	twitterImage: '/images/media-pic-wide.jpg',
 })
 </script>
