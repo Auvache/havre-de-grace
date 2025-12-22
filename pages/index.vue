@@ -40,7 +40,7 @@
 		<section id="listen" class="pt-12 px-6 bg-zinc-900">
 			<div class="max-w-4xl mx-auto text-center">
 				<h2 class="text-4xl md:text-3xl font-bold mb-8">I Want to Be Yours and Other Songs</h2>
-				<img style="max-width: 500px" class="mx-auto mb-6" src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="">
+				<img style="width: 500px; max-width: 100%;" class="mx-auto mb-6" src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="">
 				<p class="mb-6">Listen anywhere you stream music</p>
 				<div class="flex flex-wrap justify-center gap-6 mb-12">
 					<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=dJ1MjraKSTCVCW3wY9fPkg" target="_blank">
