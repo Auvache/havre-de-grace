@@ -102,6 +102,7 @@
 					<a href="https://open.spotify.com/artist/5Lyc79cqw6P44FeVTRlBLb?si=el1o7QJyR2eZnKN0PkVXhQ" target="_blank" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
 <!--					<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>-->
 					<a href="https://youtube.com/@havredegracemusic?si=h8No7fUu70yMH7Bp" target="_blank" class="text-gray-400 hover:text-white transition-colors">YouTube</a>
+					<a href="https://havredegrace.bandcamp.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>
 					<a href="mailto:booking@havredegracemusic.com" class="text-gray-400 hover:text-white transition-colors">Email</a>
 					<NuxtLink to="/press" class="text-gray-400 hover:text-white transition-colors">Press Kit</NuxtLink>
 				</div>
