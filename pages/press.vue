@@ -80,15 +80,20 @@
 
 				<div class="space-y-6">
 					<!-- Release 1 -->
-					<div class="border-l-4 border-white pl-6 py-4">
-						<p class="text-sm text-gray-400 mb-1">July 2025</p>
-						<h3 class="text-2xl font-semibold mb-1">I Want to Be Yours and Other Songs</h3>
-						<p class="text-gray-400 mb-3">Album • 9 tracks</p>
-						<div class="flex gap-4 text-sm">
-							<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=Fbw9sIJKTGy3YCJvq3IfMQ" target="_blank" class="text-white hover:text-gray-300 underline">Spotify</a>
-							<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="text-white hover:text-gray-300 underline">Apple Music</a>
+					<div class="py-4">
+						<div class="flex flex-col sm:flex-row gap-6 sm:items-center">
+							<img src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="I Want to Be Yours and Other Songs album cover" class="w-full sm:w-auto sm:max-w-[150px] flex-shrink-0">
+							<div class="text-center sm:text-left">
+								<h3 class="text-2xl font-semibold mb-1">I Want to Be Yours and Other Songs</h3>
+								<p class="text-gray-400 mb-3">Album • July 2025 </p>
+								<div class="flex flex-wrap gap-4 text-sm justify-center sm:justify-start">
+									<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=dJ1MjraKSTCVCW3wY9fPkg" target="_blank" class="text-white hover:text-gray-300 underline">Spotify</a>
+									<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="text-white hover:text-gray-300 underline">Apple Music</a>
+									<a href="https://music.youtube.com/playlist?list=OLAK5uy_nUM_0UgLmueqyFZWiRh4DhLUf3POgcAK0&si=_o2GSs1OSzAeBN3-" target="_blank" class="text-white hover:text-gray-300 underline">YouTube Music</a>
+									<a href="https://music.amazon.com/albums/B0FH1WG69X?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_SyUnTtEEhS2hYZ3KM06muQPpK" target="_blank" class="text-white hover:text-gray-300 underline">Amazon Music</a>
+								</div>
+							</div>
 						</div>
-
 					</div>
 
 					<!-- Release 2 -->

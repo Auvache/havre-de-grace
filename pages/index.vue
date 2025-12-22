@@ -36,49 +36,51 @@
 				</div>
 			</div>
 		</section>
-		<section id="listen" class="pt-24 px-6 bg-zinc-900">
-			<div class="max-w-4xl mx-auto text-center">
-				<h2 class="text-4xl md:text-5xl font-bold mb-4">
-					Music
-				</h2>
-				<div class="w-24 h-1 bg-white mb-12 mx-auto"></div>
 
-				<div>
-					<div class="space-y-4">
-						<div class="mb-4">
-							<div class="abg-zinc-800 flex items-center justify-center mb-4">
-								<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/5Lyc79cqw6P44FeVTRlBLb?utm_source=generator&theme=0" width="100%" height="700" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-							</div>
-							<p class="text-sm text-gray-400">
-								Latest Release: I Want to Be Yours and Other Songs • Released July 2025
-							</p>
-						</div>
-						<div class="flex gap-4 align-middle justify-center text-sm">
-							<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=AsSUN9OuQEitWor2eZoZYg" target="_blank" class="text-gray-400 hover:text-white transition-colors">Spotify</a>
-							<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="text-gray-400 hover:text-white transition-colors">Apple Music</a>
-							<!--							<a href="#" class="text-gray-400 hover:text-white transition-colors">Bandcamp</a>-->
-						</div>
-					</div>
+		<section id="listen" class="pt-12 px-6 bg-zinc-900">
+			<div class="max-w-4xl mx-auto text-center">
+				<h2 class="text-4xl md:text-3xl font-bold mb-8">I Want to Be Yours and Other Songs</h2>
+				<img style="max-width: 500px" class="mx-auto mb-6" src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="">
+				<p class="mb-6">Listen anywhere you stream music</p>
+				<div class="flex flex-wrap justify-center gap-6 mb-12">
+					<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=dJ1MjraKSTCVCW3wY9fPkg" target="_blank">
+						<img src="/assets/images/spotify.png" alt="Listen on Spotify" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					</a>
+
+					<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank">
+						<img src="/assets/images/apple-music.png" alt="Listen on Apple Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					</a>
+
+					<a href="https://music.youtube.com/playlist?list=OLAK5uy_nUM_0UgLmueqyFZWiRh4DhLUf3POgcAK0&si=_o2GSs1OSzAeBN3-" target="_blank">
+						<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					</a>
+
+					<a href="https://music.amazon.com/albums/B0FH1WG69X?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_SyUnTtEEhS2hYZ3KM06muQPpK" target="_blank">
+						<img src="/assets/images/amazon-music.png" alt="Listen on Amazon Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					</a>
+				</div>
+			</div>
+
+			<div class="space-y-4 mt-24">
+				<div class="abg-zinc-800 flex items-center justify-center max-w-4xl mx-auto">
+					<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/5Lyc79cqw6P44FeVTRlBLb?utm_source=generator" width="100%" height="700" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 				</div>
 			</div>
 		</section>
 
-		<section id="live" class="py-24 px-6 bg-zinc-900">
-			<div class="max-w-4xl mx-auto text-center">
-				<h2 class="text-4xl md:text-5xl font-bold mb-4">
-					Live Performances
-				</h2>
-				<div class="w-24 h-1 bg-white mb-12 mx-auto"></div>
 
+
+		<section id="live" class="py-12 px-6 bg-zinc-900">
+			<div class="max-w-4xl mx-auto text-center">
 				<div>
 					<div class="space-y-4">
-						<div>
+						<div class="py-3">
 							<iframe width="100%" height="400" src="https://www.youtube.com/embed/3ro2I9rvQj8?si=w533QpFQK6WmQVjb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 						</div>
-						<div>
+						<div class="py-3">
 							<iframe width="100%" height="400" src="https://www.youtube.com/embed/kZckptQidYk?si=OIKBZF0Ytl93oL7S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 						</div>
-						<div>
+						<div class="py-3">
 							<iframe width="100%" height="400" src="https://www.youtube.com/embed/0JF4Pm_-mPs?si=Xybe8lcC7zaKnOvF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 						</div>
 					</div>
