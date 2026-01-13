@@ -16,7 +16,7 @@
 		<section class="py-16 px-6 bg-zinc-900">
 			<div class="max-w-4xl mx-auto">
 				<h2 class="text-3xl md:text-4xl font-bold mb-4">
-					Quick Bio
+					Bio
 				</h2>
 				<div class="w-24 h-1 bg-white mb-8"></div>
 				<div class="flex flex-col sm:flex-row sm:items-center gap-6">

@@ -3,9 +3,10 @@
 		<section class="textured-forest-bg relative min-h-screen flex items-center justify-center px-6 overflow-hidden ">
 			<div class="relative z-10 max-w-4xl mx-auto text-center">
 				<!-- Large Hero Text - Contrast -->
-				<h1 class="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
+				<h1 class="sr-only">
 					HAVRE DE GRACE
 				</h1>
+				<img class="w-[90%] max-w-[300px] mb-12 mx-auto" src="@/assets/images/logo-white.png" alt="">
 
 				<div class="flex flex-wrap justify-center gap-6 mb-12">
 					<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=HCP8CVs0QnmP-Kg63nbWWw" target="_blank">

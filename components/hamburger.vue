@@ -79,7 +79,7 @@ const menuLinks = [
 	{ name: 'Home', path: '/' },
 	{ name: 'Listen', path: '/#listen' },
 	{ name: 'Live Performances', path: '/#live' },
-	{ name: 'About', path: '/press' },
+	{ name: 'Press Kit', path: '/press' },
 	{ name: 'Connect', path: '/#connect' },
 ]
 
