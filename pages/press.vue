@@ -4,7 +4,7 @@
 		<section class="pt-32 pb-16 px-6">
 			<div class="max-w-4xl mx-auto text-center">
 				<h1 class="text-5xl md:text-7xl font-bold mb-6">
-					About
+					Press Kit
 				</h1>
 				<p class="text-xl text-gray-400">
 					HAVRE DE GRACE

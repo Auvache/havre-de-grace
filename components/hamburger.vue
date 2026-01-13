@@ -53,7 +53,7 @@
 		>
 			<nav
 					v-if="isOpen"
-					class="fixed top-0 left-0 h-full w-64 forest-bg z-40 shadow-2xl overflow-y-auto"
+					class="fixed top-0 left-0 h-full w-64 black-hero-bg z-40 shadow-2xl overflow-y-auto"
 			>
 				<div class="flex flex-col h-full pt-24 px-8 pb-8">
 					<!-- Menu Links -->
@@ -62,7 +62,7 @@
 							<NuxtLink
 									:to="link.path"
 									@click="closeMenu"
-									class="text-white text-xl font-semibold hover:text-slate-300 transition-colors block"
+									class="text-white text-lg font-semibold hover:text-slate-300 transition-colors block"
 							>
 								{{ link.name }}
 							</NuxtLink>
