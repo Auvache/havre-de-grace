@@ -1,6 +1,6 @@
 <template>
 	<div class="min-h-screen bg-black text-white">
-		<section class="textured-forest-bg relative min-h-screen flex items-center justify-center px-6 overflow-hidden ">
+		<section class="bg-textured-forest relative min-h-screen flex items-center justify-center px-6 overflow-hidden ">
 			<div class="relative z-10 max-w-4xl mx-auto text-center">
 				<!-- Large Hero Text - Contrast -->
 				<h1 class="sr-only">

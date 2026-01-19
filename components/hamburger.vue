@@ -81,6 +81,7 @@ const menuLinks = [
 	{ name: 'Live Performances', path: '/#live' },
 	{ name: 'Press Kit', path: '/press' },
 	{ name: 'Connect', path: '/#connect' },
+	{ name: 'Links', path: '/links' },
 ]
 
 const isOpen = ref(false)

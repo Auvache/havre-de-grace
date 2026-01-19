@@ -16,12 +16,12 @@ nav a {
     letter-spacing: 0.08em;
 }
 /*backgrounds*/
-.textured-forest-bg {
+.bg-textured-forest {
     background-color: #000000;
     position: relative;
 }
 
-.textured-forest-bg::before {
+.bg-textured-forest::before {
     content: '';
     position: absolute;
     inset: 0;
