@@ -43,6 +43,18 @@
 					<span class="text-lg font-semibold">Amazon Music</span>
 				</a>
 
+				<!-- Bandcamp -->
+				<a href="https://havredegrace.bandcamp.com/" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+					<img src="@/assets/images/bandcamp.png" alt="Bandcamp" class="h-6 w-6 flex-shrink-0">
+					<span class="text-lg font-semibold">Bandcamp</span>
+				</a>
+
+				<!-- Soundcloud -->
+				<a href="https://soundcloud.com/havredegracemusic" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+					<img src="@/assets/images/soundcloud.png" alt="Soundcloud" class="h-6 w-6 flex-shrink-0">
+					<span class="text-lg font-semibold">Soundcloud</span>
+				</a>
+
 				<!-- YouTube -->
 				<a href="https://youtube.com/@havredegracemusic?si=h8No7fUu70yMH7Bp" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/youtube.png" alt="YouTube Channel" class="h-6 w-6 flex-shrink-0">
@@ -53,12 +65,6 @@
 				<a href="https://instagram.com/havredegracemusic" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/instagram.png" alt="Instagram" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Instagram</span>
-				</a>
-
-				<!-- Bandcamp -->
-				<a href="https://havredegrace.bandcamp.com/" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
-					<img src="@/assets/images/bandcamp.png" alt="Bandcamp" class="h-6 w-6 flex-shrink-0">
-					<span class="text-lg font-semibold">Bandcamp</span>
 				</a>
 
 				<!-- Email -->

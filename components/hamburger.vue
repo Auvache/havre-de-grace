@@ -80,8 +80,7 @@ const menuLinks = [
 	{ name: 'Listen', path: '/#listen' },
 	{ name: 'Live Performances', path: '/#live' },
 	{ name: 'Press Kit', path: '/press' },
-	{ name: 'Connect', path: '/#connect' },
-	{ name: 'Links', path: '/links' },
+	{ name: 'Connect', path: '/links' },
 ]
 
 const isOpen = ref(false)
