@@ -9,28 +9,24 @@
 				<img class="w-[90%] max-w-[300px] mb-12 mx-auto" src="@/assets/images/logo-white.png" alt="">
 
 				<div class="flex flex-wrap justify-center gap-6 mb-12 max-w-2xl mx-auto">
-					<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=HCP8CVs0QnmP-Kg63nbWWw" target="_blank">
+					<a :href="links.spotify.artist" target="_blank">
 						<img src="/assets/images/spotify.png" alt="Listen on Spotify" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank">
+					<a :href="links.appleMusic.artist" target="_blank">
 						<img src="/assets/images/apple-music.png" alt="Listen on Apple Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://music.youtube.com/channel/UCn7MTFvOrltNAAeHCmAYnNQ?si=tJUeZJT26fu0nkpI" target="_blank">
-						<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
-					</a>
-
-					<a href="https://music.amazon.com/artists/B0G83WZY27/havre-de-grace?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_oB5r6h4YdnltmJnf90rPuppKD" target="_blank">
+					<a :href="links.amazonMusic.artist" target="_blank">
 						<img src="/assets/images/amazon-music.png" alt="Listen on Amazon Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://havredegrace.bandcamp.com/" target="_blank">
-						<img src="/assets/images/bandcamp.png" alt="Listen on Bandcamp" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					<a :href="links.youtubeMusic.artist" target="_blank">
+						<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://soundcloud.com/havredegracemusic" target="_blank">
-						<img src="/assets/images/soundcloud.png" alt="Listen on Soundcloud" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					<a :href="links.bandcamp.artist" target="_blank">
+						<img src="/assets/images/bandcamp.png" alt="Listen on Bandcamp" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 				</div>
 
@@ -51,29 +47,25 @@
 				<h2 class="text-4xl md:text-3xl font-bold mb-8">I Want to Be Yours and Other Songs</h2>
 				<img style="width: 500px; max-width: 100%;" class="mx-auto mb-6" src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="">
 				<p class="mb-6">Listen anywhere you stream music</p>
-				<div class="flex flex-wrap justify-center gap-6 mb-12">
-					<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=dJ1MjraKSTCVCW3wY9fPkg" target="_blank">
+				<div class="flex flex-wrap justify-center gap-6 mb-12 max-w-2xl mx-auto">
+					<a :href="links.spotify.iWantToBeYoursAndOtherSongs" target="_blank">
 						<img src="/assets/images/spotify.png" alt="Listen on Spotify" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank">
+					<a :href="links.appleMusic.iWantToBeYoursAndOtherSongs" target="_blank">
 						<img src="/assets/images/apple-music.png" alt="Listen on Apple Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://music.youtube.com/playlist?list=OLAK5uy_nUM_0UgLmueqyFZWiRh4DhLUf3POgcAK0&si=_o2GSs1OSzAeBN3-" target="_blank">
-						<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
-					</a>
-
-					<a href="https://music.amazon.com/albums/B0FH1WG69X?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_SyUnTtEEhS2hYZ3KM06muQPpK" target="_blank">
+					<a :href="links.amazonMusic.iWantToBeYoursAndOtherSongs" target="_blank">
 						<img src="/assets/images/amazon-music.png" alt="Listen on Amazon Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs" target="_blank">
-						<img src="/assets/images/bandcamp.png" alt="Listen on Bandcamp" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					<a :href="links.youtubeMusic.iWantToBeYoursAndOtherSongs" target="_blank">
+						<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://soundcloud.com/havredegracemusic/sets/d1cefe1f-140c-4d54-a8f9-107c4adb92a7" target="_blank">
-						<img src="/assets/images/soundcloud.png" alt="Listen on Soundcloud" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					<a :href="links.bandcamp.iWantToBeYoursAndOtherSongs" target="_blank">
+						<img src="/assets/images/bandcamp.png" alt="Listen on Bandcamp" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 				</div>
 			</div>
@@ -113,42 +105,40 @@
 					Connect
 				</h2>
 				<div class="w-24 h-1 bg-white mb-12 mx-auto"></div>
-
-				<!-- Social Links - Repetition of spacing -->
 				<div class="flex flex-wrap justify-center gap-8 text-lg">
-					<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=dJ1MjraKSTCVCW3wY9fPkg" target="_blank">
+					<a :href="links.spotify.artist" target="_blank">
 						<img src="/assets/images/spotify.png" alt="Listen on Spotify" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank">
+					<a :href="links.appleMusic.artist" target="_blank">
 						<img src="/assets/images/apple-music.png" alt="Listen on Apple Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://music.youtube.com/playlist?list=OLAK5uy_nUM_0UgLmueqyFZWiRh4DhLUf3POgcAK0&si=_o2GSs1OSzAeBN3-" target="_blank">
-						<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
-					</a>
-
-					<a href="https://music.amazon.com/albums/B0FH1WG69X?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_SyUnTtEEhS2hYZ3KM06muQPpK" target="_blank">
+					<a :href="links.amazonMusic.artist" target="_blank">
 						<img src="/assets/images/amazon-music.png" alt="Listen on Amazon Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs" target="_blank">
+					<a :href="links.youtubeMusic.artist" target="_blank">
+						<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-12 w-auto hover:opacity-80 transition-opacity">
+					</a>
+
+					<a :href="links.bandcamp.artist" target="_blank">
 						<img src="/assets/images/bandcamp.png" alt="Listen on Bandcamp" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://soundcloud.com/havredegracemusic/sets/d1cefe1f-140c-4d54-a8f9-107c4adb92a7" target="_blank">
+					<a :href="links.soundcloud.artist" target="_blank">
 						<img src="/assets/images/soundcloud.png" alt="Listen on Soundcloud" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://youtube.com/@havredegracemusic?si=h8No7fUu70yMH7Bp" target="_blank">
+					<a :href="links.youtube" target="_blank">
 						<img src="/assets/images/youtube.png" alt="YouTube Channel" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="https://instagram.com/havredegracemusic" target="_blank">
+					<a :href="links.instagram" target="_blank">
 						<img src="/assets/images/instagram.png" alt="Instagram" class="h-12 w-auto hover:opacity-80 transition-opacity">
 					</a>
 
-					<a href="mailto:booking@havredegracemusic.com">
+					<a :href="`mailto:${links.email}`">
 						<svg aria-label="Email" class="h-12 w-auto hover:opacity-80 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
 							<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
 							<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -161,6 +151,8 @@
 </template>
 
 <script setup lang="ts">
+import links from '~/assets/links.json'
+
 useSeoMeta({
 	title: 'Havre De Grace | Official Music',
 	description: 'Official website of Havre De Grace - Independent singer-songwriter Stefan Auvache Bradley. Listen to "I Want to Be Yours and Other Songs" on Spotify, Apple Music, and YouTube.',

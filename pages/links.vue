@@ -20,55 +20,55 @@
 				</NuxtLink>
 
 				<!-- Spotify -->
-				<a href="https://open.spotify.com/artist/5Lyc79cqw6P44FeVTRlBLb?si=el1o7QJyR2eZnKN0PkVXhQ" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.spotify.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="/assets/images/spotify.png" alt="Spotify" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Spotify</span>
 				</a>
 
 				<!-- Apple Music -->
-				<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.appleMusic.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="/assets/images/apple-music.png" alt="Apple Music" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Apple Music</span>
 				</a>
 
 				<!-- YouTube Music -->
-				<a href="https://music.youtube.com/channel/UCn7MTFvOrltNAAeHCmAYnNQ?si=tJUeZJT26fu0nkpI" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.youtubeMusic.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="/assets/images/youtube-music.png" alt="YouTube Music" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">YouTube Music</span>
 				</a>
 
 				<!-- Amazon Music -->
-				<a href="https://music.amazon.com/artists/B0G83WZY27/havre-de-grace?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_oB5r6h4YdnltmJnf90rPuppKD" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.amazonMusic.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="/assets/images/amazon-music.png" alt="Amazon Music" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Amazon Music</span>
 				</a>
 
 				<!-- Bandcamp -->
-				<a href="https://havredegrace.bandcamp.com/" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.bandcamp.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/bandcamp.png" alt="Bandcamp" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Bandcamp</span>
 				</a>
 
 				<!-- Soundcloud -->
-				<a href="https://soundcloud.com/havredegracemusic" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.soundcloud.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/soundcloud.png" alt="Soundcloud" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Soundcloud</span>
 				</a>
 
 				<!-- YouTube -->
-				<a href="https://youtube.com/@havredegracemusic?si=h8No7fUu70yMH7Bp" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.youtube" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/youtube.png" alt="YouTube Channel" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">YouTube</span>
 				</a>
 
 				<!-- Instagram -->
-				<a href="https://instagram.com/havredegracemusic" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="links.instagram" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/instagram.png" alt="Instagram" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Instagram</span>
 				</a>
 
 				<!-- Email -->
-				<a href="mailto:booking@havredegracemusic.com" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+				<a :href="`mailto:${links.email}`" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
 						<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
 						<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -82,6 +82,7 @@
 </template>
 
 <script setup lang="ts">
+import links from "~/assets/links.json"
 useSeoMeta({
 	title: 'Links | Havre De Grace',
 	description: 'All links for Havre De Grace - Stream music on Spotify, Apple Music, YouTube Music, Amazon Music, and Bandcamp. Official website and booking contact.',

@@ -1,0 +1,29 @@
+{
+  "spotify": {
+    "artist": "https://open.spotify.com/artist/5Lyc79cqw6P44FeVTRlBLb?si=wB2FxUU0SsuLAS5EPuyFqw",
+    "iWantToBeYoursAndOtherSongs": "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK?si=XGt1dVOqTWqG8gh6LkfRFQ"
+  },
+  "appleMusic": {
+    "artist": "",
+    "iWantToBeYoursAndOtherSongs": ""
+  },
+  "youtubeMusic": {
+    "artist": "",
+    "iWantToBeYoursAndOtherSongs": ""
+  },
+  "amazonMusic": {
+    "artist": "",
+    "iWantToBeYoursAndOtherSongs": ""
+  },
+  "bandcamp": {
+    "artist": "https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs",
+    "iWantToBeYoursAndOtherSongs": "https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs"
+  },
+  "soundcloud": {
+    "artist": "https://soundcloud.com/havredegracemusic",
+    "iWantToBeYoursAndOtherSongs": "https://soundcloud.com/havredegracemusic/sets/d1cefe1f-140c-4d54-a8f9-107c4adb92a7"
+  },
+  "youtube": "https://www.youtube.com/@havredegracemusic",
+  "instagram": "https://www.instagram.com/havredegracemusic",
+  "email": "booking@havredegracemusic.com"
+}

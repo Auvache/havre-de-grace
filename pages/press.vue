@@ -79,39 +79,46 @@
 				<div class="w-24 h-1 bg-white mb-8"></div>
 
 				<div class="space-y-6">
-					<!-- Release 1 -->
+					<!-- I Want to Be Yours and Other Songs-->
 					<div class="py-4">
 						<div class="flex flex-col sm:flex-row gap-6 sm:items-center">
 							<img src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="I Want to Be Yours and Other Songs album cover" class="w-full sm:w-auto sm:max-w-[150px] flex-shrink-0">
 							<div class="text-center sm:text-left">
 								<h3 class="text-2xl font-semibold mb-1">I Want to Be Yours and Other Songs</h3>
 								<p class="text-gray-400 mb-3">Album • July 2025 </p>
-								<div class="flex flex-wrap gap-4 text-sm justify-center sm:justify-start">
-									<a href="https://open.spotify.com/album/5eKwmWSEEHLnJ8vkiuajYi?si=dJ1MjraKSTCVCW3wY9fPkg" target="_blank" class="text-white hover:text-gray-300 underline">Spotify</a>
-									<a href="https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1825329218" target="_blank" class="text-white hover:text-gray-300 underline">Apple Music</a>
-									<a href="https://music.youtube.com/playlist?list=OLAK5uy_nUM_0UgLmueqyFZWiRh4DhLUf3POgcAK0&si=_o2GSs1OSzAeBN3-" target="_blank" class="text-white hover:text-gray-300 underline">YouTube Music</a>
-									<a href="https://music.amazon.com/albums/B0FH1WG69X?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_SyUnTtEEhS2hYZ3KM06muQPpK" target="_blank" class="text-white hover:text-gray-300 underline">Amazon Music</a>
+								<div class="flex flex-wrap justify-start gap-4 text-lg">
+									<a :href="links.spotify.iWantToBeYoursAndOtherSongs" target="_blank">
+										<img src="/assets/images/spotify.png" alt="Listen on Spotify" class="h-8 w-auto hover:opacity-80 transition-opacity">
+									</a>
+
+									<a :href="links.appleMusic.iWantToBeYoursAndOtherSongs" target="_blank">
+										<img src="/assets/images/apple-music.png" alt="Listen on Apple Music" class="h-8 w-auto hover:opacity-80 transition-opacity">
+									</a>
+
+									<a :href="links.amazonMusic.iWantToBeYoursAndOtherSongs" target="_blank">
+										<img src="/assets/images/amazon-music.png" alt="Listen on Amazon Music" class="h-8 w-auto hover:opacity-80 transition-opacity">
+									</a>
+
+									<a :href="links.youtubeMusic.iWantToBeYoursAndOtherSongs" target="_blank">
+										<img src="/assets/images/youtube-music.png" alt="Listen on YouTube Music" class="h-8 w-auto hover:opacity-80 transition-opacity">
+									</a>
+
+									<a :href="links.bandcamp.iWantToBeYoursAndOtherSongs" target="_blank">
+										<img src="/assets/images/bandcamp.png" alt="Listen on Bandcamp" class="h-8 w-auto hover:opacity-80 transition-opacity">
+									</a>
+
+									<a :href="links.soundcloud.iWantToBeYoursAndOtherSongs" target="_blank">
+										<img src="/assets/images/soundcloud.png" alt="Listen on Soundcloud" class="h-8 w-auto hover:opacity-80 transition-opacity">
+									</a>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<!-- Release 2 -->
-<!--					<div class="border-l-4 border-white pl-6 py-4">-->
-<!--						<p class="text-sm text-gray-400 mb-1">[Month Year]</p>-->
-<!--						<h3 class="text-2xl font-semibold mb-1">[Album/EP/Single Name]</h3>-->
-<!--						<p class="text-gray-400 mb-3">[EP/Album/Single] • [Number] tracks</p>-->
-<!--						<div class="flex gap-4 text-sm">-->
-<!--							<a href="#" class="text-white hover:text-gray-300 underline">Spotify</a>-->
-<!--							<a href="#" class="text-white hover:text-gray-300 underline">Apple Music</a>-->
-<!--						</div>-->
-<!--					</div>-->
-
 				</div>
 			</div>
 		</section>
 
-		<!-- Contact Information -->
 		<section class="py-16 px-6 bg-black">
 			<div class="max-w-4xl mx-auto">
 				<h2 class="text-3xl md:text-4xl font-bold mb-4">
@@ -123,17 +130,10 @@
 
 					<div>
 						<p class="text-sm text-gray-400 mb-1">Booking and Other Inquires</p>
-						<a href="mailto:booking@havredegracemusic.com" class="text-lg text-white hover:text-gray-300">
-							booking@havredegracemusic.com
+						<a :href="`mailto:${links.email}`" class="text-lg text-white hover:text-gray-300">
+							{{links.email}}
 						</a>
 					</div>
-
-<!--					<div>-->
-<!--						<p class="text-sm text-gray-400 mb-1">For Verification</p>-->
-<!--						<a href="mailto:stefan.bradley14@gmail.com" class="text-lg text-white hover:text-gray-300">-->
-<!--							stefan.bradley14@gmail.com-->
-<!--						</a>-->
-<!--					</div>-->
 
 					<div>
 						<p class="text-sm text-gray-400 mb-1">Press Photos</p>
@@ -156,13 +156,18 @@
 						</div>
 					</div>
 
-<!--					<div>-->
-<!--						<p class="text-sm text-gray-400 mb-2">Social Media</p>-->
-<!--						<div class="flex gap-6 text-lg">-->
-<!--							<a href="#" class="text-white hover:text-gray-300">Instagram</a>-->
-<!--							<a href="#" class="text-white hover:text-gray-300">Spotify</a>-->
-<!--						</div>-->
-<!--					</div>-->
+					<div>
+						<p class="text-sm text-gray-400 mb-2">Social Media</p>
+						<div class="flex flex-wrap justify-start gap-4 text-lg mt-3">
+							<a :href="links.instagram" target="_blank">
+								<img src="/assets/images/instagram.png" alt="Instagram" class="h-8 w-auto hover:opacity-80 transition-opacity">
+							</a>
+
+							<a :href="links.youtube" target="_blank">
+								<img src="/assets/images/youtube.png" alt="YouTube Channel" class="h-8 w-auto hover:opacity-80 transition-opacity">
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -170,6 +175,8 @@
 </template>
 
 <script setup lang="ts">
+import links from "~/assets/links.json";
+
 useSeoMeta({
 	title: 'Press Kit | Havre De Grace',
 	description: 'Official press kit for Havre De Grace (Stefan Auvache Bradley) - Independent singer-songwriter from Vancouver, WA. Bio, photos, music, and booking information for media inquiries.',
