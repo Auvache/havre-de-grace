@@ -4,16 +4,16 @@
     "iWantToBeYoursAndOtherSongs": "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK?si=XGt1dVOqTWqG8gh6LkfRFQ"
   },
   "appleMusic": {
-    "artist": "",
-    "iWantToBeYoursAndOtherSongs": ""
+    "artist": "https://music.apple.com/us/artist/havre-de-grace/1875352277",
+    "iWantToBeYoursAndOtherSongs": "https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1875647787"
   },
   "youtubeMusic": {
     "artist": "",
     "iWantToBeYoursAndOtherSongs": ""
   },
   "amazonMusic": {
-    "artist": "",
-    "iWantToBeYoursAndOtherSongs": ""
+    "artist": "https://music.amazon.com/artists/B0G83WZY27/havre-de-grace?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_xjo54sgurf1z0eePEZRczcJRG",
+    "iWantToBeYoursAndOtherSongs": "https://music.amazon.com/albums/B0GM1XF3RY?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_kCefPNt0uYszhrJlqOi5Hk6J6"
   },
   "bandcamp": {
     "artist": "https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs",
