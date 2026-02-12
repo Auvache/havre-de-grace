@@ -3,10 +3,10 @@
 		<section class="bg-textured-forest relative min-h-screen flex items-center justify-center px-6 overflow-hidden ">
 			<div class="relative z-10 max-w-4xl mx-auto text-center">
 				<!-- Large Hero Text - Contrast -->
-				<h1 class="sr-only">
-					HAVRE DE GRACE
-				</h1>
-				<img class="w-[90%] max-w-[300px] mb-12 mx-auto" src="@/assets/images/logo-white.png" alt="">
+			<h1 class="sr-only">
+				HAVRE DE GRACE
+			</h1>
+			<img class="w-[90%] max-w-[300px] mb-12 mx-auto" src="@/assets/images/logo-white.png" alt="Havre De Grace">
 
 				<div class="flex flex-wrap justify-center gap-6 mb-12 max-w-2xl mx-auto">
 					<a :href="links.spotify.artist" target="_blank">
@@ -44,8 +44,8 @@
 
 		<section id="listen" class="pt-12 px-6 bg-zinc-900">
 			<div class="max-w-4xl mx-auto text-center">
-				<h2 class="text-4xl md:text-3xl font-bold mb-8">I Want to Be Yours and Other Songs</h2>
-				<img style="width: 500px; max-width: 100%;" class="mx-auto mb-6" src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="">
+			<h2 class="text-4xl md:text-3xl font-bold mb-8">I Want to Be Yours and Other Songs</h2>
+			<img style="width: 500px; max-width: 100%;" class="mx-auto mb-6" src="/assets/images/i-want-to-be-yours-and-other-songs-album-cover.jpg" alt="I Want to Be Yours and Other Songs album cover by Havre De Grace">
 				<p class="mb-6">Listen anywhere you stream music</p>
 				<div class="flex flex-wrap justify-center gap-6 mb-12 max-w-2xl mx-auto">
 					<a :href="links.spotify.iWantToBeYoursAndOtherSongs" target="_blank">
@@ -153,17 +153,30 @@
 <script setup lang="ts">
 import links from '~/assets/links.json'
 
+const config = useRuntimeConfig()
+
 useSeoMeta({
 	title: 'Havre De Grace | Official Music',
-	description: 'Official website of Havre De Grace - Independent singer-songwriter Stefan Auvache Bradley. Listen to "I Want to Be Yours and Other Songs" on Spotify, Apple Music, and YouTube.',
+	description: 'Official website of Havre De Grace - Independent singer-songwriter music by Stefan Auvache Bradley. Stream the debut album "I Want to Be Yours and Other Songs" on Spotify, Apple Music, YouTube, and more.',
 	ogTitle: 'Havre De Grace | Official Music',
-	ogDescription: 'Independent singer-songwriter from Vancouver, WA. Listen to the debut album "I Want to Be Yours and Other Songs".',
-	ogImage: '/images/media-pic-square.jpg',
-	keywords: 'Havre De Grace, Havre De Grace music, Stefan Auvache Bradley, Stefan Auvache Bradley music, independent singer-songwriter, acoustic music, Vancouver Washington music',
+	ogDescription: 'Independent singer-songwriter music from Vancouver, WA. Listen to the debut album "I Want to Be Yours and Other Songs".',
+	ogImage: `${config.public.siteUrl}/images/media-pic-square.jpg`,
+	keywords: 'Havre De Grace, Havre De Grace music, Havre De Grace artist, Havre De Grace musician, Stefan Auvache Bradley, Stefan Auvache Bradley music, independent singer-songwriter, independent singer-songwriter music, acoustic music, singer songwriter, Vancouver Washington music',
 	author: 'Havre De Grace',
 	twitterCard: 'summary_large_image',
 	twitterTitle: 'Havre De Grace | Official Music',
-	twitterDescription: 'Independent singer-songwriter from Vancouver, WA. Stream "I Want to Be Yours and Other Songs".',
-	twitterImage: '/images/media-pic-wide.jpg',
+	twitterDescription: 'Independent singer-songwriter music from Vancouver, WA. Stream "I Want to Be Yours and Other Songs".',
+	twitterImage: `${config.public.siteUrl}/images/media-pic-wide.jpg`,
+	robots: 'index, follow',
+	canonical: `${config.public.siteUrl}/`,
 })
+
+// Add Schema.org structured data
+const musicGroupSchema = useMusicGroupSchema()
+const albumSchema = useMusicAlbumSchema()
+
+useSchemaOrg([
+	musicGroupSchema,
+	albumSchema,
+])
 </script>

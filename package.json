@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "ssg": "nuxt generate && npx serve .output/public"
   },
   "dependencies": {
     "@nuxt/fonts": "^0.12.1",

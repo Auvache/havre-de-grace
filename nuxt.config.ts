@@ -6,7 +6,19 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/seo',
   ],
+
+  site: {
+    url: 'https://havredegracemusic.com',
+    name: 'Havre De Grace',
+    description: 'Official website of Havre De Grace - Independent singer-songwriter music',
+    defaultLocale: 'en',
+  },
+
+  sitemap: {
+    enabled: true,
+  },
 
   css: ['/assets/styles/main.css'],
 
@@ -21,13 +33,20 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&family=Lexend:wght@300&display=swap'
         }
       ],
+      htmlAttrs: {
+        lang: 'en',
+      },
       meta: [
-        { name: 'description', content: 'Official website of Havre De Grace - Original music' },
+        { name: 'description', content: 'Official website of Havre De Grace - Independent singer-songwriter music from Vancouver, WA' },
+        { property: 'og:site_name', content: 'Havre De Grace Music' },
         { property: 'og:title', content: 'Havre De Grace' },
-        { property: 'og:description', content: 'Official website of Havre De Grace - Original music' },
+        { property: 'og:description', content: 'Official website of Havre De Grace - Independent singer-songwriter music' },
         { property: 'og:url', content: 'https://havredegracemusic.com' },
         { property: 'og:type', content: 'website' },
         { property: 'og:image', content: 'https://havredegracemusic.com/og-image.jpg' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'Havre De Grace' },
+        { name: 'twitter:description', content: 'Independent singer-songwriter music' },
         { name: 'twitter:image', content: 'https://havredegracemusic.com/og-image.jpg' }
       ],
     },

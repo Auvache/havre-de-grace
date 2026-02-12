@@ -12,4 +12,26 @@
 	</div>
 </template>
 <script setup lang="ts">
+// Add global organization schema to footer (appears on all pages)
+const organizationSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: 'Havre De Grace',
+	url: 'https://havredegracemusic.com',
+	logo: 'https://havredegracemusic.com/og-image.jpg',
+	description: 'Independent singer-songwriter music',
+	sameAs: [
+		'https://open.spotify.com/artist/5Lyc79cqw6P44FeVTRlBLb',
+		'https://music.apple.com/us/artist/havre-de-grace/1756040766',
+		'https://www.youtube.com/@havredegracemusic',
+		'https://www.instagram.com/havredegracemusic/',
+	],
+	contactPoint: {
+		'@type': 'ContactPoint',
+		email: 'booking@havredegracemusic.com',
+		contactType: 'Booking',
+	},
+}
+
+useSchemaOrg([organizationSchema])
 </script>

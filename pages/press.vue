@@ -22,7 +22,7 @@
 				<div class="flex flex-col sm:flex-row sm:items-center gap-6">
 					<img
 							src="/images/media-pic-square.jpg"
-							alt="Havre De Grace"
+							alt="Havre De Grace - Independent singer-songwriter Stefan Auvache Bradley"
 							class="w-full sm:w-auto sm:max-w-[300px]"
 					>
 					<div class="text-lg text-gray-300 leading-relaxed">
@@ -177,17 +177,30 @@
 <script setup lang="ts">
 import links from "~/assets/links.json";
 
+const config = useRuntimeConfig()
+
 useSeoMeta({
 	title: 'Press Kit | Havre De Grace',
-	description: 'Official press kit for Havre De Grace (Stefan Auvache Bradley) - Independent singer-songwriter from Vancouver, WA. Bio, photos, music, and booking information for media inquiries.',
-	ogTitle: 'Press Kit | Havre De Grace',
-	ogDescription: 'Official press kit including bio, press photos, discography, and contact information for Havre De Grace.',
-	ogImage: '/images/media-pic-square.jpg',
-	keywords: 'Havre De Grace press kit, Stefan Auvache Bradley, Havre De Grace bio, Havre De Grace booking, independent artist press kit, music press photos',
+	description: 'Official press kit for Havre De Grace music (Stefan Auvache Bradley) - Independent singer-songwriter from Vancouver, WA. Bio, press photos, music streaming links, and booking information for media inquiries.',
+	ogTitle: 'Press Kit | Havre De Grace Music',
+	ogDescription: 'Official press kit for independent singer-songwriter Havre De Grace. Bio, press photos, discography, and contact information.',
+	ogImage: `${config.public.siteUrl}/images/media-pic-square.jpg`,
+	keywords: 'Havre De Grace press kit, Havre De Grace music press kit, Havre De Grace musician, Stefan Auvache Bradley, Havre De Grace bio, Havre De Grace booking, independent artist press kit, music press photos, singer-songwriter press kit',
 	author: 'Havre De Grace',
 	twitterCard: 'summary_large_image',
-	twitterTitle: 'Press Kit - Havre De Grace',
+	twitterTitle: 'Press Kit - Havre De Grace Music',
 	twitterDescription: 'Official press kit for independent singer-songwriter Havre De Grace',
-	twitterImage: '/images/media-pic-wide.jpg',
+	twitterImage: `${config.public.siteUrl}/images/media-pic-wide.jpg`,
+	robots: 'index, follow',
+	canonical: `${config.public.siteUrl}/press`,
 })
+
+// Add Schema.org structured data
+const personSchema = usePersonSchema()
+const musicGroupSchema = useMusicGroupSchema()
+
+useSchemaOrg([
+	personSchema,
+	musicGroupSchema,
+])
 </script>

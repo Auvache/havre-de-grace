@@ -3,7 +3,7 @@
 		<!-- Hero Section -->
 		<section class="pt-4 md:pt-16 pb-0 px-6">
 			<div class="max-w-2xl mx-auto text-center">
-				<img class="max-w-[125px] md:max-w-[200px] mx-auto mt-4" src="@/assets/images/logo-white.png" alt="">
+				<img class="max-w-[125px] md:max-w-[200px] mx-auto mt-4" src="@/assets/images/logo-white.png" alt="Havre De Grace">
 			</div>
 		</section>
 
@@ -83,17 +83,22 @@
 
 <script setup lang="ts">
 import links from "~/assets/links.json"
+
+const config = useRuntimeConfig()
+
 useSeoMeta({
-	title: 'Links | Havre De Grace',
-	description: 'All links for Havre De Grace - Stream music on Spotify, Apple Music, YouTube Music, Amazon Music, and Bandcamp. Official website and booking contact.',
-	ogTitle: 'Links - Havre De Grace',
+	title: 'Links | Havre De Grace Music',
+	description: 'All links for Havre De Grace music - Stream on Spotify, Apple Music, YouTube Music, Amazon Music, and Bandcamp. Official website, social media, and booking contact for independent singer-songwriter.',
+	ogTitle: 'Links - Havre De Grace Music',
 	ogDescription: 'Find all music streaming links and contact information for independent singer-songwriter Havre De Grace.',
-	ogImage: '/images/media-pic-square.jpg',
-	keywords: 'Havre De Grace links, Havre De Grace social media, Havre De Grace music links, stream Havre De Grace',
+	ogImage: `${config.public.siteUrl}/images/media-pic-square.jpg`,
+	keywords: 'Havre De Grace links, Havre De Grace music links, Havre De Grace social media, Havre De Grace music streaming, stream Havre De Grace, Havre De Grace Spotify, Havre De Grace Apple Music',
 	author: 'Havre De Grace',
 	twitterCard: 'summary_large_image',
-	twitterTitle: 'Links - Havre De Grace',
-	twitterDescription: 'All links for Havre De Grace music and contact',
-	twitterImage: '/images/media-pic-square.jpg',
+	twitterTitle: 'Links - Havre De Grace Music',
+	twitterDescription: 'All links for Havre De Grace music streaming and contact',
+	twitterImage: `${config.public.siteUrl}/images/media-pic-square.jpg`,
+	robots: 'index, follow',
+	canonical: `${config.public.siteUrl}/links`,
 })
 </script>

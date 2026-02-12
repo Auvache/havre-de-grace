@@ -1,1 +1,22 @@
-{"name":"","short_name":"","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+  "name": "Havre De Grace",
+  "short_name": "HdG Music",
+  "description": "Official website of Havre De Grace - Independent singer-songwriter music",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}
