@@ -8,8 +8,8 @@
     "iWantToBeYoursAndOtherSongs": "https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1875647787"
   },
   "youtubeMusic": {
-    "artist": "",
-    "iWantToBeYoursAndOtherSongs": ""
+    "artist": "https://music.youtube.com/channel/UC9FYhFcWIz8KVSVqZHwIgxg?si=bM-aT2sjiEYxi1js",
+    "iWantToBeYoursAndOtherSongs": "https://music.youtube.com/playlist?list=OLAK5uy_m9-fwX5X6-akFt_EXHaMl77qkEaQI2lOY&si=3H7D2GnFT3wpee_a"
   },
   "amazonMusic": {
     "artist": "https://music.amazon.com/artists/B0G83WZY27/havre-de-grace?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_xjo54sgurf1z0eePEZRczcJRG",
