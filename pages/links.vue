@@ -11,14 +11,6 @@
 		<section class="py-8 px-6">
 			<div class="max-w-2xl mx-auto space-y-4">
 
-				<!-- Homepage -->
-				<NuxtLink to="/" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
-					<svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-						<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-					</svg>
-					<span class="text-lg font-semibold">Official Website</span>
-				</NuxtLink>
-
 				<!-- Spotify -->
 				<a :href="links.spotify.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="/assets/images/spotify.png" alt="Spotify" class="h-6 w-6 flex-shrink-0">
@@ -66,6 +58,14 @@
 					<img src="@/assets/images/instagram.png" alt="Instagram" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Instagram</span>
 				</a>
+
+				<!-- Homepage -->
+				<NuxtLink to="/" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+					<svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+						<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+					</svg>
+					<span class="text-lg font-semibold">Official Website</span>
+				</NuxtLink>
 
 				<!-- Email -->
 				<a :href="`mailto:${links.email}`" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
