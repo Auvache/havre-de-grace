@@ -168,7 +168,12 @@ useSeoMeta({
 	twitterDescription: 'Independent singer-songwriter music from Vancouver, WA. Stream "I Want to Be Yours and Other Songs".',
 	twitterImage: `${config.public.siteUrl}/images/media-pic-wide.jpg`,
 	robots: 'index, follow',
-	canonical: `${config.public.siteUrl}/`,
+})
+
+useHead({
+	link: [
+		{ rel: 'canonical', href: `${config.public.siteUrl}` }
+	]
 })
 
 // Add Schema.org structured data

@@ -99,6 +99,11 @@ useSeoMeta({
 	twitterDescription: 'All links for Havre De Grace music streaming and contact',
 	twitterImage: `${config.public.siteUrl}/images/media-pic-square.jpg`,
 	robots: 'index, follow',
-	canonical: `${config.public.siteUrl}/links`,
+})
+
+useHead({
+	link: [
+		{ rel: 'canonical', href: `${config.public.siteUrl}/links` }
+	]
 })
 </script>

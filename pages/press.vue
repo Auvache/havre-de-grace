@@ -192,7 +192,12 @@ useSeoMeta({
 	twitterDescription: 'Official press kit for independent singer-songwriter Havre De Grace',
 	twitterImage: `${config.public.siteUrl}/images/media-pic-wide.jpg`,
 	robots: 'index, follow',
-	canonical: `${config.public.siteUrl}/press`,
+})
+
+useHead({
+	link: [
+		{ rel: 'canonical', href: `${config.public.siteUrl}/press` }
+	]
 })
 
 // Add Schema.org structured data
