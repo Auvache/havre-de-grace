@@ -35,18 +35,6 @@
 					<span class="text-lg font-semibold">Amazon Music</span>
 				</a>
 
-				<!-- Bandcamp -->
-				<a :href="links.bandcamp.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
-					<img src="@/assets/images/bandcamp.png" alt="Bandcamp" class="h-6 w-6 flex-shrink-0">
-					<span class="text-lg font-semibold">Bandcamp</span>
-				</a>
-
-				<!-- Soundcloud -->
-				<a :href="links.soundcloud.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
-					<img src="@/assets/images/soundcloud.png" alt="Soundcloud" class="h-6 w-6 flex-shrink-0">
-					<span class="text-lg font-semibold">Soundcloud</span>
-				</a>
-
 				<!-- YouTube -->
 				<a :href="links.youtube" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/youtube.png" alt="YouTube Channel" class="h-6 w-6 flex-shrink-0">
@@ -57,6 +45,18 @@
 				<a :href="links.instagram" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
 					<img src="@/assets/images/instagram.png" alt="Instagram" class="h-6 w-6 flex-shrink-0">
 					<span class="text-lg font-semibold">Instagram</span>
+				</a>
+
+				<!-- Bandcamp -->
+				<a :href="links.bandcamp.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+					<img src="@/assets/images/bandcamp.png" alt="Bandcamp" class="h-6 w-6 flex-shrink-0">
+					<span class="text-lg font-semibold">Bandcamp</span>
+				</a>
+
+				<!-- Soundcloud -->
+				<a :href="links.soundcloud.artist" target="_blank" class="flex items-center gap-4 p-4 bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800">
+					<img src="@/assets/images/soundcloud.png" alt="Soundcloud" class="h-6 w-6 flex-shrink-0">
+					<span class="text-lg font-semibold">Soundcloud</span>
 				</a>
 
 				<!-- Homepage -->
@@ -87,15 +87,15 @@ import links from "~/assets/links.json"
 const config = useRuntimeConfig()
 
 useSeoMeta({
-	title: 'Links | Havre De Grace Music',
+	title: 'Havre De Grace | Discover',
 	description: 'All links for Havre De Grace music - Stream on Spotify, Apple Music, YouTube Music, Amazon Music, and Bandcamp. Official website, social media, and booking contact for independent singer-songwriter.',
-	ogTitle: 'Links - Havre De Grace Music',
+	ogTitle: 'Havre De Grace Music',
 	ogDescription: 'Find all music streaming links and contact information for independent singer-songwriter Havre De Grace.',
 	ogImage: `${config.public.siteUrl}/images/media-pic-square.jpg`,
 	keywords: 'Havre De Grace links, Havre De Grace music links, Havre De Grace social media, Havre De Grace music streaming, stream Havre De Grace, Havre De Grace Spotify, Havre De Grace Apple Music',
 	author: 'Havre De Grace',
 	twitterCard: 'summary_large_image',
-	twitterTitle: 'Links - Havre De Grace Music',
+	twitterTitle: 'Havre De Grace Music',
 	twitterDescription: 'All links for Havre De Grace music streaming and contact',
 	twitterImage: `${config.public.siteUrl}/images/media-pic-square.jpg`,
 	robots: 'index, follow',
