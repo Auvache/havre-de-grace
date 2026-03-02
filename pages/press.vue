@@ -25,10 +25,10 @@
 							alt="Havre De Grace - Independent singer-songwriter Stefan Auvache Bradley"
 							class="w-full sm:w-auto sm:max-w-[300px]"
 					>
-					<div class="text-lg text-gray-300 leading-relaxed">
-						<p class="pb-3">Havre De Grace is the independent singer-songwriter project of Stefan Auvache Bradley.</p>
-						<p class="pb-3">Influenced by artists like Bob Dylan, Led Zeppelin, Jack White, John Mayer, and The Tallest Man on Earth, Stefan aims to deliver an energetic, in-the-moment performance with nothing but his guitar and his voice.</p>
-						<p>Stefan's debut release - "I Want to Be Yours and Other Songs" came out in summer 2025.</p>
+					<div class="text-lg leading-relaxed">
+						<p class="mb-4">Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley.</p>
+						<p class="italic mb-4">"Music has been and forever will be an anchor for my soul. I can't help but play the guitar and write songs. It is therapy and celebration. Havre De Grace is my attempt to share part of my soul with anyone who wants to listen."</p>
+						<p>Stefan's debut album <em>"I Want to Be Yours and Other Songs"</em> was released in July 2025.</p>
 					</div>
 				</div>
 				

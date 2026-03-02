@@ -1,0 +1,1 @@
+import{P as r,f as s,u as n}from"./DscjUpa3.js";function o(){const t=s();return r(t.public["nuxt-schema-org"],{scriptAttributes:{}})}function u(t){const i=o(),e={type:"application/ld+json",key:"schema-org-graph",nodes:t,tagPriority:"high",...i.scriptAttributes};if(i?.reactive)return n({script:[e]})}export{u};
