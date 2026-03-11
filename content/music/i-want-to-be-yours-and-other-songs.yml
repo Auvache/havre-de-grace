@@ -1,0 +1,56 @@
+title: "I Want to Be Yours and Other Songs"
+slug: "i-want-to-be-yours-and-other-songs"
+year: 2025
+releaseDate: "2025-07-01"
+isLatest: true
+coverImage: "/images/albums/i-want-to-be-yours-and-other-songs.jpg"
+coverAlt: "I Want to Be Yours and Other Songs album cover by Havre De Grace"
+description: >
+  Debut full-length album from Havre De Grace, blending intimate acoustic songs
+  with unhurried singer-songwriter storytelling.
+
+streamingLinks:
+  spotify: "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK?si=XGt1dVOqTWqG8gh6LkfRFQ"
+  appleMusic: "https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1875647787"
+  youtubeMusic: "https://music.youtube.com/playlist?list=OLAK5uy_m9-fwX5X6-akFt_EXHaMl77qkEaQI2lOY&si=3H7D2GnFT3wpee_a"
+  amazonMusic: "https://music.amazon.com/albums/B0GM1XF3RY?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_kCefPNt0uYszhrJlqOi5Hk6J6"
+  bandcamp: "https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs"
+  soundcloud: "https://soundcloud.com/havredegracemusic/sets/d1cefe1f-140c-4d54-a8f9-107c4adb92a7"
+
+tracklist:
+  - title: "TODO: Add full tracklist with song titles"
+    duration: "TODO: Add duration"
+    lyrics: |
+      TODO: Add complete lyrics for each track.
+
+linerNotes: |
+  TODO: Add full liner notes prose with recording context, themes, and stories.
+
+videos:
+  - title: "Live Performance 1"
+    url: "https://www.youtube.com/embed/3ro2I9rvQj8?si=w533QpFQK6WmQVjb"
+    description: "Live performance currently embedded on the legacy homepage."
+  - title: "Live Performance 2"
+    url: "https://www.youtube.com/embed/kZckptQidYk?si=OIKBZF0Ytl93oL7S"
+    description: "Live performance currently embedded on the legacy homepage."
+  - title: "Live Performance 3"
+    url: "https://www.youtube.com/embed/0JF4Pm_-mPs?si=Xybe8lcC7zaKnOvF"
+    description: "Live performance currently embedded on the legacy homepage."
+
+credits:
+  - role: "TODO: Written and performed by"
+    name: "TODO"
+  - role: "TODO: Recorded at"
+    name: "TODO"
+  - role: "TODO: Mixed by"
+    name: "TODO"
+  - role: "TODO: Mastered by"
+    name: "TODO"
+  - role: "TODO: Album artwork by"
+    name: "TODO"
+
+pressQuotes:
+  - quote: "TODO: Add press quote or review excerpt."
+    source: "TODO"
+
+epkDownloadUrl: "TODO: Add /press/havre-de-grace-epk.pdf"

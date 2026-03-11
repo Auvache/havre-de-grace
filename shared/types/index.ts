@@ -6,6 +6,7 @@ export interface StreamingLinks {
   bandcamp?: string
   soundcloud?: string
   youtube?: string
+  instagram?: string
 }
 
 export interface Track {
@@ -36,7 +37,40 @@ export interface Album {
   description?: string
   streamingLinks: StreamingLinks
   tracklist: Track[]
+  linerNotes?: string
+  linerNoteImages?: Array<{
+    src: string
+    alt: string
+  }>
   videos?: VideoEntry[]
   credits?: Credit[]
-  linerNotes?: string
+  pressQuotes?: Array<{
+    quote: string
+    source?: string
+  }>
+  epkDownloadUrl?: string
+}
+
+export interface SocialLink {
+  label: string
+  url: string
+}
+
+export interface PressAsset {
+  label: string
+  src: string
+  downloadName: string
+}
+
+export interface SiteProfile {
+  artistName: string
+  legalName: string
+  description: string
+  location: string
+  genres: string[]
+  bookingEmail: string
+  artistLinks: StreamingLinks
+  socialLinks: SocialLink[]
+  pressAssets: PressAsset[]
+  epkDownloadUrl: string
 }

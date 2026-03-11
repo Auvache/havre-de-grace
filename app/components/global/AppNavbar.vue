@@ -2,7 +2,7 @@
   <header class="border-b border-stone-200 bg-[var(--color-bg)]">
     <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <NuxtLink to="/" class="text-sm font-semibold uppercase tracking-[0.2em]">
-        Havre De Grace
+        {{ siteProfile.artistName }}
       </NuxtLink>
 
       <ul class="flex items-center gap-3 text-sm">
@@ -15,3 +15,7 @@
     </nav>
   </header>
 </template>
+
+<script setup lang="ts">
+const siteProfile = useSiteProfile()
+</script>
