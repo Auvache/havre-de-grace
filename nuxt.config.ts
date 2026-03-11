@@ -1,12 +1,17 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  srcDir: 'app/',
 
   ssr: true,
 
   modules: [
+    '@nuxt/content',
     '@nuxtjs/tailwindcss',
+    '@nuxt/image',
+    '@nuxt/fonts',
     '@nuxtjs/seo',
+    '@vueuse/nuxt',
   ],
 
   site: {
@@ -16,11 +21,13 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
   },
 
-  sitemap: {
-    enabled: true,
+  fonts: {
+    families: [
+      { name: 'Jost', provider: 'google' },
+    ],
   },
 
-  css: ['/assets/styles/main.css'],
+  css: ['~/assets/css/main.css'],
 
   app: {
     head: {
@@ -29,10 +36,6 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&family=Lexend:wght@300&display=swap'
-        }
       ],
       htmlAttrs: {
         lang: 'en',
@@ -56,6 +59,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: 'https://havredegracemusic.com',
+    },
+  },
+
+  nitro: {
+    prerender: {
+      routes: ['/', '/music', '/about', '/contact'],
     },
   },
 })
