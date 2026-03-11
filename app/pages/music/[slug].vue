@@ -1,112 +1,69 @@
 <template>
-  <article v-if="album" class="mx-auto max-w-6xl px-6 py-20">
-    <NuxtLink to="/music" class="text-sm text-[var(--color-muted-dark)] hover:text-[var(--color-accent)]">
-      Back to music
-    </NuxtLink>
-
-    <header class="mt-8 grid gap-8 md:grid-cols-[minmax(0,360px)_1fr]">
-      <img
-        :src="album.coverImage"
-        :alt="album.coverAlt"
-        class="w-full rounded object-cover"
-      >
-      <div>
-        <h1 class="text-4xl font-medium">{{ album.title }}</h1>
-        <p class="mt-2 text-sm uppercase tracking-[0.15em] text-[var(--color-muted-dark)]">
-          {{ album.year }}
-          <span v-if="formattedReleaseDate"> | {{ formattedReleaseDate }}</span>
-        </p>
-        <p v-if="album.description" class="mt-6 max-w-2xl text-lg text-[var(--color-muted-dark)]">
-          {{ album.description }}
-        </p>
-
-        <ul class="mt-8 flex flex-wrap gap-3">
-          <li v-for="link in streamingEntries" :key="link.label">
-            <a
-              :href="link.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex rounded border border-stone-700 px-3 py-2 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              {{ link.label }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </header>
-
-    <section class="mt-16">
-      <h2 class="text-2xl font-medium">Tracks</h2>
-      <ol class="mt-6 space-y-8">
-        <li v-for="(track, index) in album.tracklist" :key="`${track.title}-${index}`" class="border-b border-stone-700 pb-8">
-          <p class="text-lg">
-            {{ String(index + 1).padStart(2, '0') }}. {{ track.title }}
-            <span v-if="track.duration" class="ml-2 text-sm text-[var(--color-muted-dark)]">({{ track.duration }})</span>
-          </p>
-          <pre
-            v-if="track.lyrics"
-            class="mt-4 whitespace-pre-wrap font-sans text-sm text-[var(--color-muted-dark)]"
-          >{{ track.lyrics }}</pre>
-        </li>
-      </ol>
+  <article v-if="album" class="pb-24">
+    <section class="page-container pt-[calc(var(--nav-height)+1.5rem)]">
+      <NuxtLink to="/music" class="nav-link inline-block text-sm muted-text hover:text-[var(--color-accent)]">
+        back to music
+      </NuxtLink>
     </section>
 
-    <section v-if="album.linerNotes" class="mt-16">
-      <h2 class="text-2xl font-medium">Liner Notes</h2>
-      <p class="mt-6 max-w-3xl whitespace-pre-line text-[var(--color-muted-dark)]">{{ album.linerNotes }}</p>
-    </section>
+    <AlbumHero :album="album" :formatted-release-date="formattedReleaseDate" />
 
-    <section v-if="album.videos?.length" class="mt-16">
-      <h2 class="text-2xl font-medium">Videos</h2>
-      <div class="mt-6 grid gap-8">
-        <article v-for="video in album.videos" :key="video.url" class="space-y-3">
-          <h3 class="text-lg font-medium">{{ video.title }}</h3>
-          <p v-if="video.description" class="text-sm text-[var(--color-muted-dark)]">{{ video.description }}</p>
-          <iframe
-            class="aspect-video w-full rounded"
-            :src="video.url"
-            :title="video.title"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          ></iframe>
-        </article>
-      </div>
-    </section>
+    <AlbumScrollspyNav
+      :sections="navSections"
+      :active-section-id="activeSectionId"
+      @navigate="scrollToSection"
+    />
 
-    <section v-if="album.credits?.length" class="mt-16">
-      <h2 class="text-2xl font-medium">Credits</h2>
-      <ul class="mt-6 space-y-3 text-[var(--color-muted-dark)]">
-        <li v-for="credit in album.credits" :key="`${credit.role}-${credit.name}`">
-          <span class="font-medium text-[var(--color-text-dark)]">{{ credit.role }}:</span>
-          {{ credit.name }}
-        </li>
-      </ul>
-    </section>
+    <div class="page-container space-y-20 pb-10 pt-14 sm:pt-16">
+      <Tracklist
+        :tracks="album.tracklist"
+        :show-lyrics-jump="hasLyrics"
+        @jump-to-lyrics="handleTrackLyricsJump"
+      />
+
+      <LyricsViewer
+        v-if="hasLyrics"
+        ref="lyricsViewer"
+        :tracks="lyricTracks"
+      />
+
+      <LinerNotes
+        v-if="hasNotes"
+        :notes="album.linerNotes"
+        :images="album.linerNoteImages"
+      />
+
+      <AlbumVideos
+        v-if="hasVideos"
+        :videos="album.videos ?? []"
+      />
+
+      <AlbumCredits
+        v-if="hasCredits"
+        :credits="album.credits ?? []"
+      />
+    </div>
   </article>
 </template>
 
 <script setup lang="ts">
-import type { Album, StreamingLinks } from '~~/shared/types'
+import type { Album, LyricTrack } from '~~/shared/types'
+
+interface ScrollSection {
+  id: string
+  label: string
+}
+
+const STICKY_SCROLL_OFFSET = 152
 
 const route = useRoute()
 
 definePageMeta({
   layout: 'dark',
+  theme: 'dark',
 })
 
 const slug = computed(() => route.params.slug as string)
-
-const streamingPlatformLabels: Record<keyof StreamingLinks, string> = {
-  spotify: 'Spotify',
-  appleMusic: 'Apple Music',
-  youtubeMusic: 'YouTube Music',
-  amazonMusic: 'Amazon Music',
-  bandcamp: 'Bandcamp',
-  soundcloud: 'SoundCloud',
-  youtube: 'YouTube',
-  instagram: 'Instagram',
-}
 
 const { data: album } = await useAsyncData(
   () => `music-album-${slug.value}`,
@@ -119,6 +76,8 @@ if (!album.value) {
     statusMessage: 'Album not found',
   })
 }
+
+const hasValue = (value?: string | null) => Boolean(value?.trim().length)
 
 const formattedReleaseDate = computed(() => {
   if (!album.value?.releaseDate) {
@@ -136,16 +95,79 @@ const formattedReleaseDate = computed(() => {
   })
 })
 
-const streamingEntries = computed(() => {
-  if (!album.value) {
-    return []
+const hasLyrics = computed(() => (album.value?.tracklist ?? []).some((track) => hasValue(track.lyrics)))
+
+const lyricTracks = computed<LyricTrack[]>(() => (album.value?.tracklist ?? [])
+  .flatMap((track, index) => (hasValue(track.lyrics)
+    ? [{
+      trackNumber: index + 1,
+      title: track.title,
+      duration: track.duration,
+      lyrics: track.lyrics!.trim(),
+    }]
+    : [])))
+
+const hasNotes = computed(() =>
+  hasValue(album.value?.linerNotes) || Boolean(album.value?.linerNoteImages?.length))
+
+const hasVideos = computed(() => Boolean(album.value?.videos?.length))
+const hasCredits = computed(() => Boolean(album.value?.credits?.length))
+
+const navSections = computed<ScrollSection[]>(() => {
+  const sections: ScrollSection[] = [
+    { id: 'art', label: 'Art' },
+    { id: 'tracks', label: 'Tracks' },
+  ]
+
+  if (hasLyrics.value) {
+    sections.push({ id: 'lyrics', label: 'Lyrics' })
   }
 
-  return (Object.entries(album.value.streamingLinks) as Array<[keyof StreamingLinks, string | undefined]>)
-    .filter(([, url]) => Boolean(url))
-    .map(([platform, url]) => ({
-      label: streamingPlatformLabels[platform] ?? platform,
-      url: url as string,
-    }))
+  if (hasNotes.value) {
+    sections.push({ id: 'notes', label: 'Notes' })
+  }
+
+  if (hasVideos.value) {
+    sections.push({ id: 'videos', label: 'Videos' })
+  }
+
+  if (hasCredits.value) {
+    sections.push({ id: 'credits', label: 'Credits' })
+  }
+
+  return sections
 })
+
+const { activeSectionId } = useScrollspy(computed(() => navSections.value.map((section) => section.id)))
+
+const lyricsViewer = ref<{ openTrack: (trackNumber: number) => void } | null>(null)
+
+const scrollToSection = (sectionId: string) => {
+  if (!import.meta.client) {
+    return
+  }
+
+  const section = document.getElementById(sectionId)
+  if (!section) {
+    return
+  }
+
+  const top = window.scrollY + section.getBoundingClientRect().top - STICKY_SCROLL_OFFSET
+  window.scrollTo({
+    top: Math.max(top, 0),
+    behavior: 'smooth',
+  })
+}
+
+const handleTrackLyricsJump = (trackNumber: number) => {
+  if (!hasLyrics.value) {
+    return
+  }
+
+  lyricsViewer.value?.openTrack(trackNumber)
+
+  nextTick(() => {
+    scrollToSection(`lyrics-track-${trackNumber}`)
+  })
+}
 </script>

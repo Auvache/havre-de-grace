@@ -1,23 +1,31 @@
 <template>
-  <footer class="border-t border-stone-200 bg-[var(--color-bg)]">
-    <div class="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-8 text-sm text-[var(--color-muted)]">
-      <p>{{ siteProfile.artistName }}</p>
-      <p>
-        <a :href="`mailto:${siteProfile.bookingEmail}`" class="hover:text-accent">
-          {{ siteProfile.bookingEmail }}
-        </a>
-      </p>
-      <ul class="flex flex-wrap gap-x-4 gap-y-2">
-        <li v-for="link in siteProfile.socialLinks" :key="link.label">
-          <a :href="link.url" target="_blank" rel="noopener noreferrer" class="hover:text-accent">
-            {{ link.label }}
+  <footer class="border-t border-theme" :style="{ backgroundColor: 'var(--theme-bg)' }">
+    <div class="page-container py-12">
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+        <p class="label-text">
+          {{ siteProfile.artistName }}
+        </p>
+
+        <StreamingLinks :links="siteProfile.artistLinks" compact />
+
+        <p class="text-sm muted-text">
+          Booking:
+          <a :href="`mailto:${siteProfile.bookingEmail}`" class="hover:text-[var(--color-accent)]">
+            {{ siteProfile.bookingEmail }}
           </a>
-        </li>
-      </ul>
+        </p>
+
+        <EmailSignupPlaceholder />
+
+        <p class="text-xs muted-text">
+          &copy; {{ currentYear }} {{ siteProfile.artistName }}. All rights reserved.
+        </p>
+      </div>
     </div>
   </footer>
 </template>
 
 <script setup lang="ts">
 const siteProfile = useSiteProfile()
+const currentYear = new Date().getFullYear()
 </script>

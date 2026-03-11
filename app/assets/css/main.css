@@ -3,14 +3,51 @@
 @tailwind utilities;
 
 :root {
+  --font-family-base: "Jost", system-ui, sans-serif;
+  --font-size-label: clamp(0.72rem, 0.69rem + 0.15vw, 0.84rem);
+  --font-size-body: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  --font-size-subheading: clamp(1.25rem, 1.12rem + 0.6vw, 1.5rem);
+  --font-size-heading: clamp(2rem, 1.3rem + 1.8vw, 3rem);
+  --font-size-display: clamp(2.5rem, 1.6rem + 3.3vw, 5rem);
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4rem;
+  --space-7: 5rem;
+  --space-8: 7rem;
+
   --color-bg: #faf8f5;
   --color-text: #1c1917;
   --color-muted: #78716c;
   --color-border: #e7e5e4;
+
   --color-bg-dark: #1c1917;
   --color-text-dark: #faf8f5;
   --color-muted-dark: #a8a29e;
+
   --color-accent: #b45309;
+
+  --theme-bg: var(--color-bg);
+  --theme-text: var(--color-text);
+  --theme-muted: var(--color-muted);
+  --theme-border: var(--color-border);
+  --theme-bg-soft: color-mix(in srgb, var(--theme-bg) 92%, var(--color-accent) 8%);
+  --theme-surface: color-mix(in srgb, var(--theme-bg) 96%, var(--theme-text) 4%);
+
+  --radius-sm: 0.4rem;
+  --radius-md: 0.7rem;
+  --radius-lg: 1rem;
+
+  --max-content-width: 75rem;
+  --nav-height: 4.5rem;
+
+  --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --dur-fast: 200ms;
+  --dur-medium: 300ms;
+  --dur-slow: 500ms;
 }
 
 html,
@@ -19,12 +56,127 @@ body,
   min-height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: "Jost", system-ui, sans-serif;
+  background:
+    radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--color-accent) 10%, transparent), transparent 55%),
+    var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color var(--dur-medium) var(--ease-standard),
+    color var(--dur-medium) var(--ease-standard);
 }
 
 a {
   color: inherit;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 62%, transparent);
+  transition:
+    color var(--dur-fast) var(--ease-standard),
+    opacity var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 26%, transparent);
+  color: var(--theme-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.page-container {
+  margin-inline: auto;
+  width: min(var(--max-content-width), 100%);
+  padding-inline: clamp(var(--space-2), 3vw, var(--space-4));
+}
+
+.section-space {
+  padding-block: clamp(var(--space-6), 11vw, var(--space-8));
+}
+
+.section-heading {
+  font-size: var(--font-size-heading);
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  text-transform: lowercase;
+}
+
+.display-heading {
+  font-size: var(--font-size-display);
+  font-weight: 350;
+  line-height: 1.05;
+}
+
+.label-text {
+  font-size: var(--font-size-label);
+  font-weight: 500;
+  letter-spacing: 0.21em;
+  text-transform: uppercase;
+}
+
+.muted-text {
+  color: var(--theme-muted);
+}
+
+.border-theme {
+  border-color: var(--theme-border);
+}
+
+.surface-card {
+  border: 1px solid var(--theme-border);
+  border-radius: var(--radius-md);
+  background: var(--theme-surface);
+}
+
+.interactive-lift {
+  transition:
+    transform 250ms var(--ease-standard),
+    box-shadow 250ms var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+.interactive-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px color-mix(in srgb, var(--theme-text) 18%, transparent);
+}
+
+.nav-link {
+  position: relative;
+  text-transform: lowercase;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2rem;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background-color: var(--color-accent);
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+.nav-link:hover::after,
+.nav-link[data-active="true"]::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --nav-height: 4rem;
+  }
 }

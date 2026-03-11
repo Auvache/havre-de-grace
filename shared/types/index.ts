@@ -15,6 +15,13 @@ export interface Track {
   lyrics?: string
 }
 
+export interface LyricTrack {
+  trackNumber: number
+  title: string
+  duration?: string
+  lyrics: string
+}
+
 export interface VideoEntry {
   title: string
   url: string

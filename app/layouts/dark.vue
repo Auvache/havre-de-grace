@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-[var(--color-bg-dark)] text-[var(--color-text-dark)]">
+  <div class="min-h-screen text-[var(--theme-text)]">
     <AppNavbar />
-    <main>
+    <main class="min-h-[calc(100vh-var(--nav-height))]">
       <slot />
     </main>
     <AppFooter />
@@ -11,4 +11,6 @@
 <script setup lang="ts">
 import AppFooter from '~/components/global/AppFooter.vue'
 import AppNavbar from '~/components/global/AppNavbar.vue'
+
+usePageTheme()
 </script>

@@ -1,36 +1,27 @@
 <template>
-  <section class="mx-auto max-w-6xl px-6 py-20">
-    <p class="text-xs uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">Discography</p>
-    <h1 class="mt-4 text-4xl font-medium">music</h1>
-    <p class="mt-6 max-w-2xl text-lg text-[var(--color-muted-dark)]">
-      Every release on this page is loaded from <code>content/music/*.yml</code>.
+  <section class="page-container section-space">
+    <SectionHeading
+      title="music"
+      eyebrow="discography"
+      description="All releases are listed in reverse chronological order."
+    />
+
+    <p v-if="latestAlbum" class="mt-6 text-sm muted-text">
+      latest:
+      <NuxtLink :to="`/music/${latestAlbum.slug}`" class="hover:text-[var(--color-accent)]">
+        {{ latestAlbum.title }}
+      </NuxtLink>
     </p>
 
-    <ul v-if="albums?.length" class="mt-12 grid gap-8 sm:grid-cols-2">
-      <li
-        v-for="album in albums"
-        :key="album.slug"
-        class="overflow-hidden rounded border border-stone-700 bg-stone-900/60 transition hover:-translate-y-1 hover:border-[var(--color-accent)]"
-      >
-        <NuxtLink :to="`/music/${album.slug}`" class="block p-4">
-          <img
-            :src="album.coverImage"
-            :alt="album.coverAlt"
-            class="aspect-square w-full rounded object-cover"
-            loading="lazy"
-          >
-          <h2 class="mt-4 text-2xl font-medium">{{ album.title }}</h2>
-          <p class="mt-1 text-sm text-[var(--color-muted-dark)]">
-            {{ album.year }}
-          </p>
-          <p v-if="album.description" class="mt-4 text-sm text-[var(--color-muted-dark)]">
-            {{ album.description }}
-          </p>
-        </NuxtLink>
-      </li>
-    </ul>
+    <DiscographyGrid
+      v-if="albums.length"
+      class="mt-12"
+      :albums="albums"
+      :featured-slug="latestAlbum?.slug"
+      heading-tag="h2"
+    />
 
-    <p v-else class="mt-10 text-[var(--color-muted-dark)]">
+    <p v-else class="mt-10 muted-text">
       No albums are available yet.
     </p>
   </section>
@@ -41,17 +32,34 @@ import type { Album } from '~~/shared/types'
 
 definePageMeta({
   layout: 'dark',
+  theme: 'dark',
 })
 
-const { data: albums } = await useAsyncData('music-albums', async () => {
+const sortAlbums = (items: Album[]) => [...items].sort((a, b) => {
+  if (a.releaseDate && b.releaseDate) {
+    return b.releaseDate.localeCompare(a.releaseDate)
+  }
+
+  if (a.releaseDate) {
+    return -1
+  }
+
+  if (b.releaseDate) {
+    return 1
+  }
+
+  return b.year - a.year
+})
+
+const { data } = await useAsyncData('music-albums', async () => {
   const items = await queryCollection('music').all() as Album[]
+  return sortAlbums(items)
+})
 
-  return [...items].sort((a, b) => {
-    if (a.releaseDate && b.releaseDate) {
-      return b.releaseDate.localeCompare(a.releaseDate)
-    }
+const albums = computed(() => data.value ?? [])
 
-    return b.year - a.year
-  })
+const latestAlbum = computed(() => {
+  const items = albums.value
+  return items.find((album) => album.isLatest) ?? items[0] ?? null
 })
 </script>

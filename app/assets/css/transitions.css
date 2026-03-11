@@ -1,0 +1,68 @@
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 360ms var(--ease-standard),
+    transform 360ms var(--ease-standard);
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.overlay-enter-active,
+.overlay-leave-active {
+  transition: opacity var(--dur-medium) var(--ease-standard);
+}
+
+.overlay-enter-from,
+.overlay-leave-to {
+  opacity: 0;
+}
+
+.overlay-panel-enter-active,
+.overlay-panel-leave-active {
+  transition:
+    opacity var(--dur-medium) var(--ease-standard),
+    transform var(--dur-medium) var(--ease-standard);
+}
+
+.overlay-panel-enter-from,
+.overlay-panel-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.reveal-base {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--dur-slow) var(--ease-standard),
+    transform var(--dur-slow) var(--ease-standard);
+}
+
+.reveal-base.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active,
+  .overlay-enter-active,
+  .overlay-leave-active,
+  .overlay-panel-enter-active,
+  .overlay-panel-leave-active,
+  .reveal-base {
+    transition-duration: 1ms !important;
+  }
+
+  .page-enter-from,
+  .page-leave-to,
+  .overlay-panel-enter-from,
+  .overlay-panel-leave-to,
+  .reveal-base {
+    transform: none !important;
+  }
+}

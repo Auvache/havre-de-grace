@@ -27,9 +27,17 @@ export default defineNuxtConfig({
     ],
   },
 
-  css: ['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css',
+    '~/assets/css/themes.css',
+    '~/assets/css/transitions.css',
+  ],
 
   app: {
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in',
+    },
     head: {
       title: 'Havre De Grace',
       titleTemplate: '%s',
@@ -59,6 +67,21 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: 'https://havredegracemusic.com',
+    },
+  },
+
+  routeRules: {
+    '/press': {
+      redirect: {
+        to: '/about',
+        statusCode: 301,
+      },
+    },
+    '/links': {
+      redirect: {
+        to: '/contact',
+        statusCode: 301,
+      },
     },
   },
 

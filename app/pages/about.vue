@@ -1,15 +1,40 @@
 <template>
-  <section class="mx-auto max-w-6xl px-6 py-20">
-    <h1 class="text-4xl font-medium">About</h1>
-    <p class="mt-6 max-w-2xl text-lg text-[var(--color-muted)]">
-      Bio and press-kit layout will be composed in Sprint 4.
-    </p>
-    <p class="mt-4 text-[var(--color-muted)]">
-      {{ siteProfile.artistName }} is based in {{ siteProfile.location }}.
-    </p>
+  <section class="page-container section-space">
+    <BioSection :latest-album="latestAlbum" />
+    <PressKit :latest-album="latestAlbum" />
   </section>
 </template>
 
 <script setup lang="ts">
-const siteProfile = useSiteProfile()
+import type { Album } from '~~/shared/types'
+
+definePageMeta({
+  theme: 'light',
+})
+
+const sortAlbums = (items: Album[]) => [...items].sort((a, b) => {
+  if (a.releaseDate && b.releaseDate) {
+    return b.releaseDate.localeCompare(a.releaseDate)
+  }
+
+  if (a.releaseDate) {
+    return -1
+  }
+
+  if (b.releaseDate) {
+    return 1
+  }
+
+  return b.year - a.year
+})
+
+const { data } = await useAsyncData('about-albums', async () => {
+  const items = await queryCollection('music').all() as Album[]
+  return sortAlbums(items)
+})
+
+const latestAlbum = computed(() => {
+  const items = data.value ?? []
+  return items.find((album) => album.isLatest) ?? items[0] ?? null
+})
 </script>

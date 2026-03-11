@@ -1,0 +1,17 @@
+html[data-theme="light"] {
+  --theme-bg: var(--color-bg);
+  --theme-text: var(--color-text);
+  --theme-muted: var(--color-muted);
+  --theme-border: var(--color-border);
+  --theme-bg-soft: color-mix(in srgb, var(--color-bg) 88%, var(--color-accent) 12%);
+  --theme-surface: color-mix(in srgb, var(--color-bg) 96%, var(--color-text) 4%);
+}
+
+html[data-theme="dark"] {
+  --theme-bg: var(--color-bg-dark);
+  --theme-text: var(--color-text-dark);
+  --theme-muted: var(--color-muted-dark);
+  --theme-border: color-mix(in srgb, var(--color-muted-dark) 28%, transparent);
+  --theme-bg-soft: color-mix(in srgb, var(--color-bg-dark) 82%, var(--color-accent) 18%);
+  --theme-surface: color-mix(in srgb, var(--color-bg-dark) 90%, var(--color-text-dark) 10%);
+}

@@ -1,21 +1,94 @@
 <template>
-  <header class="border-b border-stone-200 bg-[var(--color-bg)]">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-      <NuxtLink to="/" class="text-sm font-semibold uppercase tracking-[0.2em]">
+  <header
+    :class="headerClass"
+    :style="headerStyle"
+  >
+    <nav class="page-container flex h-[var(--nav-height)] items-center justify-between">
+      <NuxtLink to="/" class="label-text leading-none tracking-[0.18em]">
         {{ siteProfile.artistName }}
       </NuxtLink>
 
-      <ul class="flex items-center gap-3 text-sm">
-        <li><NuxtLink to="/music" class="hover:text-accent">Music</NuxtLink></li>
-        <li>/</li>
-        <li><NuxtLink to="/about" class="hover:text-accent">About</NuxtLink></li>
-        <li>/</li>
-        <li><NuxtLink to="/contact" class="hover:text-accent">Contact</NuxtLink></li>
+      <ul class="hidden items-center gap-3 text-sm md:flex">
+        <template v-for="(link, index) in navLinks" :key="link.to">
+          <li>
+            <NuxtLink
+              :to="link.to"
+              class="nav-link"
+              :data-active="isActive(link.to)"
+            >
+              {{ link.label }}
+            </NuxtLink>
+          </li>
+          <li v-if="index < navLinks.length - 1" class="muted-text" aria-hidden="true">/</li>
+        </template>
       </ul>
+
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-theme md:hidden"
+        :aria-expanded="mobileOpen ? 'true' : 'false'"
+        aria-controls="mobile-nav-overlay"
+        aria-label="Open navigation menu"
+        @click="mobileOpen = true"
+      >
+        <span aria-hidden="true" class="block h-[2px] w-5 bg-current shadow-[0_6px_0_0_currentColor,0_-6px_0_0_currentColor]" />
+      </button>
     </nav>
+
+    <MobileNavOverlay
+      :open="mobileOpen"
+      :links="navLinks"
+      :artist-name="siteProfile.artistName"
+      @close="mobileOpen = false"
+    />
   </header>
 </template>
 
 <script setup lang="ts">
+withDefaults(defineProps<{
+  theme?: 'light' | 'dark'
+}>(), {
+  theme: 'light',
+})
+
+const route = useRoute()
 const siteProfile = useSiteProfile()
+const { isVisible, isSolid } = useNavScroll()
+
+const mobileOpen = ref(false)
+
+const navLinks = [
+  { label: 'music', to: '/music' },
+  { label: 'about', to: '/about' },
+  { label: 'contact', to: '/contact' },
+]
+
+const isActive = (to: string) => route.path === to || route.path.startsWith(`${to}/`)
+
+watch(
+  () => route.path,
+  () => {
+    mobileOpen.value = false
+  },
+)
+
+const headerClass = computed(() => [
+  'fixed inset-x-0 top-0 z-50 border-b transition-[transform,background-color,border-color] duration-300 ease-in-out',
+  !isVisible.value && !mobileOpen.value ? '-translate-y-full' : 'translate-y-0',
+  isSolid.value || mobileOpen.value ? 'supports-[backdrop-filter]:backdrop-blur-md' : '',
+])
+
+const headerStyle = computed(() => {
+  if (isSolid.value || mobileOpen.value) {
+    return {
+      backgroundColor: 'color-mix(in srgb, var(--theme-bg) 92%, transparent)',
+      borderBottomColor: 'var(--theme-border)',
+    }
+  }
+
+  return {
+    backgroundColor: 'transparent',
+    borderBottomColor: 'transparent',
+  }
+})
 </script>
