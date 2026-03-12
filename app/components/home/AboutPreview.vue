@@ -18,12 +18,13 @@
         />
 
         <p class="max-w-2xl muted-text">
-          Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley. Based in
-          {{ siteProfile.location }}, he writes intimate acoustic songs that stay close to voice, guitar, and story.
+          This is for my bio preview section on the homepage. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua while based in {{ siteProfile.location }}.
         </p>
 
         <p class="max-w-2xl italic muted-text">
-          "Music has been and forever will be an anchor for my soul. I cannot help but play the guitar and write songs."
+          "This is for my featured artist quote placeholder on the homepage. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."
         </p>
 
         <p class="max-w-2xl muted-text">
@@ -47,9 +48,9 @@ const siteProfile = useSiteProfile()
 
 const latestReleaseLine = computed(() => {
   if (!props.latestAlbumTitle) {
-    return 'Read the full bio and press details on the about page.'
+    return 'This is for my latest-release context on the homepage. Lorem ipsum details will expand on the about page.'
   }
 
-  return `Latest release: ${props.latestAlbumTitle}. Read the full story and press materials on the about page.`
+  return `This is for my latest-release context on the homepage. Lorem ipsum details support ${props.latestAlbumTitle}.`
 })
 </script>

@@ -2,6 +2,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   srcDir: 'app/',
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    },
+  ],
 
   ssr: true,
 
@@ -87,7 +93,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/about', '/contact'],
+      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/music/into-the-wild', '/about', '/contact'],
     },
   },
 })

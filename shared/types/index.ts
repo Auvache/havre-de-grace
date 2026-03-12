@@ -39,6 +39,7 @@ export interface Album {
   year: number
   releaseDate?: string
   isLatest?: boolean
+  isVisible?: boolean
   coverImage: string
   coverAlt: string
   description?: string

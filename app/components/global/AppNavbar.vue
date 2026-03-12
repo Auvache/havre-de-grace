@@ -53,7 +53,7 @@ withDefaults(defineProps<{
 
 const route = useRoute()
 const siteProfile = useSiteProfile()
-const { isVisible, isSolid } = useNavScroll()
+const { isSolid } = useNavScroll()
 
 const mobileOpen = ref(false)
 
@@ -73,8 +73,7 @@ watch(
 )
 
 const headerClass = computed(() => [
-  'fixed inset-x-0 top-0 z-50 border-b transition-[transform,background-color,border-color] duration-300 ease-in-out',
-  !isVisible.value && !mobileOpen.value ? '-translate-y-full' : 'translate-y-0',
+  'fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-300 ease-in-out',
   isSolid.value || mobileOpen.value ? 'supports-[backdrop-filter]:backdrop-blur-md' : '',
 ])
 

@@ -17,17 +17,22 @@
       />
 
       <p class="muted-text">
-        Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley. The project is built around
-        voice and acoustic guitar, with songs that value plainspoken emotion over ornament.
+        This is for my full bio section on the about page. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+        do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       </p>
 
       <p class="italic muted-text">
-        "Music has been and forever will be an anchor for my soul. I cannot help but play the guitar and write songs.
-        It is therapy and celebration."
+        "This is for my long-form artist quote placeholder for tone and personality. Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."
       </p>
 
       <p class="muted-text">
         {{ releaseLine }}
+      </p>
+
+      <p class="muted-text">
+        This is for my extended narrative bio copy between photos. Lorem ipsum dolor sit amet, consectetur adipiscing
+        elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
       </p>
 
       <img
@@ -38,6 +43,21 @@
         height="2083"
         loading="lazy"
       >
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <img
+          src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-wide.jpg"
+          alt="Placeholder about image - wide portrait"
+          class="h-full w-full rounded-[var(--radius-sm)] object-cover"
+          loading="lazy"
+        >
+        <img
+          src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-evergreens.jpg"
+          alt="Placeholder about image - atmospheric trees"
+          class="h-full w-full rounded-[var(--radius-sm)] object-cover"
+          loading="lazy"
+        >
+      </div>
 
       <div class="grid gap-6 border-t border-theme pt-8 sm:grid-cols-3">
         <article>
@@ -72,19 +92,19 @@ const genreLine = computed(() => siteProfile.genres.join(' | '))
 
 const releaseLine = computed(() => {
   if (!props.latestAlbum) {
-    return 'New music and project updates are collected on the music and contact pages.'
+    return 'This is for my release timeline context in the bio. Lorem ipsum updates are listed on music and contact pages.'
   }
 
   if (!props.latestAlbum.releaseDate) {
-    return `The latest release is "${props.latestAlbum.title}" (${props.latestAlbum.year}).`
+    return `This is for my release timeline context in the bio. Lorem ipsum supports "${props.latestAlbum.title}" (${props.latestAlbum.year}).`
   }
 
   const date = new Date(props.latestAlbum.releaseDate)
   if (Number.isNaN(date.getTime())) {
-    return `The latest release is "${props.latestAlbum.title}" (${props.latestAlbum.releaseDate}).`
+    return `This is for my release timeline context in the bio. Lorem ipsum supports "${props.latestAlbum.title}" (${props.latestAlbum.releaseDate}).`
   }
 
-  return `The latest release is "${props.latestAlbum.title}", released ${date.toLocaleDateString('en-US', {
+  return `This is for my release timeline context in the bio. Lorem ipsum supports "${props.latestAlbum.title}", released ${date.toLocaleDateString('en-US', {
     month: 'long',
     year: 'numeric',
   })}.`

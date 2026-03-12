@@ -3,11 +3,13 @@ slug: "i-want-to-be-yours-and-other-songs"
 year: 2025
 releaseDate: "2025-07-01"
 isLatest: true
+isVisible: true
 coverImage: "/images/albums/i-want-to-be-yours-and-other-songs.jpg"
 coverAlt: "I Want to Be Yours and Other Songs album cover by Havre De Grace"
 description: >
-  Debut full-length album from Havre De Grace, blending intimate acoustic songs
-  with unhurried singer-songwriter storytelling.
+  This is for my album description and release context. Lorem ipsum dolor sit
+  amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+  dolore magna aliqua.
 
 streamingLinks:
   spotify: "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK?si=XGt1dVOqTWqG8gh6LkfRFQ"
@@ -18,13 +20,102 @@ streamingLinks:
   soundcloud: "https://soundcloud.com/havredegracemusic/sets/d1cefe1f-140c-4d54-a8f9-107c4adb92a7"
 
 tracklist:
-  - title: "TODO: Add full tracklist with song titles"
-    duration: "TODO: Add duration"
+  - title: "Track One Placeholder"
+    duration: "3:42"
     lyrics: |
-      TODO: Add complete lyrics for each track.
+      This is song lyrics for Track One Placeholder in my placeholder draft.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+      sed do eiusmod tempor incididunt ut labore et dolore.
+
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris,
+      nisi ut aliquip ex ea commodo consequat.
+
+  - title: "Track Two Placeholder"
+    duration: "4:08"
+    lyrics: |
+      This is song lyrics for Track Two Placeholder in my placeholder draft.
+      Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur.
+
+      Excepteur sint occaecat cupidatat non proident,
+      sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+  - title: "Track Three Placeholder"
+    duration: "2:57"
+    lyrics: |
+      This is song lyrics for Track Three Placeholder in my placeholder draft.
+      Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+      Curabitur blandit tempus porttitor.
+
+      Maecenas faucibus mollis interdum,
+      donec id elit non mi porta gravida at eget metus.
+
+  - title: "Track Four Placeholder"
+    duration: "3:31"
+    lyrics: |
+      This is song lyrics for Track Four Placeholder in my placeholder draft.
+      Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+      Aenean lacinia bibendum nulla sed consectetur.
+
+      Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+  - title: "Track Five Placeholder"
+    duration: "4:14"
+    lyrics: |
+      This is song lyrics for Track Five Placeholder in my placeholder draft.
+      Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+      Nulla vitae elit libero, a pharetra augue.
+
+      Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+
+  - title: "Track Six Placeholder"
+    duration: "3:05"
+    lyrics: |
+      This is song lyrics for Track Six Placeholder in my placeholder draft.
+      Sed posuere consectetur est at lobortis.
+      Etiam porta sem malesuada magna mollis euismod.
+
+      Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.
+
+  - title: "Track Seven Placeholder"
+    duration: "5:01"
+    lyrics: |
+      This is song lyrics for Track Seven Placeholder in my placeholder draft.
+      Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse.
+      Quam nihil molestiae consequatur, vel illum qui dolorem.
+
+      Fugiat quo voluptas nulla pariatur.
+
+  - title: "Track Eight Placeholder"
+    duration: "3:26"
+    lyrics: |
+      This is song lyrics for Track Eight Placeholder in my placeholder draft.
+      Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+      Sed quia consequuntur magni dolores eos.
+
+      Qui ratione voluptatem sequi nesciunt.
 
 linerNotes: |
-  TODO: Add full liner notes prose with recording context, themes, and stories.
+  This is for my liner notes and full album storytelling.
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+  This is for my recording-context details and session atmosphere.
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+  This is for my themes, song origins, and sequencing notes.
+  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+linerNoteImages:
+  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-evergreens.jpg"
+    alt: "Placeholder liner note image - atmospheric trees"
+  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-banner.png"
+    alt: "Placeholder liner note image - studio texture 1"
+  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-banner-2.png"
+    alt: "Placeholder liner note image - studio texture 2"
+  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-wide.jpg"
+    alt: "Placeholder liner note image - wide artist portrait"
+  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-square.jpg"
+    alt: "Placeholder liner note image - square artist portrait"
 
 videos:
   - title: "Live Performance 1"
@@ -38,19 +129,21 @@ videos:
     description: "Live performance currently embedded on the legacy homepage."
 
 credits:
-  - role: "TODO: Written and performed by"
-    name: "TODO"
-  - role: "TODO: Recorded at"
-    name: "TODO"
-  - role: "TODO: Mixed by"
-    name: "TODO"
-  - role: "TODO: Mastered by"
-    name: "TODO"
-  - role: "TODO: Album artwork by"
-    name: "TODO"
+  - role: "This is for my writing and performance credits."
+    name: "Lorem Ipsum Artist"
+  - role: "This is for my recording location and timeframe."
+    name: "Dolor Sit Studio, Placeholder Session"
+  - role: "This is for my mixing credits."
+    name: "Consectetur Audio"
+  - role: "This is for my mastering credits."
+    name: "Adipiscing Mastering"
+  - role: "This is for my artwork credits."
+    name: "Tempor Visuals"
 
 pressQuotes:
-  - quote: "TODO: Add press quote or review excerpt."
-    source: "TODO"
+  - quote: "This is for placeholder press quotes about my music. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    source: "Placeholder Publication"
+  - quote: "This is for placeholder review excerpts about my music. Sed do eiusmod tempor incididunt ut labore et dolore."
+    source: "Placeholder Review Desk"
 
-epkDownloadUrl: "TODO: Add /press/havre-de-grace-epk.pdf"
+epkDownloadUrl: "/press/havre-de-grace-epk-placeholder.txt"

@@ -1,0 +1,120 @@
+title: "Into the Wild"
+slug: "into-the-wild"
+year: 2026
+releaseDate: "2026-04-18"
+isLatest: false
+# Toggle this to true/false to show or hide this album in site listings.
+isVisible: true
+coverImage: "/images/albums/into-the-wild-album.png"
+coverAlt: "Into the Wild album cover by Havre De Grace"
+description: >
+  This is for my album description and release context for Into the Wild. Lorem
+  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+  ut labore et dolore magna aliqua.
+
+streamingLinks: {}
+
+tracklist:
+  - title: "Trailhead Placeholder"
+    duration: "3:18"
+    lyrics: |
+      This is song lyrics for Trailhead Placeholder in my placeholder draft.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+      sed do eiusmod tempor incididunt ut labore et dolore.
+
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris,
+      nisi ut aliquip ex ea commodo consequat.
+
+  - title: "Compass Placeholder"
+    duration: "4:02"
+    lyrics: |
+      This is song lyrics for Compass Placeholder in my placeholder draft.
+      Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur.
+
+      Excepteur sint occaecat cupidatat non proident,
+      sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+  - title: "Pine and River Placeholder"
+    duration: "3:40"
+    lyrics: |
+      This is song lyrics for Pine and River Placeholder in my placeholder draft.
+      Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+      Curabitur blandit tempus porttitor.
+
+      Maecenas faucibus mollis interdum,
+      donec id elit non mi porta gravida at eget metus.
+
+  - title: "Night Fire Placeholder"
+    duration: "4:27"
+    lyrics: |
+      This is song lyrics for Night Fire Placeholder in my placeholder draft.
+      Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+      Aenean lacinia bibendum nulla sed consectetur.
+
+      Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+  - title: "Miles Left Placeholder"
+    duration: "3:54"
+    lyrics: |
+      This is song lyrics for Miles Left Placeholder in my placeholder draft.
+      Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+      Nulla vitae elit libero, a pharetra augue.
+
+      Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+
+  - title: "Homeward Placeholder"
+    duration: "4:11"
+    lyrics: |
+      This is song lyrics for Homeward Placeholder in my placeholder draft.
+      Sed posuere consectetur est at lobortis.
+      Etiam porta sem malesuada magna mollis euismod.
+
+      Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.
+
+linerNotes: |
+  This is for my liner notes and full album storytelling for Into the Wild.
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+  This is for my recording-context details and field-journal atmosphere.
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+  This is for my themes, imagery, and sequencing notes.
+  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+linerNoteImages:
+  - src: "/images/albums/into-the-wild-album.png"
+    alt: "Placeholder liner note image - Into the Wild album cover"
+  - src: "/images/albums/into-the-wild/liner-note-portrait-wide.jpg"
+    alt: "Placeholder liner note image - wide portrait"
+  - src: "/images/albums/into-the-wild/liner-note-evergreens.jpg"
+    alt: "Placeholder liner note image - evergreens"
+  - src: "/images/albums/into-the-wild/liner-note-banner.png"
+    alt: "Placeholder liner note image - studio texture 1"
+  - src: "/images/albums/into-the-wild/liner-note-banner-2.png"
+    alt: "Placeholder liner note image - studio texture 2"
+
+videos:
+  - title: "Into the Wild - Live Placeholder"
+    url: "https://www.youtube.com/embed/3ro2I9rvQj8?si=w533QpFQK6WmQVjb"
+    description: "This is for performance video context on this album page. Lorem ipsum placeholder."
+
+credits:
+  - role: "This is for my writing and performance credits."
+    name: "Lorem Ipsum Artist"
+  - role: "This is for my recording location and timeframe."
+    name: "Dolor Sit Studio, Placeholder Session"
+  - role: "This is for my mixing credits."
+    name: "Consectetur Audio"
+  - role: "This is for my mastering credits."
+    name: "Adipiscing Mastering"
+  - role: "This is for my artwork credits."
+    name: "Tempor Visuals"
+
+pressQuotes:
+  - quote: "This is for placeholder press quotes about my music. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    source: "Placeholder Publication"
+  - quote: "This is for placeholder review excerpts about my music. Sed do eiusmod tempor incididunt ut labore et dolore."
+    source: "Placeholder Review Desk"
+
+epkDownloadUrl: "/press/havre-de-grace-epk-placeholder.txt"

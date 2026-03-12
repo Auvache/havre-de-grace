@@ -51,5 +51,5 @@ export const siteProfile: SiteProfile = {
       downloadName: 'havre-de-grace-press-photo-wide.jpg',
     },
   ],
-  epkDownloadUrl: 'TODO: Add /press/havre-de-grace-epk.pdf',
+  epkDownloadUrl: '/press/havre-de-grace-epk-placeholder.txt',
 }

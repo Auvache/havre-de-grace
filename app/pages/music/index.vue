@@ -35,21 +35,23 @@ definePageMeta({
   theme: 'dark',
 })
 
-const sortAlbums = (items: Album[]) => [...items].sort((a, b) => {
-  if (a.releaseDate && b.releaseDate) {
-    return b.releaseDate.localeCompare(a.releaseDate)
-  }
+const sortAlbums = (items: Album[]) => [...items]
+  .filter((album) => album.isVisible !== false)
+  .sort((a, b) => {
+    if (a.releaseDate && b.releaseDate) {
+      return b.releaseDate.localeCompare(a.releaseDate)
+    }
 
-  if (a.releaseDate) {
-    return -1
-  }
+    if (a.releaseDate) {
+      return -1
+    }
 
-  if (b.releaseDate) {
-    return 1
-  }
+    if (b.releaseDate) {
+      return 1
+    }
 
-  return b.year - a.year
-})
+    return b.year - a.year
+  })
 
 const { data } = await useAsyncData('music-albums', async () => {
   const items = await queryCollection('music').all() as Album[]

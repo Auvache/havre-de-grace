@@ -11,6 +11,7 @@ export default defineContentConfig({
         year: z.number(),
         releaseDate: z.string().optional(),
         isLatest: z.boolean().optional(),
+        isVisible: z.boolean().optional(),
         coverImage: z.string(),
         coverAlt: z.string(),
         description: z.string().optional(),

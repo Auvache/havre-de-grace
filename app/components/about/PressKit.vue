@@ -11,8 +11,8 @@
         <article class="surface-card space-y-4 p-6">
           <p class="label-text muted-text">short bio</p>
           <p class="text-sm leading-relaxed muted-text">
-            Havre De Grace is the solo project of Stefan Auvache Bradley, an independent singer-songwriter based in
-            Vancouver, Washington. The songs lean on acoustic guitar, conversational melodies, and intimate storytelling.
+            This is for my copy-paste short bio section in the press kit. Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
           </p>
         </article>
 
@@ -40,7 +40,7 @@
             <cite v-if="quote.source" class="mt-2 block not-italic">- {{ quote.source }}</cite>
           </blockquote>
           <p v-if="!readyQuotes.length" class="text-sm muted-text">
-            Press quotes are in progress and will be added as coverage is published.
+            This is for placeholder press quotes about my music. Lorem ipsum quote samples will be replaced as coverage is published.
           </p>
         </article>
       </div>
@@ -59,7 +59,7 @@
             download full epk
           </a>
           <p v-else class="text-sm muted-text">
-            Full EPK download link is being prepared.
+            This is for my EPK download placeholder state. Lorem ipsum packet will be replaced with final assets.
           </p>
         </article>
 

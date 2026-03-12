@@ -6,7 +6,7 @@
     <h2 class="section-heading">
       {{ title }}
     </h2>
-    <p v-if="description" class="muted-text max-w-2xl">
+    <p v-if="description" :class="['muted-text max-w-2xl', descriptionClass]">
       {{ description }}
     </p>
     <slot />
@@ -26,4 +26,5 @@ const props = withDefaults(defineProps<{
 })
 
 const alignClass = computed(() => props.align === 'center' ? 'text-center' : 'text-left')
+const descriptionClass = computed(() => props.align === 'center' ? 'mx-auto' : '')
 </script>
