@@ -8,14 +8,17 @@
         :to="`/music/${album.slug}`"
         class="hero-cover-wrap interactive-lift overflow-hidden rounded-[var(--radius-lg)] border border-theme"
       >
-        <img
+        <NuxtImg
           :src="album.coverImage"
           :alt="album.coverAlt"
           class="hero-cover w-full object-cover"
           width="3000"
           height="3000"
+          sizes="(max-width: 1024px) 100vw, 560px"
+          format="webp,avif"
+          loading="eager"
           fetchpriority="high"
-        >
+        />
       </NuxtLink>
 
       <div class="space-y-6">

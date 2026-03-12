@@ -3,7 +3,7 @@
     :class="headerClass"
     :style="headerStyle"
   >
-    <nav class="page-container flex h-[var(--nav-height)] items-center justify-between">
+    <nav aria-label="Primary" class="page-container flex h-[var(--nav-height)] items-center justify-between">
       <NuxtLink to="/" class="label-text leading-none tracking-[0.18em]">
         {{ siteProfile.artistName }}
       </NuxtLink>

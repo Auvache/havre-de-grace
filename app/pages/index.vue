@@ -68,4 +68,18 @@ const latestAlbum = computed(() => {
   const items = albums.value
   return items.find((album) => album.isLatest) ?? items[0] ?? null
 })
+
+const pageDescription = computed(() => {
+  if (!latestAlbum.value) {
+    return `${siteProfile.artistName} official website featuring music, bio, and booking details.`
+  }
+
+  return `Official website of ${siteProfile.artistName}. Explore the latest release "${latestAlbum.value.title}" and the full discography.`
+})
+
+usePageSeo({
+  title: `${siteProfile.artistName} | Official Music Site`,
+  description: pageDescription,
+  image: computed(() => latestAlbum.value?.coverImage),
+})
 </script>

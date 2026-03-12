@@ -1,12 +1,16 @@
 <template>
   <NuxtLink :to="`/music/${album.slug}`" class="group block h-full rounded-[var(--radius-md)] p-4 focus-visible:outline-none">
     <div class="overflow-hidden rounded-[var(--radius-sm)]">
-      <img
+      <NuxtImg
         :src="album.coverImage"
         :alt="album.coverAlt"
         class="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        width="900"
+        height="900"
+        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+        format="webp,avif"
         loading="lazy"
-      >
+      />
     </div>
 
     <p v-if="featured" class="label-text mt-4 text-[var(--color-accent)]">

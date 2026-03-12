@@ -5,12 +5,16 @@
         v-if="open"
         id="mobile-nav-overlay"
         class="fixed inset-0 z-[60] bg-black/55 px-4 py-5 backdrop-blur-sm"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site navigation"
         @click.self="$emit('close')"
       >
         <Transition name="overlay-panel" appear>
           <div class="surface-card mx-auto flex h-full max-w-2xl flex-col justify-between p-8">
             <div class="flex justify-end">
               <button
+                ref="closeButton"
                 type="button"
                 class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-theme text-2xl leading-none"
                 aria-label="Close navigation menu"
@@ -58,6 +62,9 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const closeButton = ref<HTMLButtonElement | null>(null)
+const previousActiveElement = ref<HTMLElement | null>(null)
+
 if (import.meta.client) {
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape' && props.open) {
@@ -69,6 +76,16 @@ if (import.meta.client) {
     () => props.open,
     (isOpen) => {
       document.body.style.overflow = isOpen ? 'hidden' : ''
+
+      if (isOpen) {
+        previousActiveElement.value = document.activeElement instanceof HTMLElement ? document.activeElement : null
+        nextTick(() => {
+          closeButton.value?.focus()
+        })
+      }
+      else {
+        previousActiveElement.value?.focus()
+      }
     },
     { immediate: true },
   )

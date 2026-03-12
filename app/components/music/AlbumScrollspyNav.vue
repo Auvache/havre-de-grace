@@ -11,6 +11,7 @@
             type="button"
             class="nav-link whitespace-nowrap px-1 py-1 transition-colors duration-200"
             :data-active="section.id === activeSectionId"
+            :aria-pressed="section.id === activeSectionId ? 'true' : 'false'"
             :class="section.id === activeSectionId ? 'text-[var(--color-accent)]' : 'muted-text hover:text-[var(--theme-text)]'"
             @click="$emit('navigate', section.id)"
           >

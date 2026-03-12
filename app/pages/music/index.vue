@@ -4,6 +4,7 @@
       title="music"
       eyebrow="discography"
       description="All releases are listed in reverse chronological order."
+      heading-tag="h1"
     />
 
     <p v-if="latestAlbum" class="mt-6 text-sm muted-text">
@@ -35,6 +36,8 @@ definePageMeta({
   theme: 'dark',
 })
 
+const siteProfile = useSiteProfile()
+
 const sortAlbums = (items: Album[]) => [...items]
   .filter((album) => album.isVisible !== false)
   .sort((a, b) => {
@@ -63,5 +66,17 @@ const albums = computed(() => data.value ?? [])
 const latestAlbum = computed(() => {
   const items = albums.value
   return items.find((album) => album.isLatest) ?? items[0] ?? null
+})
+
+const pageDescription = computed(() => {
+  const visibleTitles = albums.value.map((album) => album.title).slice(0, 5)
+  const suffix = visibleTitles.length ? ` Releases include ${visibleTitles.join(', ')}.` : ''
+  return `Discography for ${siteProfile.artistName}, listed in reverse chronological order.${suffix}`
+})
+
+usePageSeo({
+  title: `Discography | ${siteProfile.artistName}`,
+  description: pageDescription,
+  image: computed(() => latestAlbum.value?.coverImage),
 })
 </script>

@@ -196,25 +196,6 @@ These are required by `site-profile.md` but are not fully present in `origin/mai
 - Structured data validates for site and album pages.
 - Lighthouse targets are met or documented with follow-up tasks.
 
-## Sprint 7 - Contact API, QA, and Release Readiness
-
-**Objective:** finish operational concerns and prepare merge/deploy.  
-**Estimate:** 0.5-1 day
-
-### Tasks
-
-- Implement `server/api/contact.post.ts` for contact form submission flow.
-- Add validation and anti-spam mechanism.
-- Add success/error UX states and failure handling.
-- Run final regression checks across desktop/mobile routes.
-- Verify static output and hosting compatibility.
-- Produce deployment and rollback checklist.
-
-### Exit Criteria
-
-- End-to-end contact flow works in target environment.
-- Build is deployable and documented for merge.
-
 ## Suggested Execution Order
 
 1. Sprint 0  
@@ -223,8 +204,7 @@ These are required by `site-profile.md` but are not fully present in `origin/mai
 4. Sprint 3  
 5. Sprint 4  
 6. Sprint 5  
-7. Sprint 6  
-8. Sprint 7
+7. Sprint 6
 
 ## Definition of Done for the Rebuild
 

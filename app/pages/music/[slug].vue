@@ -47,7 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Album, LyricTrack } from '~~/shared/types'
+import type { Album, LyricTrack, VideoEntry } from '~~/shared/types'
+import { toEmbedUrl, toVideoThumbnailUrl } from '~~/shared/utils/video'
 
 interface ScrollSection {
   id: string
@@ -57,6 +58,8 @@ interface ScrollSection {
 const STICKY_SCROLL_OFFSET = 152
 
 const route = useRoute()
+const siteProfile = useSiteProfile()
+const { toAbsoluteUrl, siteUrl } = useAbsoluteUrl()
 
 definePageMeta({
   layout: 'dark',
@@ -112,6 +115,128 @@ const hasNotes = computed(() =>
 
 const hasVideos = computed(() => Boolean(album.value?.videos?.length))
 const hasCredits = computed(() => Boolean(album.value?.credits?.length))
+
+const pageDescription = computed(() => {
+  if (!album.value) {
+    return `${siteProfile.artistName} album page.`
+  }
+
+  const trackCount = album.value.tracklist.length
+  const trackLabel = `${trackCount} track${trackCount === 1 ? '' : 's'}`
+  return `${album.value.title} by ${siteProfile.artistName}. ${trackLabel}, lyrics, liner notes, videos, and credits.`
+})
+
+const { canonicalUrl } = usePageSeo({
+  title: computed(() => `${album.value?.title ?? 'Album'} | ${siteProfile.artistName}`),
+  description: pageDescription,
+  image: computed(() => album.value?.coverImage),
+  type: 'music.album',
+})
+
+const toIsoDuration = (value?: string) => {
+  if (!value) {
+    return undefined
+  }
+
+  const segments = value.split(':').map((segment) => Number.parseInt(segment, 10))
+  if (segments.some((segment) => Number.isNaN(segment))) {
+    return undefined
+  }
+
+  if (segments.length === 2) {
+    const [minutes, seconds] = segments
+    return `PT${minutes}M${seconds}S`
+  }
+
+  if (segments.length === 3) {
+    const [hours, minutes, seconds] = segments
+    return `PT${hours}H${minutes}M${seconds}S`
+  }
+
+  return undefined
+}
+
+const musicAlbumSchema = computed(() => {
+  if (!album.value) {
+    return null
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'MusicAlbum',
+    name: album.value.title,
+    url: canonicalUrl.value,
+    image: toAbsoluteUrl(album.value.coverImage),
+    datePublished: album.value.releaseDate,
+    numTracks: album.value.tracklist.length,
+    description: album.value.description,
+    genre: siteProfile.genres,
+    byArtist: {
+      '@type': 'MusicGroup',
+      name: siteProfile.artistName,
+      url: siteUrl,
+      sameAs: Object.values(siteProfile.artistLinks).filter((url): url is string => Boolean(url?.trim().length)),
+    },
+    track: album.value.tracklist.map((track, index) => ({
+      '@type': 'MusicRecording',
+      name: track.title,
+      position: index + 1,
+      duration: toIsoDuration(track.duration),
+    })),
+  }
+})
+
+const videoSchemas = computed(() => {
+  if (!album.value) {
+    return []
+  }
+
+  return (album.value.videos ?? []).map((video: VideoEntry, index: number) => {
+    const embedUrl = toEmbedUrl(video.url)
+    const thumbnailUrl = toVideoThumbnailUrl(video.url)
+
+    return {
+      key: `ld-video-${album.value?.slug}-${index}`,
+      data: {
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        name: video.title,
+        description: video.description || `${video.title} from ${album.value?.title}`,
+        uploadDate: album.value?.releaseDate,
+        thumbnailUrl,
+        embedUrl,
+        contentUrl: video.url,
+        isPartOf: {
+          '@type': 'MusicAlbum',
+          name: album.value?.title,
+          url: canonicalUrl.value,
+        },
+      },
+    }
+  })
+})
+
+useHead(() => {
+  const script: Array<{ key: string, type: string, textContent: string }> = []
+
+  if (musicAlbumSchema.value) {
+    script.push({
+      key: `ld-album-${album.value?.slug}`,
+      type: 'application/ld+json',
+      textContent: JSON.stringify(musicAlbumSchema.value),
+    })
+  }
+
+  for (const videoSchema of videoSchemas.value) {
+    script.push({
+      key: videoSchema.key,
+      type: 'application/ld+json',
+      textContent: JSON.stringify(videoSchema.data),
+    })
+  }
+
+  return { script }
+})
 
 const navSections = computed<ScrollSection[]>(() => {
   const sections: ScrollSection[] = [

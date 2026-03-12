@@ -4,6 +4,7 @@
       title="contact"
       eyebrow="booking and press"
       description="Please reach out by email for booking, interviews, and press requests."
+      heading-tag="h1"
     />
 
     <div class="mx-auto mt-12 grid max-w-4xl gap-8 lg:grid-cols-2">
@@ -42,4 +43,10 @@ definePageMeta({
 })
 
 const siteProfile = useSiteProfile()
+
+usePageSeo({
+  title: `Contact | ${siteProfile.artistName}`,
+  description: `Contact ${siteProfile.artistName} for booking, interviews, and press requests.`,
+  image: '/press/media-pic-square.jpg',
+})
 </script>

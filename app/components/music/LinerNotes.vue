@@ -8,7 +8,16 @@
 
     <ul v-if="images?.length" class="mt-8 grid gap-5 sm:grid-cols-2">
       <li v-for="image in images" :key="image.src" class="overflow-hidden rounded-[var(--radius-md)] border border-theme">
-        <img :src="image.src" :alt="image.alt" class="h-full w-full object-cover" loading="lazy">
+        <NuxtImg
+          :src="image.src"
+          :alt="image.alt"
+          class="h-full w-full object-cover"
+          width="1200"
+          height="900"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          format="webp,avif"
+          loading="lazy"
+        />
       </li>
     </ul>
   </section>

@@ -1,14 +1,16 @@
 <template>
   <section class="page-container section-space border-t border-theme">
     <div class="grid gap-10 lg:grid-cols-[minmax(0,410px)_1fr] lg:items-center">
-      <img
+      <NuxtImg
         src="/press/media-pic-square.jpg"
         alt="Havre De Grace press photo"
         class="w-full rounded-[var(--radius-lg)] object-cover"
         width="2056"
         height="2083"
+        sizes="(max-width: 1024px) 100vw, 410px"
+        format="webp,avif"
         loading="lazy"
-      >
+      />
 
       <div class="space-y-6">
         <SectionHeading

@@ -10,7 +10,10 @@
           class="aspect-video w-full rounded-[var(--radius-md)] border border-theme"
           :src="toEmbedUrl(video.url)"
           :title="video.title"
+          width="1280"
+          height="720"
           loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
         ></iframe>
@@ -21,38 +24,9 @@
 
 <script setup lang="ts">
 import type { VideoEntry } from '~~/shared/types'
+import { toEmbedUrl } from '~~/shared/utils/video'
 
 defineProps<{
   videos: VideoEntry[]
 }>()
-
-const toEmbedUrl = (url: string) => {
-  if (url.includes('youtube.com/embed/') || url.includes('player.vimeo.com/video/')) {
-    return url
-  }
-
-  try {
-    const parsed = new URL(url)
-
-    if (parsed.hostname.includes('youtu.be')) {
-      const id = parsed.pathname.replace('/', '')
-      return id ? `https://www.youtube.com/embed/${id}` : url
-    }
-
-    if (parsed.hostname.includes('youtube.com')) {
-      const id = parsed.searchParams.get('v')
-      return id ? `https://www.youtube.com/embed/${id}` : url
-    }
-
-    if (parsed.hostname.includes('vimeo.com')) {
-      const id = parsed.pathname.split('/').filter(Boolean).pop()
-      return id ? `https://player.vimeo.com/video/${id}` : url
-    }
-  }
-  catch {
-    return url
-  }
-
-  return url
-}
 </script>

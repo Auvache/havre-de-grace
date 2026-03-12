@@ -1,19 +1,23 @@
 <template>
   <section>
-    <img
+    <NuxtImg
       src="/press/media-pic-wide.jpg"
       alt="Havre De Grace atmospheric portrait"
       class="w-full rounded-[var(--radius-lg)] object-cover"
       width="3024"
       height="1752"
+      sizes="100vw"
+      format="webp,avif"
+      loading="eager"
       fetchpriority="high"
-    >
+    />
 
     <div class="mx-auto mt-10 max-w-3xl space-y-6">
       <SectionHeading
         title="about"
         eyebrow="bio"
         description="Personal context, artistic voice, and the core details behind the project."
+        heading-tag="h1"
       />
 
       <p class="muted-text">
@@ -35,28 +39,38 @@
         elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
       </p>
 
-      <img
+      <NuxtImg
         src="/press/media-pic-square.jpg"
         alt="Havre De Grace portrait"
         class="w-full rounded-[var(--radius-md)] object-cover"
         width="2056"
         height="2083"
+        sizes="(max-width: 1024px) 100vw, 768px"
+        format="webp,avif"
         loading="lazy"
-      >
+      />
 
       <div class="grid gap-4 sm:grid-cols-2">
-        <img
+        <NuxtImg
           src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-wide.jpg"
           alt="Placeholder about image - wide portrait"
           class="h-full w-full rounded-[var(--radius-sm)] object-cover"
+          width="1200"
+          height="800"
+          sizes="(max-width: 640px) 100vw, 50vw"
+          format="webp,avif"
           loading="lazy"
-        >
-        <img
+        />
+        <NuxtImg
           src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-evergreens.jpg"
           alt="Placeholder about image - atmospheric trees"
           class="h-full w-full rounded-[var(--radius-sm)] object-cover"
+          width="1200"
+          height="800"
+          sizes="(max-width: 640px) 100vw, 50vw"
+          format="webp,avif"
           loading="lazy"
-        >
+        />
       </div>
 
       <div class="grid gap-6 border-t border-theme pt-8 sm:grid-cols-3">

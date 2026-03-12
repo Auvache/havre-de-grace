@@ -12,6 +12,8 @@ definePageMeta({
   theme: 'light',
 })
 
+const siteProfile = useSiteProfile()
+
 const sortAlbums = (items: Album[]) => [...items]
   .filter((album) => album.isVisible !== false)
   .sort((a, b) => {
@@ -38,5 +40,13 @@ const { data } = await useAsyncData('about-albums', async () => {
 const latestAlbum = computed(() => {
   const items = data.value ?? []
   return items.find((album) => album.isLatest) ?? items[0] ?? null
+})
+
+const pageDescription = computed(() => `About ${siteProfile.artistName}: artist bio, press kit, high-resolution photos, and latest release details.`)
+
+usePageSeo({
+  title: `About and Press | ${siteProfile.artistName}`,
+  description: pageDescription,
+  image: '/press/media-pic-wide.jpg',
 })
 </script>

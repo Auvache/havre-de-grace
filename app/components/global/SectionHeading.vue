@@ -3,9 +3,9 @@
     <p v-if="eyebrow" class="label-text muted-text">
       {{ eyebrow }}
     </p>
-    <h2 class="section-heading">
+    <component :is="headingTag" class="section-heading">
       {{ title }}
-    </h2>
+    </component>
     <p v-if="description" :class="['muted-text max-w-2xl', descriptionClass]">
       {{ description }}
     </p>
@@ -19,12 +19,15 @@ const props = withDefaults(defineProps<{
   eyebrow?: string
   description?: string
   align?: 'left' | 'center'
+  headingTag?: string
 }>(), {
   eyebrow: undefined,
   description: undefined,
   align: 'left',
+  headingTag: 'h2',
 })
 
 const alignClass = computed(() => props.align === 'center' ? 'text-center' : 'text-left')
 const descriptionClass = computed(() => props.align === 'center' ? 'mx-auto' : '')
+const headingTag = computed(() => props.headingTag)
 </script>

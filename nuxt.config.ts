@@ -57,17 +57,24 @@ export default defineNuxtConfig({
       meta: [
         { name: 'description', content: 'Official website of Havre De Grace - Independent singer-songwriter music from Vancouver, WA' },
         { property: 'og:site_name', content: 'Havre De Grace Music' },
-        { property: 'og:title', content: 'Havre De Grace' },
-        { property: 'og:description', content: 'Official website of Havre De Grace - Independent singer-songwriter music' },
-        { property: 'og:url', content: 'https://havredegracemusic.com' },
-        { property: 'og:type', content: 'website' },
-        { property: 'og:image', content: 'https://havredegracemusic.com/og-image.jpg' },
-        { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: 'Havre De Grace' },
-        { name: 'twitter:description', content: 'Independent singer-songwriter music' },
-        { name: 'twitter:image', content: 'https://havredegracemusic.com/og-image.jpg' }
       ],
     },
+  },
+
+  sitemap: {
+    enabled: true,
+    autoLastmod: true,
+  },
+
+  robots: {
+    enabled: true,
+    groups: [
+      {
+        userAgent: '*',
+        allow: '/',
+      },
+    ],
+    sitemap: ['/sitemap.xml'],
   },
 
   runtimeConfig: {

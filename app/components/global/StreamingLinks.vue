@@ -5,6 +5,8 @@
         :href="entry.url"
         target="_blank"
         rel="noopener noreferrer"
+        :title="entry.label"
+        :aria-label="entry.label"
         :class="linkClass"
       >
         {{ entry.label }}

@@ -1,11 +1,17 @@
 <template>
   <section id="art" class="page-container scroll-mt-[calc(var(--nav-height)+4.75rem)] pt-8 md:pt-12">
     <header class="grid gap-10 lg:grid-cols-[minmax(0,520px)_1fr] lg:items-end">
-      <img
+      <NuxtImg
         :src="album.coverImage"
         :alt="album.coverAlt"
         class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_18px_40px_color-mix(in_srgb,var(--theme-text)_24%,transparent)]"
-      >
+        width="1400"
+        height="1400"
+        sizes="(max-width: 1024px) 100vw, 520px"
+        format="webp,avif"
+        loading="eager"
+        fetchpriority="high"
+      />
 
       <div class="space-y-5">
         <p class="label-text muted-text">album</p>

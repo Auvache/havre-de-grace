@@ -67,12 +67,16 @@
           <p class="label-text muted-text">press photos</p>
           <ul class="space-y-4">
             <li v-for="asset in siteProfile.pressAssets" :key="asset.src" class="space-y-3">
-              <img
+              <NuxtImg
                 :src="asset.src"
                 :alt="asset.label"
                 class="h-28 w-full rounded-[var(--radius-sm)] object-cover"
+                width="560"
+                height="280"
+                sizes="(max-width: 1024px) 100vw, 360px"
+                format="webp,avif"
                 loading="lazy"
-              >
+              />
               <div class="flex items-center justify-between gap-3 text-sm">
                 <div class="muted-text">
                   <p>{{ asset.label }}</p>
