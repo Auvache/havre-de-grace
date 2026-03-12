@@ -9,13 +9,11 @@
         <StreamingLinks :links="siteProfile.artistLinks" compact />
 
         <p class="text-sm muted-text">
-          Booking:
+          Email:
           <a :href="`mailto:${siteProfile.bookingEmail}`" class="hover:text-[var(--color-accent)]">
             {{ siteProfile.bookingEmail }}
           </a>
         </p>
-
-        <EmailSignupPlaceholder />
 
         <p class="text-xs muted-text">
           &copy; {{ currentYear }} {{ siteProfile.artistName }}. All rights reserved.

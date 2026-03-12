@@ -13,8 +13,8 @@
     <ScrollReveal as="section" class-name="page-container section-space border-t border-theme" :delay-ms="120">
       <SectionHeading
         title="contact"
-        eyebrow="booking and updates"
-        description="Questions, booking inquiries, and updates all start here."
+        eyebrow="booking and press"
+        description="For inquiries, please reach out directly by email."
         align="center"
       />
 
@@ -22,16 +22,9 @@
         <a :href="`mailto:${siteProfile.bookingEmail}`" class="text-base hover:text-[var(--color-accent)]">
           {{ siteProfile.bookingEmail }}
         </a>
-      </div>
-
-      <div class="mt-10 flex justify-center">
-        <EmailSignupPlaceholder />
-      </div>
-
-      <div class="mt-10 text-center">
-        <NuxtLink to="/contact" class="nav-link inline-block text-base hover:text-[var(--color-accent)]">
-          get in touch
-        </NuxtLink>
+        <p class="mt-3 text-sm muted-text">
+          Email is the fastest way to connect.
+        </p>
       </div>
     </ScrollReveal>
   </div>
