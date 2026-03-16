@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isMounted && isVisible"
+    v-if="isVisible"
     class="splash-screen"
     :class="{ 'is-exiting': isExiting }"
     aria-hidden="true"
@@ -23,8 +23,12 @@ const LOGO_FADE_IN_MS = 750
 const LOGO_HOLD_AFTER_IN_MS = 750
 const OVERLAY_FADE_OUT_MS = 750
 
-const isMounted = ref(false)
-const isVisible = ref(false)
+const splashSeen = useCookie<string | null>(SESSION_KEY, {
+  sameSite: 'lax',
+  path: '/',
+})
+
+const isVisible = ref(splashSeen.value !== '1')
 const isExiting = ref(false)
 const isLogoVisible = ref(false)
 const timers: ReturnType<typeof setTimeout>[] = []
@@ -39,20 +43,18 @@ const clearTimers = () => {
 }
 
 onMounted(() => {
-  isMounted.value = true
-
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (prefersReducedMotion) {
-    sessionStorage.setItem(SESSION_KEY, '1')
+    splashSeen.value = '1'
+    isVisible.value = false
     return
   }
 
-  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  if (!isVisible.value) {
     return
   }
 
-  sessionStorage.setItem(SESSION_KEY, '1')
-  isVisible.value = true
+  splashSeen.value = '1'
 
   timers.push(
     setTimeout(() => {
