@@ -1,38 +1,47 @@
-type PageTheme = 'light' | 'dark'
-
-const isTheme = (value: unknown): value is PageTheme => value === 'light' || value === 'dark'
+import { resolvePageThemeConfig, type PageGradient, type PageTheme } from '~/config/pageThemeConfig'
 
 export const usePageTheme = () => {
   const route = useRoute()
   const theme = useState<PageTheme>('page-theme', () => 'light')
+  const gradient = useState<PageGradient>('page-gradient', () => 'light-fjord')
 
   useHead(() => ({
     htmlAttrs: {
       'data-theme': theme.value,
+      'data-page-gradient': gradient.value,
     },
   }))
 
-  const resolveRouteTheme = () => {
-    const routeTheme = route.meta.theme
-    if (isTheme(routeTheme)) {
-      return routeTheme
-    }
-
-    return route.meta.layout === 'dark' ? 'dark' : 'light'
+  const applyRouteTheme = () => {
+    const config = resolvePageThemeConfig(route.path)
+    theme.value = config.theme
+    gradient.value = config.gradient
   }
 
-  const setTheme = (nextTheme?: PageTheme) => {
-    theme.value = nextTheme ?? resolveRouteTheme()
+  const setTheme = (nextTheme?: PageTheme, nextGradient?: PageGradient) => {
+    if (!nextTheme && !nextGradient) {
+      applyRouteTheme()
+      return
+    }
+
+    if (nextTheme) {
+      theme.value = nextTheme
+    }
+
+    if (nextGradient) {
+      gradient.value = nextGradient
+    }
   }
 
   watch(
-    () => [route.path, route.meta.theme, route.meta.layout],
-    () => setTheme(),
+    () => route.path,
+    applyRouteTheme,
     { immediate: true },
   )
 
   return {
     theme: readonly(theme),
+    gradient: readonly(gradient),
     isDark: computed(() => theme.value === 'dark'),
     setTheme,
   }

@@ -5,6 +5,9 @@ html[data-theme="light"] {
   --theme-border: var(--color-border);
   --theme-bg-soft: color-mix(in srgb, var(--color-bg) 88%, var(--color-accent) 12%);
   --theme-surface: color-mix(in srgb, var(--color-bg) 96%, var(--color-text) 4%);
+  --theme-page-gradient:
+    radial-gradient(125% 82% at 0% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 96%, #eaf5fa 4%) 0%, var(--color-bg) 100%);
 }
 
 html[data-theme="dark"] {
@@ -14,4 +17,54 @@ html[data-theme="dark"] {
   --theme-border: color-mix(in srgb, var(--color-muted-dark) 28%, transparent);
   --theme-bg-soft: color-mix(in srgb, var(--color-bg-dark) 82%, var(--color-accent) 18%);
   --theme-surface: color-mix(in srgb, var(--color-bg-dark) 90%, var(--color-text-dark) 10%);
+  --theme-page-gradient:
+    radial-gradient(120% 85% at 0% 0%, color-mix(in srgb, var(--color-accent) 16%, transparent), transparent 60%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-bg-dark) 90%, #0b1d2a 10%) 0%,
+      var(--color-bg-dark) 68%,
+      #11161b 100%
+    );
+}
+
+html[data-page-gradient="home-light"] {
+  --theme-page-gradient:
+    radial-gradient(140% 90% at 5% 0%, color-mix(in srgb, var(--color-accent) 22%, #cbe8f1 78%), transparent 57%),
+    linear-gradient(180deg, #eef8fc 0%, #f4f9fc 45%, #ffffff 100%);
+}
+
+html[data-page-gradient="light-fjord"],
+html[data-page-gradient="fjord-light"] {
+  --theme-page-gradient:
+    radial-gradient(125% 82% at 0% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 96%, #eaf5fa 4%) 0%, var(--color-bg) 100%);
+}
+
+html[data-page-gradient="music-dark"] {
+  --theme-page-gradient:
+    radial-gradient(120% 85% at 0% 0%, color-mix(in srgb, var(--color-accent) 16%, transparent), transparent 60%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-bg-dark) 90%, #0b1d2a 10%) 0%,
+      var(--color-bg-dark) 68%,
+      #11161b 100%
+    );
+}
+
+html[data-page-gradient="music-into-the-wild"] {
+  --theme-page-gradient:
+    radial-gradient(140% 90% at 6% 0%, color-mix(in srgb, #b7c5d5 26%, transparent), transparent 60%),
+    linear-gradient(180deg, #eef1f4 0%, #e2e7ec 50%, #d8dee5 100%);
+}
+
+html[data-page-gradient="music-charcoal-offwhite"] {
+  --theme-page-gradient:
+    radial-gradient(140% 92% at 6% 0%, color-mix(in srgb, #c5b8ac 32%, transparent), transparent 58%),
+    radial-gradient(95% 70% at 100% 10%, color-mix(in srgb, #ffffff 30%, transparent), transparent 74%),
+    linear-gradient(
+      180deg,
+      #f5f0eb 0%,
+      #e8e0d8 50%,
+      #ddd5cc 100%
+    );
 }

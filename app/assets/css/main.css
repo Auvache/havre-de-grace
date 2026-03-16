@@ -36,6 +36,9 @@
   --theme-border: var(--color-border);
   --theme-bg-soft: color-mix(in srgb, var(--theme-bg) 92%, var(--color-accent) 8%);
   --theme-surface: color-mix(in srgb, var(--theme-bg) 96%, var(--theme-text) 4%);
+  --theme-page-gradient:
+    radial-gradient(125% 82% at 0% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 96%, #eaf5fa 4%) 0%, var(--color-bg) 100%);
 
   --radius-sm: 0.4rem;
   --radius-md: 0.7rem;
@@ -61,9 +64,7 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--color-accent) 10%, transparent), transparent 55%),
-    var(--theme-bg);
+  background: var(--theme-page-gradient);
   color: var(--theme-text);
   font-family: var(--font-family-base);
   font-size: var(--font-size-body);

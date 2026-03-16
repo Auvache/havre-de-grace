@@ -20,29 +20,41 @@
 
       <article class="surface-card space-y-4 p-6">
         <p class="label-text muted-text">social links</p>
-        <ul class="flex flex-wrap gap-3">
-          <li v-for="link in siteProfile.socialLinks" :key="link.url">
-            <a
-              :href="link.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex rounded-full border border-theme px-3 py-1.5 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              {{ link.label }}
-            </a>
-          </li>
-        </ul>
+        <StreamingLinks :links="socialLinks" />
       </article>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import type { StreamingLinks } from '~~/shared/types'
+
 definePageMeta({
   theme: 'light',
 })
 
 const siteProfile = useSiteProfile()
+
+const socialPlatformByLabel: Record<string, keyof StreamingLinks> = {
+  Spotify: 'spotify',
+  'Apple Music': 'appleMusic',
+  'YouTube Music': 'youtubeMusic',
+  'Amazon Music': 'amazonMusic',
+  Bandcamp: 'bandcamp',
+  SoundCloud: 'soundcloud',
+  YouTube: 'youtube',
+  Instagram: 'instagram',
+}
+
+const socialLinks = computed<Record<string, string>>(() =>
+  siteProfile.socialLinks.reduce((acc, link) => {
+    const platform = socialPlatformByLabel[link.label]
+    if (platform) {
+      acc[platform] = link.url
+    }
+
+    return acc
+  }, {} as Record<string, string>))
 
 usePageSeo({
   title: `Contact | ${siteProfile.artistName}`,

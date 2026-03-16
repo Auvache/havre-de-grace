@@ -33,7 +33,6 @@ import type { Album } from '~~/shared/types'
 
 definePageMeta({
   layout: 'dark',
-  theme: 'dark',
 })
 
 const siteProfile = useSiteProfile()

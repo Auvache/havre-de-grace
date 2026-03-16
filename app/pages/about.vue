@@ -8,10 +8,6 @@
 <script setup lang="ts">
 import type { Album } from '~~/shared/types'
 
-definePageMeta({
-  theme: 'light',
-})
-
 const siteProfile = useSiteProfile()
 
 const sortAlbums = (items: Album[]) => [...items]

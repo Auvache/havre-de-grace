@@ -1,5 +1,5 @@
 <template>
-  <section id="art" class="page-container scroll-mt-[calc(var(--nav-height)+4.75rem)] pt-8 md:pt-12">
+  <section id="art" class="page-container scroll-mt-[calc(var(--nav-height)+4.75rem)] pb-8 pt-8 md:pb-12 md:pt-12">
     <header class="grid gap-10 lg:grid-cols-[minmax(0,520px)_1fr] lg:items-end">
       <NuxtImg
         :src="album.coverImage"

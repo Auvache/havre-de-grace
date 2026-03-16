@@ -63,7 +63,6 @@ const { toAbsoluteUrl, siteUrl } = useAbsoluteUrl()
 
 definePageMeta({
   layout: 'dark',
-  theme: 'dark',
 })
 
 const slug = computed(() => route.params.slug as string)
