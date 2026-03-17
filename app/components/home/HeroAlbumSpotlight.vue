@@ -34,10 +34,6 @@
           {{ releaseLabel }}
         </p>
 
-        <p class="max-w-2xl muted-text">
-          {{ album?.description ?? siteProfile.description }}
-        </p>
-
         <StreamingLinks v-if="album" :links="album.streamingLinks" />
 
         <div class="flex flex-wrap gap-3 pt-2">
@@ -88,7 +84,13 @@ const releaseLabel = computed(() => {
 
 <style scoped>
 .hero-spotlight {
-  background: color-mix(in srgb, var(--theme-bg) 94%, var(--color-accent) 6%);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--theme-bg) 94%, var(--color-accent) 6%) 0%,
+      #fff 72%,
+      color-mix(in srgb, var(--color-bg) 96%, #eaf5fa 4%) 100%
+    );
 }
 
 .hero-wash {
