@@ -4,6 +4,7 @@ export type PageGradient =
   | 'home-light'
   | 'teal-depth'
   | 'light-fjord'
+  | 'blackout'
   | 'music-dark'
   | 'music-into-the-wild'
   | 'music-charcoal-offwhite'
@@ -39,29 +40,29 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
   {
     match: /^\/$/,
     config: {
-      theme: 'light',
-      gradient: 'light-fjord',
+      theme: 'dark',
+      gradient: 'blackout',
     },
   },
   {
     match: /^\/music(?:\/|$)/,
     config: {
       theme: 'dark',
-      gradient: 'music-dark',
+      gradient: 'blackout',
     },
   },
   {
     match: /^\/about\/?$/,
     config: {
-      theme: 'light',
-      gradient: 'light-fjord',
+      theme: 'dark',
+      gradient: 'blackout',
     },
   },
   {
     match: /^\/contact\/?$/,
     config: {
-      theme: 'light',
-      gradient: 'light-fjord',
+      theme: 'dark',
+      gradient: 'blackout',
     },
   },
 ]

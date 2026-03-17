@@ -1,5 +1,5 @@
 <template>
-  <section class="page-container section-space border-t border-theme text-center">
+  <section class="page-container section-space text-center">
     <SectionHeading
       title="music"
       eyebrow="discography"

@@ -84,19 +84,15 @@ const releaseLabel = computed(() => {
 
 <style scoped>
 .hero-spotlight {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--theme-bg) 94%, var(--color-accent) 6%) 0%,
-      #fff 72%,
-      color-mix(in srgb, var(--color-bg) 96%, #eaf5fa 4%) 100%
-    );
+  background: transparent;
 }
 
 .hero-wash {
   background:
-    radial-gradient(90% 90% at 12% 12%, color-mix(in srgb, var(--color-accent) 24%, transparent), transparent 62%),
-    radial-gradient(80% 80% at 88% 4%, color-mix(in srgb, var(--color-accent) 10%, transparent), transparent 72%);
+    radial-gradient(90% 90% at 12% 12%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 62%),
+    radial-gradient(80% 80% at 88% 4%, color-mix(in srgb, #2563eb 10%, transparent), transparent 72%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 100%);
 }
 
 .hero-cover-wrap {
