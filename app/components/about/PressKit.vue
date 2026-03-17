@@ -11,8 +11,9 @@
         <article class="surface-card space-y-4 p-6">
           <p class="label-text muted-text">short bio</p>
           <p class="text-sm leading-relaxed muted-text">
-            This is for my copy-paste short bio section in the press kit. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
+            Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley. His chosen medium is
+            stripped down to what matters: one guitar, his voice, and whatever song won't leave him alone. His debut
+            album, I Want to Be Yours and Other Songs, was released in 2025.
           </p>
         </article>
 
@@ -29,20 +30,6 @@
           <StreamingLinks :links="latestAlbum.streamingLinks" compact />
         </article>
 
-        <article class="surface-card space-y-4 p-6">
-          <p class="label-text muted-text">selected quotes</p>
-          <blockquote
-            v-for="quote in readyQuotes"
-            :key="`${quote.quote}-${quote.source}`"
-            class="border-l border-theme pl-4 text-sm italic leading-relaxed muted-text"
-          >
-            "{{ quote.quote }}"
-            <cite v-if="quote.source" class="mt-2 block not-italic">- {{ quote.source }}</cite>
-          </blockquote>
-          <p v-if="!readyQuotes.length" class="text-sm muted-text">
-            This is for placeholder press quotes about my music. Lorem ipsum quote samples will be replaced as coverage is published.
-          </p>
-        </article>
       </div>
 
       <div class="space-y-8">
@@ -59,7 +46,7 @@
             download full epk
           </a>
           <p v-else class="text-sm muted-text">
-            This is for my EPK download placeholder state. Lorem ipsum packet will be replaced with final assets.
+            Full EPK coming soon.
           </p>
         </article>
 
@@ -127,11 +114,6 @@ const formattedReleaseDate = computed(() => {
     year: 'numeric',
   })
 })
-
-const readyQuotes = computed(() => (props.latestAlbum?.pressQuotes ?? []).filter((quote) => {
-  const normalized = quote.quote.toLowerCase()
-  return normalized.trim().length > 0 && !normalized.includes('todo')
-}))
 
 const hasEpkDownload = computed(() => {
   const url = siteProfile.epkDownloadUrl?.trim()

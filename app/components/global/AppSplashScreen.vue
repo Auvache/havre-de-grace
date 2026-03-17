@@ -93,13 +93,7 @@ onBeforeUnmount(() => {
   transition:
     opacity 1000ms var(--ease-standard),
     transform 1000ms var(--ease-standard);
-  background:
-    radial-gradient(
-      120% 80% at 0% 0%,
-      color-mix(in srgb, var(--color-accent) 10%, transparent),
-      transparent 55%
-    ),
-    var(--color-bg-dark);
+  background: linear-gradient(135deg, #0a0e14 0%, #0f1a28 45%, #162a3e 100%);
 }
 
 .splash-screen.is-exiting {

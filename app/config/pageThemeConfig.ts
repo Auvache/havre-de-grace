@@ -2,8 +2,8 @@ export type PageTheme = 'light' | 'dark'
 
 export type PageGradient =
   | 'home-light'
+  | 'teal-depth'
   | 'light-fjord'
-  | 'fjord-light'
   | 'music-dark'
   | 'music-into-the-wild'
   | 'music-charcoal-offwhite'
@@ -40,7 +40,7 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     match: /^\/$/,
     config: {
       theme: 'light',
-      gradient: 'home-light',
+      gradient: 'light-fjord',
     },
   },
   {

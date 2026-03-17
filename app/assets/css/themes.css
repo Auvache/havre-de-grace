@@ -33,6 +33,11 @@ html[data-page-gradient="home-light"] {
     linear-gradient(180deg, #eef8fc 0%, #f4f9fc 45%, #ffffff 100%);
 }
 
+html[data-page-gradient="teal-depth"] {
+  --theme-page-gradient:
+    linear-gradient(135deg, #1a3c40 0%, #234e52 50%, #2d6265 100%);
+}
+
 html[data-page-gradient="light-fjord"],
 html[data-page-gradient="fjord-light"] {
   --theme-page-gradient:
