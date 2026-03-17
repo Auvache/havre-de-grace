@@ -39,7 +39,7 @@
         <div class="flex flex-wrap gap-3 pt-2">
           <NuxtLink
             :to="album ? `/music/${album.slug}` : '/music'"
-            class="inline-flex rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-[var(--theme-bg)]"
+            class="inline-flex rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-white"
           >
             {{ album ? 'explore the album' : 'explore music' }}
           </NuxtLink>

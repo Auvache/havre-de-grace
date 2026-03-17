@@ -1,18 +1,37 @@
 <template>
   <section class="page-container section-space border-t border-theme">
     <div class="grid gap-10 lg:grid-cols-[minmax(0,410px)_1fr] lg:items-center">
-      <NuxtImg
-        src="/press/media-pic-square.jpg"
-        alt="Havre De Grace press photo"
-        class="w-full rounded-[var(--radius-lg)] object-cover"
-        width="2056"
-        height="2083"
-        sizes="(max-width: 1024px) 100vw, 410px"
-        format="webp,avif"
-        loading="lazy"
-      />
+      <ScrollReveal
+        as="div"
+        variant="section-left"
+        class-name="overflow-hidden rounded-[var(--radius-lg)]"
+        :delay-ms="90"
+        :distance-px="84"
+        :threshold="0.18"
+        root-margin="0px 0px -8% 0px"
+      >
+        <NuxtImg
+          src="/press/media-pic-square.jpg"
+          alt="Havre De Grace press photo"
+          class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_26px_54px_color-mix(in_srgb,var(--theme-text)_14%,transparent)]"
+          width="2056"
+          height="2083"
+          sizes="(max-width: 1024px) 100vw, 410px"
+          format="webp,avif"
+          loading="lazy"
+        />
+      </ScrollReveal>
 
-      <div class="space-y-6">
+      <ScrollReveal
+        as="div"
+        class-name="space-y-6"
+        variant="section-right"
+        :delay-ms="180"
+        :distance-px="84"
+        :blur-px="6"
+        :threshold="0.18"
+        root-margin="0px 0px -8% 0px"
+      >
         <SectionHeading
           title="about"
           eyebrow="bio"
@@ -34,7 +53,7 @@
         <NuxtLink to="/about" class="nav-link inline-block text-base hover:text-[var(--color-accent)]">
           read more
         </NuxtLink>
-      </div>
+      </ScrollReveal>
     </div>
   </section>
 </template>

@@ -16,7 +16,7 @@
         </p>
 
         <p class="text-xs muted-text">
-          &copy; {{ currentYear }} {{ siteProfile.artistName }}. All rights reserved.
+          &copy; {{ currentYear }} {{ siteProfile.artistName }} Music. All rights reserved.
         </p>
       </div>
     </div>

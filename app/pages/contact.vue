@@ -1,60 +1,58 @@
 <template>
   <section class="page-container section-space">
-    <SectionHeading
-      title="contact"
-      eyebrow="booking and press"
-      description="Please reach out by email for booking, interviews, and press requests."
-      heading-tag="h1"
-    />
+    <div class="mx-auto max-w-2xl text-center">
+      <ScrollReveal
+        as="div"
+        variant="section-up"
+        :delay-ms="70"
+        :duration-ms="840"
+        :distance-px="56"
+        :threshold="0.18"
+        root-margin="0px 0px -6% 0px"
+      >
+        <SectionHeading
+          title="contact"
+          eyebrow="booking and press"
+          description="For booking, interviews, and press requests, email directly or find Havre De Grace on the platforms below."
+          heading-tag="h1"
+          align="center"
+        />
+      </ScrollReveal>
 
-    <div class="mx-auto mt-12 grid max-w-4xl gap-8 lg:grid-cols-2">
-      <article class="surface-card space-y-3 p-6">
+      <ScrollReveal
+        as="div"
+        class-name="mt-10 rounded-[var(--radius-lg)] border border-theme bg-[color-mix(in_srgb,var(--theme-surface)_92%,transparent)] px-6 py-10 shadow-[0_28px_58px_color-mix(in_srgb,var(--theme-text)_10%,transparent)] sm:px-10"
+        variant="section-up"
+        :delay-ms="180"
+        :distance-px="52"
+        :threshold="0.16"
+        root-margin="0px 0px -6% 0px"
+      >
         <p class="label-text muted-text">email</p>
-        <a :href="`mailto:${siteProfile.bookingEmail}`" class="text-base hover:text-[var(--color-accent)]">
+        <a
+          :href="`mailto:${siteProfile.bookingEmail}`"
+          class="mt-4 inline-block text-lg hover:text-[var(--color-accent)] sm:text-xl"
+        >
           {{ siteProfile.bookingEmail }}
         </a>
-        <p class="text-sm muted-text">
-          Email is the best way to get in touch.
+        <p class="mt-4 text-sm muted-text">
+          Email is the fastest way to connect.
         </p>
-      </article>
 
-      <article class="surface-card space-y-4 p-6">
-        <p class="label-text muted-text">social links</p>
-        <StreamingLinks :links="socialLinks" />
-      </article>
+        <div class="mt-8 flex justify-center">
+          <StreamingLinks :links="siteProfile.artistLinks" />
+        </div>
+      </ScrollReveal>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { StreamingLinks } from '~~/shared/types'
-
 definePageMeta({
   theme: 'light',
 })
 
 const siteProfile = useSiteProfile()
-
-const socialPlatformByLabel: Record<string, keyof StreamingLinks> = {
-  Spotify: 'spotify',
-  'Apple Music': 'appleMusic',
-  'YouTube Music': 'youtubeMusic',
-  'Amazon Music': 'amazonMusic',
-  Bandcamp: 'bandcamp',
-  SoundCloud: 'soundcloud',
-  YouTube: 'youtube',
-  Instagram: 'instagram',
-}
-
-const socialLinks = computed<Record<string, string>>(() =>
-  siteProfile.socialLinks.reduce((acc, link) => {
-    const platform = socialPlatformByLabel[link.label]
-    if (platform) {
-      acc[platform] = link.url
-    }
-
-    return acc
-  }, {} as Record<string, string>))
 
 usePageSeo({
   title: `Contact | ${siteProfile.artistName}`,

@@ -1,23 +1,52 @@
 <template>
   <section class="mt-20 border-t border-theme pt-16">
-    <SectionHeading
-      title="press"
-      eyebrow="press kit"
-      description="Bio, photos, release details, and direct booking contact for media use."
-    />
+    <ScrollReveal
+      as="div"
+      class-name="max-w-2xl"
+      variant="section-up"
+      :delay-ms="70"
+      :distance-px="46"
+      :threshold="0.18"
+      root-margin="0px 0px -6% 0px"
+    >
+      <SectionHeading
+        title="press"
+        eyebrow="press kit"
+        description="Bio, photos, release details, and direct booking contact for media use."
+      />
+    </ScrollReveal>
 
     <div class="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
       <div class="space-y-8">
-        <article class="surface-card space-y-4 p-6">
+        <ScrollReveal
+          as="article"
+          class-name="surface-card space-y-4 p-6"
+          variant="section-left"
+          :delay-ms="120"
+          :distance-px="78"
+          :blur-px="6"
+          :threshold="0.14"
+          root-margin="0px 0px -8% 0px"
+        >
           <p class="label-text muted-text">short bio</p>
           <p class="text-sm leading-relaxed muted-text">
             Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley. His chosen medium is
             stripped down to what matters: one guitar, his voice, and whatever song won't leave him alone. His debut
             album, I Want to Be Yours and Other Songs, was released in 2025.
           </p>
-        </article>
+        </ScrollReveal>
 
-        <article v-if="latestAlbum" class="surface-card space-y-4 p-6">
+        <ScrollReveal
+          v-if="latestAlbum"
+          as="article"
+          class-name="surface-card space-y-4 p-6"
+          variant="section-left"
+          :delay-ms="220"
+          :distance-px="78"
+          :blur-px="6"
+          :threshold="0.14"
+          root-margin="0px 0px -8% 0px"
+        >
           <p class="label-text muted-text">latest release</p>
           <h3 class="text-xl font-medium">{{ latestAlbum.title }}</h3>
           <p class="text-sm muted-text">
@@ -28,12 +57,20 @@
             {{ latestAlbum.description }}
           </p>
           <StreamingLinks :links="latestAlbum.streamingLinks" compact />
-        </article>
-
+        </ScrollReveal>
       </div>
 
       <div class="space-y-8">
-        <article class="surface-card space-y-4 p-6">
+        <ScrollReveal
+          as="article"
+          class-name="surface-card space-y-4 p-6"
+          variant="section-right"
+          :delay-ms="170"
+          :distance-px="78"
+          :blur-px="6"
+          :threshold="0.14"
+          root-margin="0px 0px -8% 0px"
+        >
           <p class="label-text muted-text">booking and press</p>
           <a :href="`mailto:${siteProfile.bookingEmail}`" class="text-base hover:text-[var(--color-accent)]">
             {{ siteProfile.bookingEmail }}
@@ -48,9 +85,18 @@
           <p v-else class="text-sm muted-text">
             Full EPK coming soon.
           </p>
-        </article>
+        </ScrollReveal>
 
-        <article class="surface-card space-y-5 p-6">
+        <ScrollReveal
+          as="article"
+          class-name="surface-card space-y-5 p-6"
+          variant="section-right"
+          :delay-ms="270"
+          :distance-px="78"
+          :blur-px="6"
+          :threshold="0.14"
+          root-margin="0px 0px -8% 0px"
+        >
           <p class="label-text muted-text">press photos</p>
           <ul class="space-y-4">
             <li v-for="asset in siteProfile.pressAssets" :key="asset.src" class="space-y-3">
@@ -79,7 +125,7 @@
               </div>
             </li>
           </ul>
-        </article>
+        </ScrollReveal>
       </div>
     </div>
   </section>

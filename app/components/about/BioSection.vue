@@ -1,18 +1,37 @@
 <template>
   <section>
-    <NuxtImg
-      src="/press/media-pic-wide.jpg"
-      alt="Havre De Grace atmospheric portrait"
-      class="w-full rounded-[var(--radius-lg)] object-cover"
-      width="3024"
-      height="1752"
-      sizes="100vw"
-      format="webp,avif"
-      loading="eager"
-      fetchpriority="high"
-    />
+    <ScrollReveal
+      as="div"
+      variant="section-up"
+      :duration-ms="900"
+      :distance-px="72"
+      :blur-px="6"
+      :threshold="0.16"
+      root-margin="0px 0px -6% 0px"
+    >
+      <NuxtImg
+        src="/press/media-pic-wide.jpg"
+        alt="Havre De Grace atmospheric portrait"
+        class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_30px_64px_color-mix(in_srgb,var(--theme-text)_14%,transparent)]"
+        width="3024"
+        height="1752"
+        sizes="100vw"
+        format="webp,avif"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </ScrollReveal>
 
-    <div class="mx-auto mt-10 max-w-3xl space-y-6">
+    <ScrollReveal
+      as="div"
+      class-name="mx-auto mt-10 max-w-3xl space-y-6"
+      variant="section-up"
+      :delay-ms="110"
+      :duration-ms="860"
+      :distance-px="52"
+      :threshold="0.16"
+      root-margin="0px 0px -6% 0px"
+    >
       <SectionHeading
         title="about"
         eyebrow="bio"
@@ -57,7 +76,18 @@
       <p class="muted-text">
         You don't have to listen to it... But you could.
       </p>
+    </ScrollReveal>
 
+    <ScrollReveal
+      as="div"
+      class-name="mx-auto mt-10 max-w-3xl"
+      variant="section-left"
+      :delay-ms="140"
+      :distance-px="82"
+      :blur-px="6"
+      :threshold="0.14"
+      root-margin="0px 0px -8% 0px"
+    >
       <NuxtImg
         src="/press/media-pic-square.jpg"
         alt="Havre De Grace portrait"
@@ -68,8 +98,18 @@
         format="webp,avif"
         loading="lazy"
       />
+    </ScrollReveal>
 
-      <div class="grid gap-4 sm:grid-cols-2">
+    <div class="mx-auto mt-6 grid max-w-3xl gap-4 sm:grid-cols-2">
+      <ScrollReveal
+        as="div"
+        variant="section-left"
+        :delay-ms="90"
+        :distance-px="72"
+        :blur-px="5"
+        :threshold="0.12"
+        root-margin="0px 0px -8% 0px"
+      >
         <NuxtImg
           src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-wide.jpg"
           alt="Placeholder about image - wide portrait"
@@ -80,6 +120,16 @@
           format="webp,avif"
           loading="lazy"
         />
+      </ScrollReveal>
+      <ScrollReveal
+        as="div"
+        variant="section-right"
+        :delay-ms="190"
+        :distance-px="72"
+        :blur-px="5"
+        :threshold="0.12"
+        root-margin="0px 0px -8% 0px"
+      >
         <NuxtImg
           src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-evergreens.jpg"
           alt="Placeholder about image - atmospheric trees"
@@ -90,8 +140,18 @@
           format="webp,avif"
           loading="lazy"
         />
-      </div>
+      </ScrollReveal>
+    </div>
 
+    <ScrollReveal
+      as="div"
+      class-name="mx-auto mt-8 max-w-3xl"
+      variant="section-up"
+      :delay-ms="120"
+      :distance-px="48"
+      :threshold="0.18"
+      root-margin="0px 0px -6% 0px"
+    >
       <div class="grid gap-6 border-t border-theme pt-8 sm:grid-cols-3">
         <article>
           <p class="label-text muted-text">based in</p>
@@ -108,7 +168,7 @@
           <p class="mt-2">{{ siteProfile.artistName }}</p>
         </article>
       </div>
-    </div>
+    </ScrollReveal>
   </section>
 </template>
 
