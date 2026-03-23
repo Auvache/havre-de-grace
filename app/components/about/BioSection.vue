@@ -145,6 +145,28 @@
 
     <ScrollReveal
       as="div"
+      class-name="mx-auto mt-10 max-w-3xl"
+      variant="section-up"
+      :delay-ms="120"
+      :distance-px="52"
+      :blur-px="5"
+      :threshold="0.14"
+      root-margin="0px 0px -8% 0px"
+    >
+      <div class="aspect-video w-full overflow-hidden rounded-[var(--radius-md)]">
+        <iframe
+          src="https://www.youtube.com/embed/3ro2I9rvQj8?si=w533QpFQK6WmQVjb"
+          title="Havre De Grace - Live Performance"
+          class="h-full w-full"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+    </ScrollReveal>
+
+    <ScrollReveal
+      as="div"
       class-name="mx-auto mt-8 max-w-3xl"
       variant="section-up"
       :delay-ms="120"

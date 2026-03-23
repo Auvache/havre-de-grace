@@ -6,7 +6,7 @@
       <NuxtLink
         v-if="album"
         :to="`/music/${album.slug}`"
-        class="hero-cover-wrap interactive-lift overflow-hidden rounded-[var(--radius-lg)] border border-theme"
+        class="hero-cover-wrap interactive-lift relative overflow-hidden rounded-[var(--radius-lg)] border border-theme"
       >
         <NuxtImg
           :src="album.coverImage"
@@ -19,6 +19,14 @@
           loading="eager"
           fetchpriority="high"
         />
+        <div
+          v-if="album.slug === 'into-the-wild'"
+          class="absolute inset-0 flex items-center justify-center bg-black/35 text-center"
+        >
+          <span class="text-xl font-semibold uppercase tracking-[0.2em] text-red-600 sm:text-2xl">
+            Coming Soon
+          </span>
+        </div>
       </NuxtLink>
 
       <div class="space-y-6">

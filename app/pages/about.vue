@@ -38,10 +38,10 @@ const latestAlbum = computed(() => {
   return items.find((album) => album.isLatest) ?? items[0] ?? null
 })
 
-const pageDescription = computed(() => `About ${siteProfile.artistName}: artist bio, press kit, high-resolution photos, and latest release details.`)
+const pageDescription = computed(() => `About ${siteProfile.artistName}: artist bio, high-resolution photos, and latest release details.`)
 
 usePageSeo({
-  title: `About and Press | ${siteProfile.artistName}`,
+  title: `About | ${siteProfile.artistName}`,
   description: pageDescription,
   image: '/press/media-pic-wide.jpg',
 })

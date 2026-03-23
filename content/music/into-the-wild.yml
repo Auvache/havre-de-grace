@@ -4,7 +4,7 @@ year: 2026
 releaseDate: "2026-04-18"
 isLatest: false
 # Toggle this to true/false to show or hide this album in site listings.
-isVisible: true
+isVisible: false
 coverImage: "/images/albums/into-the-wild-album.png"
 coverAlt: "Into the Wild album cover by Havre De Grace"
 description: >

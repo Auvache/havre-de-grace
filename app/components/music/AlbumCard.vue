@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="`/music/${album.slug}`" class="group block h-full rounded-[var(--radius-md)] p-4 focus-visible:outline-none">
-    <div class="overflow-hidden rounded-[var(--radius-sm)]">
+    <div class="relative overflow-hidden rounded-[var(--radius-sm)]">
       <NuxtImg
         :src="album.coverImage"
         :alt="album.coverAlt"
@@ -11,6 +11,14 @@
         format="webp,avif"
         loading="lazy"
       />
+      <div
+        v-if="album.slug === 'into-the-wild'"
+        class="absolute inset-0 flex items-center justify-center bg-black/35 text-center"
+      >
+        <span class="text-lg font-semibold uppercase tracking-[0.2em] text-red-600 sm:text-xl">
+          Coming Soon
+        </span>
+      </div>
     </div>
 
     <p v-if="featured" class="label-text mt-4 text-[var(--color-accent)]">

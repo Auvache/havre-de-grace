@@ -11,8 +11,8 @@
     >
       <SectionHeading
         title="press"
-        eyebrow="press kit"
-        description="Bio, photos, release details, and direct booking contact for media use."
+        eyebrow="media"
+        description="Bio, photos, and latest release details for media use."
       />
     </ScrollReveal>
 
@@ -61,32 +61,6 @@
       </div>
 
       <div class="space-y-8">
-        <ScrollReveal
-          as="article"
-          class-name="surface-card space-y-4 p-6"
-          variant="section-right"
-          :delay-ms="170"
-          :distance-px="78"
-          :blur-px="6"
-          :threshold="0.14"
-          root-margin="0px 0px -8% 0px"
-        >
-          <p class="label-text muted-text">booking and press</p>
-          <a :href="`mailto:${siteProfile.bookingEmail}`" class="text-base hover:text-[var(--color-accent)]">
-            {{ siteProfile.bookingEmail }}
-          </a>
-          <a
-            v-if="hasEpkDownload"
-            :href="siteProfile.epkDownloadUrl"
-            class="inline-flex w-fit rounded-full border border-theme px-4 py-2 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-          >
-            download full epk
-          </a>
-          <p v-else class="text-sm muted-text">
-            Full EPK coming soon.
-          </p>
-        </ScrollReveal>
-
         <ScrollReveal
           as="article"
           class-name="surface-card space-y-5 p-6"
@@ -159,14 +133,5 @@ const formattedReleaseDate = computed(() => {
     month: 'long',
     year: 'numeric',
   })
-})
-
-const hasEpkDownload = computed(() => {
-  const url = siteProfile.epkDownloadUrl?.trim()
-  if (!url) {
-    return false
-  }
-
-  return !url.toLowerCase().includes('todo')
 })
 </script>

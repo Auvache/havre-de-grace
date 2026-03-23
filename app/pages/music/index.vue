@@ -21,16 +21,26 @@
           class="group block focus-visible:outline-none"
           :aria-label="`Open ${album.title}`"
         >
-          <NuxtImg
-            :src="album.coverImage"
-            :alt="album.coverAlt"
-            class="aspect-square w-full object-cover shadow-[0_22px_46px_color-mix(in_srgb,var(--theme-text)_14%,transparent)] transition-transform duration-300 group-hover:scale-[1.03]"
-            width="1200"
-            height="1200"
-            sizes="(max-width: 640px) 78vw, (max-width: 1024px) 42vw, 320px"
-            format="webp,avif"
-            loading="lazy"
-          />
+          <div class="relative overflow-hidden">
+            <NuxtImg
+              :src="album.coverImage"
+              :alt="album.coverAlt"
+              class="aspect-square w-full object-cover shadow-[0_22px_46px_color-mix(in_srgb,var(--theme-text)_14%,transparent)] transition-transform duration-300 group-hover:scale-[1.03]"
+              width="1200"
+              height="1200"
+              sizes="(max-width: 640px) 78vw, (max-width: 1024px) 42vw, 320px"
+              format="webp,avif"
+              loading="lazy"
+            />
+            <div
+              v-if="album.slug === 'into-the-wild'"
+              class="absolute inset-0 flex items-center justify-center bg-black/35 text-center"
+            >
+              <span class="text-lg font-semibold uppercase tracking-[0.2em] text-red-600 sm:text-xl">
+                Coming Soon
+              </span>
+            </div>
+          </div>
 
           <h2 class="mt-4 text-xl font-medium leading-tight">
             {{ album.title }}

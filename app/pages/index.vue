@@ -2,7 +2,7 @@
   <div>
     <HeroAlbumSpotlight :album="latestAlbum" />
 
-    <DiscographyPreview :albums="albums" :featured-slug="latestAlbum?.slug" />
+<!--    <DiscographyPreview :albums="albums" :featured-slug="latestAlbum?.slug" />-->
 
     <AboutPreview :latest-album-title="latestAlbum?.title" />
 
