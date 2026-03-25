@@ -90,17 +90,12 @@ export default defineNuxtConfig({
         statusCode: 301,
       },
     },
-    '/links': {
-      redirect: {
-        to: '/contact',
-        statusCode: 301,
-      },
-    },
   },
 
   nitro: {
     prerender: {
-      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/music/into-the-wild', '/about', '/contact'],
+      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/music/into-the-wild', '/about', '/contact', '/links'],
     },
   },
 })
+

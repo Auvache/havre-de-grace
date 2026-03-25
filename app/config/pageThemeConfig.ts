@@ -65,6 +65,13 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
       gradient: 'blackout',
     },
   },
+  {
+    match: /^\/links\/?$/,
+    config: {
+      theme: 'dark',
+      gradient: 'blackout',
+    },
+  },
 ]
 
 const toAlbumSlug = (path: string): string | null => {
@@ -83,3 +90,4 @@ export const resolvePageThemeConfig = (path: string): PageThemeConfig => {
 
   return PAGE_THEME_RULES.find((rule) => rule.match.test(path))?.config ?? DEFAULT_PAGE_THEME_CONFIG
 }
+
