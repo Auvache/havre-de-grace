@@ -52,7 +52,6 @@
       <LinerNotes
         v-if="hasNotes"
         :notes="album.linerNotes"
-        :images="album.linerNoteImages"
       />
 
       <AlbumVideos
@@ -132,8 +131,7 @@ const lyricTracks = computed<LyricTrack[]>(() => (album.value?.tracklist ?? [])
     }]
     : [])))
 
-const hasNotes = computed(() =>
-  hasValue(album.value?.linerNotes) || Boolean(album.value?.linerNoteImages?.length))
+const hasNotes = computed(() => hasValue(album.value?.linerNotes))
 
 const hasVideos = computed(() => Boolean(album.value?.videos?.length))
 const hasCredits = computed(() => Boolean(album.value?.credits?.length))

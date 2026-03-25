@@ -2,21 +2,20 @@
   <section>
     <ScrollReveal
       as="div"
+      class-name="mx-auto max-w-3xl"
       variant="section-up"
       :duration-ms="900"
       :distance-px="72"
-      :blur-px="6"
+      :blur-px="0"
       :threshold="0.16"
       root-margin="0px 0px -6% 0px"
     >
-      <NuxtImg
-        src="/press/media-pic-wide.jpg"
+      <img
+        src="/images/profile.jpg"
         alt="Havre De Grace atmospheric portrait"
         class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_30px_64px_color-mix(in_srgb,var(--theme-text)_14%,transparent)]"
         width="3024"
         height="1752"
-        sizes="100vw"
-        format="webp,avif"
         loading="eager"
         fetchpriority="high"
       />
@@ -78,46 +77,21 @@
       </p>
     </ScrollReveal>
 
-    <ScrollReveal
-      as="div"
-      class-name="mx-auto mt-10 max-w-3xl"
-      variant="section-left"
-      :delay-ms="140"
-      :distance-px="82"
-      :blur-px="6"
-      :threshold="0.14"
-      root-margin="0px 0px -8% 0px"
-    >
-      <NuxtImg
-        src="/press/media-pic-square.jpg"
-        alt="Havre De Grace portrait"
-        class="w-full rounded-[var(--radius-md)] object-cover"
-        width="2056"
-        height="2083"
-        sizes="(max-width: 1024px) 100vw, 768px"
-        format="webp,avif"
-        loading="lazy"
-      />
-    </ScrollReveal>
-
     <div class="mx-auto mt-6 grid max-w-3xl gap-4 sm:grid-cols-2">
       <ScrollReveal
         as="div"
         variant="section-left"
         :delay-ms="90"
         :distance-px="72"
-        :blur-px="5"
-        :threshold="0.12"
+        :blur-px="0"
         root-margin="0px 0px -8% 0px"
       >
-        <NuxtImg
-          src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-wide.jpg"
-          alt="Placeholder about image - wide portrait"
+        <img
+          src="/images/bio-update.png"
+          alt="Havre De Grace profile portrait"
           class="h-full w-full rounded-[var(--radius-sm)] object-cover"
           width="1200"
           height="800"
-          sizes="(max-width: 640px) 100vw, 50vw"
-          format="webp,avif"
           loading="lazy"
         />
       </ScrollReveal>
@@ -126,18 +100,16 @@
         variant="section-right"
         :delay-ms="190"
         :distance-px="72"
-        :blur-px="5"
+        :blur-px="0"
         :threshold="0.12"
         root-margin="0px 0px -8% 0px"
       >
-        <NuxtImg
-          src="/images/albums/i-want-to-be-yours-and-other-songs/liner-note-evergreens.jpg"
-          alt="Placeholder about image - atmospheric trees"
+        <img
+          src="/images/bio-pic.jpg"
+          alt="Havre De Grace bio portrait"
           class="h-full w-full rounded-[var(--radius-sm)] object-cover"
           width="1200"
           height="800"
-          sizes="(max-width: 640px) 100vw, 50vw"
-          format="webp,avif"
           loading="lazy"
         />
       </ScrollReveal>
