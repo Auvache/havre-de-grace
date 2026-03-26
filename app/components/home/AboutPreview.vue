@@ -11,7 +11,7 @@
         root-margin="0px 0px -8% 0px"
       >
         <NuxtImg
-          src="/press/media-pic-square.jpg"
+          src="/images/bio-update.png"
           alt="Havre De Grace press photo"
           class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_26px_54px_color-mix(in_srgb,var(--theme-text)_14%,transparent)]"
           width="2056"

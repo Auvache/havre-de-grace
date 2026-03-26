@@ -13,7 +13,6 @@
         <SectionHeading
           title="contact"
           eyebrow="booking and press"
-          description="For booking, interviews, and press requests, email directly or find Havre De Grace on the platforms below."
           heading-tag="h1"
           align="center"
         />
@@ -38,10 +37,7 @@
         <p class="mt-4 text-sm muted-text">
           Email is the fastest way to connect.
         </p>
-
-        <div class="mt-8 flex justify-center">
-          <StreamingLinks :links="siteProfile.artistLinks" />
-        </div>
+	      <NuxtLink class="mt-4 text-sm hover:text-[var(--color-accent)]" to="/about#press">Go to press kit</NuxtLink>
       </ScrollReveal>
     </div>
   </section>

@@ -11,7 +11,7 @@
       root-margin="0px 0px -6% 0px"
     >
       <img
-        src="/images/profile.jpg"
+        src="/images/bio-update.png"
         alt="Havre De Grace atmospheric portrait"
         class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_30px_64px_color-mix(in_srgb,var(--theme-text)_14%,transparent)]"
         width="3024"
@@ -87,7 +87,7 @@
         root-margin="0px 0px -8% 0px"
       >
         <img
-          src="/images/bio-update.png"
+          src="/images/profile.jpg"
           alt="Havre De Grace profile portrait"
           class="h-full w-full rounded-[var(--radius-sm)] object-cover"
           width="1200"

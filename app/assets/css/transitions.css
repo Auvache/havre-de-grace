@@ -88,6 +88,14 @@
   --reveal-y: var(--reveal-distance);
 }
 
+@media (max-width: 767px) {
+  .reveal-base[data-reveal="section-left"],
+  .reveal-base[data-reveal="section-right"] {
+    --reveal-x: 0px;
+    --reveal-y: var(--reveal-distance);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-enter-active,
   .page-leave-active,

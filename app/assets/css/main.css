@@ -61,6 +61,7 @@ body,
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -73,6 +74,14 @@ body {
   transition:
     background-color var(--dur-medium) var(--ease-standard),
     color var(--dur-medium) var(--ease-standard);
+  overflow-x: clip;
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
 }
 
 a {

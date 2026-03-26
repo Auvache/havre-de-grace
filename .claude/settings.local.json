@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/sbradley/stefan/havre-de-grace/app/composables -type f -name *.ts)"
+    ]
+  }
+}

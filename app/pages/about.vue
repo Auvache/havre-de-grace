@@ -1,7 +1,7 @@
 <template>
   <section class="page-container section-space">
     <BioSection :latest-album="latestAlbum" />
-    <PressKit :latest-album="latestAlbum" />
+    <PressKit id="press" :latest-album="latestAlbum" />
   </section>
 </template>
 
