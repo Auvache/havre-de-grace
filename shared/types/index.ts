@@ -4,6 +4,7 @@ export interface StreamingLinks {
   youtubeMusic?: string
   amazonMusic?: string
   bandcamp?: string
+  bandsintown?: string
   soundcloud?: string
   youtube?: string
   instagram?: string
@@ -82,3 +83,4 @@ export interface SiteProfile {
   pressAssets: PressAsset[]
   epkDownloadUrl: string
 }
+

@@ -39,6 +39,7 @@ import soundcloudIcon from '~~/assets/images/soundcloud.png'
 import spotifyIcon from '~~/assets/images/spotify.png'
 import youtubeIcon from '~~/assets/images/youtube.png'
 import youtubeMusicIcon from '~~/assets/images/youtube-music.png'
+const bandsintownIcon = '/images/bandsintown.png'
 
 const props = withDefaults(defineProps<{
   links: StreamingLinks | Record<string, string | undefined>
@@ -53,6 +54,7 @@ const platformMeta: Record<string, { label: string, iconSrc: string | null }> = 
   youtubeMusic: { label: 'YouTube Music', iconSrc: youtubeMusicIcon },
   amazonMusic: { label: 'Amazon Music', iconSrc: amazonMusicIcon },
   bandcamp: { label: 'Bandcamp', iconSrc: bandcampIcon },
+  bandsintown: { label: 'Bandsintown', iconSrc: bandsintownIcon },
   soundcloud: { label: 'SoundCloud', iconSrc: soundcloudIcon },
   youtube: { label: 'YouTube', iconSrc: youtubeIcon },
   instagram: { label: 'Instagram', iconSrc: instagramIcon },

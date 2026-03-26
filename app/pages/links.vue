@@ -17,13 +17,13 @@
             :rel="link.external ? 'noopener noreferrer' : undefined"
             class="interactive-lift group flex w-full items-center gap-4 rounded-[1.1rem] border border-theme bg-[color-mix(in_srgb,var(--theme-surface)_88%,black_12%)] px-4 py-4 shadow-[0_20px_48px_color-mix(in_srgb,black_28%,transparent)] backdrop-blur-[6px] sm:px-5"
           >
-            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--theme-text)_8%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--theme-text)_12%,transparent)]">
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center">
               <img
                 v-if="link.iconSrc"
                 :src="link.iconSrc"
                 alt=""
                 aria-hidden="true"
-                class="h-6 w-6 object-contain"
+                class="h-11 w-11 object-contain"
                 loading="lazy"
                 decoding="async"
               >
@@ -31,7 +31,7 @@
                 v-else-if="link.icon === 'globe'"
                 aria-hidden="true"
                 viewBox="0 0 24 24"
-                class="h-5 w-5 text-[var(--theme-text)]"
+                class="h-11 w-11 text-[var(--theme-text)]"
                 fill="none"
                 stroke="currentColor"
                 stroke-linecap="round"
@@ -47,7 +47,7 @@
                 v-else
                 aria-hidden="true"
                 viewBox="0 0 24 24"
-                class="h-5 w-5 text-[var(--theme-text)]"
+                class="h-11 w-11 text-[var(--theme-text)]"
                 fill="none"
                 stroke="currentColor"
                 stroke-linecap="round"
@@ -93,6 +93,7 @@ import soundcloudIcon from '~~/assets/images/soundcloud.png'
 import spotifyIcon from '~~/assets/images/spotify.png'
 import youtubeIcon from '~~/assets/images/youtube.png'
 import youtubeMusicIcon from '~~/assets/images/youtube-music.png'
+const bandsintownIcon = '/images/bandsintown.png'
 
 definePageMeta({
   layout: 'links',
@@ -118,6 +119,7 @@ const linkEntries = computed(() => [
   { label: 'YouTube', href: siteProfile.artistLinks.youtube, external: true, iconSrc: youtubeIcon },
   { label: 'Instagram', href: siteProfile.artistLinks.instagram, external: true, iconSrc: instagramIcon },
   { label: 'Bandcamp', href: siteProfile.artistLinks.bandcamp, external: true, iconSrc: bandcampIcon },
+  { label: 'Bandsintown', href: siteProfile.artistLinks.bandsintown, external: true, iconSrc: bandsintownIcon },
   { label: 'SoundCloud', href: siteProfile.artistLinks.soundcloud, external: true, iconSrc: soundcloudIcon },
   { label: 'Official Website', href: '/', external: false, icon: 'globe' },
   { label: 'Email', href: `mailto:${siteProfile.bookingEmail}`, external: false, icon: 'mail' },

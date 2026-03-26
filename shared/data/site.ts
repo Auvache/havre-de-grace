@@ -13,6 +13,7 @@ export const siteProfile: SiteProfile = {
     youtubeMusic: 'https://music.youtube.com/channel/UC9FYhFcWIz8KVSVqZHwIgxg?si=bM-aT2sjiEYxi1js',
     amazonMusic: 'https://music.amazon.com/artists/B0G83WZY27/havre-de-grace?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_xjo54sgurf1z0eePEZRczcJRG',
     bandcamp: 'https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs',
+    bandsintown: 'https://www.bandsintown.com/a/15640008?noindex=1',
     soundcloud: 'https://soundcloud.com/havredegracemusic',
     youtube: 'https://www.youtube.com/@havredegracemusic',
     instagram: 'https://www.instagram.com/havredegracemusic',
@@ -53,3 +54,4 @@ export const siteProfile: SiteProfile = {
   ],
   epkDownloadUrl: '/press/havre-de-grace-epk-placeholder.txt',
 }
+
