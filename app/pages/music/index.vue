@@ -127,11 +127,11 @@ const formatReleaseDate = (album: Album) => {
 const pageDescription = computed(() => {
   const visibleTitles = albums.value.map((album) => album.title).slice(0, 5)
   const suffix = visibleTitles.length ? ` Releases include ${visibleTitles.join(', ')}.` : ''
-  return `Discography for ${siteProfile.artistName}, listed in reverse chronological order.${suffix}`
+  return `Browse the Havre De Grace Music discography.${suffix}`
 })
 
 usePageSeo({
-  title: `Discography | ${siteProfile.artistName}`,
+  title: `Havre De Grace Music | Discography`,
   description: pageDescription,
   image: computed(() => latestAlbum.value?.coverImage),
 })

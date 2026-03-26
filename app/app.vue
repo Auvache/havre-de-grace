@@ -19,9 +19,25 @@ const musicGroupSchema = computed(() => ({
   url: siteUrl,
   description: siteProfile.description,
   genre: siteProfile.genres,
+  foundingLocation: {
+    '@type': 'Place',
+    name: 'Vancouver, Washington',
+  },
+  member: {
+    '@type': 'Person',
+    name: siteProfile.legalName,
+  },
   image: toAbsoluteUrl('/press/media-pic-wide.jpg'),
   sameAs: Object.values(siteProfile.artistLinks).filter((url): url is string => Boolean(url?.trim().length)),
 }))
+
+const webSiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Havre De Grace Music',
+  alternateName: ['Havre De Grace', 'Stefan Auvache Bradley'],
+  url: siteUrl,
+}
 
 useHead(() => ({
   script: [
@@ -29,6 +45,11 @@ useHead(() => ({
       key: 'ld-music-group',
       type: 'application/ld+json',
       textContent: JSON.stringify(musicGroupSchema.value),
+    },
+    {
+      key: 'ld-website',
+      type: 'application/ld+json',
+      textContent: JSON.stringify(webSiteSchema),
     },
   ],
 }))

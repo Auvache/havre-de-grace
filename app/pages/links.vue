@@ -124,8 +124,8 @@ const linkEntries = computed(() => [
 ].filter((entry): entry is LinkEntry => Boolean(entry.href)))
 
 usePageSeo({
-  title: `${siteProfile.artistName} | Discover`,
-  description: `All links for ${siteProfile.artistName} music streaming, socials, and contact.`,
+  title: `Havre De Grace | Music Links & Streaming`,
+  description: `Find Havre De Grace Music links on Spotify, Apple Music, YouTube, Instagram, and more in one place.`,
   image: '/press/media-pic-square.jpg',
 })
 </script>

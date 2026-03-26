@@ -38,10 +38,10 @@ const latestAlbum = computed(() => {
   return items.find((album) => album.isLatest) ?? items[0] ?? null
 })
 
-const pageDescription = computed(() => `About ${siteProfile.artistName}: artist bio, high-resolution photos, and latest release details.`)
+const pageDescription = computed(() => `Learn about Havre De Grace Music. Find bio details, press photos, and booking information.`)
 
 usePageSeo({
-  title: `About | ${siteProfile.artistName}`,
+  title: `Havre De Grace Music | About & Press`,
   description: pageDescription,
   image: '/press/media-pic-wide.jpg',
 })

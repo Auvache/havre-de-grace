@@ -1,6 +1,7 @@
 # START nuxt-robots (indexable)
 User-agent: *
 Allow: /
+Disallow: /music/into-the-wild
 
 User-agent: *
 Allow: /

@@ -138,16 +138,16 @@ const hasCredits = computed(() => Boolean(album.value?.credits?.length))
 
 const pageDescription = computed(() => {
   if (!album.value) {
-    return `${siteProfile.artistName} album page.`
+    return `Havre De Grace Music album page.`
   }
 
   if (isIntoTheWildComingSoon.value) {
-    return `${album.value.title} by ${siteProfile.artistName}. Coming soon.`
+    return `${album.value.title} by ${siteProfile.artistName}. Coming soon from Havre De Grace Music.`
   }
 
   const trackCount = album.value.tracklist.length
   const trackLabel = `${trackCount} track${trackCount === 1 ? '' : 's'}`
-  return `${album.value.title} by ${siteProfile.artistName}. ${trackLabel}, lyrics, liner notes, videos, and credits.`
+  return `${album.value.title} by ${siteProfile.artistName}. ${trackLabel}, lyrics, liner notes, videos, and credits on Havre De Grace Music.`
 })
 
 const { canonicalUrl } = usePageSeo({

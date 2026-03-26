@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   site: {
     url: 'https://havredegracemusic.com',
     name: 'Havre De Grace',
-    description: 'Official website of Havre De Grace - Independent singer-songwriter music',
+    description: 'Official Havre De Grace Music website. Explore acoustic folk and singer-songwriter releases, videos, and booking details from Vancouver, WA.',
     defaultLocale: 'en',
   },
 
@@ -55,7 +55,8 @@ export default defineNuxtConfig({
         lang: 'en',
       },
       meta: [
-        { name: 'description', content: 'Official website of Havre De Grace - Independent singer-songwriter music from Vancouver, WA' },
+        { name: 'description', content: 'Official Havre De Grace Music website. Explore acoustic folk and singer-songwriter releases, videos, and booking details from Vancouver, WA.' },
+        { name: 'keywords', content: 'Havre De Grace Music, Havre De Grace Band, Havre De Grace, acoustic folk music, singer-songwriter, indie folk, Vancouver WA music' },
         { property: 'og:site_name', content: 'Havre De Grace Music' },
       ],
     },
@@ -64,6 +65,7 @@ export default defineNuxtConfig({
   sitemap: {
     enabled: true,
     autoLastmod: true,
+    exclude: ['/music/into-the-wild'],
   },
 
   robots: {
@@ -72,6 +74,7 @@ export default defineNuxtConfig({
       {
         userAgent: '*',
         allow: '/',
+        disallow: ['/music/into-the-wild'],
       },
     ],
     sitemap: ['/sitemap.xml'],
@@ -90,12 +93,14 @@ export default defineNuxtConfig({
         statusCode: 301,
       },
     },
+    '/music/into-the-wild': {
+      headers: { 'X-Robots-Tag': 'noindex, nofollow' },
+    },
   },
 
   nitro: {
     prerender: {
-      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/music/into-the-wild', '/about', '/contact', '/links'],
+      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/about', '/contact', '/links'],
     },
   },
 })
-

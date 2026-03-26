@@ -3,7 +3,7 @@ import type { SiteProfile } from '../types'
 export const siteProfile: SiteProfile = {
   artistName: 'Havre De Grace',
   legalName: 'Stefan Auvache Bradley',
-  description: 'Independent singer-songwriter music rooted in intimate acoustic storytelling.',
+  description: 'Acoustic folk and singer-songwriter music by Stefan Auvache Bradley, performing as Havre De Grace.',
   location: 'Vancouver, Washington',
   genres: ['Independent Singer-Songwriter', 'Folk', 'Acoustic'],
   bookingEmail: 'booking@havredegracemusic.com',

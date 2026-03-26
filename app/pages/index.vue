@@ -81,14 +81,14 @@ const latestAlbum = computed(() => {
 
 const pageDescription = computed(() => {
   if (!latestAlbum.value) {
-    return `${siteProfile.artistName} official website featuring music, bio, and booking details.`
+    return `Havre De Grace Music is home to acoustic folk songs, artist details, and booking information.`
   }
 
-  return `Official website of ${siteProfile.artistName}. Explore the latest release "${latestAlbum.value.title}" and the full discography.`
+  return `Havre De Grace Music features the latest release "${latestAlbum.value.title}". Explore the full discography, videos, and booking details.`
 })
 
 usePageSeo({
-  title: `${siteProfile.artistName} | Official Music Site`,
+  title: `${siteProfile.artistName} Music | Official`,
   description: pageDescription,
   image: computed(() => latestAlbum.value?.coverImage),
 })

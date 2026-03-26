@@ -51,8 +51,8 @@ definePageMeta({
 const siteProfile = useSiteProfile()
 
 usePageSeo({
-  title: `Contact | ${siteProfile.artistName}`,
-  description: `Contact ${siteProfile.artistName} for booking, interviews, and press requests.`,
+  title: `Havre De Grace Music | Contact`,
+  description: `Contact Havre De Grace Music for booking, press inquiries, and collaborations.`,
   image: '/press/media-pic-square.jpg',
 })
 </script>
