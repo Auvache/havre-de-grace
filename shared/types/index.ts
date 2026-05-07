@@ -60,6 +60,23 @@ export interface Album {
   epkDownloadUrl?: string
 }
 
+export interface TasteAlbum {
+  id: string
+  title: string
+  artist: string
+  coverImage: string
+  tier: 1 | 2 | 3 | 4 | 5
+  description: string
+  listenLinks?: {
+    spotify?: string
+    appleMusic?: string
+  }
+}
+
+export interface TasteAlbumCollection {
+  albums: TasteAlbum[]
+}
+
 export interface SocialLink {
   label: string
   url: string

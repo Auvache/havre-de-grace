@@ -72,6 +72,13 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
       gradient: 'blackout',
     },
   },
+  {
+    match: /^\/influences\/?$/,
+    config: {
+      theme: 'dark',
+      gradient: 'blackout',
+    },
+  },
 ]
 
 const toAlbumSlug = (path: string): string | null => {

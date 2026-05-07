@@ -1,0 +1,103 @@
+{
+  "albums": [
+    {
+      "id": "album-01",
+      "title": "The Freewheelin' Bob Dylan",
+      "artist": "Bob Dylan",
+      "coverImage": "/images/influences/bob-dylan-freewheelin.jpg",
+      "tier": 1,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-02",
+      "title": "Pink Moon",
+      "artist": "Nick Drake",
+      "coverImage": "/images/influences/nick-drake-pink-moon.jpg",
+      "tier": 1,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-03",
+      "title": "Led Zeppelin IV",
+      "artist": "Led Zeppelin",
+      "coverImage": "/images/influences/led-zeppelin-iv.jpg",
+      "tier": 2,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-04",
+      "title": "The Wild Hunt",
+      "artist": "The Tallest Man on Earth",
+      "coverImage": "/images/influences/the-tallest-man-on-earth-wild-hunt.jpg",
+      "tier": 2,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-05",
+      "title": "The Black Parade",
+      "artist": "My Chemical Romance",
+      "coverImage": "/images/influences/my-chemical-romance-black-parade.jpg",
+      "tier": 3,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-06",
+      "title": "Physical Graffiti",
+      "artist": "Led Zeppelin",
+      "coverImage": "/images/influences/led-zeppelin-physical-graffiti.jpg",
+      "tier": 3,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-07",
+      "title": "Dreamboat Annie",
+      "artist": "Heart",
+      "coverImage": "/images/influences/heart-dreamboat-annie.png",
+      "tier": 3,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-08",
+      "title": "Led Zeppelin II",
+      "artist": "Led Zeppelin",
+      "coverImage": "/images/influences/led-zeppelin-ii.jpg",
+      "tier": 4,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-09",
+      "title": "Danger Days: The True Lives of the Fabulous Killjoys",
+      "artist": "My Chemical Romance",
+      "coverImage": "/images/influences/my-chemical-romance-danger-days.jpg",
+      "tier": 4,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-10",
+      "title": "Hi Infidelity",
+      "artist": "REO Speedwagon",
+      "coverImage": "/images/influences/reo-speedwagon-hi-infidelity.jpg",
+      "tier": 5,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-11",
+      "title": "Loverboy",
+      "artist": "Loverboy",
+      "coverImage": "/images/influences/loverboy-loverboy.jpg",
+      "tier": 5,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    }
+  ]
+}

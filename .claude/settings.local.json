@@ -3,7 +3,9 @@
     "allow": [
       "Bash(find /c/Users/sbradley/stefan/havre-de-grace/app/composables -type f -name *.ts)",
       "Bash(echo \"EXIT:$?\")",
-      "Bash(npx nuxi:*)"
+      "Bash(npx nuxi:*)",
+      "Bash(xargs -I {} basename {})",
+      "WebFetch(domain:www.apple.com)"
     ]
   }
 }

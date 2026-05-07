@@ -34,6 +34,20 @@
   transform: translateY(10px);
 }
 
+.influences-enter-active {
+  transition: opacity 800ms var(--ease-standard);
+  transition-delay: 200ms;
+}
+
+.influences-leave-active {
+  transition: opacity 600ms var(--ease-standard);
+}
+
+.influences-enter-from,
+.influences-leave-to {
+  opacity: 0;
+}
+
 .reveal-base {
   --reveal-duration: var(--dur-slow);
   --reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -99,6 +113,8 @@
 @media (prefers-reduced-motion: reduce) {
   .page-enter-active,
   .page-leave-active,
+  .influences-enter-active,
+  .influences-leave-active,
   .overlay-enter-active,
   .overlay-leave-active,
   .overlay-panel-enter-active,

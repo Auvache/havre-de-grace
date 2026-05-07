@@ -100,7 +100,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/about', '/contact', '/links'],
+      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/about', '/contact', '/links', '/influences'],
     },
   },
 })

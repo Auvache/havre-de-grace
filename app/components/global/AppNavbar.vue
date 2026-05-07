@@ -4,9 +4,10 @@
     :style="headerStyle"
   >
     <nav aria-label="Primary" class="page-container flex h-[var(--nav-height)] items-center justify-between">
-      <NuxtLink to="/" class="label-text leading-none tracking-[0.18em]">
+      <NuxtLink v-if="!props.immersive" to="/" class="label-text leading-none tracking-[0.18em]">
         {{ siteProfile.artistName }}
       </NuxtLink>
+      <div v-else aria-hidden="true" />
 
       <ul class="hidden items-center gap-3 text-sm md:flex">
         <template v-for="(link, index) in navLinks" :key="link.to">
@@ -45,10 +46,12 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   theme?: 'light' | 'dark'
+  immersive?: boolean
 }>(), {
   theme: 'light',
+  immersive: false,
 })
 
 const route = useRoute()
@@ -61,6 +64,7 @@ const navLinks = [
   { label: 'music', to: '/music' },
   { label: 'about', to: '/about' },
   { label: 'contact', to: '/contact' },
+  { label: 'influences', to: '/influences' },
 ]
 
 const isActive = (to: string) => route.path === to || route.path.startsWith(`${to}/`)
@@ -74,10 +78,17 @@ watch(
 
 const headerClass = computed(() => [
   'fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-300 ease-in-out',
-  isSolid.value || mobileOpen.value ? 'supports-[backdrop-filter]:backdrop-blur-md' : '',
+  (isSolid.value || mobileOpen.value) && !props.immersive ? 'supports-[backdrop-filter]:backdrop-blur-md' : '',
 ])
 
 const headerStyle = computed(() => {
+  if (props.immersive) {
+    return {
+      backgroundColor: 'transparent',
+      borderBottomColor: 'transparent',
+    }
+  }
+
   if (isSolid.value || mobileOpen.value) {
     return {
       backgroundColor: 'color-mix(in srgb, var(--theme-bg) 92%, transparent)',
