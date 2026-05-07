@@ -98,6 +98,15 @@
       "tier": 5,
       "description": "DESCRIPTION",
       "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+    },
+    {
+      "id": "album-12",
+      "title": "Live from Lincoln Theatre",
+      "artist": "The Milk Carton Kids",
+      "coverImage": "/images/influences/milk-carton-kids-live-lincoln.jpg",
+      "tier": 5,
+      "description": "DESCRIPTION",
+      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
     }
   ]
 }

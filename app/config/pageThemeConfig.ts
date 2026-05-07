@@ -73,7 +73,7 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
-    match: /^\/influences\/?$/,
+    match: /^\/influences(?:-new)?\/?$/,
     config: {
       theme: 'dark',
       gradient: 'blackout',
