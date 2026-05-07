@@ -13,23 +13,23 @@
       <div ref="gridRef" class="will-change-transform">
         <div class="grid" :style="gridStyle">
           <button
-            v-for="album in albums"
-            :key="album.id"
+            v-for="cell in cells"
+            :key="cell.key"
             type="button"
             class="influence-tile relative block select-none bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            :aria-label="`${album.title} by ${album.artist}`"
-            @click="openAlbum(album)"
+            :aria-label="`${cell.album.title} by ${cell.album.artist}`"
+            @click="openAlbum(cell.album)"
           >
             <NuxtImg
-              :src="album.coverImage"
-              :alt="`${album.title} by ${album.artist}`"
-              width="800"
-              height="800"
-              sizes="400px"
+              :src="cell.album.coverImage"
+              :alt="`${cell.album.title} by ${cell.album.artist}`"
+              width="600"
+              height="600"
+              sizes="300px"
               format="webp,avif"
-              loading="lazy"
+              loading="eager"
               draggable="false"
-              class="block h-[400px] w-[400px] object-cover"
+              class="block h-[300px] w-[300px] object-cover"
             />
           </button>
         </div>
@@ -47,11 +47,11 @@ const props = defineProps<{
   albums: TasteAlbum[]
 }>()
 
-const TILE = 400
+const TILE = 300
 const GAP = 16
 const COLS = 4
-const BUFFER = 160
-const MAX_SPEED = 1600
+const PITCH = TILE + GAP
+const MAX_SPEED = 250
 const DEADZONE = 0.08
 const RAMP_POWER = 1.7
 
@@ -59,10 +59,32 @@ const wrapperRef = ref<HTMLElement | null>(null)
 const gridRef = ref<HTMLElement | null>(null)
 const activeAlbum = ref<TasteAlbum | null>(null)
 
-const rows = computed(() => Math.max(1, Math.ceil(props.albums.length / COLS)))
+const blockRows = computed(() => Math.max(1, Math.ceil(props.albums.length / COLS)))
+const blockW = computed(() => COLS * PITCH)
+const blockH = computed(() => blockRows.value * PITCH)
+
+const repeatX = ref(3)
+const repeatY = ref(3)
+
+const cells = computed(() => {
+  const out: { key: string; album: TasteAlbum }[] = []
+  const len = props.albums.length
+  if (len === 0) {
+    return out
+  }
+  const totalCols = repeatX.value * COLS
+  const totalRows = repeatY.value * blockRows.value
+  for (let r = 0; r < totalRows; r++) {
+    for (let c = 0; c < totalCols; c++) {
+      const idx = (((r % blockRows.value) * COLS) + (c % COLS)) % len
+      out.push({ key: `${r}-${c}`, album: props.albums[idx]! })
+    }
+  }
+  return out
+})
 
 const gridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${COLS}, ${TILE}px)`,
+  gridTemplateColumns: `repeat(${repeatX.value * COLS}, ${TILE}px)`,
   gap: `${GAP}px`,
 }))
 
@@ -73,22 +95,15 @@ let reducedMotion = false
 let rafId: number | null = null
 let lastT = 0
 
-const computeBounds = () => {
-  const w = wrapperRef.value?.clientWidth ?? 0
-  const h = wrapperRef.value?.clientHeight ?? 0
-  const gridW = COLS * TILE + Math.max(0, COLS - 1) * GAP
-  const gridH = rows.value * TILE + Math.max(0, rows.value - 1) * GAP
-  return {
-    halfPanX: Math.max(0, (gridW - w) / 2) + BUFFER,
-    halfPanY: Math.max(0, (gridH - h) / 2) + BUFFER,
-  }
-}
-
 const applyTransform = () => {
   if (!gridRef.value) {
     return
   }
-  gridRef.value.style.transform = `translate3d(${offset.x}px, ${offset.y}px, 0)`
+  const bw = blockW.value
+  const bh = blockH.value
+  const tx = offset.x - Math.round(offset.x / bw) * bw
+  const ty = offset.y - Math.round(offset.y / bh) * bh
+  gridRef.value.style.transform = `translate3d(${tx}px, ${ty}px, 0)`
 }
 
 const easeAxis = (n: number) => {
@@ -118,9 +133,6 @@ const tick = (t: number) => {
       const fy = easeAxis(Math.max(-1, Math.min(1, ny)))
       offset.x -= fx * MAX_SPEED * dt
       offset.y -= fy * MAX_SPEED * dt
-      const { halfPanX, halfPanY } = computeBounds()
-      offset.x = Math.max(-halfPanX, Math.min(halfPanX, offset.x))
-      offset.y = Math.max(-halfPanY, Math.min(halfPanY, offset.y))
       applyTransform()
     }
   }
@@ -165,10 +177,14 @@ if (import.meta.client) {
     reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   }
 
-  const clampOffsetToBounds = () => {
-    const { halfPanX, halfPanY } = computeBounds()
-    offset.x = Math.max(-halfPanX, Math.min(halfPanX, offset.x))
-    offset.y = Math.max(-halfPanY, Math.min(halfPanY, offset.y))
+  const updateRepeats = () => {
+    if (!wrapperRef.value) {
+      return
+    }
+    const vw = wrapperRef.value.clientWidth
+    const vh = wrapperRef.value.clientHeight
+    repeatX.value = Math.max(3, Math.ceil(vw / blockW.value) + 1)
+    repeatY.value = Math.max(3, Math.ceil(vh / blockH.value) + 1)
     applyTransform()
   }
 
@@ -177,7 +193,8 @@ if (import.meta.client) {
     document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKey)
-    window.addEventListener('resize', clampOffsetToBounds)
+    window.addEventListener('resize', updateRepeats)
+    updateRepeats()
     applyTransform()
     rafId = requestAnimationFrame(tick)
   })
@@ -186,7 +203,7 @@ if (import.meta.client) {
     document.documentElement.style.overflow = ''
     document.body.style.overflow = ''
     window.removeEventListener('keydown', onKey)
-    window.removeEventListener('resize', clampOffsetToBounds)
+    window.removeEventListener('resize', updateRepeats)
     if (rafId !== null) {
       cancelAnimationFrame(rafId)
       rafId = null
@@ -197,13 +214,13 @@ if (import.meta.client) {
 
 <style scoped>
 .influence-tile {
-  transition: transform 250ms ease;
+  transition: transform 1000ms ease;
   transform-origin: center center;
 }
 
 .influence-tile:hover,
 .influence-tile:focus-visible {
-  transform: scale(1.2);
+  transform: scale(1.1);
   z-index: 1;
 }
 

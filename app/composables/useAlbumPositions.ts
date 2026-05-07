@@ -45,6 +45,7 @@ export const useAlbumPositions = (
   albums: Ref<TasteAlbum[]>,
   viewportWidth: Ref<number>,
   viewportHeight: Ref<number>,
+  coverSizeOverride?: Ref<number>,
 ) => {
   const orderedAlbums = computed(() => [...albums.value].sort((left, right) => {
     if (left.tier !== right.tier) {
@@ -54,9 +55,9 @@ export const useAlbumPositions = (
     return left.id.localeCompare(right.id)
   }))
 
-  const coverSize = computed(() => viewportWidth.value < 768
+  const coverSize = computed(() => coverSizeOverride?.value ?? (viewportWidth.value < 768
     ? Math.max(60, Math.min(100, viewportWidth.value * 0.18))
-    : Math.max(80, Math.min(140, viewportWidth.value * 0.12)))
+    : Math.max(80, Math.min(140, viewportWidth.value * 0.12))))
 
   const canvasSize = computed<CanvasSize>(() => {
     const baseSpan = Math.max(viewportWidth.value || 1280, viewportHeight.value || 720, 960)

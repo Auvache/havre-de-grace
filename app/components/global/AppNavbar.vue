@@ -84,7 +84,7 @@ const headerClass = computed(() => [
 const headerStyle = computed(() => {
   if (props.immersive) {
     return {
-      backgroundColor: 'transparent',
+      backgroundColor: '#000',
       borderBottomColor: 'transparent',
     }
   }
