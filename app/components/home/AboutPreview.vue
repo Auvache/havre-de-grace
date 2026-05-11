@@ -42,8 +42,7 @@
         </p>
 
         <p class="max-w-2xl italic muted-text">
-	        "I love music and music loves me. I can't help but play the guitar and write songs. It is my favorite thing to
-	        do in the world. Havre De Grace is the vehicle I use to share what I love with anyone willing to listen."
+	        "I love music and music loves me. I can't help but play the guitar and write songs. Havre De Grace is the vehicle I use to share what I love with anyone who wants to listen."
         </p>
 
         <p class="max-w-2xl muted-text">
@@ -67,9 +66,9 @@ const siteProfile = useSiteProfile()
 
 const latestReleaseLine = computed(() => {
   if (!props.latestAlbumTitle) {
-    return 'Stefan\'s debut album was released in 2025.'
+    return 'His debut album was released in 2025.'
   }
 
-  return `Stefan's debut album "${props.latestAlbumTitle}" was released in 2025.`
+  return `His debut album "${props.latestAlbumTitle}" was released in 2025.`
 })
 </script>

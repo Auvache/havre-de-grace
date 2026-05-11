@@ -37,44 +37,35 @@
         heading-tag="h1"
       />
 
+	    <p class="muted-text">
+		    Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley.
+	    </p>
+
       <p class="italic muted-text">
-	      "I love music and music loves me. I can't help but play the guitar and write songs. It is my favorite thing to
-	      do in the world. Havre De Grace is the vehicle I use to share what I love with anyone willing to listen."
+	      "I love music and music loves me. I can't help but play the guitar and write songs. Havre De Grace is the vehicle I use to share what I love with anyone who wants to listen."
       </p>
 
       <p class="muted-text">
-        Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley. The name comes from a freeway
-        exit sign he spotted on a road trip. It grabbed him, and years later when choosing a name for his project, it
-        still hadn't let go.
-      </p>
-
-      <p class="muted-text">
-        This is the perfect analogy for how Stefan writes music. It isn't about composition or correctness or putting in
-        the hours. He never even set out to be a musician. He just loves playing the guitar and writing songs. And he
-        runs with whatever feels good.
+        For Stefan, music isn't about composition, correctness, marketing, or building a fanbase. He never set out to be a musician or a performer. He just loves playing the guitar and writing songs, and he runs with whatever feels best in the moment.
       </p>
 
       <p class="muted-text">
         Growing up, his parents shared an eclectic mix of music with him, ranging from Led Zeppelin, REO Speedwagon,
-        and Heart to Michael Jackson and Donny Osmond. Along the way, he fell in love with the music of Bob Dylan, Jack
-        White, John Mayer, and Kristian Matsson's The Tallest Man on Earth. His chosen medium is stripped down to what
-        matters: one guitar, his voice, and whatever song won't leave him alone.
+        and Heart to Michael Jackson and Donny Osmond. As he grew up, he fell in love with the music of Bob Dylan, Jack
+        White, John Mayer, and Kristian Matsson's The Tallest Man on Earth. These influences have shaped him as a guitar player and a songwriter.
       </p>
 
       <p class="muted-text">
-        Stefan doesn't write songs with much intention. A feeling hits, a line appears, and if it's good, he writes it
-        down. Most of his songs are lyrically ninety percent finished within five minutes. They're about falling in
-        love, being a father, working through loss, navigating complex social situations, and balancing a love for music
-        with his other passions. Playing music is a therapeutic necessity and playful obsession in equal measure.
+        Most of Stefan's songs are lyrically ninety percent finished within five minutes. They're about infatuation, being a father, working through loss, navigating complex social situations, and balancing passion with practicality. Playing music is a therapeutic necessity and playful obsession in equal measure.
       </p>
 
       <p class="muted-text">
         {{ releaseLine }}
       </p>
 
-      <p class="muted-text">
-        You don't have to listen to it... But you could.
-      </p>
+	    <p class="muted-text">
+		    The next Havre De Grace next album, Into the Wild, is scheduled for release in summer 2026.
+	    </p>
     </ScrollReveal>
 
     <div class="mx-auto mt-6 grid max-w-3xl gap-4 sm:grid-cols-2">
@@ -179,21 +170,21 @@ const genreLine = computed(() => siteProfile.genres.join(' | '))
 
 const releaseLine = computed(() => {
   if (!props.latestAlbum) {
-    return 'His debut album was released in 2025. He doesn\'t worry much about production — you don\'t need a whole lot more than one guitar and a voice. He makes music and performs when he feels like it.'
+    return 'His debut album was released in 2025. It is a collection of singles that highlight various snapshots of his life.'
   }
 
   if (!props.latestAlbum.releaseDate) {
-    return `His debut album, ${props.latestAlbum.title}, was released in ${props.latestAlbum.year}. He doesn't worry much about production — you don't need a whole lot more than one guitar and a voice. He makes music and performs when he feels like it.`
+    return `His debut album, ${props.latestAlbum.title}, was released in ${props.latestAlbum.year}. It is a stripped down collection of singles that highlight various snapshots of his life.`
   }
 
   const date = new Date(props.latestAlbum.releaseDate)
   if (Number.isNaN(date.getTime())) {
-    return `His debut album, ${props.latestAlbum.title}, was released in ${props.latestAlbum.releaseDate}. He doesn't worry much about production — you don't need a whole lot more than one guitar and a voice. He makes music and performs when he feels like it.`
+    return `His debut album, ${props.latestAlbum.title}, was released in ${props.latestAlbum.releaseDate}. It is a stripped down collection of singles that highlight various snapshots of his life.`
   }
 
   return `His debut album, ${props.latestAlbum.title}, was released in ${date.toLocaleDateString('en-US', {
     month: 'long',
     year: 'numeric',
-  })}. He doesn't worry much about production — you don't need a whole lot more than one guitar and a voice. He makes music and performs when he feels like it.`
+  })}. It is a stripped down collection of singles that highlight various snapshots of his life.`
 })
 </script>

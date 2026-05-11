@@ -64,7 +64,7 @@ const navLinks = [
   { label: 'music', to: '/music' },
   { label: 'about', to: '/about' },
   { label: 'contact', to: '/contact' },
-  { label: 'influences', to: '/influences' },
+  // { label: 'influences', to: '/influences' },
 ]
 
 const isActive = (to: string) => route.path === to || route.path.startsWith(`${to}/`)
