@@ -12,6 +12,8 @@ export default defineContentConfig({
         releaseDate: z.string().optional(),
         isLatest: z.boolean().optional(),
         isVisible: z.boolean().optional(),
+        isSingle: z.boolean().optional(),
+        parentAlbumSlug: z.string().optional(),
         coverImage: z.string(),
         coverAlt: z.string(),
         description: z.string().optional(),

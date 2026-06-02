@@ -1,27 +1,5 @@
 <template>
-  <section
-    v-if="album && isIntoTheWildComingSoon"
-    class="flex h-screen items-center justify-center px-6"
-  >
-    <div class="w-full max-w-xl text-center">
-      <NuxtImg
-        :src="album.coverImage"
-        :alt="album.coverAlt"
-        class="aspect-square w-full object-cover shadow-[0_22px_46px_color-mix(in_srgb,var(--theme-text)_24%,transparent)]"
-        width="1800"
-        height="1800"
-        sizes="(max-width: 768px) 90vw, 640px"
-        format="webp,avif"
-        loading="eager"
-        fetchpriority="high"
-      />
-      <p class="mt-6 text-2xl font-semibold uppercase tracking-[0.2em] text-red-600 sm:text-3xl">
-        Coming Soon
-      </p>
-    </div>
-  </section>
-
-  <article v-else-if="album" class="pb-24">
+  <article v-if="album" class="pb-24">
     <section class="page-container pt-[calc(var(--nav-height)+1.5rem)]">
       <NuxtLink to="/music" class="nav-link inline-block text-sm muted-text hover:text-[var(--color-accent)]">
         back to music
@@ -100,8 +78,12 @@ if (!album.value) {
   })
 }
 
+// Singles don't have a dedicated album page — they surface in a modal on /music.
+if (album.value.isSingle) {
+  await navigateTo('/music', { redirectCode: 301 })
+}
+
 const hasValue = (value?: string | null) => Boolean(value?.trim().length)
-const isIntoTheWildComingSoon = computed(() => album.value?.slug === 'into-the-wild')
 
 const formattedReleaseDate = computed(() => {
   if (!album.value?.releaseDate) {
@@ -139,10 +121,6 @@ const hasCredits = computed(() => Boolean(album.value?.credits?.length))
 const pageDescription = computed(() => {
   if (!album.value) {
     return `Havre De Grace Music album page.`
-  }
-
-  if (isIntoTheWildComingSoon.value) {
-    return `${album.value.title} by ${siteProfile.artistName}. Coming soon from Havre De Grace Music.`
   }
 
   const trackCount = album.value.tracklist.length

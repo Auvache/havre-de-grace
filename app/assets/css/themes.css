@@ -64,9 +64,11 @@ html[data-page-gradient="music-dark"] {
 }
 
 html[data-page-gradient="music-into-the-wild"] {
+  /* Sea-and-sky blue drawn from the Into the Wild cover art. */
+  --color-accent: #3f6896;
   --theme-page-gradient:
-    radial-gradient(140% 90% at 6% 0%, color-mix(in srgb, #b7c5d5 26%, transparent), transparent 60%),
-    linear-gradient(180deg, #eef1f4 0%, #e2e7ec 50%, #d8dee5 100%);
+    radial-gradient(140% 90% at 6% 0%, color-mix(in srgb, #6f97bd 30%, transparent), transparent 60%),
+    linear-gradient(180deg, #e6edf4 0%, #d3dfeb 50%, #bcd0e1 100%);
 }
 
 html[data-page-gradient="music-charcoal-offwhite"] {

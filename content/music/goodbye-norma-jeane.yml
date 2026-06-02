@@ -1,0 +1,22 @@
+title: "Goodbye, Norma Jeane"
+slug: "goodbye-norma-jeane"
+year: 2026
+releaseDate: "2026-05-28"
+isLatest: true
+isVisible: true
+# Singles normally open a modal (artwork + streaming links). When parentAlbumSlug
+# is set, clicking the single instead links to that album's page.
+isSingle: true
+parentAlbumSlug: "into-the-wild"
+coverImage: "/images/albums/into-the-wild/into-the-wild-album-cover.png"
+coverAlt: "Goodbye, Norma Jeane single cover by Havre De Grace"
+description: >
+  The first single from the forthcoming album Into the Wild.
+
+streamingLinks:
+  spotify: "https://open.spotify.com/track/0T01Dn5FljBW8YybCUidxX?si=e8e15ab615544d21"
+  appleMusic: "https://music.apple.com/us/song/goodbye-norma-jeane/6771901492"
+  youtubeMusic: "https://music.youtube.com/watch?v=Fj8ZkKDQ-2k&si=q6QkFVhjN92d3_He"
+  amazonMusic: "https://music.amazon.com/tracks/B0H2GD5DNV?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_AXPxabZuf52edG4U1V3ms8MCq"
+
+tracklist: []

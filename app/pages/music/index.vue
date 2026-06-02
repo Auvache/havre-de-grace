@@ -16,10 +16,13 @@
         :key="album.slug"
         class="w-full max-w-xs sm:w-72 sm:max-w-none"
       >
-        <NuxtLink
-          :to="`/music/${album.slug}`"
-          class="group block focus-visible:outline-none"
+        <component
+          :is="albumHref(album) ? NuxtLinkComponent : 'button'"
+          :type="albumHref(album) ? undefined : 'button'"
+          :to="albumHref(album) ?? undefined"
+          class="group block w-full text-center focus-visible:outline-none"
           :aria-label="`Open ${album.title}`"
+          @click="albumHref(album) ? undefined : openSingle(album)"
         >
           <div class="relative overflow-hidden">
             <NuxtImg
@@ -49,13 +52,15 @@
           <p class="mt-1 text-sm muted-text">
             {{ formatReleaseDate(album) }}
           </p>
-        </NuxtLink>
+        </component>
       </li>
     </ul>
 
     <p v-else class="mt-10 muted-text">
       No albums are available yet.
     </p>
+
+    <SingleModal :album="activeSingle" @close="activeSingle = null" />
   </section>
 </template>
 
@@ -67,6 +72,23 @@ definePageMeta({
 })
 
 const siteProfile = useSiteProfile()
+
+const NuxtLinkComponent = resolveComponent('NuxtLink')
+
+const activeSingle = ref<Album | null>(null)
+const openSingle = (album: Album) => {
+  activeSingle.value = album
+}
+
+// Returns the album page to link to, or null when the tile should open the
+// single modal instead. Singles tied to a parent release link to that album.
+const albumHref = (album: Album) => {
+  if (album.parentAlbumSlug) {
+    return `/music/${album.parentAlbumSlug}`
+  }
+
+  return album.isSingle ? null : `/music/${album.slug}`
+}
 
 const sortAlbums = (items: Album[]) => [...items]
   .filter((album) => album.isVisible !== false)

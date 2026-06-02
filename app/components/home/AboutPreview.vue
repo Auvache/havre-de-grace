@@ -45,10 +45,6 @@
 	        "I love music and music loves me. I can't help but play the guitar and write songs. Havre De Grace is the vehicle I use to share what I love with anyone who wants to listen."
         </p>
 
-        <p class="max-w-2xl muted-text">
-          {{ latestReleaseLine }}
-        </p>
-
         <NuxtLink to="/about" class="nav-link inline-block text-base hover:text-[var(--color-accent)]">
           read more
         </NuxtLink>

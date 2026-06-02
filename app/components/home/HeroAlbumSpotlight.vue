@@ -3,10 +3,14 @@
     <div class="hero-wash pointer-events-none absolute inset-0" aria-hidden="true" />
 
     <div class="page-container grid min-h-[calc(100vh-var(--nav-height))] gap-12 py-12 lg:grid-cols-[minmax(0,560px)_1fr] lg:items-center">
-      <NuxtLink
+      <component
+        :is="albumHref ? NuxtLinkComponent : 'button'"
         v-if="album"
-        :to="`/music/${album.slug}`"
-        class="hero-cover-wrap interactive-lift relative overflow-hidden rounded-[var(--radius-lg)] border border-theme"
+        :type="albumHref ? undefined : 'button'"
+        :to="albumHref ?? undefined"
+        :aria-label="albumHref ? undefined : `Open ${album.title}`"
+        class="hero-cover-wrap interactive-lift relative block w-full overflow-hidden text-left"
+        @click="albumHref ? undefined : openSingle()"
       >
         <NuxtImg
           :src="album.coverImage"
@@ -27,7 +31,7 @@
             Coming Soon
           </span>
         </div>
-      </NuxtLink>
+      </component>
 
       <div class="space-y-6">
         <p class="label-text muted-text">
@@ -45,12 +49,15 @@
         <StreamingLinks v-if="album" :links="album.streamingLinks" />
 
         <div class="flex flex-wrap gap-3 pt-2">
-          <NuxtLink
-            :to="album ? `/music/${album.slug}` : '/music'"
+          <component
+            :is="albumHref || !isSingle ? NuxtLinkComponent : 'button'"
+            :type="albumHref || !isSingle ? undefined : 'button'"
+            :to="albumHref ?? (isSingle ? undefined : (album ? `/music/${album.slug}` : '/music'))"
             class="inline-flex rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-white"
+            @click="albumHref || !isSingle ? undefined : openSingle()"
           >
-            {{ album ? 'explore the album' : 'explore music' }}
-          </NuxtLink>
+            {{ ctaLabel }}
+          </component>
           <NuxtLink
             to="/music"
             class="inline-flex rounded-full border border-theme px-5 py-2.5 text-sm font-medium hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
@@ -60,6 +67,8 @@
         </div>
       </div>
     </div>
+
+    <SingleModal :album="activeSingle" @close="closeSingle" />
   </section>
 </template>
 
@@ -71,6 +80,43 @@ const props = defineProps<{
 }>()
 
 const siteProfile = useSiteProfile()
+
+const NuxtLinkComponent = resolveComponent('NuxtLink')
+
+const isSingle = computed(() => Boolean(props.album?.isSingle))
+
+// When set, the hero links to this album page instead of opening the single
+// modal. Singles tied to a parent release link to that album.
+const albumHref = computed(() => {
+  if (!props.album) {
+    return null
+  }
+
+  if (props.album.parentAlbumSlug) {
+    return `/music/${props.album.parentAlbumSlug}`
+  }
+
+  return props.album.isSingle ? null : `/music/${props.album.slug}`
+})
+
+const isSingleOpen = ref(false)
+const activeSingle = computed(() => (isSingleOpen.value ? props.album : null))
+const openSingle = () => {
+  isSingleOpen.value = true
+}
+const closeSingle = () => {
+  isSingleOpen.value = false
+}
+
+const ctaLabel = computed(() => {
+  if (!props.album) {
+    return 'explore music'
+  }
+  if (albumHref.value) {
+    return 'explore the album'
+  }
+  return isSingle.value ? 'listen now' : 'explore the album'
+})
 
 const releaseLabel = computed(() => {
   if (!props.album) {
@@ -114,11 +160,11 @@ const releaseLabel = computed(() => {
 @keyframes hero-cover-zoom {
   from {
     opacity: 0;
-    transform: scale(1);
+    transform: scale(1.02);
   }
   to {
     opacity: 1;
-    transform: scale(1.02);
+    transform: scale(1);
   }
 }
 

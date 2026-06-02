@@ -41,6 +41,10 @@ export interface Album {
   releaseDate?: string
   isLatest?: boolean
   isVisible?: boolean
+  isSingle?: boolean
+  // For singles drawn from a larger release: clicking the single links to this
+  // album page instead of opening the single modal.
+  parentAlbumSlug?: string
   coverImage: string
   coverAlt: string
   description?: string

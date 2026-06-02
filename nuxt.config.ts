@@ -65,7 +65,7 @@ export default defineNuxtConfig({
   sitemap: {
     enabled: true,
     autoLastmod: true,
-    exclude: ['/music/into-the-wild'],
+    exclude: ['/music/into-the-wild', '/music/goodbye-norma-jeane'],
   },
 
   robots: {

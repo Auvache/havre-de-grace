@@ -30,10 +30,12 @@
         >
           <p class="label-text muted-text">short bio</p>
           <p class="text-sm leading-relaxed muted-text">
-            Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley. His chosen medium is
-            stripped down to what matters: one guitar, his voice, and whatever song won't leave him alone. His debut
-            album, I Want to Be Yours and Other Songs, was released in 2025.
+            Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley.
           </p>
+	        <p class="text-sm leading-relaxed muted-text">"I love music and music loves me. I can't help but play the guitar and write songs. Havre De Grace is the vehicle I use to share what I love with anyone who wants to listen."</p>
+	        <p class="text-sm leading-relaxed muted-text">
+		        Stefan's first album, I Want to Be Yours and Other Songs, was originally released in July 2025. His followup album, Into the Wild, is scheduled for release on July 17, 2026.
+	        </p>
         </ScrollReveal>
 
         <ScrollReveal
