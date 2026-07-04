@@ -65,7 +65,6 @@ export default defineNuxtConfig({
   sitemap: {
     enabled: true,
     autoLastmod: true,
-    exclude: ['/music/into-the-wild', '/music/goodbye-norma-jeane'],
   },
 
   robots: {
@@ -74,7 +73,6 @@ export default defineNuxtConfig({
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/music/into-the-wild'],
       },
     ],
     sitemap: ['/sitemap.xml'],
@@ -93,6 +91,20 @@ export default defineNuxtConfig({
         statusCode: 301,
       },
     },
+    // The discography now lives as a section on the homepage.
+    '/music': {
+      redirect: {
+        to: '/#music',
+        statusCode: 301,
+      },
+    },
+    // Contact is now a section on the homepage.
+    '/contact': {
+      redirect: {
+        to: '/#contact',
+        statusCode: 301,
+      },
+    },
     '/music/into-the-wild': {
       headers: { 'X-Robots-Tag': 'noindex, nofollow' },
     },
@@ -100,7 +112,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/', '/music', '/music/i-want-to-be-yours-and-other-songs', '/about', '/contact', '/links', '/influences'],
+      routes: ['/', '/music/i-want-to-be-yours-and-other-songs', '/about', '/links', '/influences'],
     },
   },
 })

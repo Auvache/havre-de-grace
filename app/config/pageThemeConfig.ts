@@ -59,13 +59,6 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
-    match: /^\/contact\/?$/,
-    config: {
-      theme: 'light',
-      gradient: 'light-fjord',
-    },
-  },
-  {
     match: /^\/links\/?$/,
     config: {
       theme: 'light',

@@ -2,9 +2,9 @@ title: "Into the Wild"
 slug: "into-the-wild"
 year: 2026
 releaseDate: "2026-07-17"
-isLatest: false
+isLatest: true
 # Toggle this to true/false to show or hide this album in site listings.
-isVisible: false
+isVisible: true
 coverImage: "/images/albums/into-the-wild/into-the-wild-album-cover.png"
 coverAlt: "Into the Wild album cover by Havre De Grace"
 description: "Coming July 17, 2026"

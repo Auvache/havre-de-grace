@@ -61,13 +61,21 @@ const { isSolid } = useNavScroll()
 const mobileOpen = ref(false)
 
 const navLinks = [
-  { label: 'music', to: '/music' },
+  { label: 'music', to: '/#music' },
   { label: 'about', to: '/about' },
-  { label: 'contact', to: '/contact' },
+  { label: 'contact', to: '/#contact' },
   // { label: 'influences', to: '/influences' },
 ]
 
-const isActive = (to: string) => route.path === to || route.path.startsWith(`${to}/`)
+const isActive = (to: string) => {
+  // Hash links (e.g. the music section) are active when on their base page.
+  const [path] = to.split('#')
+  if (to.includes('#')) {
+    return route.path === (path || '/')
+  }
+
+  return route.path === to || route.path.startsWith(`${to}/`)
+}
 
 watch(
   () => route.path,

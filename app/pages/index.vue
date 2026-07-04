@@ -2,11 +2,14 @@
   <div>
     <HeroAlbumSpotlight :album="latestAlbum" />
 
-<!--    <DiscographyPreview :albums="albums" :featured-slug="latestAlbum?.slug" />-->
-
     <AboutPreview :latest-album-title="latestAlbum?.title" />
 
-    <section class="page-container section-space border-t border-theme">
+    <MusicSection :albums="albums" />
+
+    <section
+      id="contact"
+      class="page-container section-space border-t border-theme scroll-mt-[calc(var(--nav-height)+1.5rem)]"
+    >
       <ScrollReveal
         as="div"
         class-name="text-center"
@@ -39,6 +42,12 @@
         <p class="mt-3 text-sm muted-text">
           Email is the fastest way to connect.
         </p>
+        <NuxtLink
+          to="/about#press"
+          class="mt-4 inline-block text-sm hover:text-[var(--color-accent)]"
+        >
+          Go to press kit
+        </NuxtLink>
       </ScrollReveal>
     </section>
   </div>
@@ -84,7 +93,7 @@ const pageDescription = computed(() => {
     return `Havre De Grace Music is home to acoustic folk songs, artist details, and booking information.`
   }
 
-  return `Havre De Grace Music features the latest release "${latestAlbum.value.title}". Explore the full discography, videos, and booking details.`
+  return `Havre De Grace Music features the new release "${latestAlbum.value.title}". Explore the full discography, videos, and booking details.`
 })
 
 usePageSeo({

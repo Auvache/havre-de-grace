@@ -1,6 +1,6 @@
 <template>
   <section class="hero-spotlight relative isolate overflow-hidden">
-    <div class="page-container grid min-h-[calc(100vh-var(--nav-height))] gap-12 py-12 lg:grid-cols-[minmax(0,560px)_1fr] lg:items-center">
+    <div class="page-container grid min-h-[calc(100vh-var(--nav-height))] gap-12 pb-12 pt-[clamp(var(--space-6),11vw,var(--space-8))] lg:grid-cols-[minmax(0,560px)_1fr] lg:items-center">
       <component
         :is="albumHref ? NuxtLinkComponent : 'button'"
         v-if="album"
@@ -21,19 +21,11 @@
           loading="eager"
           fetchpriority="high"
         />
-        <div
-          v-if="album.slug === 'into-the-wild'"
-          class="absolute inset-0 flex items-center justify-center bg-black/35 text-center"
-        >
-          <span class="text-xl font-semibold uppercase tracking-[0.2em] text-red-600 sm:text-2xl">
-            Coming Soon
-          </span>
-        </div>
       </component>
 
       <div class="space-y-6">
         <p class="label-text muted-text">
-          latest release
+          new release
         </p>
 
         <h1 class="display-heading">
@@ -50,14 +42,14 @@
           <component
             :is="albumHref || !isSingle ? NuxtLinkComponent : 'button'"
             :type="albumHref || !isSingle ? undefined : 'button'"
-            :to="albumHref ?? (isSingle ? undefined : (album ? `/music/${album.slug}` : '/music'))"
+            :to="albumHref ?? (isSingle ? undefined : (album ? `/music/${album.slug}` : '/#music'))"
             class="inline-flex rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-white"
             @click="albumHref || !isSingle ? undefined : openSingle()"
           >
             {{ ctaLabel }}
           </component>
           <NuxtLink
-            to="/music"
+            to="/#music"
             class="inline-flex rounded-full border border-theme px-5 py-2.5 text-sm font-medium hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           >
             all releases
@@ -125,9 +117,22 @@ const releaseLabel = computed(() => {
     return `Released ${props.album.year}`
   }
 
-  const date = new Date(props.album.releaseDate)
+  // Parse YYYY-MM-DD as a local date so the announced day isn't shifted by the
+  // browser's timezone (a bare `new Date('2026-07-17')` is parsed as UTC).
+  const isoMatch = props.album.releaseDate.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!isoMatch) {
+    return `Released ${props.album.releaseDate}`
+  }
+
+  const [, year, month, day] = isoMatch
+  const date = new Date(Number(year), Number(month) - 1, Number(day))
   if (Number.isNaN(date.getTime())) {
     return `Released ${props.album.releaseDate}`
+  }
+
+  // Upcoming releases are announced with their day; past releases show month/year.
+  if (date.getTime() > Date.now()) {
+    return `Coming ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`
   }
 
   return `Released ${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`

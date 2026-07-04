@@ -1,47 +1,74 @@
 <template>
   <article v-if="album" class="pb-24">
     <section class="page-container pt-[calc(var(--nav-height)+1.5rem)]">
-      <NuxtLink to="/music" class="nav-link inline-block text-sm muted-text hover:text-[var(--color-accent)]">
+      <NuxtLink to="/#music" class="nav-link inline-block text-sm muted-text hover:text-[var(--color-accent)]">
         back to music
       </NuxtLink>
     </section>
 
-    <AlbumHero :album="album" :formatted-release-date="formattedReleaseDate" />
+    <!--
+      Unreleased albums show only the cover art and a "Coming <date>" title.
+      The full track/lyrics/credits data is kept in the content file and renders
+      automatically once the release date has passed.
+    -->
+    <section
+      v-if="isUpcoming"
+      class="page-container flex flex-col items-center pb-16 pt-8 text-center md:pt-12"
+    >
+      <NuxtImg
+        :src="album.coverImage"
+        :alt="album.coverAlt"
+        class="w-full max-w-md rounded-[var(--radius-lg)] object-cover shadow-[0_18px_40px_color-mix(in_srgb,var(--theme-text)_24%,transparent)]"
+        width="1400"
+        height="1400"
+        sizes="(max-width: 768px) 100vw, 448px"
+        format="webp,avif"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <h1 class="mt-10 text-balance text-2xl font-medium sm:text-3xl">
+        {{ comingLabel }}
+      </h1>
+    </section>
 
-    <AlbumScrollspyNav
-      :sections="navSections"
-      :active-section-id="activeSectionId"
-      @navigate="scrollToSection"
-    />
+    <template v-else>
+      <AlbumHero :album="album" :formatted-release-date="formattedReleaseDate" />
 
-    <div class="page-container space-y-20 pb-10 pt-14 sm:pt-16">
-      <Tracklist
-        :tracks="album.tracklist"
-        :show-lyrics-jump="hasLyrics"
-        @jump-to-lyrics="handleTrackLyricsJump"
+      <AlbumScrollspyNav
+        :sections="navSections"
+        :active-section-id="activeSectionId"
+        @navigate="scrollToSection"
       />
 
-      <LyricsViewer
-        v-if="hasLyrics"
-        ref="lyricsViewer"
-        :tracks="lyricTracks"
-      />
+      <div class="page-container space-y-20 pb-10 pt-14 sm:pt-16">
+        <Tracklist
+          :tracks="album.tracklist"
+          :show-lyrics-jump="hasLyrics"
+          @jump-to-lyrics="handleTrackLyricsJump"
+        />
 
-      <LinerNotes
-        v-if="hasNotes"
-        :notes="album.linerNotes"
-      />
+        <LyricsViewer
+          v-if="hasLyrics"
+          ref="lyricsViewer"
+          :tracks="lyricTracks"
+        />
 
-      <AlbumVideos
-        v-if="hasVideos"
-        :videos="album.videos ?? []"
-      />
+        <LinerNotes
+          v-if="hasNotes"
+          :notes="album.linerNotes"
+        />
 
-      <AlbumCredits
-        v-if="hasCredits"
-        :credits="album.credits ?? []"
-      />
-    </div>
+        <AlbumVideos
+          v-if="hasVideos"
+          :videos="album.videos ?? []"
+        />
+
+        <AlbumCredits
+          v-if="hasCredits"
+          :credits="album.credits ?? []"
+        />
+      </div>
+    </template>
   </article>
 </template>
 
@@ -78,12 +105,52 @@ if (!album.value) {
   })
 }
 
-// Singles don't have a dedicated album page — they surface in a modal on /music.
+// Singles don't have a dedicated album page — they surface in a modal in the
+// music section on the homepage.
 if (album.value.isSingle) {
-  await navigateTo('/music', { redirectCode: 301 })
+  await navigateTo('/#music', { redirectCode: 301 })
 }
 
 const hasValue = (value?: string | null) => Boolean(value?.trim().length)
+
+// Parse a YYYY-MM-DD string as a local date so day-level comparisons and labels
+// aren't shifted by the browser's timezone (a bare `new Date('2026-07-17')` is UTC).
+const parseIsoDate = (value?: string | null) => {
+  const match = value?.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!match) {
+    return null
+  }
+
+  const [, year, month, day] = match
+  const date = new Date(Number(year), Number(month) - 1, Number(day))
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+// An album whose release date is still in the future shows a "coming soon"
+// placeholder instead of its (not-yet-public) track, lyric, and credit details.
+const isUpcoming = computed(() => {
+  const date = parseIsoDate(album.value?.releaseDate)
+  return date ? date.getTime() > Date.now() : false
+})
+
+const comingLabel = computed(() => {
+  const date = parseIsoDate(album.value?.releaseDate)
+  if (!date) {
+    return 'Coming soon'
+  }
+
+  return `Coming ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`
+})
+
+// The per-route config gives released albums a cover-matched gradient. Unreleased
+// albums show a bare placeholder, so they use the site's standard white
+// background (light-fjord) like every other page instead.
+const { setTheme } = usePageTheme()
+watchEffect(() => {
+  if (isUpcoming.value) {
+    setTheme('light', 'light-fjord')
+  }
+})
 
 const formattedReleaseDate = computed(() => {
   if (!album.value?.releaseDate) {
@@ -121,6 +188,11 @@ const hasCredits = computed(() => Boolean(album.value?.credits?.length))
 const pageDescription = computed(() => {
   if (!album.value) {
     return `Havre De Grace Music album page.`
+  }
+
+  if (isUpcoming.value) {
+    const detail = hasValue(album.value.description) ? album.value.description : comingLabel.value
+    return `${album.value.title} by ${siteProfile.artistName}. ${detail}`
   }
 
   const trackCount = album.value.tracklist.length
@@ -163,14 +235,13 @@ const musicAlbumSchema = computed(() => {
     return null
   }
 
-  return {
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'MusicAlbum',
     name: album.value.title,
     url: canonicalUrl.value,
     image: toAbsoluteUrl(album.value.coverImage),
     datePublished: album.value.releaseDate,
-    numTracks: album.value.tracklist.length,
     description: album.value.description,
     genre: siteProfile.genres,
     byArtist: {
@@ -179,17 +250,24 @@ const musicAlbumSchema = computed(() => {
       url: siteUrl,
       sameAs: Object.values(siteProfile.artistLinks).filter((url): url is string => Boolean(url?.trim().length)),
     },
-    track: album.value.tracklist.map((track, index) => ({
+  }
+
+  // Withhold the tracklist from structured data until the album is released.
+  if (!isUpcoming.value) {
+    schema.numTracks = album.value.tracklist.length
+    schema.track = album.value.tracklist.map((track, index) => ({
       '@type': 'MusicRecording',
       name: track.title,
       position: index + 1,
       duration: toIsoDuration(track.duration),
-    })),
+    }))
   }
+
+  return schema
 })
 
 const videoSchemas = computed(() => {
-  if (!album.value) {
+  if (!album.value || isUpcoming.value) {
     return []
   }
 
