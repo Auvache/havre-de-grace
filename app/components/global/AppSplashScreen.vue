@@ -6,7 +6,7 @@
     aria-hidden="true"
   >
     <img
-      :src="logoWhite"
+      :src="logoBlack"
       alt="Havre de Grace"
       class="splash-logo"
       :class="{ 'is-visible': isLogoVisible }"
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import logoWhite from '~~/assets/images/logo-white.png'
+import logoBlack from '~~/assets/images/logo-black.png'
 
 const SESSION_KEY = 'hdg-splash-seen'
 const BLANK_DELAY_MS = 500
@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
   transition:
     opacity 1000ms var(--ease-standard),
     transform 1000ms var(--ease-standard);
-  background: linear-gradient(135deg, #0a0e14 0%, #0f1a28 45%, #162a3e 100%);
+  background: var(--color-bg);
 }
 
 .splash-screen.is-exiting {

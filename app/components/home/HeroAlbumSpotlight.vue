@@ -1,7 +1,5 @@
 <template>
   <section class="hero-spotlight relative isolate overflow-hidden">
-    <div class="hero-wash pointer-events-none absolute inset-0" aria-hidden="true" />
-
     <div class="page-container grid min-h-[calc(100vh-var(--nav-height))] gap-12 py-12 lg:grid-cols-[minmax(0,560px)_1fr] lg:items-center">
       <component
         :is="albumHref ? NuxtLinkComponent : 'button'"
@@ -139,14 +137,6 @@ const releaseLabel = computed(() => {
 <style scoped>
 .hero-spotlight {
   background: transparent;
-}
-
-.hero-wash {
-  background:
-    radial-gradient(90% 90% at 12% 12%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 62%),
-    radial-gradient(80% 80% at 88% 4%, color-mix(in srgb, #2563eb 10%, transparent), transparent 72%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 100%);
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 100%);
 }
 
 .hero-cover-wrap {

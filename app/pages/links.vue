@@ -3,9 +3,9 @@
     <div class="w-full">
       <div class="mx-auto max-w-xl">
         <img
-          :src="logoWhite"
+          :src="logoBlack"
           alt="Havre De Grace"
-          class="mx-auto w-[min(8.5rem,36vw)] drop-shadow-[0_18px_42px_rgba(0,0,0,0.45)]"
+          class="mx-auto w-[min(8.5rem,36vw)] drop-shadow-[0_18px_42px_rgba(0,0,0,0.12)]"
         >
 
         <div class="mt-8 space-y-3 sm:space-y-4">
@@ -88,7 +88,7 @@ import amazonMusicIcon from '~~/assets/images/amazon-music.png'
 import appleMusicIcon from '~~/assets/images/apple-music.png'
 import bandcampIcon from '~~/assets/images/bandcamp.png'
 import instagramIcon from '~~/assets/images/instagram.png'
-import logoWhite from '~~/assets/images/logo-white.png'
+import logoBlack from '~~/assets/images/logo-black.png'
 import soundcloudIcon from '~~/assets/images/soundcloud.png'
 import spotifyIcon from '~~/assets/images/spotify.png'
 import youtubeIcon from '~~/assets/images/youtube.png'

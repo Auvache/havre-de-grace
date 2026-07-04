@@ -40,39 +40,40 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
   {
     match: /^\/$/,
     config: {
-      theme: 'dark',
-      gradient: 'blackout',
+      theme: 'light',
+      gradient: 'light-fjord',
     },
   },
   {
     match: /^\/music(?:\/|$)/,
     config: {
-      theme: 'dark',
-      gradient: 'blackout',
+      theme: 'light',
+      gradient: 'light-fjord',
     },
   },
   {
     match: /^\/about\/?$/,
     config: {
-      theme: 'dark',
-      gradient: 'blackout',
+      theme: 'light',
+      gradient: 'light-fjord',
     },
   },
   {
     match: /^\/contact\/?$/,
     config: {
-      theme: 'dark',
-      gradient: 'blackout',
+      theme: 'light',
+      gradient: 'light-fjord',
     },
   },
   {
     match: /^\/links\/?$/,
     config: {
-      theme: 'dark',
-      gradient: 'blackout',
+      theme: 'light',
+      gradient: 'light-fjord',
     },
   },
   {
+    // The influences canvas is a deliberately immersive dark experience.
     match: /^\/influences(?:-new)?\/?$/,
     config: {
       theme: 'dark',
