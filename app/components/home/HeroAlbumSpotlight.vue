@@ -1,13 +1,13 @@
 <template>
   <section class="hero-spotlight relative isolate overflow-hidden">
-    <div class="page-container grid min-h-[calc(100vh-var(--nav-height))] gap-12 pb-12 pt-[clamp(var(--space-6),11vw,var(--space-8))] lg:grid-cols-[minmax(0,560px)_1fr] lg:items-center">
+    <div class="page-container flex min-h-[calc(100vh-var(--nav-height))] flex-col items-center justify-center gap-10 pb-12 pt-[clamp(var(--space-6),11vw,var(--space-8))] text-center">
       <component
         :is="albumHref ? NuxtLinkComponent : 'button'"
         v-if="album"
         :type="albumHref ? undefined : 'button'"
         :to="albumHref ?? undefined"
         :aria-label="albumHref ? undefined : `Open ${album.title}`"
-        class="hero-cover-wrap interactive-lift relative block w-full overflow-hidden text-left"
+        class="hero-cover-wrap interactive-lift relative block w-full max-w-[504px] overflow-hidden"
         @click="albumHref ? undefined : openSingle()"
       >
         <NuxtImg
@@ -16,14 +16,14 @@
           class="hero-cover w-full object-cover"
           width="3000"
           height="3000"
-          sizes="(max-width: 1024px) 100vw, 560px"
+          sizes="(max-width: 1024px) 100vw, 504px"
           format="webp,avif"
           loading="eager"
           fetchpriority="high"
         />
       </component>
 
-      <div class="space-y-6">
+      <div class="flex max-w-2xl flex-col items-center gap-6">
         <p class="label-text muted-text">
           new release
         </p>
@@ -32,13 +32,13 @@
           {{ album?.title ?? siteProfile.artistName }}
         </h1>
 
-        <p class="max-w-2xl muted-text">
+        <p class="muted-text">
           {{ releaseLabel }}
         </p>
 
         <StreamingLinks v-if="album" :links="album.streamingLinks" />
 
-        <div class="flex flex-wrap gap-3 pt-2">
+        <div class="flex flex-wrap justify-center gap-3 pt-2">
           <component
             :is="albumHref || !isSingle ? NuxtLinkComponent : 'button'"
             :type="albumHref || !isSingle ? undefined : 'button'"
