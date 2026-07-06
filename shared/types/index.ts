@@ -49,6 +49,12 @@ export interface Album {
   coverAlt: string
   description?: string
   streamingLinks: StreamingLinks
+  // Shown on the hero when the album itself has no streaming links yet
+  // (i.e. it hasn't released) but a single from it already has.
+  leadSingle?: {
+    title: string
+    streamingLinks: StreamingLinks
+  }
   tracklist: Track[]
   linerNotes?: string
   linerNoteImages?: Array<{

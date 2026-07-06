@@ -2,7 +2,7 @@
   <article v-if="album" class="pb-24">
     <section class="page-container pt-[calc(var(--nav-height)+1.5rem)]">
       <NuxtLink to="/#music" class="nav-link inline-block text-sm muted-text hover:text-[var(--color-accent)]">
-        back to music
+        back to home
       </NuxtLink>
     </section>
 

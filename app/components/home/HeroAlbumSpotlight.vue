@@ -36,7 +36,13 @@
           {{ releaseLabel }}
         </p>
 
-        <StreamingLinks v-if="album" :links="album.streamingLinks" />
+        <StreamingLinks v-if="hasAlbumStreamingLinks" :links="album!.streamingLinks" />
+        <template v-else-if="leadSingle">
+          <p class="text-sm muted-text">
+            Stream lead single {{ leadSingle.title }} now
+          </p>
+          <StreamingLinks :links="leadSingle.streamingLinks" />
+        </template>
 
         <div class="flex flex-wrap justify-center gap-3 pt-2">
           <component
@@ -74,6 +80,11 @@ const siteProfile = useSiteProfile()
 const NuxtLinkComponent = resolveComponent('NuxtLink')
 
 const isSingle = computed(() => Boolean(props.album?.isSingle))
+
+const hasAlbumStreamingLinks = computed(() =>
+  Object.values(props.album?.streamingLinks ?? {}).some(Boolean),
+)
+const leadSingle = computed(() => props.album?.leadSingle ?? null)
 
 // When set, the hero links to this album page instead of opening the single
 // modal. Singles tied to a parent release link to that album.

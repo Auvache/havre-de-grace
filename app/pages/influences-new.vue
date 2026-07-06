@@ -20,6 +20,6 @@ usePageSeo({
   title: 'Influences (Grid) - Havre De Grace',
   description: 'An endless tiled wall of musical influences orbiting Havre De Grace.',
   path: '/influences-new',
-  image: '/images/albums/into-the-wild-album.png',
+  image: '/albums/into-the-wild/images/into-the-wild-album-cover.png',
 })
 </script>

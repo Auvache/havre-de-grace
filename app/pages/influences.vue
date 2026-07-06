@@ -20,6 +20,6 @@ usePageSeo({
   title: 'Influences - Havre De Grace',
   description: 'Explore the albums orbiting Havre De Grace in a pannable field of musical influences.',
   path: '/influences',
-  image: '/images/albums/into-the-wild-album.png',
+  image: '/albums/into-the-wild/images/into-the-wild-album-cover.png',
 })
 </script>

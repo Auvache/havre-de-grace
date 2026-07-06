@@ -4,7 +4,7 @@ year: 2025
 releaseDate: "2025-07-08"
 isLatest: false
 isVisible: true
-coverImage: "/images/albums/i-want-to-be-yours-and-other-songs.jpg"
+coverImage: "/albums/i-want-to-be-yours-and-other-songs/images/i-want-to-be-yours-and-other-songs.jpg"
 coverAlt: "I Want to Be Yours and Other Songs album cover by Havre De Grace"
 description: "The debut album from Havre De Grace. Ten songs of acoustic folk and intimate storytelling by singer-songwriter Stefan Auvache Bradley."
 
@@ -471,18 +471,6 @@ linerNotes: |
   I had such a great time putting this album together.
   
   I hope you enjoy it.
-
-linerNoteImages:
-  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-evergreens.jpg"
-    alt: "Placeholder liner note image - atmospheric trees"
-  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-banner.png"
-    alt: "Placeholder liner note image - studio texture 1"
-  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-banner-2.png"
-    alt: "Placeholder liner note image - studio texture 2"
-  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-wide.jpg"
-    alt: "Placeholder liner note image - wide artist portrait"
-  - src: "/images/albums/i-want-to-be-yours-and-other-songs/liner-note-portrait-square.jpg"
-    alt: "Placeholder liner note image - square artist portrait"
 
 videos: []
 

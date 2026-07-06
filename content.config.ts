@@ -27,6 +27,19 @@ export default defineContentConfig({
           youtube: z.string().optional(),
           instagram: z.string().optional(),
         }),
+        leadSingle: z.object({
+          title: z.string(),
+          streamingLinks: z.object({
+            spotify: z.string().optional(),
+            appleMusic: z.string().optional(),
+            youtubeMusic: z.string().optional(),
+            amazonMusic: z.string().optional(),
+            bandcamp: z.string().optional(),
+            soundcloud: z.string().optional(),
+            youtube: z.string().optional(),
+            instagram: z.string().optional(),
+          }),
+        }).optional(),
         tracklist: z.array(z.object({
           title: z.string(),
           duration: z.string().optional(),

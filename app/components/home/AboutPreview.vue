@@ -1,10 +1,10 @@
 <template>
   <section class="page-container section-space border-t border-theme">
-    <div class="grid gap-10 lg:grid-cols-[minmax(0,410px)_1fr] lg:items-center">
+    <div class="grid gap-10 md:grid-cols-[minmax(0,504px)_1fr] md:items-center">
       <ScrollReveal
         as="div"
         variant="section-left"
-        class-name="overflow-hidden rounded-[var(--radius-lg)]"
+        class-name="mx-auto w-full max-w-[504px] overflow-hidden rounded-[var(--radius-lg)]"
         :delay-ms="90"
         :distance-px="84"
         :threshold="0.18"
@@ -16,7 +16,7 @@
           class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_26px_54px_color-mix(in_srgb,var(--theme-text)_14%,transparent)]"
           width="2056"
           height="2083"
-          sizes="(max-width: 1024px) 100vw, 410px"
+          sizes="(max-width: 768px) 100vw, 504px"
           format="webp,avif"
           loading="lazy"
         />
