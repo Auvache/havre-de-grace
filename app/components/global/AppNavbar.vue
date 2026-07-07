@@ -68,10 +68,11 @@ const navLinks = [
 ]
 
 const isActive = (to: string) => {
-  // Hash links (e.g. the music section) are active when on their base page.
-  const [path] = to.split('#')
+  // Hash links (music/contact) point at homepage sections; without real
+  // scrollspy we can't tell which one is in view, so skip the underline
+  // for them rather than showing it on both at once.
   if (to.includes('#')) {
-    return route.path === (path || '/')
+    return false
   }
 
   return route.path === to || route.path.startsWith(`${to}/`)

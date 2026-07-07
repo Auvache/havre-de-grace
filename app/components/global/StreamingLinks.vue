@@ -34,12 +34,12 @@ import type { StreamingLinks } from '~~/shared/types'
 import amazonMusicIcon from '~~/assets/images/amazon-music.png'
 import appleMusicIcon from '~~/assets/images/apple-music.png'
 import bandcampIcon from '~~/assets/images/bandcamp.png'
+import bandsintownIcon from '~~/assets/images/bandsintown.png'
 import instagramIcon from '~~/assets/images/instagram.png'
 import soundcloudIcon from '~~/assets/images/soundcloud.png'
 import spotifyIcon from '~~/assets/images/spotify.png'
 import youtubeIcon from '~~/assets/images/youtube.png'
 import youtubeMusicIcon from '~~/assets/images/youtube-music.png'
-const bandsintownIcon = '/images/bandsintown.png'
 
 const props = withDefaults(defineProps<{
   links: StreamingLinks | Record<string, string | undefined>
