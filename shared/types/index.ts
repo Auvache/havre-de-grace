@@ -14,6 +14,59 @@ export interface Track {
   title: string
   duration?: string
   lyrics?: string
+  // Absolute public path to the playable audio file (see content.config.ts).
+  audio?: string
+}
+
+// --- Interactive record player (/listen) ---
+
+// [x, y, rotate] scene coordinates (px, px, deg) for a scattered collage element.
+export type LayoutTriplet = [x: number, y: number, rotate: number]
+
+export interface TrackLayout {
+  lyrics: LayoutTriplet
+  storyA: LayoutTriplet
+  storyB: LayoutTriplet
+  annotations: LayoutTriplet
+  imageA: LayoutTriplet
+  imageB: LayoutTriplet
+}
+
+// A track prepared for the record player. Collage text/images are placeholders
+// for now (see app/utils/recordPlayer.ts); title/lyrics wire to real content later.
+export interface ListenTrack {
+  number: number // 1-based index within the album
+  side: 'a' | 'b' // which face of the record this track lives on
+  sideNumber: number // 1-based index within its side (A1, A2, ... / B1, B2, ...)
+  slug: string // URL segment, derived from the audio file basename
+  title: string
+  audioSrc: string
+  accent: string
+  accent2: string
+  accentDark: string
+  lyrics: string[]
+  storyA: string
+  storyB: string
+  annotations: string[]
+  imageACaption: string
+  imageBCaption: string
+  artworkPngA?: string
+  artworkPngB?: string
+  artworkAAlt?: string
+  artworkBAlt?: string
+  layout: TrackLayout
+}
+
+// An album as shown in the /listen picker and switcher.
+export interface ListenAlbum {
+  title: string
+  slug: string
+  coverImage: string
+  coverAlt: string
+  listenable: boolean // released + has audio -> playable
+  releaseLabel?: string // e.g. "Coming July 17, 2026" when not yet listenable
+  // Record-player backdrop keyword (e.g. "charcoal"); maps to a [data-bg] style.
+  background?: string
 }
 
 export interface LyricTrack {
@@ -48,6 +101,14 @@ export interface Album {
   coverImage: string
   coverAlt: string
   description?: string
+  // Record player (/listen): which tracks sit on each vinyl side (1-based track
+  // numbers). Omit to auto-split evenly, first half on A.
+  sides?: {
+    a: number[]
+    b: number[]
+  }
+  // Record player backdrop keyword (e.g. "charcoal"). Omit for the default look.
+  listenBackground?: string
   streamingLinks: StreamingLinks
   // Shown on the hero when the album itself has no streaming links yet
   // (i.e. it hasn't released) but a single from it already has.

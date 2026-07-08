@@ -1,8 +1,15 @@
 <template>
   <article v-if="album" class="pb-24">
-    <section class="page-container pt-[calc(var(--nav-height)+1.5rem)]">
+    <section class="page-container flex items-center justify-between gap-4 pt-[calc(var(--nav-height)+1.5rem)]">
       <NuxtLink to="/#music" class="nav-link inline-block text-sm muted-text hover:text-[var(--color-accent)]">
         back to home
+      </NuxtLink>
+      <NuxtLink
+        v-if="isListenable"
+        :to="`/listen/${album.slug}`"
+        class="nav-link inline-block text-sm font-semibold text-[var(--color-accent)]"
+      >
+        listen on the record player →
       </NuxtLink>
     </section>
 
@@ -75,6 +82,7 @@
 <script setup lang="ts">
 import type { Album, LyricTrack, VideoEntry } from '~~/shared/types'
 import { toEmbedUrl, toVideoThumbnailUrl } from '~~/shared/utils/video'
+import { isAlbumListenable } from '~/utils/recordPlayer'
 
 interface ScrollSection {
   id: string
@@ -167,6 +175,9 @@ const formattedReleaseDate = computed(() => {
     year: 'numeric',
   })
 })
+
+// Show a link to the interactive record player once the album is released and has audio.
+const isListenable = computed(() => (album.value ? isAlbumListenable(album.value) : false))
 
 const hasLyrics = computed(() => (album.value?.tracklist ?? []).some((track) => hasValue(track.lyrics)))
 

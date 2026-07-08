@@ -1,0 +1,1003 @@
+/*
+ * Record player scene styles, ported from new-page-mockup.html and namespaced
+ * under .record-player-page so nothing leaks into the rest of the site.
+ * NOTE: the visual style of the player chassis and the paper/collage graphics
+ * is expected to change — element layout/structure is correct, styling is WIP.
+ */
+
+.record-player-page {
+  --scene-w: 2200px;
+  --scene-h: 1600px;
+  --paper: #fffaf1;
+  --paper-warm: #fff4dd;
+  --ink: #10131a;
+  --muted: #5b6473;
+  --sky: #bce8fb;
+  --wood-1: #c38745;
+  --wood-2: #9f6329;
+  --wood-3: #e3ad66;
+  --deck-shadow: rgba(37, 28, 17, .3);
+  --accent: #ef463b;
+  --accent-2: #ffd15c;
+  --accent-dark: #112644;
+  --arm-angle: -88deg;
+
+  --lyrics-x: 550px;
+  --lyrics-y: 358px;
+  --lyrics-rotate: 10deg;
+  --story-a-x: 1400px;
+  --story-a-y: 368px;
+  --story-a-rotate: -7deg;
+  --story-b-x: 470px;
+  --story-b-y: 848px;
+  --story-b-rotate: -12deg;
+  --annotations-x: 1390px;
+  --annotations-y: 798px;
+  --annotations-rotate: 8deg;
+  --image-a-x: 1540px;
+  --image-a-y: 1030px;
+  --image-a-rotate: -9deg;
+  --image-b-x: 628px;
+  --image-b-y: 1072px;
+  --image-b-rotate: 5deg;
+  --album-story-x: 544px;
+  --album-story-y: 550px;
+  --album-story-rotate: -10deg;
+  --cover-x: 1398px;
+  --cover-y: 486px;
+  --cover-rotate: 7deg;
+
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  /* Drag-to-pan surface: suppress text/word selection so a pan gesture that
+     crosses a label (e.g. "← Albums") never leaves a lingering highlight that
+     would swallow the next drag. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: grab;
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(255, 255, 255, .44), transparent 31rem),
+    linear-gradient(135deg, #d7f5ff 0%, var(--sky) 52%, #96d2ed 100%);
+}
+
+/* Per-album backdrop: textured off-black / charcoal. Set via [data-bg] on the
+   page root from the album's `listenBackground` field. */
+.record-player-page[data-bg="charcoal"] {
+  color: #ecebe6;
+  background:
+    repeating-linear-gradient(22deg, rgba(255, 255, 255, .014) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-22deg, rgba(0, 0, 0, .16) 0 2px, transparent 2px 6px),
+    radial-gradient(circle at 50% 38%, #33363b 0%, #24262a 42%, #17181b 78%, #101113 100%);
+}
+
+/* While actively dragging the canvas, the whole surface reads as "grabbed". */
+.record-player-page.is-grabbing,
+.record-player-page.is-grabbing .scene,
+.record-player-page.is-grabbing .paper,
+.record-player-page.is-grabbing .album-cover,
+.record-player-page.is-grabbing .track-image {
+  cursor: grabbing;
+}
+
+.record-player-page * {
+  box-sizing: border-box;
+}
+
+.record-player-page .scene {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--scene-w);
+  height: var(--scene-h);
+  isolation: isolate;
+  will-change: transform;
+  /* The JS pan sets `translate() scale()` on this element; scaling from the
+     top-left keeps the translate in the same space useListenCanvas clamps. */
+  transform-origin: 0 0;
+}
+
+.record-player-page .scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, .34), transparent 26rem),
+    radial-gradient(circle at 16% 18%, rgba(255, 255, 255, .26), transparent 17rem),
+    radial-gradient(circle at 87% 72%, rgba(255, 255, 255, .18), transparent 21rem);
+  pointer-events: none;
+}
+
+/* On charcoal, trade the white glows for a soft warm spotlight + vignette. */
+.record-player-page[data-bg="charcoal"] .scene::before {
+  background:
+    radial-gradient(circle at 50% 46%, rgba(255, 246, 224, .07), transparent 30rem),
+    radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, .38) 100%);
+}
+
+.record-player-page .paper,
+.record-player-page .album-cover,
+.record-player-page .track-image {
+  position: absolute;
+  filter: drop-shadow(0 13px 14px rgba(26, 52, 70, .18));
+  transition:
+    opacity 1s ease,
+    transform 1s cubic-bezier(.2, .75, .2, 1),
+    left 1s cubic-bezier(.2, .75, .2, 1),
+    top 1s cubic-bezier(.2, .75, .2, 1),
+    visibility 1s ease;
+}
+
+.record-player-page .paper {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .68), transparent 42%),
+    var(--paper);
+  border: 1px solid rgba(10, 18, 28, .09);
+  color: var(--ink);
+  padding: 24px 26px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .64),
+    0 1px 0 rgba(255, 255, 255, .9);
+  /* Handwritten, single text style for all paper copy (no headers). */
+  font-family: "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive;
+}
+
+/* Drop the label chips and subtitles — the collage is one uniform hand. */
+.record-player-page .paper .track-chip,
+.record-player-page .paper .song-title small {
+  display: none;
+}
+
+.record-player-page .paper h2,
+.record-player-page .paper h3,
+.record-player-page .paper p,
+.record-player-page .track-image figcaption {
+  margin: 0;
+}
+
+.record-player-page .paper h2,
+.record-player-page .paper h3 {
+  margin-bottom: 6px;
+  font-size: 1.32rem;
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.record-player-page .paper p {
+  font-size: 1.16rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.record-player-page .album-story {
+  left: var(--album-story-x);
+  top: var(--album-story-y);
+  width: 360px;
+  min-height: 356px;
+  transform: rotate(var(--album-story-rotate));
+  z-index: 4;
+}
+
+.record-player-page .album-story h2 { margin-bottom: 12px; }
+.record-player-page .album-story p { font-size: 1.2rem; line-height: 1.32; font-weight: 400; }
+
+.record-player-page .album-cover {
+  left: var(--cover-x);
+  top: var(--cover-y);
+  width: 330px;
+  padding: 18px;
+  background: #fff;
+  transform: rotate(var(--cover-rotate));
+  z-index: 3;
+}
+
+.record-player-page .album-cover h2 {
+  margin: 0 0 14px;
+  font-size: 2.25rem;
+  line-height: .88;
+  letter-spacing: -.07em;
+  text-transform: uppercase;
+}
+
+.record-player-page .album-cover .cover-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+
+.record-player-page .lyrics-card {
+  left: var(--lyrics-x);
+  top: var(--lyrics-y);
+  width: 294px;
+  min-height: 314px;
+  transform: rotate(var(--lyrics-rotate));
+  z-index: 4;
+}
+
+.record-player-page .lyrics-card h2 { margin-bottom: 18px; }
+
+.record-player-page .lyrics-lines {
+  display: grid;
+  gap: 2px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1.14rem;
+  color: var(--ink);
+}
+
+.record-player-page .story-a {
+  left: var(--story-a-x);
+  top: var(--story-a-y);
+  width: 292px;
+  min-height: 250px;
+  transform: rotate(var(--story-a-rotate));
+  z-index: 3;
+}
+
+.record-player-page .story-b {
+  left: var(--story-b-x);
+  top: var(--story-b-y);
+  width: 316px;
+  min-height: 246px;
+  transform: rotate(var(--story-b-rotate));
+  z-index: 2;
+}
+
+.record-player-page .annotations-card {
+  left: var(--annotations-x);
+  top: var(--annotations-y);
+  width: 292px;
+  min-height: 252px;
+  transform: rotate(var(--annotations-rotate));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .62), transparent 36%),
+    repeating-linear-gradient(0deg, transparent 0 30px, rgba(46, 74, 102, .13) 31px 32px),
+    var(--paper-warm);
+  z-index: 4;
+}
+
+.record-player-page .annotations-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-size: 1.12rem;
+  line-height: 1.3;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.record-player-page .annotations-list li + li { margin-top: 8px; }
+
+.record-player-page .track-chip {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  background: linear-gradient(145deg, var(--accent), var(--accent-2));
+  color: #0b1422;
+}
+
+.record-player-page .track-image {
+  width: 188px;
+  padding: 12px 12px 34px;
+  background: #fff;
+  z-index: 1;
+}
+
+.record-player-page .image-a {
+  left: var(--image-a-x);
+  top: var(--image-a-y);
+  transform: rotate(var(--image-a-rotate));
+}
+
+.record-player-page .image-b {
+  left: var(--image-b-x);
+  top: var(--image-b-y);
+  width: 218px;
+  transform: rotate(var(--image-b-rotate));
+}
+
+.record-player-page .track-image figcaption {
+  position: absolute;
+  left: 13px;
+  right: 13px;
+  bottom: 9px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: .75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: #253044;
+}
+
+.record-player-page .art {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 81% 6%, var(--accent-2) 0 36px, transparent 37px),
+    linear-gradient(136deg, var(--accent) 0 58%, #153151 59% 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
+  background-size: cover;
+  background-position: center;
+}
+
+.record-player-page .album-cover .art { height: 310px; }
+.record-player-page .image-b .art { height: 132px; }
+
+.record-player-page .art.has-png {
+  /* PNG hook: set --png-art to a url(...) to replace the CSS placeholder art. */
+  background-image: var(--png-art);
+}
+
+.record-player-page .art.has-png::after,
+.record-player-page .art.has-png .guitar,
+.record-player-page .art.has-png .figure,
+.record-player-page .art.has-png .drum,
+.record-player-page .art.has-png .mic { display: none; }
+
+.record-player-page .art::after {
+  content: "";
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: -26%;
+  height: 46%;
+  background: var(--accent-dark);
+  transform: rotate(-2deg);
+}
+
+.record-player-page .figure {
+  position: absolute;
+  bottom: 24px;
+  width: 10px;
+  height: 46px;
+  border-radius: 8px 8px 3px 3px;
+  background: var(--accent-dark);
+  z-index: 4;
+}
+
+.record-player-page .figure::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -16px;
+  width: 15px;
+  height: 15px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--accent-dark);
+}
+
+.record-player-page .figure::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 13px;
+  width: 30px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--accent-dark);
+  transform: rotate(var(--fig-arm, 0deg));
+  transform-origin: 50% 50%;
+}
+
+.record-player-page .figure.guitarist { left: 16%; --fig-arm: -24deg; transform: rotate(-8deg); }
+.record-player-page .figure.singer { right: 14%; --fig-arm: -28deg; transform: rotate(-4deg); }
+.record-player-page .figure.drummer { left: 52%; height: 34px; bottom: 34px; --fig-arm: 18deg; }
+
+.record-player-page .guitar {
+  position: absolute;
+  left: 11%;
+  bottom: 45px;
+  width: 48px;
+  height: 16px;
+  border-radius: 48% 52% 48% 52%;
+  background: var(--accent-dark);
+  transform: rotate(20deg);
+  z-index: 3;
+}
+
+.record-player-page .guitar::after {
+  content: "";
+  position: absolute;
+  right: -46px;
+  top: 6px;
+  width: 50px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--accent-dark);
+}
+
+.record-player-page .drum {
+  position: absolute;
+  left: 44%;
+  bottom: 30px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  z-index: 4;
+  box-shadow: inset 0 0 0 8px var(--accent-dark);
+}
+
+.record-player-page .drum::before,
+.record-player-page .drum::after {
+  content: "";
+  position: absolute;
+  top: -23px;
+  width: 46px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--accent-dark);
+}
+
+.record-player-page .drum::before { left: -31px; transform: rotate(-24deg); }
+.record-player-page .drum::after { right: -31px; transform: rotate(24deg); }
+
+.record-player-page .mic {
+  position: absolute;
+  right: 9%;
+  bottom: 52px;
+  width: 4px;
+  height: 82px;
+  background: var(--accent-dark);
+  transform: rotate(-11deg);
+  z-index: 3;
+}
+
+.record-player-page .mic::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: -6px;
+  width: 18px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent-dark);
+}
+
+.record-player-page .turntable {
+  --deck-w: 430px;
+  --deck-h: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--deck-w);
+  height: var(--deck-h);
+  transform: translate(-50%, -50%);
+  border-radius: 20px;
+  /* Solid arctic-white chassis with a black border. */
+  background: linear-gradient(160deg, #ffffff 0%, #f4f6f8 55%, #e9edf1 100%);
+  border: 5px solid #0d0e11;
+  box-shadow:
+    0 30px 42px rgba(0, 0, 0, .45),
+    inset 0 2px 0 rgba(255, 255, 255, .95),
+    inset 0 -14px 26px rgba(15, 23, 35, .06);
+  z-index: 20;
+}
+
+.record-player-page .turntable::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 13px;
+  background: none;
+  box-shadow: inset 0 0 0 1px rgba(13, 14, 17, .07);
+  pointer-events: none;
+}
+
+.record-player-page .record-wrap {
+  position: absolute;
+  left: 85px;
+  top: 20px;
+  width: 250px;
+  height: 250px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .12), transparent 48%),
+    #171717;
+  box-shadow:
+    inset 0 0 0 4px rgba(0, 0, 0, .34),
+    0 6px 18px rgba(0, 0, 0, .38);
+  cursor: pointer;
+  touch-action: none;
+  z-index: 4;
+  perspective: 1600px;
+}
+
+/* Flip container — rotates the whole record to reveal the B side on button click. */
+.record-player-page .record-flip {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  transition: transform .72s cubic-bezier(.55, .05, .25, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.record-player-page .record-flip.flipped {
+  transform: rotateY(180deg);
+}
+
+.record-player-page .record-wrap:focus-visible {
+  outline: 5px solid rgba(255, 255, 255, .8);
+  box-shadow:
+    0 0 0 8px rgba(25, 99, 165, .5),
+    inset 0 0 0 4px rgba(0, 0, 0, .34),
+    0 6px 18px rgba(0, 0, 0, .38);
+}
+
+.record-player-page .record {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 24px, rgba(255, 255, 255, .08) 25px 26px, transparent 27px 100%),
+    repeating-radial-gradient(circle at 50% 50%, #040404 0 7px, #151515 8px 9px, #050505 10px 14px),
+    #050505;
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, .12),
+    inset 0 0 42px rgba(0, 0, 0, .85);
+  will-change: transform;
+}
+
+.record-player-page .record::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    conic-gradient(from 20deg, transparent, rgba(255, 255, 255, .12) 8deg, transparent 19deg, transparent 140deg, rgba(255, 255, 255, .08) 151deg, transparent 170deg, transparent),
+    repeating-radial-gradient(circle, transparent 0 10px, rgba(255, 255, 255, .05) 11px 12px, transparent 13px 23px);
+  mix-blend-mode: screen;
+  opacity: .5;
+  pointer-events: none;
+}
+
+.record-player-page .record::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .06);
+  pointer-events: none;
+}
+
+.record-player-page .record-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 104px;
+  height: 104px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 38%, #ffffff 0%, #f4f1ea 60%, #e7e2d7 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, .12),
+    inset 0 2px 6px rgba(255, 255, 255, .7),
+    0 1px 4px rgba(0, 0, 0, .45);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Center spindle hole over the label. */
+.record-player-page .record-spindle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #0b0b0b;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .28);
+  z-index: 3;
+}
+
+.record-player-page .groove-zone-hint {
+  position: absolute;
+  inset: 15px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: .18;
+  background:
+    repeating-radial-gradient(circle, transparent 0 12px, rgba(255, 255, 255, .2) 13px 14px, transparent 15px 22px);
+  mix-blend-mode: screen;
+}
+
+.record-player-page .power-light {
+  position: absolute;
+  right: 18px;
+  top: 92px;
+  width: 29px;
+  height: 16px;
+  border-radius: 3px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .32), transparent),
+    #e74742;
+  box-shadow: inset 0 0 0 3px rgba(80, 18, 16, .38), 0 0 12px rgba(238, 65, 58, .3);
+  z-index: 7;
+  transition: opacity .25s ease;
+}
+
+.record-player-page .scene[data-mode="off"] .power-light { opacity: .45; }
+
+.record-player-page .speed-slot {
+  position: absolute;
+  right: 19px;
+  bottom: 28px;
+  width: 27px;
+  height: 102px;
+  border-radius: 7px;
+  background: #1d2128;
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, .46), inset 0 0 14px rgba(255, 255, 255, .12);
+  z-index: 7;
+}
+
+.record-player-page .speed-slot::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: 28px;
+  height: 8px;
+  border-radius: 10px;
+  background: #eef5f5;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .45);
+}
+
+.record-player-page .tonearm-zone {
+  position: absolute;
+  left: 205px;
+  top: 42px;
+  width: 190px;
+  height: 208px;
+  z-index: 18;
+  pointer-events: none;
+}
+
+.record-player-page .tonearm {
+  position: absolute;
+  right: 0;
+  top: 1px;
+  width: 216px;
+  height: 42px;
+  /* Rotate around the center of the drawn pivot base so the arm visibly hinges
+     there (and points straight down onto the rest when off). Keep in sync with
+     TURNTABLE_PIVOT_RATIO. */
+  transform-origin: 195px 25px;
+  transform: rotate(var(--arm-angle));
+  transition: transform .7s cubic-bezier(.2, .85, .2, 1.04);
+  cursor: grab;
+  pointer-events: auto;
+  outline: none;
+  touch-action: none;
+  will-change: transform;
+}
+
+.record-player-page .tonearm:active { cursor: grabbing; }
+.record-player-page .tonearm.dragging { transition: none; }
+.record-player-page .tonearm:focus-visible .arm-bar {
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, .7), 0 0 0 8px rgba(25, 99, 165, .55);
+}
+
+.record-player-page .arm-bar {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  width: 177px;
+  height: 6px;
+  border-radius: 999px;
+  transform: rotate(5deg);
+  transform-origin: 100% 50%;
+  background:
+    linear-gradient(90deg, #d9e0e3, #768185 18%, #dfe8ea 42%, #7d878c 78%, #edf2f3);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, .32), inset 0 1px rgba(255, 255, 255, .75);
+}
+
+/* Stylus: a short thin line extending straight out of the end of the arm, in line
+   with it. Attached to the arm-bar so it stays at the tip and tilts with it. */
+.record-player-page .arm-bar::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 15px;
+  height: 3px;
+  transform: translateY(-50%);
+  border-radius: 2px 3px 3px 2px;
+  background: linear-gradient(90deg, #565f64, #aab3b7);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, .28);
+}
+
+.record-player-page .pivot-base {
+  position: absolute;
+  right: -10px;
+  top: -6px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #bfc8cb 0 8px, #555d65 9px 20px, #262b31 21px 100%);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .12), 0 5px 9px rgba(0, 0, 0, .32);
+  z-index: -1;
+}
+
+.record-player-page .pivot-base::before {
+  content: "";
+  position: absolute;
+  inset: 15px;
+  border-radius: 50%;
+  background: #dce3e6;
+  box-shadow: inset 0 0 0 5px #78838a;
+}
+
+.record-player-page .rest-post {
+  position: absolute;
+  right: 39px;
+  top: 140px;
+  width: 20px;
+  height: 74px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #292e35, #747e86, #15191f);
+  z-index: 8;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, .3);
+}
+
+/* Fixed top bar that spans the scene: the "Albums" exit sits at the far left and
+   the control panel is centered in the viewport (middle grid track). pointer-events
+   are off on the bar itself so empty gaps still pan the canvas; each interactive
+   child re-enables them and carries [data-no-pan] so the pan handler skips it. */
+.record-player-page .scene-topbar {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 12px;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.record-player-page .scene-topbar > * {
+  pointer-events: auto;
+}
+
+/* Centered control panel; buttons sit on one line and wrap as space runs out. */
+.record-player-page .track-controls {
+  grid-column: 2;
+  justify-self: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .72);
+  border: 1px solid rgba(255, 255, 255, .6);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 18px rgba(30, 58, 78, .16);
+  max-width: 100%;
+}
+
+.record-player-page .track-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 10px;
+  min-width: 32px;
+  font: inherit;
+  font-size: .76rem;
+  font-weight: 950;
+  color: #203047;
+  background: rgba(255, 255, 255, .68);
+  box-shadow: inset 0 0 0 1px rgba(40, 55, 75, .12), 0 3px 8px rgba(32, 48, 68, .12);
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, color .15s ease;
+}
+
+.record-player-page .track-button:hover { transform: translateY(-1px); }
+.record-player-page .track-button:focus-visible { outline: 3px solid rgba(25, 99, 165, .45); outline-offset: 3px; }
+.record-player-page .track-button[aria-pressed="true"] {
+  background: linear-gradient(145deg, var(--accent), var(--accent-2));
+  color: #06111e;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .16), 0 6px 12px rgba(32, 48, 68, .18);
+}
+
+.record-player-page .flip-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  margin-left: 4px;
+  padding: 5px 12px;
+  font: inherit;
+  font-size: .76rem;
+  font-weight: 950;
+  letter-spacing: .02em;
+  color: #f4f6f8;
+  background: linear-gradient(145deg, #26292e, #0f1013);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12), 0 4px 10px rgba(0, 0, 0, .3);
+  cursor: pointer;
+  transition: transform .15s ease, opacity .15s ease;
+}
+
+.record-player-page .flip-button:hover { transform: translateY(-1px); }
+.record-player-page .flip-button:focus-visible { outline: 3px solid rgba(25, 99, 165, .55); outline-offset: 3px; }
+.record-player-page .flip-button:disabled { opacity: .5; cursor: default; transform: none; }
+
+.record-player-page .song-title small {
+  display: block;
+  margin-top: 5px;
+  font-size: .73rem;
+  letter-spacing: .08em;
+  color: var(--muted);
+}
+
+.record-player-page .scene[data-mode="off"] .song-only,
+.record-player-page .scene[data-mode="song"] .off-only {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.record-player-page .scene[data-mode="off"] .lyrics-card,
+.record-player-page .scene.is-changing .lyrics-card { transform: translateY(-26px) rotate(var(--lyrics-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="off"] .story-a,
+.record-player-page .scene.is-changing .story-a { transform: translateX(34px) rotate(var(--story-a-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="off"] .story-b,
+.record-player-page .scene.is-changing .story-b { transform: translateX(-34px) rotate(var(--story-b-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="off"] .annotations-card,
+.record-player-page .scene.is-changing .annotations-card { transform: translateY(28px) rotate(var(--annotations-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="off"] .image-a,
+.record-player-page .scene.is-changing .image-a { transform: translateY(24px) rotate(var(--image-a-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="off"] .image-b,
+.record-player-page .scene.is-changing .image-b { transform: translateY(24px) rotate(var(--image-b-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="song"] .album-cover,
+.record-player-page .scene.is-changing .album-cover { transform: translateX(30px) rotate(var(--cover-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="song"] .album-story,
+.record-player-page .scene.is-changing .album-story { transform: translateX(-30px) rotate(var(--album-story-rotate)) scale(.965); }
+
+.record-player-page .scene.is-changing .paper,
+.record-player-page .scene.is-changing .album-cover,
+.record-player-page .scene.is-changing .track-image {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* One-shot "drag to look around" affordance: full-screen translucent scrim with a
+   centered pill. Non-interactive so it never blocks the first drag. */
+.record-player-page .drag-hint {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 14, 20, .28);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
+.record-player-page .drag-hint-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  color: #10131a;
+  background: rgba(255, 255, 255, .86);
+  border: 1px solid rgba(255, 255, 255, .7);
+  box-shadow: 0 12px 30px rgba(20, 30, 45, .28);
+}
+
+.record-player-page .drag-hint-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* Vue <Transition name="drag-hint"> fade in/out. */
+.drag-hint-enter-active { transition: opacity .5s ease; }
+.drag-hint-leave-active { transition: opacity .8s ease; }
+.drag-hint-enter-from,
+.drag-hint-leave-to { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drag-hint-enter-active,
+  .drag-hint-leave-active { transition-duration: .01ms; }
+}
+
+.record-player-page .back-link {
+  grid-column: 1;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #10131a;
+  background: rgba(255, 255, 255, .72);
+  border: 1px solid rgba(255, 255, 255, .6);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 18px rgba(30, 58, 78, .16);
+  text-decoration: none;
+}
+
+.record-player-page .back-link:hover { background: rgba(255, 255, 255, .9); }
+
+/* Phone zoom-out: shrink the fixed UI chrome to match the scaled artboard
+   (MOBILE_SCALE in useListenCanvas.ts). Each control scales toward the corner
+   it's anchored to so it stays pinned in place. */
+@media (max-width: 640px) {
+  /* Content box is 95vw wide, centered; both children left-align to its edge. */
+  .record-player-page .scene-topbar {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    row-gap: 10px;
+    padding: 0 2.5vw;
+  }
+  /* Panel spans the full 95vw box; Albums drops underneath, left-aligned to it. */
+  .record-player-page .track-controls {
+    grid-column: 1;
+    order: 1;
+    width: 100%;
+  }
+  .record-player-page .back-link {
+    grid-column: 1;
+    order: 2;
+    justify-self: start;
+  }
+}
+
+.record-player-page .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record-player-page .paper,
+  .record-player-page .album-cover,
+  .record-player-page .track-image,
+  .record-player-page .record-flip,
+  .record-player-page .tonearm {
+    transition-duration: 1ms;
+  }
+}

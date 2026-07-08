@@ -66,6 +66,15 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
+    // The /listen record player draws its own full-bleed scene background, but the
+    // picker landing (/listen) uses the standard light theme.
+    match: /^\/listen(?:\/|$)/,
+    config: {
+      theme: 'light',
+      gradient: 'light-fjord',
+    },
+  },
+  {
     // The influences canvas is a deliberately immersive dark experience.
     match: /^\/influences(?:-new)?\/?$/,
     config: {

@@ -8,6 +8,13 @@ coverImage: "/albums/i-want-to-be-yours-and-other-songs/images/i-want-to-be-your
 coverAlt: "I Want to Be Yours and Other Songs album cover by Havre De Grace"
 description: "The debut album from Havre De Grace. Ten songs of acoustic folk and intimate storytelling by singer-songwriter Stefan Auvache Bradley."
 
+# Record player (/listen) presentation.
+listenBackground: "charcoal"
+# Vinyl sides — 1-based track numbers. A: side one, B: side two.
+sides:
+  a: [1, 2, 3, 4, 5]
+  b: [6, 7, 8, 9]
+
 streamingLinks:
   spotify: "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK?si=XGt1dVOqTWqG8gh6LkfRFQ"
   appleMusic: "https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1875647787"
@@ -19,6 +26,7 @@ streamingLinks:
 tracklist:
   - title: "I Want to Be Yours"
     duration: "4:26"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/i-want-to-be-yours.mp3"
     lyrics: |
       I could be a singer
       Living on the road
@@ -69,6 +77,7 @@ tracklist:
 
   - title: "Shades of Blue and Red"
     duration: "3:18"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/shades-of-blue-and-red.mp3"
     lyrics: |
       Crossing the water on your way to me
       Talking about all the things that we've seen
@@ -119,6 +128,7 @@ tracklist:
 
   - title: "Sky Blue"
     duration: "4:05"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/sky-blue.mp3"
     lyrics: |
       I'm sitting in a place that I never thought I'd be
       Between the person I've become and the man that I should see
@@ -178,6 +188,7 @@ tracklist:
 
   - title: "Scarecrow"
     duration: "5:50"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/scarecrow.mp3"
     lyrics: |
       She looks like a lightning strike
       Laughs with her smile but never her eyes
@@ -246,6 +257,7 @@ tracklist:
 
   - title: "Jesus Creek"
     duration: "3:35"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/jesus-creek.mp3"
     lyrics: |
       There stands a tree house atop of cross hill
       An old woman lives there against her will
@@ -281,6 +293,7 @@ tracklist:
 
   - title: "Demolition Woman - Live"
     duration: "3:50"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/demolition-woman.mp3"
     lyrics: |
       She's a demolition woman
       Coming for my heart
@@ -335,6 +348,7 @@ tracklist:
 
   - title: "White Raven - Live"
     duration: "6:04"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/white-raven.mp3"
     lyrics: |
       I don't want to track in mud
       When I come into your home
@@ -368,6 +382,7 @@ tracklist:
 
   - title: "Song for the Sick"
     duration: "5:18"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/song-for-the-sick.mp3"
     lyrics: |
       Her heart is a graveyard, her love is a ghost
       He didn't turn up when she needed him most
@@ -413,6 +428,7 @@ tracklist:
 
   - title: "I Want to Be Yours - Demo Version"
     duration: "4:07"
+    audio: "/albums/i-want-to-be-yours-and-other-songs/music/i-want-to-be-yours-demo.mp3"
     lyrics: |
       I could be a singer
       Living on the road

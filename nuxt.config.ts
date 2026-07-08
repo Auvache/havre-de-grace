@@ -30,6 +30,7 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       { name: 'Jost', provider: 'google' },
+      { name: 'Patrick Hand', provider: 'google' },
     ],
   },
 
@@ -112,7 +113,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/', '/music/i-want-to-be-yours-and-other-songs', '/about', '/links', '/influences'],
+      routes: ['/', '/music/i-want-to-be-yours-and-other-songs', '/about', '/links', '/influences', '/listen', '/listen/i-want-to-be-yours-and-other-songs'],
     },
   },
 })

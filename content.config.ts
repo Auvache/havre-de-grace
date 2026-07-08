@@ -17,6 +17,12 @@ export default defineContentConfig({
         coverImage: z.string(),
         coverAlt: z.string(),
         description: z.string().optional(),
+        // Record player (/listen): textured backdrop keyword + vinyl side split.
+        listenBackground: z.string().optional(),
+        sides: z.object({
+          a: z.array(z.number()),
+          b: z.array(z.number()),
+        }).optional(),
         streamingLinks: z.object({
           spotify: z.string().optional(),
           appleMusic: z.string().optional(),
@@ -44,6 +50,11 @@ export default defineContentConfig({
           title: z.string(),
           duration: z.string().optional(),
           lyrics: z.string().optional(),
+          // Absolute public path to the playable audio file, e.g.
+          // "/albums/<slug>/music/scarecrow.mp3". Filenames don't derive cleanly
+          // from titles, so this is set explicitly. Used by the /listen record player;
+          // the track's URL slug is derived from this file's basename.
+          audio: z.string().optional(),
         })),
         linerNotes: z.string().optional(),
         linerNoteImages: z.array(z.object({
