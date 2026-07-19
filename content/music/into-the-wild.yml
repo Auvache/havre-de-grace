@@ -7,7 +7,7 @@ isLatest: true
 isVisible: true
 coverImage: "/albums/into-the-wild/images/into-the-wild-album-cover.png"
 coverAlt: "Into the Wild album cover by Havre De Grace"
-description: "Coming July 17, 2026"
+description: "Released July 17, 2026"
 
 streamingLinks:
   spotify: "https://open.spotify.com/album/3DbM52oMQnsIyrAo0ehTUx?si=VNB2Ur1fRZmv_eQ34whnEw"
@@ -77,8 +77,7 @@ tracklist:
   - title: "Ghost"
 
 linerNotes: |
-  Coming July 17, 2026
-
+  Released
 videos:
   - title: "Havre De Grace - Live Performance"
     url: "https://www.youtube.com/embed/0JF4Pm_-mPs?si=u7ip8ecrCrAivo3A"

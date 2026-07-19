@@ -16,10 +16,6 @@
       <div class="space-y-5">
         <p class="label-text muted-text">album</p>
         <h1 class="display-heading text-balance">{{ album.title }}</h1>
-        <p class="muted-text">
-          {{ album.year }}
-          <span v-if="formattedReleaseDate"> | {{ formattedReleaseDate }}</span>
-        </p>
         <p v-if="album.description" class="max-w-2xl muted-text">
           {{ album.description }}
         </p>

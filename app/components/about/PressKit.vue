@@ -51,10 +51,6 @@
         >
           <p class="label-text muted-text">latest release</p>
           <h3 class="text-xl font-medium">{{ latestAlbum.title }}</h3>
-          <p class="text-sm muted-text">
-            {{ latestAlbum.year }}
-            <span v-if="formattedReleaseDate"> | {{ formattedReleaseDate }}</span>
-          </p>
           <p v-if="latestAlbum.description" class="text-sm muted-text">
             {{ latestAlbum.description }}
           </p>
@@ -133,6 +129,7 @@ const formattedReleaseDate = computed(() => {
 
   return date.toLocaleDateString('en-US', {
     month: 'long',
+    day: 'numeric',
     year: 'numeric',
   })
 })

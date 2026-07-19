@@ -51,12 +51,8 @@
         White, John Mayer, and Kristian Matsson's The Tallest Man on Earth. These influences have shaped him as a guitar player and a songwriter.
       </p>
 
-      <p class="muted-text">
-        Most of Stefan's songs are lyrically ninety percent finished within five minutes. They're about infatuation, fatherhood, loss, navigating complex social situations, and balancing passion with practicality.
-      </p>
-
 	    <p class="muted-text">
-		    Stefan's first album, I Want to Be Yours and Other Songs, was originally released under the moniker Stefan Auvache in July 2025. His followup album, Into the Wild, is scheduled for release on July 17, 2026.
+		    Stefan's first album, I Want to Be Yours and Other Songs, was originally released under the moniker Stefan Auvache in July 2025. His second album, Into the Wild, was released on July 17, 2026.
 	    </p>
     </ScrollReveal>
 
