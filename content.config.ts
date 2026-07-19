@@ -16,6 +16,10 @@ export default defineContentConfig({
         parentAlbumSlug: z.string().optional(),
         coverImage: z.string(),
         coverAlt: z.string(),
+        // Optional album back cover, shown alongside the front in the /listen player
+        // while a song plays. Omit if the release has no back artwork.
+        backCoverImage: z.string().optional(),
+        backCoverAlt: z.string().optional(),
         description: z.string().optional(),
         // Record player (/listen): textured backdrop keyword + vinyl side split.
         listenBackground: z.string().optional(),
@@ -55,6 +59,21 @@ export default defineContentConfig({
           // from titles, so this is set explicitly. Used by the /listen record player;
           // the track's URL slug is derived from this file's basename.
           audio: z.string().optional(),
+          // --- /listen record-player "now playing" collage (all optional) ---
+          // Prose about how the song was written.
+          writingStory: z.string().optional(),
+          // Prose about how the song was recorded.
+          recordingDetails: z.string().optional(),
+          // 2-3 photos shown borderless and uncaptioned around the player.
+          photos: z.array(z.object({
+            src: z.string(),
+            alt: z.string().optional(),
+          })).optional(),
+          // Per-song liner notes: production, writing, instrumentation credits, etc.
+          credits: z.array(z.object({
+            role: z.string(),
+            name: z.string(),
+          })).optional(),
         })),
         linerNotes: z.string().optional(),
         linerNoteImages: z.array(z.object({

@@ -42,11 +42,7 @@
 	    </p>
 
       <p class="italic muted-text">
-	      "I love music and music loves me. I can't help but play the guitar and write songs. Havre De Grace is the vehicle I use to share what I love with anyone who wants to listen."
-      </p>
-
-      <p class="muted-text">
-        For Stefan, music isn't about composition, correctness, marketing, or building a fanbase. He never set out to be a musician or a performer. He just loves playing the guitar and writing songs, and he runs with whatever feels best in the moment. He plays what he wants, when he wants.
+	      "I love music and music loves me. I can't help but play the guitar and write songs."
       </p>
 
       <p class="muted-text">

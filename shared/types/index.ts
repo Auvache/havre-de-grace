@@ -10,12 +10,22 @@ export interface StreamingLinks {
   instagram?: string
 }
 
+export interface TrackPhoto {
+  src: string
+  alt?: string
+}
+
 export interface Track {
   title: string
   duration?: string
   lyrics?: string
   // Absolute public path to the playable audio file (see content.config.ts).
   audio?: string
+  // --- /listen "now playing" collage (all optional) ---
+  writingStory?: string
+  recordingDetails?: string
+  photos?: TrackPhoto[]
+  credits?: Credit[]
 }
 
 // --- Interactive record player (/listen) ---
@@ -32,8 +42,8 @@ export interface TrackLayout {
   imageB: LayoutTriplet
 }
 
-// A track prepared for the record player. Collage text/images are placeholders
-// for now (see app/utils/recordPlayer.ts); title/lyrics wire to real content later.
+// A track prepared for the record player. Every content field is optional — the
+// collage omits any element with no data (see app/components/listen/AlbumCollage.vue).
 export interface ListenTrack {
   number: number // 1-based index within the album
   side: 'a' | 'b' // which face of the record this track lives on
@@ -44,16 +54,11 @@ export interface ListenTrack {
   accent: string
   accent2: string
   accentDark: string
-  lyrics: string[]
-  storyA: string
-  storyB: string
-  annotations: string[]
-  imageACaption: string
-  imageBCaption: string
-  artworkPngA?: string
-  artworkPngB?: string
-  artworkAAlt?: string
-  artworkBAlt?: string
+  lyrics: string[] // lyric lines (empty array when the song has no lyrics)
+  writingStory?: string // how the song was written
+  recordingDetails?: string // how the song was recorded
+  photos: TrackPhoto[] // borderless, uncaptioned photos (empty when none)
+  credits: Credit[] // per-song liner notes (empty when none)
   layout: TrackLayout
 }
 
@@ -63,6 +68,9 @@ export interface ListenAlbum {
   slug: string
   coverImage: string
   coverAlt: string
+  // Album-wide back artwork, shown next to the front cover during playback.
+  backCoverImage?: string
+  backCoverAlt?: string
   listenable: boolean // released + has audio -> playable
   releaseLabel?: string // e.g. "Coming July 17, 2026" when not yet listenable
   // Record-player backdrop keyword (e.g. "charcoal"); maps to a [data-bg] style.
@@ -100,6 +108,8 @@ export interface Album {
   parentAlbumSlug?: string
   coverImage: string
   coverAlt: string
+  backCoverImage?: string
+  backCoverAlt?: string
   description?: string
   // Record player (/listen): which tracks sit on each vinyl side (1-based track
   // numbers). Omit to auto-split evenly, first half on A.

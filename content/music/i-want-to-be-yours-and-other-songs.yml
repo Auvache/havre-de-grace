@@ -12,8 +12,8 @@ description: "The debut album from Havre De Grace. Ten songs of acoustic folk an
 listenBackground: "charcoal"
 # Vinyl sides — 1-based track numbers. A: side one, B: side two.
 sides:
-  a: [1, 2, 3, 4, 5]
-  b: [6, 7, 8, 9]
+  a: [1, 2, 3, 4]
+  b: [5, 6, 7, 8, 9]
 
 streamingLinks:
   spotify: "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK?si=XGt1dVOqTWqG8gh6LkfRFQ"
@@ -27,6 +27,15 @@ tracklist:
   - title: "I Want to Be Yours"
     duration: "4:26"
     audio: "/albums/i-want-to-be-yours-and-other-songs/music/i-want-to-be-yours.mp3"
+    writingStory: |
+      I was rocking and humming my 3-month-old son to sleep at 2am. When he finally passed out, I laid him between my legs and the line "yes I could be famous, that'd sure be a chore. I could belong to anybody but I want to be yours" popped into my head. Less than five minutes later, all of the words were written as they are now.
+    recordingDetails: |
+      This was the first song I intentionally recorded for the album. Everything else up to this point had been randomly recorded over the past few years. This was the real beginning of forming the album (hence the title).
+    credits:
+      - role: "Written & Performed"
+        name: "Stefan Auvache Bradley"
+      - role: "Produced"
+        name: "Parker Holt"
     lyrics: |
       I could be a singer
       Living on the road
@@ -78,6 +87,15 @@ tracklist:
   - title: "Shades of Blue and Red"
     duration: "3:18"
     audio: "/albums/i-want-to-be-yours-and-other-songs/music/shades-of-blue-and-red.mp3"
+    writingStory: |
+      I remember a story my mom told me when I was a kid about a guy in our hometown. His wife left him and their two kids to travel cross country with a motorcycle gang for a year. When she eventually came back and asked for forgiveness, he welcomed her back with open arms. I don't know if that story is true or exaggerated or spot on accurate, but I do know how it makes me feel. Shades of Blue and Red is about that story.
+    recordingDetails: |
+      This was originally a demo I recorded two years before deciding to record the rest of the album. I had some time off work, bought a couple of SM57 mics, and recorded some songs.
+    credits:
+      - role: "Written & Performed"
+        name: "Stefan Auvache Bradley"
+      - role: "Produced"
+        name: "Parker Holt"
     lyrics: |
       Crossing the water on your way to me
       Talking about all the things that we've seen
@@ -129,6 +147,11 @@ tracklist:
   - title: "Sky Blue"
     duration: "4:05"
     audio: "/albums/i-want-to-be-yours-and-other-songs/music/sky-blue.mp3"
+    credits:
+      - role: "Written & Performed"
+        name: "Stefan Auvache Bradley"
+      - role: "Produced"
+        name: "Parker Holt"
     lyrics: |
       I'm sitting in a place that I never thought I'd be
       Between the person I've become and the man that I should see
@@ -189,6 +212,15 @@ tracklist:
   - title: "Scarecrow"
     duration: "5:50"
     audio: "/albums/i-want-to-be-yours-and-other-songs/music/scarecrow.mp3"
+    writingStory: |
+      This song makes me think about my dad. Not everyone comes from a loving place, but that doesn't mean you can't give and receive love in your life. I wrote this song to give hope to those who feel hopeless.
+
+      A year after releasing this song, a girl reached out to me and told me that she had memorized every word to Scarecrow, and that it gave her hope. I have heard the same thing over and over about this song. And it is really special every time. Thanks for the love :)
+    credits:
+      - role: "Written & Performed"
+        name: "Stefan Auvache Bradley"
+      - role: "Produced"
+        name: "Parker Holt"
     lyrics: |
       She looks like a lightning strike
       Laughs with her smile but never her eyes
@@ -258,6 +290,15 @@ tracklist:
   - title: "Jesus Creek"
     duration: "3:35"
     audio: "/albums/i-want-to-be-yours-and-other-songs/music/jesus-creek.mp3"
+    writingStory: |
+      In terms of the album, this is the first song I wrote. I wrote it in just a few minutes. We are responsible for our actions and our actions alone. But we can't do it alone. We need love from others.
+    recordingDetails: |
+      This is the only song on the album that was recorded in an actual studio. A friend of mine pulled me into the studio at Utah Valley University. He walked me through the process, we took a few takes, and it was done in about an hour. It was a great experience.
+    credits:
+      - role: "Written & Performed"
+        name: "Stefan Auvache Bradley"
+      - role: "Produced"
+        name: "Parker Holt"
     lyrics: |
       There stands a tree house atop of cross hill
       An old woman lives there against her will

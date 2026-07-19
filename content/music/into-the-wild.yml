@@ -9,7 +9,12 @@ coverImage: "/albums/into-the-wild/images/into-the-wild-album-cover.png"
 coverAlt: "Into the Wild album cover by Havre De Grace"
 description: "Coming July 17, 2026"
 
-streamingLinks: {}
+streamingLinks:
+  spotify: "https://open.spotify.com/album/3DbM52oMQnsIyrAo0ehTUx?si=VNB2Ur1fRZmv_eQ34whnEw"
+  appleMusic: "https://music.apple.com/us/album/into-the-wild/6786144389"
+  youtubeMusic: "https://music.youtube.com/playlist?list=OLAK5uy_no5sD4HYPICKZHLuGtmcMg-koCMTuQLvI&si=4prn4rgjEJgGO6yM"
+  amazonMusic: "https://music.amazon.com/albums/B0H72WMS6F?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_ccqH6wCJ81k7cBzdrf924NhR3"
+  soundcloud: "https://soundcloud.com/havredegracemusic/sets/52207e38-1e74-4265-93c7-2558279b281f?si=dc131786f1744890afcdf17391210130&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
 
 leadSingle:
   title: "Goodbye, Norma Jeane"

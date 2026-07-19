@@ -149,16 +149,9 @@
   font-family: "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive;
 }
 
-/* Drop the label chips and subtitles — the collage is one uniform hand. */
-.record-player-page .paper .track-chip,
-.record-player-page .paper .song-title small {
-  display: none;
-}
-
 .record-player-page .paper h2,
 .record-player-page .paper h3,
-.record-player-page .paper p,
-.record-player-page .track-image figcaption {
+.record-player-page .paper p {
   margin: 0;
 }
 
@@ -255,11 +248,11 @@
   z-index: 2;
 }
 
-.record-player-page .annotations-card {
+.record-player-page .credits-card {
   left: var(--annotations-x);
   top: var(--annotations-y);
   width: 292px;
-  min-height: 252px;
+  min-height: 200px;
   transform: rotate(var(--annotations-rotate));
   background:
     linear-gradient(180deg, rgba(255, 255, 255, .62), transparent 36%),
@@ -268,211 +261,77 @@
   z-index: 4;
 }
 
-.record-player-page .annotations-list {
-  margin: 10px 0 0;
-  padding-left: 18px;
-  font-size: 1.12rem;
-  line-height: 1.3;
+.record-player-page .credits-list {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.08rem;
+  line-height: 1.28;
   font-weight: 400;
   color: var(--ink);
 }
 
-.record-player-page .annotations-list li + li { margin-top: 8px; }
+.record-player-page .credits-list li {
+  display: flex;
+  flex-direction: column;
+}
 
-.record-player-page .track-chip {
-  display: inline-block;
-  margin: 0 0 10px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: .72rem;
-  font-weight: 950;
+.record-player-page .credits-list li + li { margin-top: 8px; }
+
+.record-player-page .credits-list .credit-role {
+  font-size: .82rem;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  letter-spacing: .08em;
-  background: linear-gradient(145deg, var(--accent), var(--accent-2));
-  color: #0b1422;
+  color: var(--muted);
 }
 
+.record-player-page .credits-list .credit-name { color: var(--ink); }
+
+/* Multi-paragraph stories: space paragraphs within a paper. */
+.record-player-page .story-a p + p,
+.record-player-page .story-b p + p { margin-top: 10px; }
+
+/*
+ * Photo / artwork clusters: borderless, uncaptioned images strewn around the
+ * player. They keep the `.track-image` class so the scene's enter/leave and
+ * "is-changing" transitions still apply, but carry no frame or mat.
+ */
 .record-player-page .track-image {
-  width: 188px;
-  padding: 12px 12px 34px;
-  background: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
   z-index: 1;
+  /* Shadow lives on each photo, not the transparent cluster container. */
+  filter: none;
 }
 
-.record-player-page .image-a {
+.record-player-page .photo-cluster {
   left: var(--image-a-x);
   top: var(--image-a-y);
+  width: 250px;
   transform: rotate(var(--image-a-rotate));
 }
 
-.record-player-page .image-b {
+.record-player-page .artwork-cluster {
   left: var(--image-b-x);
   top: var(--image-b-y);
-  width: 218px;
+  width: 236px;
   transform: rotate(var(--image-b-rotate));
 }
 
-.record-player-page .track-image figcaption {
-  position: absolute;
-  left: 13px;
-  right: 13px;
-  bottom: 9px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: .75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: .03em;
-  color: #253044;
+.record-player-page .collage-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  /* Depth only — no border or mat, per design. */
+  filter: drop-shadow(0 10px 12px rgba(26, 52, 70, .26));
 }
 
-.record-player-page .art {
-  position: relative;
-  height: 160px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 81% 6%, var(--accent-2) 0 36px, transparent 37px),
-    linear-gradient(136deg, var(--accent) 0 58%, #153151 59% 100%);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
-  background-size: cover;
-  background-position: center;
-}
-
-.record-player-page .album-cover .art { height: 310px; }
-.record-player-page .image-b .art { height: 132px; }
-
-.record-player-page .art.has-png {
-  /* PNG hook: set --png-art to a url(...) to replace the CSS placeholder art. */
-  background-image: var(--png-art);
-}
-
-.record-player-page .art.has-png::after,
-.record-player-page .art.has-png .guitar,
-.record-player-page .art.has-png .figure,
-.record-player-page .art.has-png .drum,
-.record-player-page .art.has-png .mic { display: none; }
-
-.record-player-page .art::after {
-  content: "";
-  position: absolute;
-  left: -8%;
-  right: -8%;
-  bottom: -26%;
-  height: 46%;
-  background: var(--accent-dark);
-  transform: rotate(-2deg);
-}
-
-.record-player-page .figure {
-  position: absolute;
-  bottom: 24px;
-  width: 10px;
-  height: 46px;
-  border-radius: 8px 8px 3px 3px;
-  background: var(--accent-dark);
-  z-index: 4;
-}
-
-.record-player-page .figure::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -16px;
-  width: 15px;
-  height: 15px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: var(--accent-dark);
-}
-
-.record-player-page .figure::after {
-  content: "";
-  position: absolute;
-  left: -8px;
-  top: 13px;
-  width: 30px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--accent-dark);
-  transform: rotate(var(--fig-arm, 0deg));
-  transform-origin: 50% 50%;
-}
-
-.record-player-page .figure.guitarist { left: 16%; --fig-arm: -24deg; transform: rotate(-8deg); }
-.record-player-page .figure.singer { right: 14%; --fig-arm: -28deg; transform: rotate(-4deg); }
-.record-player-page .figure.drummer { left: 52%; height: 34px; bottom: 34px; --fig-arm: 18deg; }
-
-.record-player-page .guitar {
-  position: absolute;
-  left: 11%;
-  bottom: 45px;
-  width: 48px;
-  height: 16px;
-  border-radius: 48% 52% 48% 52%;
-  background: var(--accent-dark);
-  transform: rotate(20deg);
-  z-index: 3;
-}
-
-.record-player-page .guitar::after {
-  content: "";
-  position: absolute;
-  right: -46px;
-  top: 6px;
-  width: 50px;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--accent-dark);
-}
-
-.record-player-page .drum {
-  position: absolute;
-  left: 44%;
-  bottom: 30px;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: var(--accent-2);
-  z-index: 4;
-  box-shadow: inset 0 0 0 8px var(--accent-dark);
-}
-
-.record-player-page .drum::before,
-.record-player-page .drum::after {
-  content: "";
-  position: absolute;
-  top: -23px;
-  width: 46px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--accent-dark);
-}
-
-.record-player-page .drum::before { left: -31px; transform: rotate(-24deg); }
-.record-player-page .drum::after { right: -31px; transform: rotate(24deg); }
-
-.record-player-page .mic {
-  position: absolute;
-  right: 9%;
-  bottom: 52px;
-  width: 4px;
-  height: 82px;
-  background: var(--accent-dark);
-  transform: rotate(-11deg);
-  z-index: 3;
-}
-
-.record-player-page .mic::before {
-  content: "";
-  position: absolute;
-  left: -9px;
-  top: -6px;
-  width: 18px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--accent-dark);
-}
+/* Gentle scatter: nudge each photo in a cluster off the grid. */
+.record-player-page .photo-cluster .collage-photo:nth-child(2) { transform: rotate(-4deg); }
+.record-player-page .photo-cluster .collage-photo:nth-child(3) { transform: rotate(3deg); }
+.record-player-page .artwork-cluster .collage-photo:nth-child(2) { transform: rotate(3deg); }
 
 .record-player-page .turntable {
   --deck-w: 430px;
@@ -850,14 +709,6 @@
 .record-player-page .flip-button:focus-visible { outline: 3px solid rgba(25, 99, 165, .55); outline-offset: 3px; }
 .record-player-page .flip-button:disabled { opacity: .5; cursor: default; transform: none; }
 
-.record-player-page .song-title small {
-  display: block;
-  margin-top: 5px;
-  font-size: .73rem;
-  letter-spacing: .08em;
-  color: var(--muted);
-}
-
 .record-player-page .scene[data-mode="off"] .song-only,
 .record-player-page .scene[data-mode="song"] .off-only {
   opacity: 0;
@@ -871,8 +722,8 @@
 .record-player-page .scene.is-changing .story-a { transform: translateX(34px) rotate(var(--story-a-rotate)) scale(.965); }
 .record-player-page .scene[data-mode="off"] .story-b,
 .record-player-page .scene.is-changing .story-b { transform: translateX(-34px) rotate(var(--story-b-rotate)) scale(.965); }
-.record-player-page .scene[data-mode="off"] .annotations-card,
-.record-player-page .scene.is-changing .annotations-card { transform: translateY(28px) rotate(var(--annotations-rotate)) scale(.965); }
+.record-player-page .scene[data-mode="off"] .credits-card,
+.record-player-page .scene.is-changing .credits-card { transform: translateY(28px) rotate(var(--annotations-rotate)) scale(.965); }
 .record-player-page .scene[data-mode="off"] .image-a,
 .record-player-page .scene.is-changing .image-a { transform: translateY(24px) rotate(var(--image-a-rotate)) scale(.965); }
 .record-player-page .scene[data-mode="off"] .image-b,

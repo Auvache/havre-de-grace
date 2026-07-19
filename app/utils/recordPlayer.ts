@@ -80,6 +80,12 @@ const LAYOUTS: ReadonlyArray<TrackLayout> = [
   { lyrics: [456, 794, -9], storyA: [1430, 354, 7], storyB: [578, 322, 11], annotations: [1402, 840, 12], imageA: [1566, 1032, -8], imageB: [404, 526, -12] },
 ]
 
+// Until real song photos exist, every track shows three copies of this shared
+// placeholder. Once a track defines its own `photos` in the content YAML, those
+// replace the placeholders entirely.
+const PLACEHOLDER_PHOTO = '/images/photo-placeholder.svg'
+const PLACEHOLDER_PHOTO_COUNT = 3
+
 function slugify(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 }
@@ -132,6 +138,8 @@ export function toListenAlbum(album: Album, now: Date = new Date()): ListenAlbum
     slug: album.slug,
     coverImage: album.coverImage,
     coverAlt: album.coverAlt,
+    backCoverImage: album.backCoverImage,
+    backCoverAlt: album.backCoverAlt,
     listenable,
     releaseLabel,
     background: album.listenBackground,
@@ -156,10 +164,25 @@ function resolveSides(album: Album, count: number): Array<'a' | 'b'> {
   return assignment.map((_, i) => (i < half ? 'a' : 'b'))
 }
 
-// Build the per-track view model for the record player.
-// NOTE: collage text (lyrics/story/annotations/captions) is placeholder for now.
-// Real lyrics/titles already live in the content YAML and can be wired in later
-// by reading `album.tracklist[i].title` / `.lyrics` here instead of the fillers.
+// Split a lyrics block into trimmed lines, preserving blank lines between verses.
+function toLyricLines(lyrics?: string): string[] {
+  if (!lyrics) {
+    return []
+  }
+  return lyrics
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trimEnd())
+    // Drop leading/trailing blank lines but keep internal verse gaps.
+    .reduce<string[]>((acc, line, index, arr) => {
+      const isEdgeBlank = line.trim() === '' && (acc.length === 0 || index === arr.length - 1)
+      if (!isEdgeBlank) acc.push(line)
+      return acc
+    }, [])
+}
+
+// Build the per-track view model for the record player from real album content.
+// Every content field is optional; empty values simply render nothing in the collage.
 export function buildListenTracks(album: Album): ListenTrack[] {
   const list = album.tracklist ?? []
   const sideAssignment = resolveSides(album, list.length)
@@ -180,34 +203,18 @@ export function buildListenTracks(album: Album): ListenTrack[] {
       side,
       sideNumber,
       slug,
-      // Filler for now (see note above).
-      title: `Track ${number}`,
+      title: track.title,
       audioSrc,
       accent,
       accent2,
       accentDark,
-      lyrics: [
-        `Track ${number} lyric line one,`,
-        `track ${number} lyric line two,`,
-        `track ${number} lyric line three,`,
-        `track ${number} lyric line four,`,
-        `track ${number} lyric line five,`,
-        `track ${number} lyric line six.`,
-      ],
-      storyA: `Track ${number} story placeholder. Replace with the main story, memory, or context for this song.`,
-      storyB: `Track ${number} behind-the-track placeholder. Use this for recording details, inspiration, or a second vignette.`,
-      annotations: [
-        `Track ${number} annotation one: a lyric, instrument, or production detail.`,
-        `Track ${number} annotation two: another note for listeners.`,
-        `Track ${number} annotation three: credits, samples, or hidden references.`,
-      ],
-      imageACaption: `Track ${number} art`,
-      imageBCaption: `Track ${number} still`,
-      // PNG hooks: set these to real artwork paths later.
-      artworkPngA: '',
-      artworkPngB: '',
-      artworkAAlt: `Track ${number} artwork`,
-      artworkBAlt: `Track ${number} studio still`,
+      lyrics: toLyricLines(track.lyrics),
+      writingStory: track.writingStory?.trim() || undefined,
+      recordingDetails: track.recordingDetails?.trim() || undefined,
+      photos: track.photos?.length
+        ? track.photos
+        : Array.from({ length: PLACEHOLDER_PHOTO_COUNT }, () => ({ src: PLACEHOLDER_PHOTO, alt: '' })),
+      credits: track.credits ?? [],
       layout,
     }
   })

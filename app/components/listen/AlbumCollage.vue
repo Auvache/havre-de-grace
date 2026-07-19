@@ -1,19 +1,17 @@
 <template>
   <!--
-    Off state shows the album cover + a short album story. Song state shows the
-    scattered collage: lyrics, two story papers, annotations, and two images.
-    Positions come from CSS custom properties on the scene root (set per track).
-    Text/images are placeholder for now — see app/utils/recordPlayer.ts.
+    Off state shows the album cover + a short album intro. Song state shows the
+    scattered collage of whatever content the track defines — lyrics, a "how it
+    was written" story, recording details, borderless photos, the album artwork
+    (front/back), and per-song liner-note credits. Every element is optional and
+    is omitted entirely when the track has no data for it. Positions come from CSS
+    custom properties on the scene root (set per track).
   -->
 
-  <!-- Off-state: album story -->
+  <!-- Off-state: album intro -->
   <section class="paper album-story off-only" aria-live="polite">
-    <h2>The Album</h2>
+    <h2>{{ album.title }}</h2>
     <p>
-      A story placeholder for <strong>{{ album.title }}</strong>. This can hold the album essay,
-      credits, release context, or how to use the record player.
-    </p>
-    <p style="margin-top: 16px;">
       Move the tonearm onto the vinyl, click a groove, or use the track buttons to reveal each song.
     </p>
   </section>
@@ -32,65 +30,74 @@
     />
   </section>
 
-  <!-- Song-state: lyrics -->
-  <section class="paper lyrics-card song-only" aria-live="polite">
-    <span class="track-chip">Track {{ track?.number ?? 1 }}</span>
+  <!-- Song-state: lyrics on a single page -->
+  <section v-if="track?.lyrics?.length" class="paper lyrics-card song-only" aria-live="polite">
     <h2>Lyrics</h2>
     <div class="lyrics-lines">
-      <span v-for="(line, index) in track?.lyrics ?? []" :key="index">{{ line }}</span>
+      <span v-for="(line, index) in track.lyrics" :key="index">{{ line || ' ' }}</span>
     </div>
   </section>
 
-  <!-- Song-state: story A -->
-  <section class="paper story-a song-only" aria-live="polite">
-    <span class="track-chip">Track {{ track?.number ?? 1 }}</span>
-    <h2 class="song-title">{{ track?.title }}<small>{{ track?.title }}</small></h2>
-    <p>{{ track?.storyA }}</p>
+  <!-- Song-state: how the song was written -->
+  <section v-if="track?.writingStory" class="paper story-a song-only" aria-live="polite">
+    <h2>How It Was Written</h2>
+    <p v-for="(para, index) in paragraphs(track.writingStory)" :key="index">{{ para }}</p>
   </section>
 
-  <!-- Song-state: story B -->
-  <section class="paper story-b song-only" aria-live="polite">
-    <span class="track-chip">Story 2</span>
-    <h2>Behind The Track</h2>
-    <p>{{ track?.storyB }}</p>
+  <!-- Song-state: how the song was recorded -->
+  <section v-if="track?.recordingDetails" class="paper story-b song-only" aria-live="polite">
+    <h2>In The Studio</h2>
+    <p v-for="(para, index) in paragraphs(track.recordingDetails)" :key="index">{{ para }}</p>
   </section>
 
-  <!-- Song-state: annotations -->
-  <section class="paper annotations-card song-only" aria-live="polite">
-    <span class="track-chip">Notes</span>
-    <h2>Annotations</h2>
-    <ul class="annotations-list">
-      <li v-for="(note, index) in track?.annotations ?? []" :key="index">{{ note }}</li>
+  <!-- Song-state: per-song liner notes / credits -->
+  <section v-if="track?.credits?.length" class="paper credits-card song-only" aria-live="polite">
+    <h2>Liner Notes</h2>
+    <ul class="credits-list">
+      <li v-for="(credit, index) in track.credits" :key="index">
+        <span class="credit-role">{{ credit.role }}</span>
+        <span class="credit-name">{{ credit.name }}</span>
+      </li>
     </ul>
   </section>
 
-  <!-- Song-state: image A -->
-  <figure class="track-image image-a song-only" aria-label="Track image one">
-    <!-- PNG hook: set track.artworkPngA to swap in real art. -->
-    <div class="art" :class="{ 'has-png': Boolean(track?.artworkPngA) }" :style="artStyle(track?.artworkPngA)">
-      <span class="guitar" aria-hidden="true" />
-      <span class="figure guitarist" aria-hidden="true" />
-      <span class="figure drummer" aria-hidden="true" />
-      <span class="figure singer" aria-hidden="true" />
-      <span class="drum" aria-hidden="true" />
-      <span class="mic" aria-hidden="true" />
-    </div>
-    <figcaption>{{ track?.imageACaption }}</figcaption>
-  </figure>
+  <!-- Song-state: borderless, uncaptioned photos -->
+  <div v-if="track?.photos?.length" class="track-image image-a photo-cluster song-only" aria-label="Song photos">
+    <NuxtImg
+      v-for="(photo, index) in track.photos"
+      :key="index"
+      :src="photo.src"
+      :alt="photo.alt || ''"
+      class="collage-photo"
+      width="520"
+      sizes="240px"
+      format="webp,avif"
+      loading="lazy"
+    />
+  </div>
 
-  <!-- Song-state: image B -->
-  <figure class="track-image image-b song-only" aria-label="Track image two">
-    <!-- PNG hook: set track.artworkPngB to swap in real art. -->
-    <div class="art" :class="{ 'has-png': Boolean(track?.artworkPngB) }" :style="artStyle(track?.artworkPngB)">
-      <span class="guitar" aria-hidden="true" />
-      <span class="figure guitarist" aria-hidden="true" />
-      <span class="figure drummer" aria-hidden="true" />
-      <span class="figure singer" aria-hidden="true" />
-      <span class="drum" aria-hidden="true" />
-      <span class="mic" aria-hidden="true" />
-    </div>
-    <figcaption>{{ track?.imageBCaption }}</figcaption>
-  </figure>
+  <!-- Song-state: album artwork (front + back), borderless -->
+  <div v-if="album.coverImage" class="track-image image-b artwork-cluster song-only" aria-label="Album artwork">
+    <NuxtImg
+      :src="album.coverImage"
+      :alt="album.coverAlt"
+      class="collage-photo"
+      width="520"
+      sizes="230px"
+      format="webp,avif"
+      loading="lazy"
+    />
+    <NuxtImg
+      v-if="album.backCoverImage"
+      :src="album.backCoverImage"
+      :alt="album.backCoverAlt || `${album.title} back cover`"
+      class="collage-photo"
+      width="520"
+      sizes="230px"
+      format="webp,avif"
+      loading="lazy"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -101,5 +108,13 @@ defineProps<{
   track: ListenTrack | null
 }>()
 
-const artStyle = (png?: string) => ({ '--png-art': png ? `url("${png}")` : 'none' })
+// Split a prose block into paragraphs on blank lines so multi-paragraph stories
+// render with spacing instead of one run-on block.
+function paragraphs(text: string): string[] {
+  return text
+    .replace(/\r\n/g, '\n')
+    .split(/\n\s*\n/)
+    .map((para) => para.trim())
+    .filter(Boolean)
+}
 </script>
