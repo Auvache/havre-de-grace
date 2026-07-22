@@ -1,1 +1,0 @@
-import{u as s}from"./De_MTUXz.js";import{e as t,c as a,a as o,C as n,o as r}from"./CXuguHXA.js";const c={class:"min-h-screen text-[var(--theme-text)]"},m={class:"min-h-screen"},p=t({__name:"links",setup(i){return s(),(e,_)=>(r(),a("div",c,[o("main",m,[n(e.$slots,"default")])]))}});export{p as default};

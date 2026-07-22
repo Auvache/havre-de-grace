@@ -6,7 +6,7 @@
           {{ siteProfile.artistName }}
         </p>
 
-        <StreamingLinks :links="siteProfile.artistLinks" compact class="max-w-[13rem] justify-center sm:max-w-none" />
+        <StreamingLinks :links="siteProfile.artistLinks" compact />
 
         <p class="text-sm muted-text">
           Email:

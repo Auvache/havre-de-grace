@@ -60,11 +60,6 @@
           :tracks="lyricTracks"
         />
 
-        <LinerNotes
-          v-if="hasNotes"
-          :notes="album.linerNotes"
-        />
-
         <AlbumVideos
           v-if="hasVideos"
           :videos="album.videos ?? []"
@@ -191,8 +186,6 @@ const lyricTracks = computed<LyricTrack[]>(() => (album.value?.tracklist ?? [])
     }]
     : [])))
 
-const hasNotes = computed(() => hasValue(album.value?.linerNotes))
-
 const hasVideos = computed(() => Boolean(album.value?.videos?.length))
 const hasCredits = computed(() => Boolean(album.value?.credits?.length))
 
@@ -208,7 +201,7 @@ const pageDescription = computed(() => {
 
   const trackCount = album.value.tracklist.length
   const trackLabel = `${trackCount} track${trackCount === 1 ? '' : 's'}`
-  return `${album.value.title} by ${siteProfile.artistName}. ${trackLabel}, lyrics, liner notes, videos, and credits on Havre De Grace Music.`
+  return `${album.value.title} by ${siteProfile.artistName}. ${trackLabel}, lyrics, videos, and credits on Havre De Grace Music.`
 })
 
 const { canonicalUrl } = usePageSeo({
@@ -337,10 +330,6 @@ const navSections = computed<ScrollSection[]>(() => {
 
   if (hasLyrics.value) {
     sections.push({ id: 'lyrics', label: 'Lyrics' })
-  }
-
-  if (hasNotes.value) {
-    sections.push({ id: 'notes', label: 'Notes' })
   }
 
   if (hasVideos.value) {

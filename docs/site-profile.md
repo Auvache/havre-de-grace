@@ -292,7 +292,6 @@ Combined page with two distinct zones:
 | `AlbumHero`             | Full-bleed album art + title + streaming links                 |
 | `Tracklist`             | Numbered track list with optional embedded player              |
 | `LyricsViewer`          | Tabbed or accordion lyrics display, per-song                   |
-| `LinerNotes`            | Prose section with optional interspersed images                |
 | `AlbumVideos`           | Stacked video embeds with titles/context (conditionally shown) |
 | `AlbumCredits`          | Credits list                                                   |
 | **About / Press**       |                                                                |
@@ -338,7 +337,6 @@ project-root/
 │   │   │   ├── AlbumHero.vue
 │   │   │   ├── Tracklist.vue
 │   │   │   ├── LyricsViewer.vue
-│   │   │   ├── LinerNotes.vue
 │   │   │   ├── AlbumVideos.vue
 │   │   │   └── AlbumCredits.vue
 │   │   ├── about/

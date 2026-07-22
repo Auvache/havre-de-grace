@@ -14,6 +14,7 @@ streamingLinks:
   appleMusic: "https://music.apple.com/us/album/into-the-wild/6786144389"
   youtubeMusic: "https://music.youtube.com/playlist?list=OLAK5uy_no5sD4HYPICKZHLuGtmcMg-koCMTuQLvI&si=4prn4rgjEJgGO6yM"
   amazonMusic: "https://music.amazon.com/albums/B0H72WMS6F?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_ccqH6wCJ81k7cBzdrf924NhR3"
+  bandcamp: "https://havredegrace.bandcamp.com/album/into-the-wild"
   soundcloud: "https://soundcloud.com/havredegracemusic/sets/52207e38-1e74-4265-93c7-2558279b281f?si=dc131786f1744890afcdf17391210130&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
 
 leadSingle:
@@ -24,10 +25,76 @@ leadSingle:
     youtubeMusic: "https://music.youtube.com/watch?v=Fj8ZkKDQ-2k&si=q6QkFVhjN92d3_He"
     amazonMusic: "https://music.amazon.com/tracks/B0H2GD5DNV?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_AXPxabZuf52edG4U1V3ms8MCq"
 
-# Unreleased album: tracks are listed without lyrics or timestamps.
 tracklist:
   - title: "Into the Wild"
+    lyrics: |
+      Oh, I'm headed out on an adventure
+      To see if I can't lose my way
+      And stumble upon all the splendorous things
+      The gods hid about when they made
+      Oh, the Earth out of water and iron
+      Ebony, ivory, and bone
+      Stone-cold these beauties are sleeping
+      You know they hate sleeping alone
+
+      So I'm running into the wild
+      Oh, I'm running
+
+      Oh, I'm tired of all the conjecture
+      Dreaming and scheming and goals
+      All that it creates is pressure
+      And all that it makes us is old
+      Oh, I want to take stories with meaning
+      From the tales that my life's taught to me
+      Dress them in something revealing
+      And put them in songs that I sing
+
+      So I'm running into the wild
+      Oh, I'm running
+
+      Oh, I'm headed out on an adventure
+      Where I'll end up, I don't know
+      I'm off in search of those treasures
+      That aren't made of silver or gold
+      I mean glaciers and gardens and grottos
+      The sound of the wind through the sage
+      The hush of a harbor so hollow
+      The roar of a crowd center stage
+
+      So I'm running into the wild
+      Oh, I'm running
   - title: "Conman"
+    lyrics: |
+      I'm a conman, don't be fooled by the way I shake
+      These rhythms' been around since 1968 when they
+      Bottled lightning in several steady notes
+      And pulled the clouds into the sea to clear the sky of smoke, you know
+
+      Oh, I'm a conman, don't be fooled by the way I look
+      I've made a killing off of moving fast and cooking books
+      Until the Earth shook in 2025
+      I started searching and I finally realized
+
+      No matter where I go, I never seem to change
+      No matter what I do, I always sound the same
+
+      I'm a conman and I'm here to steal your sound
+      I stick to the shadows when I follow you around
+      When you see me, I pretend not to stare
+      And I pray to God that you will remain unaware that I
+
+      No matter where I go, I never seem to change
+      No matter what I do, I always sound the same
+
+      Oh, I'm a conman, don't be fooled by the way I move
+      Watch me split the ground and pierce the sky and find a groove
+      Don't protect me from the damage in my wake
+      I could handle all the eyes you know for goodness sake that I
+
+      No matter where I go, I never seem to stay
+      No matter what I do, I always sound the same
+      No matter where I go, I never seem to change
+      No matter what I do, I always sound the same
   - title: "Goodbye, Norma Jeane"
     lyrics: |
       Silver screen says Norma Jeane, oh
@@ -69,12 +136,227 @@ tracklist:
       Know you want the world, it's more, more, more
       I wanted you, you wanted more
   - title: "Ivory"
+    lyrics: |
+      That there's a woman, of that you can be sure
+      Eyes that hit a sunrise like waves that hit a shore, oh
+
+      Her eyes are open ocean and blue butterfly wings
+      She's got some way about her when she gets on stage and sings, oh
+      Ivory
+
+      Looks like California, sounds like Tennessee
+      I want to get to know her, she remains my mystery
+      Oh, Ivory
+
+      That there's a woman with flowers in her hair
+      When she moves, the universe can't help but stop and stare, oh
+
+      Right up there beside her is where I want to be
+      When I asked her for her name, she looked straight back at me, oh
+      Ivory
+
+      If I wanted paradise, I'd play a melody
+      Too avoid the heartache, I'll keep this one just for me
+      Oh, Ivory
+
+      I could be the one she loves, the Adam to her Eve
+      But when she asked me for my name, I forgot how to breathe, oh
+      Ivory
+
+      Looks like California, sounds like Tennessee
+      Walks just like Alaska with the snowfall in the trees
+      If I wanted paradise, I'd play a melody
+      But too avoid the heartache, I'll keep this one just for me
+      Oh, Ivory
+      Ivory
   - title: "Andalusia"
+    lyrics: |
+      Oh, I think that I could live in Andalusia
+      Walk until my boots are breaking through
+      Oh, I'd brush up on my Spanish with all the pretty girls
+      To distract myself from how much I miss you
+
+      Oh, I think that I could live outside of Stockholm
+      I'd sit and watch the sailors in the cold
+      But like a lover stranded underneath a churchyard
+      I'd never get to watch you growing old
+
+      If I were king for just a day and I always got my way
+      Know no other dream would ever do
+      It doesn't matter where I go, in the sun or in the snow
+      The only one I want, my love, is you
+
+      Oh, I think that I could live in San Diego
+      Bangkok, Budapest, or Baton Rouge
+      Yes, I'd travel round the world for the rest of my days
+      If it meant that I could forget about you
+
+      If I were king for just a day and I always got my way
+      Know no other dream would ever do
+      It doesn't matter where I go, in the sun or in the snow
+      The only one I want, my love, is you
+
+      Oh-oh-oh-oh-oh-oh-oh-oh-oh-oh Oh-oh-oh-oh-oh-oh-oh
+
+      I think I'll take a chance on Andalusia
+      Walk until my boots are faded blue
+      But all the pretty ladies in the whole wide world
+      Could not help me to forget about you
+
+      If I were king for just a day and I always got my way
+      Know no other dream would ever do
+      It doesn't matter where I go, in the sun or in the snow
+      The only one I want, my love, is you, oh
+      The only one I want, my love, is you
   - title: "New York"
+    lyrics: |
+      They say love when lost upon the rocks is best left burning out the coals
+      That easy dreams like submarines can undermine mankind's familiar goal
+      I don't wanna follow those lights I see out on the shore
+      I don't wanna listen to anybody ever anymore
+
+      They said move to Memphis, Nashville, Austin, L.A, or Detroit
+      That the only way to break it is to bargain, bend, abandon, or exploit
+      I don't wanna follow those lights I see out on the shore
+      I don't wanna listen to anybody ever anymore
+
+      No, no, no, no
+      No, I won't go, I'm not going to New York
+
+      I don't wanna follow those lights I see out on the shore
+      I don't wanna listen to anybody ever anymore
+      No, no, no, no
+      No, no, no, no
+      No, no, no, no
+      No, I won't go, I'm not going to New York
   - title: "Meet Me at the Horizon"
+    lyrics: |
+      No, I don't need a friend. No, I don't need a lover
+      Some nights the darkness is sweeter than others
+      Just me and my thoughts, no counting sheep
+      When the absence of light doesn't mean that I sleep
+
+      I lie in my bed and I think of the sky
+      And I wonder what happens right after we die
+      Should I be afraid, will my troubles end
+      Does the whole process repeat again and again
+
+      Then the sun starts to wake, the trees start to yawn
+      And the dark of the night meets a glimpse of the dawn
+      The whole world's asleep, it's too dark to see
+      So I can lie here and feel like you're still next to me
+
+      Do I call you first or wait for you to call
+      Fever kicks in and my skin starts to crawl
+      Unnatural tension in my brain and my eyes
+      And the headache evolves when I straighten my spine
+
+      My blood runs too thick and my mind runs too deep
+      And the room breaks the silence when the house starts to creak
+      The windows are open to let in the wind
+      Oh, I could be the sky if I could only give in
+
+      Then the sun starts to wake, the trees start to yawn
+      And the dark of the night meets a glimpse of the dawn
+      The whole world's asleep, it's too dark to see
+      So I can lie here and feel like you're still next to me, so
+
+      Meet me at the horizon
+      Oh won't you
+      Meet me at the horizon
+
+      No, I don't need a friend. No, I don't need a lover
+      Some nights the darkness cuts deeper than others
+      Just me and my thoughts in that bed all alone
+      When the dawning of day brings a sliver of hope
+
+      And the sun starts to wake and the trees start to yawn
+      The dark of the night finds relief in the dawn
+      The whole world's asleep, that is except me
+      And I lie here and miss the way things used to be, so
+
+      Meet me at the horizon
+      Oh won't you
+      Meet me at the horizon, oh
   - title: "Rocks in the Sea"
+    lyrics: |
+      I drove by my hometown today
+      I miss the green but I don't miss the gray
+      It's always with me, what a shame
+      It's always with me, much to my shame
+
+      I don't have that much left to say
+      I'll leave all my things and just drift away
+      I can't seem to shake all this rain
+      And the rocks in the water have been calling my name
+
+      When the road slims down and the trees hide the sound
+      Of hearts leaving home, there you're free
+      And the only place that's calling your name
+      Is the sand by the rocks in the sea
+      The sand by the rocks in the sea
+
+      I talked to my sister today
+      About nothing at all and the things that we make
+      I stranded those rocks by the bay
+      For the ones that I love, oh I choose to stay
+
+      When the road slims down and the trees hide the sound
+      Of hearts leaving home, there you're free
+      And the only place that's calling your name
+      Is the sand by the rocks in the sea
+      The sand by the rocks in the sea
+      Oh, the sand by the rocks in the sea
   - title: "Ship to Stockholm"
+    lyrics: |
+      Oh, away with the land and away with the light
+      Tomorrow I will be a' sailing
+      Oh, I've traveled for days just to follow the night
+      To find if lost love is worth saving
+
+      The ship back to Stockholm, it waits on no man
+      And the wind doesn't wait on the seasons
+      Oh, to get back to you I'd do all that I can
+      Bribing or begging or bleeding, oh
+
+      So away with your guns and away with the fight
+      Or tomorrow we will be a' fading
+      Oh, I'm done trying to prove that I want to do right
+      Everyone's beyond persuading, oh
+
+      It's deep water rescue on razor thin ice
+      We're walking a tightrope to Eden
+      So away with your dogs and away with their bite
+      The rhetoric's not worth repeating, no
+
+      And I don't need to kiss you, no I just need to ask
+      If we make it back could we hash out the past
+      I can't seem to reach you, not by letter or phone
+      So I'm taking the ship back to Stockholm
   - title: "Ghost"
+    lyrics: |
+      Amplifiers just make a noise
+      When I write songs, it's not by choice
+      The city burns and I'm a ghost
+      The city burns and I'm a ghost
+
+      Give me shelter, give me sleep
+      I wanna help but I can't breathe
+      Can't pick you up, can't put you down
+      I'd hold you close, I'm not allowed
+
+      I'd play for you if I had hands
+      If I had legs, we could learn to dance
+      I tell you I love you, that I love you the most
+      But you're on fire and I'm a ghost
+      You're on fire. I'm a ghost
+
+      And I'd play for you if I had hands
+      If I had legs, we could learn to dance
+      I tell you I love you, that I love you the most
+      But you're on fire and I'm a ghost
+      You're on fire. I'm a ghost
+      You're on fire. I'm a ghost
 
 linerNotes: |
   Released
