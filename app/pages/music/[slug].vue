@@ -48,22 +48,7 @@
       />
 
       <div class="page-container space-y-20 pb-10 pt-14 sm:pt-16">
-        <Tracklist
-          :tracks="album.tracklist"
-          :show-lyrics-jump="hasLyrics"
-          @jump-to-lyrics="handleTrackLyricsJump"
-        />
-
-        <LyricsViewer
-          v-if="hasLyrics"
-          ref="lyricsViewer"
-          :tracks="lyricTracks"
-        />
-
-        <AlbumVideos
-          v-if="hasVideos"
-          :videos="album.videos ?? []"
-        />
+        <Tracklist :tracks="trackEntries" />
 
         <AlbumCredits
           v-if="hasCredits"
@@ -75,8 +60,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Album, LyricTrack, VideoEntry } from '~~/shared/types'
-import { toEmbedUrl, toVideoThumbnailUrl } from '~~/shared/utils/video'
+import type { Album, LyricTrack } from '~~/shared/types'
+import { stripEmphasis } from '~~/shared/utils/emphasis'
 import { isAlbumListenable } from '~/utils/recordPlayer'
 
 interface ScrollSection {
@@ -174,19 +159,15 @@ const formattedReleaseDate = computed(() => {
 // Show a link to the interactive record player once the album is released and has audio.
 const isListenable = computed(() => (album.value ? isAlbumListenable(album.value) : false))
 
-const hasLyrics = computed(() => (album.value?.tracklist ?? []).some((track) => hasValue(track.lyrics)))
+// Every track is listed in the tracks section; the ones with lyrics expand to show them.
+const trackEntries = computed<LyricTrack[]>(() => (album.value?.tracklist ?? [])
+  .map((track, index) => ({
+    trackNumber: index + 1,
+    title: track.title,
+    duration: track.duration,
+    lyrics: hasValue(track.lyrics) ? track.lyrics!.trim() : undefined,
+  })))
 
-const lyricTracks = computed<LyricTrack[]>(() => (album.value?.tracklist ?? [])
-  .flatMap((track, index) => (hasValue(track.lyrics)
-    ? [{
-      trackNumber: index + 1,
-      title: track.title,
-      duration: track.duration,
-      lyrics: track.lyrics!.trim(),
-    }]
-    : [])))
-
-const hasVideos = computed(() => Boolean(album.value?.videos?.length))
 const hasCredits = computed(() => Boolean(album.value?.credits?.length))
 
 const pageDescription = computed(() => {
@@ -195,13 +176,13 @@ const pageDescription = computed(() => {
   }
 
   if (isUpcoming.value) {
-    const detail = hasValue(album.value.description) ? album.value.description : comingLabel.value
+    const detail = hasValue(album.value.description) ? stripEmphasis(album.value.description) : comingLabel.value
     return `${album.value.title} by ${siteProfile.artistName}. ${detail}`
   }
 
   const trackCount = album.value.tracklist.length
   const trackLabel = `${trackCount} track${trackCount === 1 ? '' : 's'}`
-  return `${album.value.title} by ${siteProfile.artistName}. ${trackLabel}, lyrics, videos, and credits on Havre De Grace Music.`
+  return `${album.value.title} by ${siteProfile.artistName}. ${trackLabel}, lyrics, and credits on Havre De Grace Music.`
 })
 
 const { canonicalUrl } = usePageSeo({
@@ -246,7 +227,7 @@ const musicAlbumSchema = computed(() => {
     url: canonicalUrl.value,
     image: toAbsoluteUrl(album.value.coverImage),
     datePublished: album.value.releaseDate,
-    description: album.value.description,
+    description: stripEmphasis(album.value.description),
     genre: siteProfile.genres,
     byArtist: {
       '@type': 'MusicGroup',
@@ -270,36 +251,6 @@ const musicAlbumSchema = computed(() => {
   return schema
 })
 
-const videoSchemas = computed(() => {
-  if (!album.value || isUpcoming.value) {
-    return []
-  }
-
-  return (album.value.videos ?? []).map((video: VideoEntry, index: number) => {
-    const embedUrl = toEmbedUrl(video.url)
-    const thumbnailUrl = toVideoThumbnailUrl(video.url)
-
-    return {
-      key: `ld-video-${album.value?.slug}-${index}`,
-      data: {
-        '@context': 'https://schema.org',
-        '@type': 'VideoObject',
-        name: video.title,
-        description: video.description || `${video.title} from ${album.value?.title}`,
-        uploadDate: album.value?.releaseDate,
-        thumbnailUrl,
-        embedUrl,
-        contentUrl: video.url,
-        isPartOf: {
-          '@type': 'MusicAlbum',
-          name: album.value?.title,
-          url: canonicalUrl.value,
-        },
-      },
-    }
-  })
-})
-
 useHead(() => {
   const script: Array<{ key: string, type: string, textContent: string }> = []
 
@@ -308,14 +259,6 @@ useHead(() => {
       key: `ld-album-${album.value?.slug}`,
       type: 'application/ld+json',
       textContent: JSON.stringify(musicAlbumSchema.value),
-    })
-  }
-
-  for (const videoSchema of videoSchemas.value) {
-    script.push({
-      key: videoSchema.key,
-      type: 'application/ld+json',
-      textContent: JSON.stringify(videoSchema.data),
     })
   }
 
@@ -328,14 +271,6 @@ const navSections = computed<ScrollSection[]>(() => {
     { id: 'tracks', label: 'Tracks' },
   ]
 
-  if (hasLyrics.value) {
-    sections.push({ id: 'lyrics', label: 'Lyrics' })
-  }
-
-  if (hasVideos.value) {
-    sections.push({ id: 'videos', label: 'Videos' })
-  }
-
   if (hasCredits.value) {
     sections.push({ id: 'credits', label: 'Credits' })
   }
@@ -344,8 +279,6 @@ const navSections = computed<ScrollSection[]>(() => {
 })
 
 const { activeSectionId } = useScrollspy(computed(() => navSections.value.map((section) => section.id)))
-
-const lyricsViewer = ref<{ openTrack: (trackNumber: number) => void } | null>(null)
 
 const scrollToSection = (sectionId: string) => {
   if (!import.meta.client) {
@@ -361,18 +294,6 @@ const scrollToSection = (sectionId: string) => {
   window.scrollTo({
     top: Math.max(top, 0),
     behavior: 'smooth',
-  })
-}
-
-const handleTrackLyricsJump = (trackNumber: number) => {
-  if (!hasLyrics.value) {
-    return
-  }
-
-  lyricsViewer.value?.openTrack(trackNumber)
-
-  nextTick(() => {
-    scrollToSection(`lyrics-track-${trackNumber}`)
   })
 }
 </script>

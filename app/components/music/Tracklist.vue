@@ -2,30 +2,42 @@
   <section id="tracks" class="scroll-mt-[calc(var(--nav-height)+4.75rem)]">
     <SectionHeading title="tracks" />
 
-    <ol v-if="tracks.length" class="mt-8 space-y-7">
-      <li
-        v-for="(track, index) in tracks"
-        :key="`${track.title}-${index}`"
-        class="border-b border-theme pb-7"
+    <div v-if="tracks.length" class="mt-8 space-y-4">
+      <article
+        v-for="track in tracks"
+        :id="`track-${track.trackNumber}`"
+        :key="`track-${track.trackNumber}`"
+        class="scroll-mt-[calc(var(--nav-height)+5.5rem)] rounded-[var(--radius-md)] border border-theme bg-[color-mix(in_srgb,var(--theme-surface)_88%,transparent)]"
       >
-        <div class="flex flex-wrap items-baseline gap-x-2 gap-y-2">
-          <span class="text-sm muted-text">{{ String(index + 1).padStart(2, '0') }}.</span>
-
-          <button
-            v-if="showLyricsJump && hasLyrics(track.lyrics)"
-            type="button"
-            class="text-left text-lg transition-colors hover:text-[var(--color-accent)]"
-            @click="$emit('jump-to-lyrics', index + 1)"
+        <h3>
+          <!-- Tracks without lyrics still list, they just don't expand. -->
+          <component
+            :is="hasLyrics(track) ? 'button' : 'div'"
+            :type="hasLyrics(track) ? 'button' : undefined"
+            class="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
+            :aria-expanded="hasLyrics(track) ? (openTrackNumber === track.trackNumber ? 'true' : 'false') : undefined"
+            :aria-controls="hasLyrics(track) ? `track-panel-${track.trackNumber}` : undefined"
+            @click="hasLyrics(track) ? toggleTrack(track.trackNumber) : undefined"
           >
-            {{ track.title }}
-          </button>
-
-          <span v-else class="text-lg">{{ track.title }}</span>
-
-          <span v-if="track.duration" class="text-sm muted-text">({{ track.duration }})</span>
+            <span class="text-base sm:text-lg">
+              {{ String(track.trackNumber).padStart(2, '0') }}. {{ track.title }}
+              <span v-if="track.duration" class="ml-2 text-sm muted-text">({{ track.duration }})</span>
+            </span>
+            <span v-if="hasLyrics(track)" class="text-xs muted-text">
+              {{ openTrackNumber === track.trackNumber ? 'Hide' : 'Show' }}
+            </span>
+          </component>
+        </h3>
+        <div
+          v-if="hasLyrics(track)"
+          v-show="openTrackNumber === track.trackNumber"
+          :id="`track-panel-${track.trackNumber}`"
+          class="border-t border-theme px-5 py-5"
+        >
+          <pre class="whitespace-pre-wrap font-sans text-sm leading-7 muted-text">{{ track.lyrics }}</pre>
         </div>
-      </li>
-    </ol>
+      </article>
+    </div>
 
     <p v-else class="mt-6 muted-text">
       Tracklist details are coming soon.
@@ -34,18 +46,23 @@
 </template>
 
 <script setup lang="ts">
-import type { Track } from '~~/shared/types'
+import type { LyricTrack } from '~~/shared/types'
 
-withDefaults(defineProps<{
-  tracks: Track[]
-  showLyricsJump?: boolean
-}>(), {
-  showLyricsJump: true,
-})
-
-defineEmits<{
-  'jump-to-lyrics': [trackNumber: number]
+const props = defineProps<{
+  tracks: LyricTrack[]
 }>()
 
-const hasLyrics = (lyrics?: string) => Boolean(lyrics?.trim().length)
+const hasLyrics = (track: LyricTrack) => Boolean(track.lyrics?.trim().length)
+
+// 0 means every track is collapsed, which is the default on load and whenever
+// the album (and so the track list) changes.
+const openTrackNumber = ref(0)
+
+watch(() => props.tracks, () => {
+  openTrackNumber.value = 0
+})
+
+const toggleTrack = (trackNumber: number) => {
+  openTrackNumber.value = openTrackNumber.value === trackNumber ? 0 : trackNumber
+}
 </script>

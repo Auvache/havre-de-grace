@@ -50,7 +50,7 @@
                 v-if="album.description"
                 class="mt-5 text-[length:var(--font-size-body)] font-[350] leading-[1.65] text-[var(--color-text-dark)]/92"
               >
-                {{ album.description }}
+                <RichText :text="album.description" />
               </p>
 
               <StreamingLinks

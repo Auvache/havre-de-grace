@@ -25,16 +25,12 @@
 
       <div class="flex max-w-2xl flex-col items-center gap-6">
         <p class="label-text muted-text">
-          new release
+          {{ newReleaseLabel }}
         </p>
 
         <h1 class="display-heading">
           {{ album?.title ?? siteProfile.artistName }}
         </h1>
-
-        <p class="muted-text">
-          {{ releaseLabel }}
-        </p>
 
         <StreamingLinks v-if="hasAlbumStreamingLinks" :links="album!.streamingLinks" />
         <template v-else-if="leadSingle">
@@ -119,34 +115,25 @@ const ctaLabel = computed(() => {
   return isSingle.value ? 'listen now' : 'explore the album'
 })
 
-const releaseLabel = computed(() => {
+// The eyebrow label doubles as the release announcement, e.g. "new release - july 2026".
+const newReleaseLabel = computed(() => {
   if (!props.album) {
-    return `${siteProfile.artistName} | ${siteProfile.location}`
+    return 'new release'
   }
 
-  if (!props.album.releaseDate) {
-    return `Released ${props.album.year}`
-  }
-
-  // Parse YYYY-MM-DD as a local date so the announced day isn't shifted by the
+  // Parse YYYY-MM-DD as a local date so the month isn't shifted by the
   // browser's timezone (a bare `new Date('2026-07-17')` is parsed as UTC).
-  const isoMatch = props.album.releaseDate.match(/^(\d{4})-(\d{2})-(\d{2})$/)
-  if (!isoMatch) {
-    return `Released ${props.album.releaseDate}`
+  const isoMatch = props.album.releaseDate?.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (isoMatch) {
+    const [, year, month, day] = isoMatch
+    const date = new Date(Number(year), Number(month) - 1, Number(day))
+    if (!Number.isNaN(date.getTime())) {
+      return `new release - ${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
+    }
   }
 
-  const [, year, month, day] = isoMatch
-  const date = new Date(Number(year), Number(month) - 1, Number(day))
-  if (Number.isNaN(date.getTime())) {
-    return `Released ${props.album.releaseDate}`
-  }
-
-  // Upcoming releases are announced with their day; past releases show month/year.
-  if (date.getTime() > Date.now()) {
-    return `Coming ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`
-  }
-
-  return `Released ${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
+  const fallback = props.album.releaseDate ?? props.album.year
+  return fallback ? `new release - ${fallback}` : 'new release'
 })
 </script>
 

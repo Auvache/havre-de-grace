@@ -81,7 +81,8 @@ export interface LyricTrack {
   trackNumber: number
   title: string
   duration?: string
-  lyrics: string
+  // Optional: a track can be listed on the album page without published lyrics.
+  lyrics?: string
 }
 
 export interface VideoEntry {

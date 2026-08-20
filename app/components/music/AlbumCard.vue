@@ -35,7 +35,7 @@
     </p>
 
     <p v-if="showDescription && album.description" class="mt-4 text-sm muted-text">
-      {{ album.description }}
+      <RichText :text="album.description" />
     </p>
   </NuxtLink>
 </template>

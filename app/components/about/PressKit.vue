@@ -52,7 +52,7 @@
           <p class="label-text muted-text">latest release</p>
           <h3 class="text-xl font-medium">{{ latestAlbum.title }}</h3>
           <p v-if="latestAlbum.description" class="text-sm muted-text">
-            {{ latestAlbum.description }}
+            <RichText :text="latestAlbum.description" />
           </p>
           <StreamingLinks :links="latestAlbum.streamingLinks" compact />
         </ScrollReveal>

@@ -189,7 +189,7 @@ This is the heart of the site. Each album is an **immersive, long-scroll experie
 
 - **Position**: Sticky below the main navbar (appears after scrolling past the hero)
 - **Style**: Horizontal bar, minimal — section labels in label type
-- **Items**: `Art` `|` `Tracks` `|` `Lyrics` `|` `Notes` `|` `Videos` `|` `Credits`
+- **Items**: `Art` `|` `Tracks` `|` `Credits`
 - **Behavior**: Highlights current section as user scrolls; clicking jumps to section with smooth scroll
 - **Mobile**: Horizontally scrollable if items overflow
 
@@ -200,37 +200,23 @@ This is the heart of the site. Each album is an **immersive, long-scroll experie
 - **Streaming links**: Row of platform buttons beneath the art
 - **Mood**: The gatefold moment — reverent, still
 
-#### Section B: Tracklist
+#### Section B: Tracks
 
-- **Layout**: Numbered list with song titles and durations
-- **Optional**: Embedded Spotify/Apple Music player for the full album, or per-track play buttons
-- **Each track**: Clickable to scroll to its lyrics (if lyrics section exists)
-- **Style**: Clean list, generous line-height, accent color on hover/active
-
-#### Section C: Lyrics
-
-- **Layout**: Single-column, centered, one song at a time
-- **Navigation**: Songs as tabs or vertical accordion — click a song title to reveal its lyrics
+- **Layout**: Numbered accordion — each track is a card with its number, title, and duration
+- **Navigation**: Click a track title to reveal its lyrics; tracks without lyrics list but don't expand
 - **Typography**: Body size, generous line-height; song titles as subheadings
 - **Style**: Feels like reading a lyric booklet; plenty of whitespace around stanzas
 
-#### Section D: Liner Notes
+#### Section C: Liner Notes
 
 - **Layout**: Single-column prose, centered (max-width ~720px for comfortable reading)
 - **Content**: First-person writing about the album — recording context, themes, stories behind songs
 - **Optional**: Interspersed atmospheric photos from the recording process
 - **Tone**: Intimate, like handwritten liner notes
 
-#### Section E: Performance Videos
+#### Section D: Credits
 
-- **Layout**: Stacked video embeds (1–4 per album), each with title and brief context
-- **Player**: YouTube/Vimeo embed, lazy-loaded
-- **Content**: Live performances, session recordings, music videos associated with this album
-- **Fallback**: If no videos exist for an album, this section is omitted automatically
-
-#### Section F: Credits
-
-- **Layout**: Simple list or two-column
+- **Layout**: Single column of left-aligned paragraphs, one per credit
 - **Content**: Written/performed by, recorded at, mixed by, mastered by, featured musicians, artwork credits, etc.
 - **Style**: Smaller text, muted color — present but not prominent
 
@@ -277,6 +263,7 @@ Combined page with two distinct zones:
 | `AppFooter`             | Social/streaming links, email signup placeholder, copyright    |
 | `MobileNavOverlay`      | Full-screen mobile navigation                                  |
 | `ScrollReveal`          | Wrapper component for fade-up-on-enter animation               |
+| `RichText`              | Renders `*asterisk*` runs from content copy as italics         |
 | `SectionHeading`        | Reusable lowercase display heading                             |
 | `StreamingLinks`        | Row of platform icons/links (Spotify, Apple Music, etc.)       |
 | `ThemeProvider`         | Handles light/dark page context + accent variable              |
@@ -290,10 +277,8 @@ Combined page with two distinct zones:
 | `DiscographyGrid`       | Grid layout for all album cards                                |
 | `AlbumScrollspyNav`     | Sticky horizontal section nav with active-state tracking       |
 | `AlbumHero`             | Full-bleed album art + title + streaming links                 |
-| `Tracklist`             | Numbered track list with optional embedded player              |
-| `LyricsViewer`          | Tabbed or accordion lyrics display, per-song                   |
-| `AlbumVideos`           | Stacked video embeds with titles/context (conditionally shown) |
-| `AlbumCredits`          | Credits list                                                   |
+| `Tracklist`             | Numbered track accordion; each track expands to show its lyrics |
+| `AlbumCredits`          | Credits as left-aligned paragraphs                             |
 | **About / Press**       |                                                                |
 | `BioSection`            | Full bio with hero image + interspersed photos                 |
 | `PressKit`              | EPK layout with downloadable assets                            |
@@ -336,8 +321,6 @@ project-root/
 │   │   │   ├── AlbumScrollspyNav.vue
 │   │   │   ├── AlbumHero.vue
 │   │   │   ├── Tracklist.vue
-│   │   │   ├── LyricsViewer.vue
-│   │   │   ├── AlbumVideos.vue
 │   │   │   └── AlbumCredits.vue
 │   │   ├── about/
 │   │   │   ├── BioSection.vue
@@ -396,7 +379,8 @@ coverImage: "/images/albums/album-title.jpg"
 coverAlt: "Description of album artwork"
 
 description: |
-  A few sentences about the album for meta/SEO purposes.
+  A few sentences about the album for meta/SEO purposes. Wrap a name in
+  *asterisks* to italicize it on display; markers are stripped for meta/SEO.
 
 streamingLinks:
   spotify: "https://open.spotify.com/album/..."

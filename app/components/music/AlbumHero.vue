@@ -1,5 +1,6 @@
 <template>
   <section id="art" class="page-container scroll-mt-[calc(var(--nav-height)+4.75rem)] pb-8 pt-8 md:pb-12 md:pt-12">
+    <!-- Below lg (tablet and down) the art stacks above centered hero copy. -->
     <header class="grid gap-10 lg:grid-cols-[minmax(0,520px)_1fr] lg:items-end">
       <NuxtImg
         :src="album.coverImage"
@@ -13,13 +14,13 @@
         fetchpriority="high"
       />
 
-      <div class="space-y-5">
+      <div class="flex flex-col items-center space-y-5 text-center lg:items-stretch lg:text-left">
         <p class="label-text muted-text">album</p>
         <h1 class="display-heading text-balance">{{ album.title }}</h1>
         <p v-if="album.description" class="max-w-2xl muted-text">
-          {{ album.description }}
+          <RichText :text="album.description" />
         </p>
-        <StreamingLinks :links="album.streamingLinks" />
+        <StreamingLinks :links="album.streamingLinks" class="justify-center lg:justify-start" />
       </div>
     </header>
   </section>
