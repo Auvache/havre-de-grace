@@ -22,6 +22,8 @@ export default defineContentConfig({
         backCoverAlt: z.string().optional(),
         description: z.string().optional(),
         // Record player (/listen): textured backdrop keyword + vinyl side split.
+        // Backdrops are picked to sit with the album art; "charcoal" (off-black)
+        // and "sea" (steel blue) are defined in app/assets/css/record-player.css.
         listenBackground: z.string().optional(),
         sides: z.object({
           a: z.array(z.number()),
@@ -59,7 +61,8 @@ export default defineContentConfig({
           // from titles, so this is set explicitly. Used by the /listen record player;
           // the track's URL slug is derived from this file's basename.
           audio: z.string().optional(),
-          // --- /listen record-player "now playing" collage (all optional) ---
+          // --- Per-song archive (all optional). Kept in content but not
+          // currently rendered; the /listen player shows the deck alone. ---
           // Prose about how the song was written.
           writingStory: z.string().optional(),
           // Prose about how the song was recorded.

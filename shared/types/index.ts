@@ -30,20 +30,7 @@ export interface Track {
 
 // --- Interactive record player (/listen) ---
 
-// [x, y, rotate] scene coordinates (px, px, deg) for a scattered collage element.
-export type LayoutTriplet = [x: number, y: number, rotate: number]
-
-export interface TrackLayout {
-  lyrics: LayoutTriplet
-  storyA: LayoutTriplet
-  storyB: LayoutTriplet
-  annotations: LayoutTriplet
-  imageA: LayoutTriplet
-  imageB: LayoutTriplet
-}
-
-// A track prepared for the record player. Every content field is optional — the
-// collage omits any element with no data (see app/components/listen/AlbumCollage.vue).
+// A track prepared for the record player. Every content field is optional.
 export interface ListenTrack {
   number: number // 1-based index within the album
   side: 'a' | 'b' // which face of the record this track lives on
@@ -59,7 +46,6 @@ export interface ListenTrack {
   recordingDetails?: string // how the song was recorded
   photos: TrackPhoto[] // borderless, uncaptioned photos (empty when none)
   credits: Credit[] // per-song liner notes (empty when none)
-  layout: TrackLayout
 }
 
 // An album as shown in the /listen picker and switcher.

@@ -9,6 +9,13 @@ coverImage: "/albums/into-the-wild/images/into-the-wild-album-cover.png"
 coverAlt: "Into the Wild album cover by Havre De Grace"
 description: "Into the Wild represents the true beginning of Stefan's *Havre De Grace* project. The songs were selected, organized, and produced with the intention of being listened to as a whole body of work. The album explores what music means to the artist and the listener — adventure, creativity, self-identity, and a medium for working through big emotions."
 
+# Record player (/listen) presentation.
+listenBackground: "sea"
+# Vinyl sides — 1-based track numbers. A: side one, B: side two.
+sides:
+  a: [1, 2, 3, 4, 5]
+  b: [6, 7, 8, 9, 10]
+
 streamingLinks:
   spotify: "https://open.spotify.com/album/3DbM52oMQnsIyrAo0ehTUx?si=VNB2Ur1fRZmv_eQ34whnEw"
   appleMusic: "https://music.apple.com/us/album/into-the-wild/6786144389"
@@ -27,6 +34,7 @@ leadSingle:
 
 tracklist:
   - title: "Into the Wild"
+    audio: "/albums/into-the-wild/music/into-the-wild.mp3"
     lyrics: |
       Oh, I'm headed out on an adventure
       To see if I can't lose my way
@@ -64,6 +72,7 @@ tracklist:
       So I'm running into the wild
       Oh, I'm running
   - title: "Conman"
+    audio: "/albums/into-the-wild/music/conman.mp3"
     lyrics: |
       I'm a conman, don't be fooled by the way I shake
       These rhythms' been around since 1968 when they
@@ -96,6 +105,7 @@ tracklist:
       No matter where I go, I never seem to change
       No matter what I do, I always sound the same
   - title: "Goodbye, Norma Jeane"
+    audio: "/albums/into-the-wild/music/goodbye-norma-jeane.mp3"
     lyrics: |
       Silver screen says Norma Jeane, oh
       Something bigger's meant for me
@@ -136,6 +146,7 @@ tracklist:
       Know you want the world, it's more, more, more
       I wanted you, you wanted more
   - title: "Ivory"
+    audio: "/albums/into-the-wild/music/ivory.mp3"
     lyrics: |
       That there's a woman, of that you can be sure
       Eyes that hit a sunrise like waves that hit a shore, oh
@@ -170,6 +181,7 @@ tracklist:
       Oh, Ivory
       Ivory
   - title: "Andalusia"
+    audio: "/albums/into-the-wild/music/andalusia.mp3"
     lyrics: |
       Oh, I think that I could live in Andalusia
       Walk until my boots are breaking through
@@ -209,6 +221,7 @@ tracklist:
       The only one I want, my love, is you, oh
       The only one I want, my love, is you
   - title: "New York"
+    audio: "/albums/into-the-wild/music/new-york.mp3"
     lyrics: |
       They say love when lost upon the rocks is best left burning out the coals
       That easy dreams like submarines can undermine mankind's familiar goal
@@ -230,6 +243,7 @@ tracklist:
       No, no, no, no
       No, I won't go, I'm not going to New York
   - title: "Meet Me at the Horizon"
+    audio: "/albums/into-the-wild/music/meet-me-at-the-horizon.mp3"
     lyrics: |
       No, I don't need a friend. No, I don't need a lover
       Some nights the darkness is sweeter than others
@@ -279,6 +293,7 @@ tracklist:
       Oh won't you
       Meet me at the horizon, oh
   - title: "Rocks in the Sea"
+    audio: "/albums/into-the-wild/music/rocks-in-the-sea-mix.mp3"
     lyrics: |
       I drove by my hometown today
       I miss the green but I don't miss the gray
@@ -308,6 +323,7 @@ tracklist:
       The sand by the rocks in the sea
       Oh, the sand by the rocks in the sea
   - title: "Ship to Stockholm"
+    audio: "/albums/into-the-wild/music/ship-to-stockholm.mp3"
     lyrics: |
       Oh, away with the land and away with the light
       Tomorrow I will be a' sailing
@@ -334,6 +350,7 @@ tracklist:
       I can't seem to reach you, not by letter or phone
       So I'm taking the ship back to Stockholm
   - title: "Ghost"
+    audio: "/albums/into-the-wild/music/ghost.mp3"
     lyrics: |
       Amplifiers just make a noise
       When I write songs, it's not by choice

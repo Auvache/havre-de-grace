@@ -29,6 +29,7 @@
   --color-muted-dark: #94a1ac;
 
   --color-accent: #3d7a8a;
+  --color-splash-bg: #0d1421;
 
   --theme-bg: var(--color-bg);
   --theme-text: var(--color-text);

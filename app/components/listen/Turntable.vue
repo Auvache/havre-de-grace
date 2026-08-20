@@ -1,5 +1,5 @@
 <template>
-  <section ref="turntableEl" class="turntable" data-no-pan aria-label="Record player">
+  <section ref="turntableEl" class="turntable" aria-label="Record player">
     <div class="power-light" aria-hidden="true" />
     <div class="speed-slot" aria-hidden="true" />
     <div class="rest-post" aria-hidden="true" />

@@ -26,8 +26,7 @@
               loading="lazy"
             />
           </div>
-          <h2 class="mt-3 text-sm font-semibold">{{ album.title }}</h2>
-          <p class="text-xs uppercase tracking-[0.12em] text-[var(--color-accent)]">Play on the record player</p>
+          <h2 class="mt-3 text-center text-sm font-semibold">{{ album.title }}</h2>
         </NuxtLink>
 
         <div v-else class="block cursor-default opacity-70">
@@ -46,8 +45,8 @@
               {{ album.releaseLabel ?? 'Coming soon' }}
             </span>
           </div>
-          <h2 class="mt-3 text-sm font-semibold">{{ album.title }}</h2>
-          <p class="text-xs uppercase tracking-[0.12em] text-[var(--theme-muted)]">Not yet available</p>
+          <h2 class="mt-3 text-center text-sm font-semibold">{{ album.title }}</h2>
+          <p class="text-center text-xs uppercase tracking-[0.12em] text-[var(--theme-muted)]">Not yet available</p>
         </div>
       </li>
     </ul>

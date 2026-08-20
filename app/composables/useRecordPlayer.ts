@@ -1,10 +1,12 @@
 import type { Ref } from 'vue'
 import type { ListenTrack } from '~~/shared/types'
 import {
+  ARM_TRAVEL_MS,
+  AUDIO_STOP_FADE_MS,
   FLIP_MS,
+  NEEDLE_SETTLE_MS,
   OFF_ANGLE,
   OFF_RELEASE_BOUNDARY,
-  PAGE_TRANSITION_MS,
   PLAY_INNER_ANGLE,
   PLAY_OUTER_ANGLE,
   RECORD_INNER_RATIO,
@@ -18,8 +20,9 @@ import {
 
 interface ChooseOptions {
   play?: boolean
-  fadeIfOff?: boolean
-  animate?: boolean
+  // Silence before the audio comes up, in ms. Defaults to the full cue (arm
+  // travel + lead-in groove) when the needle is coming off the rest post.
+  audioDelayMs?: number
 }
 
 interface UseRecordPlayerArgs {
@@ -42,24 +45,21 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
   const boundaries = computed(() => makeTrackBoundaries(total.value))
 
   const currentTrack = ref(0) // 0 = Off, 1..N (within the current side)
-  const renderedTrack = ref(0) // what the collage currently shows (swaps mid-transition)
+  // The platter motor. It leads the needle: play spins the record up before the
+  // arm swings over, and it keeps turning after the music has stopped.
+  const motorOn = ref(false)
   const armAngle = ref(OFF_ANGLE)
-  const isChanging = ref(false)
   const isFlipping = ref(false)
   const dragging = ref(false)
   const rotation = ref(0)
 
-  const mode = computed(() => (currentTrack.value === 0 ? 'off' : 'song'))
-  const renderedMode = computed(() => (renderedTrack.value === 0 ? 'off' : 'song'))
   const currentTrackData = computed(() => trackByNumber(currentTrack.value))
-  const renderedTrackData = computed(() => trackByNumber(renderedTrack.value))
 
   let spinRate = 0
   let spinFrame = 0
   let lastSpinTime = 0
   let audioFadeFrame = 0
-  let transitionTimer: ReturnType<typeof setTimeout> | null = null
-  let transitionId = 0
+  let cueTimer: ReturnType<typeof setTimeout> | null = null
   let flipTimer: ReturnType<typeof setTimeout> | null = null
 
   function trackByNumber(n: number): ListenTrack | null {
@@ -146,31 +146,6 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     return total.value
   }
 
-  // --- content transition (fade out, swap at midpoint, fade in) ---
-  function renderContent(n: number, animate = true) {
-    const doRender = () => {
-      renderedTrack.value = n
-    }
-
-    if (!animate || renderedTrack.value === n) {
-      if (transitionTimer) clearTimeout(transitionTimer)
-      isChanging.value = false
-      doRender()
-      return
-    }
-
-    const id = ++transitionId
-    if (transitionTimer) clearTimeout(transitionTimer)
-    isChanging.value = true
-    transitionTimer = setTimeout(() => {
-      if (id !== transitionId) return
-      doRender()
-      requestAnimationFrame(() => {
-        if (id === transitionId) isChanging.value = false
-      })
-    }, PAGE_TRANSITION_MS / 2)
-  }
-
   // --- audio ---
   function cancelAudioFade() {
     if (audioFadeFrame) cancelAnimationFrame(audioFadeFrame)
@@ -189,7 +164,14 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     }
   }
 
-  function fadeOutAudio(duration = STOP_RAMP_MS) {
+  function cancelCue() {
+    if (cueTimer) clearTimeout(cueTimer)
+    cueTimer = null
+  }
+
+  // Cut the music. A very short ramp keeps the stop from clicking; it reads as
+  // immediate against the platter, which takes STOP_RAMP_MS to wind down.
+  function stopAudio(duration = AUDIO_STOP_FADE_MS) {
     const audio = audioEl.value
     if (!audio) return
     cancelAudioFade()
@@ -218,7 +200,7 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     audioFadeFrame = requestAnimationFrame(fade)
   }
 
-  function playTrackAudio(n: number) {
+  function startTrackAudio(n: number) {
     const audio = audioEl.value
     const track = trackByNumber(n)
     if (!audio || !track || !track.audioSrc) return
@@ -232,30 +214,36 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     audio.play().catch(() => {})
   }
 
+  // Drop the needle now, or after the cue delay while the arm is still travelling
+  // and the record is coming up to speed.
+  function playTrackAudio(n: number, delayMs = 0) {
+    if (delayMs <= 0) {
+      startTrackAudio(n)
+      return
+    }
+    cueTimer = setTimeout(() => {
+      cueTimer = null
+      startTrackAudio(n)
+    }, delayMs)
+  }
+
   // --- selection ---
   function chooseTrack(n: number, options: ChooseOptions = {}) {
     const num = clamp(Math.round(n), 0, total.value)
+    // Coming off the rest post means a full cue: the arm has to swing across and
+    // the needle has to ride the lead-in. Moving between tracks is instant.
+    const fromRest = currentTrack.value === 0
+    cancelCue()
     setArmAngle(angleForTrackStart(num))
     currentTrack.value = num
-    ensureSpinLoop()
-    renderContent(num, options.animate !== false)
+    setMotor(num > 0)
     onSelect?.(trackByNumber(num))
 
     if (num === 0) {
-      if (options.fadeIfOff) {
-        fadeOutAudio(STOP_RAMP_MS)
-      }
-      else {
-        const audio = audioEl.value
-        if (audio) {
-          audio.pause()
-          resetAudioToStart()
-          audio.volume = 1
-        }
-      }
+      stopAudio()
     }
     else if (options.play) {
-      playTrackAudio(num)
+      playTrackAudio(num, options.audioDelayMs ?? (fromRest ? ARM_TRAVEL_MS + NEEDLE_SETTLE_MS : 0))
     }
   }
 
@@ -280,7 +268,7 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     if (isFlipping.value) return
     isFlipping.value = true
     side.value = side.value === 'a' ? 'b' : 'a'
-    chooseTrack(0, { fadeIfOff: true, animate: true })
+    chooseTrack(0)
     if (flipTimer) clearTimeout(flipTimer)
     flipTimer = setTimeout(() => {
       isFlipping.value = false
@@ -288,6 +276,13 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
   }
 
   // --- spin loop ---
+  // Switch the platter motor on or off. Play spins the record up before the arm
+  // has moved, so this is deliberately separate from the selected track.
+  function setMotor(on: boolean) {
+    motorOn.value = on
+    ensureSpinLoop()
+  }
+
   function ensureSpinLoop() {
     if (spinFrame) return
     lastSpinTime = performance.now()
@@ -297,7 +292,7 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
   function updateSpin(now: number) {
     const dt = Math.min(50, now - lastSpinTime)
     lastSpinTime = now
-    const target = currentTrack.value > 0 ? SPIN_RATE : 0
+    const target = motorOn.value ? SPIN_RATE : 0
     const ramp = target > spinRate ? START_RAMP_MS : STOP_RAMP_MS
     const maxDelta = SPIN_RATE * (dt / ramp)
     spinRate += clamp(target - spinRate, -maxDelta, maxDelta)
@@ -315,6 +310,9 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
   // --- tonearm pointer handlers ---
   function onArmPointerDown(event: PointerEvent) {
     dragging.value = true
+    // Picking the arm up spins the platter, the same as pressing play — by the
+    // time the needle lands the record is on its way up to speed.
+    setMotor(true)
     const el = event.currentTarget as HTMLElement
     el.setPointerCapture?.(event.pointerId)
     setArmAngle(angleFromPointer(event))
@@ -335,8 +333,10 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     catch {
       // ignore
     }
+    // The visitor has placed the needle by hand, so there is no arm travel to
+    // wait out — only the lead-in groove.
     const finalTrack = trackFromArmAngle(armAngle.value)
-    chooseTrack(finalTrack, { play: finalTrack > 0, fadeIfOff: finalTrack === 0, animate: true })
+    chooseTrack(finalTrack, { play: finalTrack > 0, audioDelayMs: NEEDLE_SETTLE_MS })
   }
 
   // --- record groove click ---
@@ -344,14 +344,14 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     event.preventDefault()
     event.stopPropagation()
     const trackNumber = trackFromRecordClick(event)
-    chooseTrack(trackNumber, { play: true, animate: true })
+    chooseTrack(trackNumber, { play: true })
   }
 
   function onRecordKeydown(event: KeyboardEvent) {
     if (event.key !== 'Enter' && event.key !== ' ') return
     event.preventDefault()
     const next = currentTrack.value === 0 ? 1 : (currentTrack.value % total.value) + 1
-    chooseTrack(next, { play: true, animate: true })
+    chooseTrack(next, { play: true })
   }
 
   // --- tonearm keyboard ---
@@ -361,28 +361,24 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     event.preventDefault()
 
     if (event.key === 'Home') {
-      chooseTrack(0, { fadeIfOff: true, animate: true })
+      chooseTrack(0)
       return
     }
     if (event.key === 'End') {
-      chooseTrack(total.value, { play: true, animate: true })
+      chooseTrack(total.value, { play: true })
       return
     }
     if (event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'PageUp') {
-      chooseTrack(Math.min(total.value, currentTrack.value + 1), { play: true, animate: true })
+      chooseTrack(Math.min(total.value, currentTrack.value + 1), { play: true })
     }
     else {
-      chooseTrack(Math.max(0, currentTrack.value - 1), {
-        play: currentTrack.value > 1,
-        fadeIfOff: currentTrack.value === 1,
-        animate: true,
-      })
+      chooseTrack(Math.max(0, currentTrack.value - 1), { play: currentTrack.value > 1 })
     }
   }
 
   function onEnded() {
     const next = currentTrack.value >= total.value ? 0 : currentTrack.value + 1
-    chooseTrack(next, { play: next > 0, animate: true })
+    chooseTrack(next, { play: next > 0 })
   }
 
   onMounted(() => {
@@ -392,8 +388,8 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
   onUnmounted(() => {
     audioEl.value?.removeEventListener('ended', onEnded)
     if (spinFrame) cancelAnimationFrame(spinFrame)
+    cancelCue()
     cancelAudioFade()
-    if (transitionTimer) clearTimeout(transitionTimer)
     if (flipTimer) clearTimeout(flipTimer)
     audioEl.value?.pause()
   })
@@ -403,19 +399,16 @@ export function useRecordPlayer({ sides, audioEl, turntableEl, recordWrapEl, onS
     side,
     tracks,
     currentTrack,
-    renderedTrack,
     currentTrackData,
-    renderedTrackData,
+    motorOn,
     armAngle,
-    isChanging,
     isFlipping,
     dragging,
     rotation,
-    mode,
-    renderedMode,
     total,
     // actions
     chooseTrack,
+    setMotor,
     selectBySlug,
     flip,
     // handlers
