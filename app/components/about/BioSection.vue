@@ -10,12 +10,14 @@
       :threshold="0.16"
       root-margin="0px 0px -6% 0px"
     >
-      <img
+      <NuxtImg
         src="/images/bio-update.png"
-        alt="Havre De Grace atmospheric portrait"
+        alt="Havre De Grace, the acoustic folk project of Stefan Auvache Bradley"
         class="w-full rounded-[var(--radius-lg)] object-cover shadow-[0_30px_64px_color-mix(in_srgb,var(--theme-text)_14%,transparent)]"
-        width="3024"
-        height="1752"
+        width="2000"
+        height="2000"
+        sizes="(max-width: 768px) 100vw, 768px"
+        format="webp,avif"
         loading="eager"
         fetchpriority="high"
       />
@@ -65,12 +67,14 @@
         :blur-px="0"
         root-margin="0px 0px -8% 0px"
       >
-        <img
+        <NuxtImg
           src="/images/profile.jpg"
-          alt="Havre De Grace profile portrait"
+          sizes="(max-width: 640px) 100vw, 384px"
+          format="webp,avif"
+          alt="Stefan Auvache Bradley, who performs as Havre De Grace"
           class="h-full w-full rounded-[var(--radius-sm)] object-cover"
-          width="1200"
-          height="800"
+          width="2056"
+          height="2083"
           loading="lazy"
         />
       </ScrollReveal>
@@ -83,12 +87,14 @@
         :threshold="0.12"
         root-margin="0px 0px -8% 0px"
       >
-        <img
+        <NuxtImg
           src="/images/bio-pic.jpg"
-          alt="Havre De Grace bio portrait"
+          sizes="(max-width: 640px) 100vw, 384px"
+          format="webp,avif"
+          alt="Havre De Grace performing live"
           class="h-full w-full rounded-[var(--radius-sm)] object-cover"
-          width="1200"
-          height="800"
+          width="1000"
+          height="1000"
           loading="lazy"
         />
       </ScrollReveal>
@@ -106,9 +112,10 @@
     >
       <div class="aspect-video w-full overflow-hidden rounded-[var(--radius-md)]">
         <iframe
-          src="https://www.youtube.com/embed/0JF4Pm_-mPs?si=u7ip8ecrCrAivo3A"
+          src="https://www.youtube-nocookie.com/embed/0JF4Pm_-mPs"
           title="Havre De Grace - Live Performance"
           class="h-full w-full"
+          loading="lazy"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen

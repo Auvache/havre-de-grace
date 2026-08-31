@@ -2,7 +2,7 @@
   <div>
     <HeroAlbumSpotlight :album="latestAlbum" />
 
-    <AboutPreview :latest-album-title="latestAlbum?.title" />
+    <AboutPreview :albums="albums" />
 
     <MusicSection :albums="albums" />
 
@@ -55,6 +55,7 @@
 
 <script setup lang="ts">
 import type { Album } from '~~/shared/types'
+import { schemaId } from '~/utils/schema'
 
 const siteProfile = useSiteProfile()
 
@@ -90,15 +91,37 @@ const latestAlbum = computed(() => {
 
 const pageDescription = computed(() => {
   if (!latestAlbum.value) {
-    return `Havre De Grace Music is home to acoustic folk songs, artist details, and booking information.`
+    return `Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, from Vancouver, Washington. Albums, lyrics, credits, and booking.`
   }
 
-  return `Havre De Grace Music features the new release "${latestAlbum.value.title}". Explore the full discography, videos, and booking details.`
+  return `Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, from Vancouver, Washington. Hear the album "${latestAlbum.value.title}", read the lyrics, and get booking details.`
 })
 
+// The homepage is the page *about* the artist, so its WebPage node names the
+// MusicGroup as its mainEntity. This is the relationship the MusicGroup used to
+// assert from its own side via `mainEntityOfPage`, which was wrong: that node
+// renders on every page, so it pointed at a `/#webpage` @id that only exists here.
+const { siteUrl } = useAbsoluteUrl()
+
+useSchemaOrg([
+  defineWebPage({
+    mainEntity: { '@id': schemaId.artist(siteUrl) },
+  }),
+])
+
 usePageSeo({
-  title: `${siteProfile.artistName} Music | Official`,
+  // "Havre De Grace Music" leads so the exact target phrase (and the domain
+  // name) sits at the front of the title, with the genre terms behind it.
+  title: `Havre De Grace Music | Acoustic Folk Singer-Songwriter`,
   description: pageDescription,
-  image: computed(() => latestAlbum.value?.coverImage),
+  image: computed(() => (latestAlbum.value
+    ? {
+        src: latestAlbum.value.ogImage ?? latestAlbum.value.coverImage,
+        width: 1200,
+        height: 1200,
+        type: 'image/jpeg',
+        alt: latestAlbum.value.coverAlt,
+      }
+    : undefined)),
 })
 </script>

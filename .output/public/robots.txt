@@ -2,8 +2,5 @@
 User-agent: *
 Allow: /
 
-User-agent: *
-Allow: /
-
 Sitemap: https://havredegracemusic.com/sitemap.xml
 # END nuxt-robots

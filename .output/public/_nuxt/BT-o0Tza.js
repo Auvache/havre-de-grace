@@ -1,0 +1,1 @@
+import{u as s}from"./D3LsuWPl.js";import{e as t,c as a,a as o,H as n,o as r}from"./DNNlJSXj.js";const c={class:"min-h-screen text-[var(--theme-text)]"},m={class:"h-screen"},p=t({__name:"listen",setup(_){return s(),(e,i)=>(r(),a("div",c,[o("main",m,[n(e.$slots,"default")])]))}});export{p as default};

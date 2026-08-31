@@ -6,6 +6,7 @@ isLatest: false
 isVisible: true
 coverImage: "/albums/i-want-to-be-yours-and-other-songs/images/i-want-to-be-yours-and-other-songs.jpg"
 coverAlt: "I Want to Be Yours and Other Songs album cover by Havre De Grace"
+ogImage: "/albums/i-want-to-be-yours-and-other-songs/images/i-want-to-be-yours-and-other-songs-og.jpg"
 description: "An accidental debut album originally released under the moniker *Stefan Auvache*. Eight songs written and recorded for Stefan to listen to personally, eventually compiled, mixed, and released in 2025. The album was rereleased under the name *Havre De Grace* in January 2026."
 
 # Record player (/listen) presentation.
@@ -16,10 +17,10 @@ sides:
   b: [5, 6, 7, 8, 9]
 
 streamingLinks:
-  spotify: "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK?si=XGt1dVOqTWqG8gh6LkfRFQ"
+  spotify: "https://open.spotify.com/album/5hitWldm8YSkLO0B6nnAPK"
   appleMusic: "https://music.apple.com/us/album/i-want-to-be-yours-and-other-songs/1875647787"
-  youtubeMusic: "https://music.youtube.com/playlist?list=OLAK5uy_m9-fwX5X6-akFt_EXHaMl77qkEaQI2lOY&si=3H7D2GnFT3wpee_a"
-  amazonMusic: "https://music.amazon.com/albums/B0GM1XF3RY?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_kCefPNt0uYszhrJlqOi5Hk6J6"
+  youtubeMusic: "https://music.youtube.com/playlist?list=OLAK5uy_m9-fwX5X6-akFt_EXHaMl77qkEaQI2lOY"
+  amazonMusic: "https://music.amazon.com/albums/B0GM1XF3RY"
   bandcamp: "https://havredegrace.bandcamp.com/album/i-want-to-be-yours-and-other-songs"
   soundcloud: "https://soundcloud.com/havredegracemusic/sets/d1cefe1f-140c-4d54-a8f9-107c4adb92a7"
 

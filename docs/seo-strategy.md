@@ -4,6 +4,15 @@
 
 **Core problem:** Google currently interprets "Havre De Grace" as the town in Maryland. The site needs stronger entity signals across the web to disambiguate "Havre De Grace" as a music artist.
 
+> **On-site work is done.** The technical items this document used to list under
+> "Technical SEO essentials" have been implemented — see the audit summary in
+> `docs/seo-audit.md` for exactly what changed, including the schema.org graph
+> (`MusicGroup`, `Person`, `MusicAlbum`, `MusicRecording`, `BreadcrumbList`,
+> `VideoObject`), per-song pages, and the indexability cleanup. **Everything left
+> in this file is off-site work that only you can do**, and it is now the
+> bottleneck: the site can't disambiguate itself from a Maryland town without
+> corroborating profiles elsewhere pointing back at it.
+
 ---
 
 ## External Tasks
@@ -23,9 +32,11 @@ These are actions taken outside the codebase. They require manual account creati
    - **Disambiguation:** singer-songwriter project of Stefan Auvache Bradley
    - **URL relationships:** Add `havredegracemusic.com` as the official homepage
    - **URL relationships:** Add Spotify, Apple Music, YouTube, Instagram, Bandcamp, SoundCloud URLs
-4. Add the album "I Want to Be Yours and Other Songs" as a Release Group
-   - Add all tracks with durations
-   - Link streaming URLs
+4. Add **both** albums as Release Groups:
+   - "I Want to Be Yours and Other Songs" (released 2025-07-08, 9 tracks)
+   - "Into the Wild" (released 2026-07-17, 10 tracks)
+   - Add all tracks with durations — these are in `content/music/*.yml`
+   - Link streaming URLs (also in those files, under `streamingLinks`)
 
 ### 2 — Create a Wikidata entry
 
@@ -88,8 +99,12 @@ These are actions taken outside the codebase. They require manual account creati
 3. Add the about section with genre and real name
 4. Link to streaming platforms
 5. Post at least one thing (e.g., the album announcement)
-6. Add the Facebook URL to `siteProfile.artistLinks` and `siteProfile.socialLinks` in `shared/data/site.ts`
-7. This will automatically flow into the MusicGroup schema `sameAs` array
+6. Add the Facebook URL to `siteProfile.entityUrls` in `shared/data/site.ts` (and
+   to `artistLinks` / `socialLinks` too if you want it shown as a link on the site)
+7. `entityUrls` is what feeds the MusicGroup schema's `sameAs`, so it flows through
+   automatically. Use the bare profile URL with no tracking parameters — `sameAs`
+   values are entity identifiers that get matched against the same URLs on
+   Wikidata, MusicBrainz, and the platforms themselves.
 
 ### 7 — Verify all external profiles link back to the website
 

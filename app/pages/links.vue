@@ -125,9 +125,18 @@ const linkEntries = computed(() => [
   { label: 'Email', href: `mailto:${siteProfile.bookingEmail}`, external: false, icon: 'mail' },
 ].filter((entry): entry is LinkEntry => Boolean(entry.href)))
 
+// This page is noindex (see routeRules in nuxt.config.ts): it's the link-in-bio
+// hub pointed at from Instagram/YouTube/Bandcamp, so its job is click-through,
+// not search. Titles and share metadata still matter for those social previews.
 usePageSeo({
   title: `Havre De Grace | Music Links & Streaming`,
   description: `Find Havre De Grace Music links on Spotify, Apple Music, YouTube, Instagram, and more in one place.`,
-  image: '/press/media-pic-square.jpg',
+  image: {
+    src: '/press/media-pic-square.jpg',
+    width: 1200,
+    height: 1200,
+    type: 'image/jpeg',
+    alt: 'Havre De Grace press photo',
+  },
 })
 </script>

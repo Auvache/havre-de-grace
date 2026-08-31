@@ -35,6 +35,18 @@
           class="border-t border-theme px-5 py-5"
         >
           <pre class="whitespace-pre-wrap font-sans text-sm leading-7 muted-text">{{ track.lyrics }}</pre>
+          <!--
+            The link to the song's own page. It matters beyond navigation: song
+            pages are only legitimate if they're genuinely reachable, and this is
+            the crawl path that gets them discovered and prerendered.
+          -->
+          <NuxtLink
+            v-if="track.songSlug"
+            :to="`/music/${albumSlug}/${track.songSlug}`"
+            class="nav-link mt-5 inline-block text-xs hover:text-[var(--color-accent)]"
+          >
+            more about {{ track.title }} →
+          </NuxtLink>
         </div>
       </article>
     </div>
@@ -50,7 +62,11 @@ import type { LyricTrack } from '~~/shared/types'
 
 const props = defineProps<{
   tracks: LyricTrack[]
+  // Parent album slug, used to build each track's song-page link.
+  albumSlug: string
 }>()
+
+const albumSlug = computed(() => props.albumSlug)
 
 const hasLyrics = (track: LyricTrack) => Boolean(track.lyrics?.trim().length)
 

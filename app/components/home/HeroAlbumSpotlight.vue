@@ -6,7 +6,7 @@
         v-if="album"
         :type="albumHref ? undefined : 'button'"
         :to="albumHref ?? undefined"
-        :aria-label="albumHref ? undefined : `Open ${album.title}`"
+        :aria-label="`${album.title} by ${siteProfile.artistName}`"
         class="hero-cover-wrap interactive-lift relative block w-full max-w-[504px] overflow-hidden"
         @click="albumHref ? undefined : openSingle()"
       >
@@ -115,7 +115,10 @@ const ctaLabel = computed(() => {
   return isSingle.value ? 'listen now' : 'explore the album'
 })
 
-// The eyebrow label doubles as the release announcement, e.g. "new release - july 2026".
+// The eyebrow is the release announcement only, e.g. "new release, july 2026".
+// The artist name is deliberately absent from the hero: it's carried by the
+// navbar wordmark, the "about havre de grace" section below, and the page title
+// and schema, so repeating it here was visual noise.
 const newReleaseLabel = computed(() => {
   if (!props.album) {
     return 'new release'
@@ -128,12 +131,12 @@ const newReleaseLabel = computed(() => {
     const [, year, month, day] = isoMatch
     const date = new Date(Number(year), Number(month) - 1, Number(day))
     if (!Number.isNaN(date.getTime())) {
-      return `new release - ${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
+      return `new release, ${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
     }
   }
 
   const fallback = props.album.releaseDate ?? props.album.year
-  return fallback ? `new release - ${fallback}` : 'new release'
+  return fallback ? `new release, ${fallback}` : 'new release'
 })
 </script>
 

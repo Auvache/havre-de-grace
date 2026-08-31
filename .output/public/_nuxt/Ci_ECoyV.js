@@ -1,0 +1,1 @@
+function c(t){return t.toLowerCase().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}function s(t){const o=new Set;return(t.tracklist??[]).reduce((r,u,a)=>{const n=c(u.title);if(!n)return r;let e=n;return o.has(e)&&(e=`${n}-${a+1}`),o.add(e),r.push({slug:e,track:u,trackNumber:a+1}),r},[])}export{s as t};

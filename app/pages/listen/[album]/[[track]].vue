@@ -60,10 +60,22 @@ if (trackParam.value && !initialTrackSlug.value) {
   await navigateTo(`/listen/${albumSlug.value}`, { replace: true })
 }
 
+// noindex (see routeRules in nuxt.config.ts). The canonical still points here
+// rather than at /music/<album>: this is a distinct experience, not a duplicate
+// of the album page, and noindex already keeps it out of the index. Share
+// metadata is kept accurate because these URLs do get passed around directly.
 usePageSeo({
-  title: computed(() => `Listen: ${album.value?.title ?? 'Album'} | ${siteProfile.artistName}`),
-  description: computed(() => `Play ${album.value?.title} by ${siteProfile.artistName} on an interactive record player — drop the needle and explore each song.`),
-  image: computed(() => album.value?.coverImage),
+  title: computed(() => `Listen to ${album.value?.title ?? 'Album'} in digital vinyl format | ${siteProfile.artistName}`),
+  description: computed(() => `Play ${album.value?.title} by ${siteProfile.artistName} on an interactive record player — drop the needle, flip the record, and hear the album side by side.`),
+  image: computed(() => (album.value
+    ? {
+        src: album.value.ogImage ?? album.value.coverImage,
+        width: 1200,
+        height: 1200,
+        type: 'image/jpeg',
+        alt: album.value.coverAlt,
+      }
+    : undefined)),
   path: computed(() => `/listen/${albumSlug.value}`),
   type: 'music.album',
 })

@@ -16,6 +16,11 @@ export default defineContentConfig({
         parentAlbumSlug: z.string().optional(),
         coverImage: z.string(),
         coverAlt: z.string(),
+        // Pre-rendered 1200x1200 JPEG for social cards. The full-size cover art
+        // is a 3000x3000, multi-megabyte original: too large for scrapers and
+        // the wrong thing to declare dimensions for. Omit to fall back to the
+        // site's brand og-image.jpg.
+        ogImage: z.string().optional(),
         // Optional album back cover, shown alongside the front in the /listen player
         // while a song plays. Omit if the release has no back artwork.
         backCoverImage: z.string().optional(),

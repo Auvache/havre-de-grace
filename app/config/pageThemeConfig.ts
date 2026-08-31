@@ -76,7 +76,7 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
   },
   {
     // The influences canvas is a deliberately immersive dark experience.
-    match: /^\/influences(?:-new)?\/?$/,
+    match: /^\/influences\/?$/,
     config: {
       theme: 'dark',
       gradient: 'blackout',
@@ -84,8 +84,11 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
   },
 ]
 
+// Matches both an album page (/music/<slug>) and one of its song pages
+// (/music/<slug>/<song>), so a song inherits its album's cover-matched gradient
+// instead of falling through to the plain light theme.
 const toAlbumSlug = (path: string): string | null => {
-  const matched = path.match(/^\/music\/([^/]+)\/?$/)
+  const matched = path.match(/^\/music\/([^/]+)(?:\/[^/]+)?\/?$/)
   return matched?.[1] ?? null
 }
 

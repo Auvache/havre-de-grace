@@ -70,9 +70,12 @@ const { data: albums } = await useAsyncData('listen-albums', async () => {
     .sort((a, b) => Number(b.listenable) - Number(a.listenable))
 }) as { data: Ref<ListenAlbum[]> }
 
+// noindex (see routeRules): the record-player scene renders almost no text
+// server-side, so it can't earn a search listing. The "digital vinyl" angle is
+// targeted from the album pages, which have the body copy to rank for it.
 usePageSeo({
   title: 'Listen | Havre De Grace',
-  description: 'Play Havre De Grace albums on an interactive record player — drop the needle, explore lyrics, stories, and artwork for each song.',
+  description: 'Play Havre De Grace albums on an interactive record player — drop the needle and hear the album the way a record plays.',
   path: '/listen',
 })
 </script>

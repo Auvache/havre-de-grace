@@ -69,6 +69,9 @@ export interface LyricTrack {
   duration?: string
   // Optional: a track can be listed on the album page without published lyrics.
   lyrics?: string
+  // URL segment for this track's page at /music/<album>/<songSlug>. Absent when
+  // the track has no page — see shared/utils/songSlug.ts.
+  songSlug?: string
 }
 
 export interface VideoEntry {
@@ -95,6 +98,8 @@ export interface Album {
   parentAlbumSlug?: string
   coverImage: string
   coverAlt: string
+  // Pre-rendered 1200x1200 social-card image (see content.config.ts).
+  ogImage?: string
   backCoverImage?: string
   backCoverAlt?: string
   description?: string
@@ -164,6 +169,10 @@ export interface SiteProfile {
   genres: string[]
   bookingEmail: string
   artistLinks: StreamingLinks
+  // Canonical artist-profile URLs used for schema.org `sameAs`. Kept separate
+  // from `artistLinks` because those are visitor click targets and may
+  // deep-link, while these must be bare profile roots (see shared/data/site.ts).
+  entityUrls: string[]
   socialLinks: SocialLink[]
   pressAssets: PressAsset[]
   epkDownloadUrl: string
