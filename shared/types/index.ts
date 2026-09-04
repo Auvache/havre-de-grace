@@ -21,46 +21,11 @@ export interface Track {
   lyrics?: string
   // Absolute public path to the playable audio file (see content.config.ts).
   audio?: string
-  // --- /listen "now playing" collage (all optional) ---
+  // --- Per-song material shown by the /listen record player (all optional) ---
   writingStory?: string
   recordingDetails?: string
   photos?: TrackPhoto[]
   credits?: Credit[]
-}
-
-// --- Interactive record player (/listen) ---
-
-// A track prepared for the record player. Every content field is optional.
-export interface ListenTrack {
-  number: number // 1-based index within the album
-  side: 'a' | 'b' // which face of the record this track lives on
-  sideNumber: number // 1-based index within its side (A1, A2, ... / B1, B2, ...)
-  slug: string // URL segment, derived from the audio file basename
-  title: string
-  audioSrc: string
-  accent: string
-  accent2: string
-  accentDark: string
-  lyrics: string[] // lyric lines (empty array when the song has no lyrics)
-  writingStory?: string // how the song was written
-  recordingDetails?: string // how the song was recorded
-  photos: TrackPhoto[] // borderless, uncaptioned photos (empty when none)
-  credits: Credit[] // per-song liner notes (empty when none)
-}
-
-// An album as shown in the /listen picker and switcher.
-export interface ListenAlbum {
-  title: string
-  slug: string
-  coverImage: string
-  coverAlt: string
-  // Album-wide back artwork, shown next to the front cover during playback.
-  backCoverImage?: string
-  backCoverAlt?: string
-  listenable: boolean // released + has audio -> playable
-  releaseLabel?: string // e.g. "Coming July 17, 2026" when not yet listenable
-  // Record-player backdrop keyword (e.g. "charcoal"); maps to a [data-bg] style.
-  background?: string
 }
 
 export interface LyricTrack {
@@ -109,8 +74,6 @@ export interface Album {
     a: number[]
     b: number[]
   }
-  // Record player backdrop keyword (e.g. "charcoal"). Omit for the default look.
-  listenBackground?: string
   streamingLinks: StreamingLinks
   // Shown on the hero when the album itself has no streaming links yet
   // (i.e. it hasn't released) but a single from it already has.

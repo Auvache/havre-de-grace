@@ -26,10 +26,7 @@ export default defineContentConfig({
         backCoverImage: z.string().optional(),
         backCoverAlt: z.string().optional(),
         description: z.string().optional(),
-        // Record player (/listen): textured backdrop keyword + vinyl side split.
-        // Backdrops are picked to sit with the album art; "charcoal" (off-black)
-        // and "sea" (steel blue) are defined in app/assets/css/record-player.css.
-        listenBackground: z.string().optional(),
+        // Record player (/listen): which tracks sit on each vinyl side.
         sides: z.object({
           a: z.array(z.number()),
           b: z.array(z.number()),
@@ -63,11 +60,10 @@ export default defineContentConfig({
           lyrics: z.string().optional(),
           // Absolute public path to the playable audio file, e.g.
           // "/albums/<slug>/music/scarecrow.mp3". Filenames don't derive cleanly
-          // from titles, so this is set explicitly. Used by the /listen record player;
-          // the track's URL slug is derived from this file's basename.
+          // from titles, so this is set explicitly. Used by the /listen record player.
           audio: z.string().optional(),
-          // --- Per-song archive (all optional). Kept in content but not
-          // currently rendered; the /listen player shows the deck alone. ---
+          // --- Per-song archive (all optional). Shown in the /listen
+          // record player's Notes drawer. ---
           // Prose about how the song was written.
           writingStory: z.string().optional(),
           // Prose about how the song was recorded.

@@ -10,9 +10,7 @@ coverAlt: "Into the Wild album cover by Havre De Grace"
 ogImage: "/albums/into-the-wild/images/into-the-wild-og.jpg"
 description: "Into the Wild represents the true beginning of Stefan's *Havre De Grace* project. The songs were selected, organized, and produced with the intention of being listened to as a whole body of work. The album explores what music means to the artist and the listener — adventure, creativity, self-identity, and a medium for working through big emotions."
 
-# Record player (/listen) presentation.
-listenBackground: "sea"
-# Vinyl sides — 1-based track numbers. A: side one, B: side two.
+# Record player (/listen) vinyl sides — 1-based track numbers.
 sides:
   a: [1, 2, 3, 4, 5]
   b: [6, 7, 8, 9, 10]

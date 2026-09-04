@@ -3,12 +3,10 @@ import type { Album, Track } from '../types'
 /**
  * URL segment for a song page under /music/<album>/<song>.
  *
- * Derived from the track *title*, not from the audio filename that
- * app/utils/recordPlayer.ts uses for /listen track slugs. The filenames carry
- * production artifacts that don't belong in an indexable URL — "Rocks in the
- * Sea" ships as `rocks-in-the-sea-mix.mp3`, which would give
- * `/music/into-the-wild/rocks-in-the-sea-mix`. The /listen slugs stay as they
- * are: those routes are noindex, and their URLs are already in the wild.
+ * Derived from the track *title*, not from the audio filename. The filenames
+ * carry production artifacts that don't belong in an indexable URL — "Rocks in
+ * the Sea" ships as `rocks-in-the-sea-mix.mp3`, which would give
+ * `/music/into-the-wild/rocks-in-the-sea-mix`.
  */
 export function toSongSlug(title: string): string {
   return title

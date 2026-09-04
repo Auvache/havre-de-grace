@@ -186,8 +186,24 @@ export default defineNuxtConfig({
     '/listen': {
       robots: 'noindex, follow',
     },
-    '/listen/**': {
-      robots: 'noindex, follow',
+    // The record player used to be one route per album (/listen/<album>) plus one
+    // per track. It's now a single scene with the records on the page, but those
+    // URLs were live and passed around, so they redirect rather than 404.
+    //
+    // Matched a segment at a time rather than with `/listen/**`: the double
+    // wildcard also matches `/listen` itself, which redirected the page to
+    // itself in an infinite loop.
+    '/listen/*': {
+      redirect: {
+        to: '/listen',
+        statusCode: 301,
+      },
+    },
+    '/listen/*/*': {
+      redirect: {
+        to: '/listen',
+        statusCode: 301,
+      },
     },
     // The influences canvas is client-rendered, so crawlers see an empty page.
     '/influences': {
@@ -207,8 +223,6 @@ export default defineNuxtConfig({
         '/listen',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
-        '/listen/i-want-to-be-yours-and-other-songs',
-        '/listen/into-the-wild',
       ],
     },
   },

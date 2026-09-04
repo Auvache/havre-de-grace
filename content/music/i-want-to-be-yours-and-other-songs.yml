@@ -9,9 +9,7 @@ coverAlt: "I Want to Be Yours and Other Songs album cover by Havre De Grace"
 ogImage: "/albums/i-want-to-be-yours-and-other-songs/images/i-want-to-be-yours-and-other-songs-og.jpg"
 description: "An accidental debut album originally released under the moniker *Stefan Auvache*. Eight songs written and recorded for Stefan to listen to personally, eventually compiled, mixed, and released in 2025. The album was rereleased under the name *Havre De Grace* in January 2026."
 
-# Record player (/listen) presentation.
-listenBackground: "charcoal"
-# Vinyl sides — 1-based track numbers. A: side one, B: side two.
+# Record player (/listen) vinyl sides — 1-based track numbers.
 sides:
   a: [1, 2, 3, 4]
   b: [5, 6, 7, 8, 9]

@@ -6,7 +6,7 @@
       </NuxtLink>
       <NuxtLink
         v-if="isListenable"
-        :to="`/listen/${album.slug}`"
+        to="/listen"
         class="nav-link inline-block text-sm font-semibold text-[var(--color-accent)]"
       >
         listen in digital vinyl format →
@@ -64,7 +64,7 @@ import type { Album, LyricTrack } from '~~/shared/types'
 import { stripEmphasis } from '~~/shared/utils/emphasis'
 import { toSongRefs } from '~~/shared/utils/songSlug'
 import { compact, schemaId, toIsoDuration } from '~/utils/schema'
-import { isAlbumListenable } from '~/utils/recordPlayer'
+import { isListenable as isAlbumListenable } from '~/utils/listenAlbums'
 
 interface ScrollSection {
   id: string
