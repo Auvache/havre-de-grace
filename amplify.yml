@@ -1,0 +1,29 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Node's built-in node:sqlite backs the content DB at build time
+        # (content.experimental.sqliteConnector in nuxt.config.ts). It is
+        # unflagged from Node 24 on, and AL2023 still defaults to 22, so pin.
+        # Keep in sync with .nvmrc / package.json engines.
+        - nvm use 24
+        - node -v
+        - npm ci
+    build:
+      commands:
+        # NITRO_PRESET=static is required, not cosmetic. Amplify sets
+        # AWS_APP_ID on every build, which std-env reports as provider
+        # "aws_amplify", so nitro auto-selects its aws-amplify preset and
+        # writes an SSR bundle to .amplify-hosting/ instead of .output/public
+        # — even under `nuxt generate`. This site has no nitro.preset set in
+        # nuxt.config.ts, so the env var is the only thing pinning it.
+        - NITRO_PRESET=static npm run generate
+  artifacts:
+    baseDirectory: .output/public
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .npm/**/*

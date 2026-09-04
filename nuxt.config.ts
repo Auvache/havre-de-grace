@@ -45,6 +45,17 @@ export default defineNuxtConfig({
     enabled: false,
   },
 
+  content: {
+    // Back the build-time content DB with Node's built-in `node:sqlite`
+    // instead of the better-sqlite3 native addon. A native addon is ABI-locked
+    // to one Node major, so it has to be rebuilt whenever Node moves and it
+    // couples the Node that installs node_modules to the Node that builds.
+    // node:sqlite is unflagged from Node 24 on and has neither problem.
+    experimental: {
+      sqliteConnector: 'native',
+    },
+  },
+
   fonts: {
     families: [
       { name: 'Jost', provider: 'google' },
