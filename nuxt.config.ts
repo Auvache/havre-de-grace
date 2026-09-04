@@ -45,6 +45,19 @@ export default defineNuxtConfig({
     enabled: false,
   },
 
+  image: {
+    // Pin the provider. It defaults to 'auto', which resolves via std-env's
+    // detected provider — and Amplify sets AWS_APP_ID on every build, so a
+    // build there autodetects 'awsAmplify' and rewrites every image URL to
+    // /_amplify/image?url=... That endpoint only exists on a WEB_COMPUTE
+    // deployment, served by the nitro aws-amplify preset's imageOptimization
+    // handler. This site deploys as static (platform WEB), so those URLs 404
+    // and nitro stops prerendering the 132 /_ipx/ routes the pages reference.
+    // Same failure mode as NITRO_PRESET in amplify.yml: provider autodetection
+    // assumes SSR on Amplify, and this site is deliberately not that.
+    provider: 'ipx',
+  },
+
   content: {
     // Back the build-time content DB with Node's built-in `node:sqlite`
     // instead of the better-sqlite3 native addon. A native addon is ABI-locked
