@@ -4,7 +4,7 @@
     <div class="room-glow" aria-hidden="true" :style="{ opacity: 0.18 + deck.level.value * 0.5, transform: `scale(${1 + deck.level.value * 0.12})` }" />
     <div class="dust" aria-hidden="true" />
 
-    <header ref="hudEl" class="hud">
+    <header class="hud">
       <NuxtLink to="/" class="hud-btn" aria-label="Back to Havre De Grace">
         <span aria-hidden="true">←</span>
         <span class="back-long" aria-hidden="true">Havre De Grace</span>
@@ -14,9 +14,9 @@
         <span class="hud-album">{{ deck.album.value?.title ?? 'No record' }}</span>
         <span class="hud-side">Side {{ deck.side.value.toUpperCase() }}</span>
       </div>
-      <!-- Tabs, not independent toggles: the panel they open is one drawer,
-           and it's docked below this header so these stay reachable while it's
-           open. Pressing the open one closes it. -->
+      <!-- Tabs, not independent toggles: the panel they open is one drawer.
+           It covers this header while open, so the drawer's own close button
+           is the way out; pressing the open tab closes it too. -->
       <div class="hud-right">
         <button
           v-for="tab in PANELS"
@@ -254,11 +254,6 @@ type PanelId = typeof PANELS[number]['id']
 const panel = ref<PanelId | null>(null)
 function togglePanel(id: PanelId) { panel.value = panel.value === id ? null : id }
 
-/* The drawer docks under the header so the tabs stay live while it's open.
-   Measured rather than hardcoded: the header wraps to two rows on a phone. */
-const hudEl = ref<HTMLElement | null>(null)
-const { height: hudHeight } = useElementSize(hudEl)
-
 onMounted(() => { if (albums.value.length) deck.load(albums.value[0]!) })
 
 // Choosing a record puts it on the platter with the needle still up. Starting
@@ -452,7 +447,6 @@ const linerParas = computed(() => (deck.album.value?.linerNotes ?? '').split(/\n
 
 const pageStyle = computed(() => ({
   '--accent': deck.album.value?.accent ?? '#c9a15e',
-  '--hud-h': `${hudHeight.value}px`,
 }))
 
 // noindex (see routeRules): the scene is locked to the viewport and renders
@@ -810,10 +804,9 @@ usePageSeo({
 .drawer {
   position: fixed;
   right: 0;
-  /* Docked under the header so the Lyrics/Notes tabs stay visible and clickable
-     while the panel is open. --hud-h is measured, because the header wraps to a
-     second row on a phone. */
-  top: var(--hud-h, 0px);
+  /* Full-height: the panel runs the whole viewport and covers the header's
+     Lyrics/Notes tabs. Its own close button is the way back out. */
+  top: 0;
   bottom: 0;
   z-index: 40;
   width: min(92vw, 420px);
