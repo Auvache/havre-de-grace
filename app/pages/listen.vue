@@ -4,7 +4,7 @@
     <div class="room-glow" aria-hidden="true" :style="{ opacity: 0.18 + deck.level.value * 0.5, transform: `scale(${1 + deck.level.value * 0.12})` }" />
     <div class="dust" aria-hidden="true" />
 
-    <header class="hud">
+    <header ref="hudEl" class="hud">
       <NuxtLink to="/" class="hud-btn" aria-label="Back to Havre De Grace">
         <span aria-hidden="true">←</span>
         <span class="back-long" aria-hidden="true">Havre De Grace</span>
@@ -14,9 +14,19 @@
         <span class="hud-album">{{ deck.album.value?.title ?? 'No record' }}</span>
         <span class="hud-side">Side {{ deck.side.value.toUpperCase() }}</span>
       </div>
+      <!-- Tabs, not independent toggles: the panel they open is one drawer,
+           and it's docked below this header so these stay reachable while it's
+           open. Pressing the open one closes it. -->
       <div class="hud-right">
-        <button type="button" class="hud-btn" :class="{ on: showLyrics }" @click="showLyrics = !showLyrics">Lyrics</button>
-        <button type="button" class="hud-btn" :class="{ on: showNotes }" @click="showNotes = !showNotes">Notes</button>
+        <button
+          v-for="tab in PANELS"
+          :key="tab.id"
+          type="button"
+          class="hud-btn"
+          :class="{ on: panel === tab.id }"
+          :aria-pressed="panel === tab.id"
+          @click="togglePanel(tab.id)"
+        >{{ tab.label }}</button>
       </div>
     </header>
 
@@ -62,7 +72,10 @@
 
           <!-- Nothing plays until the visitor acts, so the deck says how — and
                while the arm is being dragged it says where it would land. -->
-          <p v-if="scrubCue" class="drop-hint live">
+          <p v-if="scrubParking" class="drop-hint live">
+            Let go to rest the arm
+          </p>
+          <p v-else-if="scrubCue" class="drop-hint live">
             {{ scrubCue.track?.title }} · {{ formatDuration(scrubCue.offset) }} in
           </p>
           <p v-else-if="deck.album.value && !deck.playing.value" class="drop-hint">
@@ -100,20 +113,6 @@
           <span class="arm-pivot" aria-hidden="true" />
         </div>
       </div>
-
-      <!-- teleprompter lyrics -->
-      <transition name="fade">
-        <div v-if="showLyrics" class="prompter" aria-live="polite">
-          <p
-            v-for="entry in lyricWindow"
-            :key="entry.i"
-            class="prompt-line"
-            :class="{ now: entry.i === deck.activeLyricIndex.value }"
-            :style="{ opacity: entry.opacity }"
-          >{{ entry.line || '·' }}</p>
-          <p v-if="!lyricWindow.length" class="prompt-line dim">{{ deck.track.value ? 'Instrumental' : 'Drop the needle' }}</p>
-        </div>
-      </transition>
     </main>
 
     <!-- ---------- console ---------- -->
@@ -156,28 +155,50 @@
       </div>
     </footer>
 
-    <!-- notes drawer -->
+    <!-- One drawer, two panels. Sharing the element rather than stacking two
+         asides is what makes them identical by construction, and switching tabs
+         swaps the contents in place instead of sliding the panel out and in. -->
     <transition name="slide">
-      <aside v-if="showNotes" class="notes-drawer" aria-label="Liner notes">
-        <button type="button" class="drawer-close" @click="showNotes = false">close ✕</button>
-        <h2>{{ deck.album.value?.title }}</h2>
-        <p v-if="deck.album.value?.isFiller" class="ph-flag">placeholder content</p>
-        <template v-if="deck.track.value?.writingStory">
-          <h3>On “{{ deck.track.value.title }}”</h3>
-          <p>{{ deck.track.value.writingStory }}</p>
+      <aside v-if="panel" class="drawer" :aria-label="panel === 'lyrics' ? 'Lyrics' : 'Liner notes'">
+        <button type="button" class="drawer-close" @click="panel = null">close ✕</button>
+
+        <!-- Lyrics follow the record, not the clock: whatever is playing, whole.
+             The content has no per-line timestamps, so there is nothing honest
+             to highlight against. -->
+        <template v-if="panel === 'lyrics'">
+          <h2>{{ deck.track.value?.title ?? 'No track' }}</h2>
+          <p v-if="deck.track.value" class="drawer-sub">
+            Side {{ deck.side.value.toUpperCase() }}{{ deck.track.value.sideNumber }} · {{ deck.album.value?.title }}
+          </p>
+          <p v-for="(stanza, i) in stanzas" :key="i" class="stanza">
+            <span v-for="(line, j) in stanza" :key="j">{{ line }}</span>
+          </p>
+          <p v-if="!stanzas.length" class="drawer-empty">
+            {{ deck.track.value ? 'No words for this one.' : 'Drop the needle to see the words.' }}
+          </p>
         </template>
-        <p v-if="deck.track.value?.recordingDetails">{{ deck.track.value.recordingDetails }}</p>
-        <h3>Album</h3>
-        <p v-if="deck.album.value?.linerNotesArePlaceholder" class="ph-flag">lorem — no liner notes written yet</p>
-        <p v-for="(para, i) in linerParas" :key="i">{{ para }}</p>
-        <h3>Credits</h3>
-        <dl>
-          <template v-for="c in (deck.track.value?.credits.length ? deck.track.value.credits : deck.album.value?.credits ?? [])" :key="c.role + c.name">
-            <dt>{{ c.role }}</dt><dd>{{ c.name }}</dd>
+
+        <template v-else>
+          <h2>{{ deck.album.value?.title }}</h2>
+          <p v-if="deck.album.value?.isFiller" class="ph-flag">placeholder content</p>
+          <template v-if="deck.track.value?.writingStory">
+            <h3>On “{{ deck.track.value.title }}”</h3>
+            <p>{{ deck.track.value.writingStory }}</p>
           </template>
-        </dl>
+          <p v-if="deck.track.value?.recordingDetails">{{ deck.track.value.recordingDetails }}</p>
+          <h3>Album</h3>
+          <p v-if="deck.album.value?.linerNotesArePlaceholder" class="ph-flag">lorem — no liner notes written yet</p>
+          <p v-for="(para, i) in linerParas" :key="i">{{ para }}</p>
+          <h3>Credits</h3>
+          <dl>
+            <template v-for="c in (deck.track.value?.credits.length ? deck.track.value.credits : deck.album.value?.credits ?? [])" :key="c.role + c.name">
+              <dt>{{ c.role }}</dt><dd>{{ c.name }}</dd>
+            </template>
+          </dl>
+        </template>
       </aside>
     </transition>
+
   </div>
 </template>
 
@@ -219,8 +240,24 @@ const { data } = await useAsyncData('listen-albums', async () => {
 const albums = computed<ListenAlbum[]>(() => data.value ?? [])
 
 const deck = useVinylDeck({ analyser: true })
-const showLyrics = ref(true)
-const showNotes = ref(false)
+
+/*
+ * The side panel. One drawer showing one of two things, so opening lyrics can't
+ * bury the notes behind it — and the record stays uncovered by default, since
+ * the panel now sits over the scene rather than beside it.
+ */
+const PANELS = [
+  { id: 'lyrics', label: 'Lyrics' },
+  { id: 'notes', label: 'Notes' },
+] as const
+type PanelId = typeof PANELS[number]['id']
+const panel = ref<PanelId | null>(null)
+function togglePanel(id: PanelId) { panel.value = panel.value === id ? null : id }
+
+/* The drawer docks under the header so the tabs stay live while it's open.
+   Measured rather than hardcoded: the header wraps to two rows on a phone. */
+const hudEl = ref<HTMLElement | null>(null)
+const { height: hudHeight } = useElementSize(hudEl)
 
 onMounted(() => { if (albums.value.length) deck.load(albums.value[0]!) })
 
@@ -296,17 +333,36 @@ const ARM_INNER = 47.6
 /** Pivot as a fraction of the deck frame — matches `.arm`'s right/top in CSS. */
 const ARM_PIVOT = { x: 1.06, y: 0.82 }
 
+/**
+ * How far back past the lead-in a release still counts as playing rather than
+ * parking. A couple of degrees of slop, so brushing just off the record's edge
+ * starts the side instead of sending the arm home.
+ */
+const PARK_RELEASE = -0.12
+
+/*
+ * The dock, the lead-in and the run-out all sit on one arc about the pivot, so
+ * the angle is a single linear map over the whole of it — no branch at the
+ * record's edge. That's what lets a drag cross from the rest post onto the
+ * vinyl without the arm jumping. The clamp is the mechanical stop at each end:
+ * `armProgress` reports -1 when parked, which lands just past the rest post.
+ */
 const armDeg = computed(() => {
-  const p = deck.armProgress.value
-  return p < 0 ? ARM_PARK : ARM_OUTER + p * (ARM_INNER - ARM_OUTER)
+  const deg = ARM_OUTER + deck.armProgress.value * (ARM_INNER - ARM_OUTER)
+  return Math.min(ARM_PARK, Math.max(ARM_INNER, deg))
 })
 
 const armValueText = computed(() => (deck.album.value
   ? `${deck.track.value?.title ?? 'off'}, ${formatDuration(deck.sidePosition.value)} into side ${deck.side.value.toUpperCase()}`
   : 'No record loaded'))
 
+/** Dragged back off the record: releasing here sends the arm to its rest. */
+const scrubParking = computed(() => deck.scrubbing.value && deck.scrubProgress.value < PARK_RELEASE)
+
 /** Where the needle would land if the arm were released now. */
-const scrubCue = computed(() => (deck.scrubbing.value ? deck.preview(deck.scrubProgress.value) : null))
+const scrubCue = computed(() => (deck.scrubbing.value && !scrubParking.value
+  ? deck.preview(deck.scrubProgress.value)
+  : null))
 
 const frameEl = ref<HTMLElement | null>(null)
 
@@ -330,7 +386,8 @@ function onArmDown(event: PointerEvent) {
   // Pointer capture is what makes the drag work on a touch screen: the finger
   // leaves the thin arm almost immediately, and without it the move events stop.
   ;(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId)
-  deck.beginScrub(Math.min(1, Math.max(0, p)))
+  // Unclamped: grabbing a parked arm used to snap it straight to the lead-in.
+  deck.beginScrub(p)
   event.preventDefault()
 }
 
@@ -344,8 +401,9 @@ function onArmUp(event: PointerEvent) {
   if (!deck.scrubbing.value) return
   const p = armProgressFromPointer(event)
   try { (event.currentTarget as HTMLElement).releasePointerCapture?.(event.pointerId) } catch { /* ignore */ }
-  // Swung back out past the lead-in groove means parking the arm, not playing.
-  deck.endScrub(p !== null && p < -0.12)
+  // Let go off the record and the arm swings home on its own — `lift()` puts
+  // armProgress back to -1 and the CSS transition on `.arm` carries it there.
+  deck.endScrub(p !== null && p < PARK_RELEASE)
 }
 
 function onArmKey(event: KeyboardEvent) {
@@ -368,18 +426,18 @@ watch(() => deck.level.value, (v) => { setTimeout(() => { lag.value = v }, 90) }
 const vuAngle = (i: number) => -42 + (i === 0 ? deck.level.value : lag.value) * 84
 
 // --- lyrics ---------------------------------------------------------------
-const WINDOW = 4
-const lyricWindow = computed(() => {
-  const lines = deck.track.value?.lyrics ?? []
-  const active = deck.activeLyricIndex.value
-  if (!lines.length) return []
-  const centre = active >= 0 ? active : 0
-  const out: Array<{ i: number, line: string, opacity: number }> = []
-  for (let i = centre - WINDOW; i <= centre + WINDOW; i += 1) {
-    if (i < 0 || i >= lines.length) continue
-    const distance = Math.abs(i - centre)
-    out.push({ i, line: lines[i]!, opacity: Math.max(0.12, 1 - distance * 0.26) })
+// `lyrics` is a flat line list where a blank string marks a verse break; the
+// panel wants those breaks as real paragraphs.
+const stanzas = computed(() => {
+  const out: string[][] = []
+  let current: string[] = []
+  for (const line of deck.track.value?.lyrics ?? []) {
+    if (line.trim() === '') {
+      if (current.length) { out.push(current); current = [] }
+    }
+    else { current.push(line) }
   }
+  if (current.length) out.push(current)
   return out
 })
 
@@ -394,6 +452,7 @@ const linerParas = computed(() => (deck.album.value?.linerNotes ?? '').split(/\n
 
 const pageStyle = computed(() => ({
   '--accent': deck.album.value?.accent ?? '#c9a15e',
+  '--hud-h': `${hudHeight.value}px`,
 }))
 
 // noindex (see routeRules): the scene is locked to the viewport and renders
@@ -488,29 +547,36 @@ usePageSeo({
 .hud-btn.on { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 
 /* ---------- rack ---------- */
+/* The records sit in a strip along the bottom at every width. As a left-hand
+   sidebar the rack stole horizontal space asymmetrically, which pushed the
+   record — the one thing the page is about — off the centre axis. */
 .rack {
   position: absolute;
-  left: clamp(8px, 1.6vw, 18px);
-  top: 50%;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 7;
-  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 66vh;
-  padding: 8px;
-  overflow-y: auto;
+  flex-direction: row;
+  /* Centred, but `safe center` so a strip that outgrows the viewport falls
+     back to start-aligned: plain `center` overflows in both directions and
+     puts the leading records past the scroll origin, out of reach. The
+     flex-start line is what an engine that doesn't parse `safe` keeps. */
+  justify-content: flex-start;
+  justify-content: safe center;
+  gap: 10px;
+  padding: 10px clamp(12px, 3vw, 28px);
+  overflow-x: auto;
   scrollbar-width: none;
-  border-radius: 12px;
   background: rgba(255, 255, 255, .03);
-  border: 1px solid rgba(255, 255, 255, .06);
+  border-top: 1px solid rgba(255, 255, 255, .07);
 }
 .rack::-webkit-scrollbar { display: none; }
 
 .rack-item {
   position: relative;
   flex: none;
-  width: clamp(42px, 5vw, 58px);
+  width: clamp(44px, 4.5vw, 64px);
   aspect-ratio: 1;
   padding: 0;
   border: 0;
@@ -521,14 +587,14 @@ usePageSeo({
   transition: filter .25s ease, transform .25s ease;
 }
 .rack-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
-.rack-item:hover { filter: brightness(.9); transform: translateX(4px); }
+.rack-item:hover { filter: brightness(.9); transform: translateY(-4px); }
 .rack-item.on { filter: none; box-shadow: 0 0 0 1px var(--accent), 0 0 14px color-mix(in srgb, var(--accent) 50%, transparent); }
 
 .rack-name {
   position: absolute;
-  left: calc(100% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
   padding: 3px 8px;
   border-radius: 4px;
   background: rgba(10, 10, 12, .92);
@@ -546,14 +612,17 @@ usePageSeo({
   position: relative;
   z-index: 5;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(16px, 4vw, 60px);
-  padding: 0 clamp(70px, 8vw, 120px);
+  /* Just the record now that the lyrics have moved to the drawer. The single
+     row is spelled out rather than left implicit: the disc sizes itself off
+     `100%` of this row, which an auto row would make circular. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
+  padding: 0 clamp(12px, 4vw, 40px);
   min-height: 0;
 }
 
-.deck-frame { position: relative; justify-self: center; align-self: center; width: min(46vh, 100%); max-height: 100%; aspect-ratio: 1; }
+.deck-frame { position: relative; width: auto; height: min(58vh, 82vw, calc(100% - 34px)); aspect-ratio: 1; }
 
 .disc {
   position: relative;
@@ -618,7 +687,7 @@ usePageSeo({
 .drop-hint {
   position: absolute;
   left: 50%;
-  bottom: -34px;
+  bottom: -24px;
   transform: translateX(-50%);
   white-space: nowrap;
   font-size: .62rem;
@@ -670,31 +739,6 @@ usePageSeo({
 .arm-head { position: absolute; left: 0; top: 50%; width: 7%; height: 92%; transform: translateY(-50%) rotate(-8deg); border-radius: 2px; background: linear-gradient(180deg, #4b5257, #1e2226); }
 .arm-pivot { position: absolute; right: -4%; top: 50%; width: 9%; aspect-ratio: 1; transform: translateY(-50%); border-radius: 50%; background: radial-gradient(circle at 40% 36%, #cbd4d9, #23282d); box-shadow: 0 6px 14px rgba(0, 0, 0, .6); }
 
-/* prompter */
-.prompter {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-height: 70%;
-  overflow: hidden;
-  padding-right: 10px;
-  /* Lines fade out at the edges instead of being cut in half. */
-  mask: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
-  -webkit-mask: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
-}
-
-.prompt-line {
-  font-size: clamp(1.05rem, 2.3vw, 1.9rem);
-  font-weight: 300;
-  line-height: 1.5;
-  letter-spacing: .005em;
-  color: #cfc8bd;
-  transition: opacity .5s ease, color .5s ease, transform .5s ease;
-}
-.prompt-line.now { color: #fff; text-shadow: 0 0 26px color-mix(in srgb, var(--accent) 60%, transparent); }
-.prompt-line.dim { opacity: .4 !important; font-size: 1rem; }
-
 /* ---------- console ---------- */
 .console {
   position: relative;
@@ -703,6 +747,8 @@ usePageSeo({
   align-items: center;
   gap: clamp(12px, 3vw, 36px);
   padding: 14px clamp(12px, 3vw, 28px) 18px;
+  /* Room for the rack, which is absolutely positioned over the bottom edge. */
+  margin-bottom: 88px;
   border-top: 1px solid rgba(255, 255, 255, .07);
   background: linear-gradient(180deg, rgba(10, 10, 12, .2), rgba(6, 6, 8, .85));
 }
@@ -760,55 +806,50 @@ usePageSeo({
 .sp { padding: 7px 10px; border: 0; background: none; color: #9a938a; font: inherit; font-size: .66rem; cursor: pointer; }
 .sp.on { background: color-mix(in srgb, var(--accent) 26%, transparent); color: #fff; }
 
-/* ---------- notes drawer ---------- */
-.notes-drawer {
+/* ---------- side drawer (lyrics / notes) ---------- */
+.drawer {
   position: fixed;
   right: 0;
-  top: 0;
+  /* Docked under the header so the Lyrics/Notes tabs stay visible and clickable
+     while the panel is open. --hud-h is measured, because the header wraps to a
+     second row on a phone. */
+  top: var(--hud-h, 0px);
   bottom: 0;
   z-index: 40;
   width: min(92vw, 420px);
-  padding: 22px 24px 90px;
+  padding: 18px 24px 90px;
   overflow-y: auto;
   background: rgba(9, 9, 11, .97);
   border-left: 1px solid rgba(255, 255, 255, .1);
   backdrop-filter: blur(10px);
 }
 .drawer-close { float: right; padding: 4px 10px; border: 1px solid rgba(255, 255, 255, .16); border-radius: 999px; background: none; color: #b9b2a8; font: inherit; font-size: .6rem; letter-spacing: .1em; cursor: pointer; }
-.notes-drawer h2 { font-size: 1.2rem; font-weight: 400; margin-bottom: 4px; }
-.notes-drawer h3 { margin: 18px 0 6px; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
-.notes-drawer p { font-size: .86rem; line-height: 1.75; color: #c3bcb2; margin-bottom: 9px; }
-.notes-drawer dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; font-size: .8rem; }
-.notes-drawer dt { color: #8d8579; }
+.drawer h2 { font-size: 1.2rem; font-weight: 400; margin-bottom: 4px; }
+.drawer h3 { margin: 18px 0 6px; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+.drawer p { font-size: .86rem; line-height: 1.75; color: #c3bcb2; margin-bottom: 9px; }
+.drawer dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; font-size: .8rem; }
+.drawer dt { color: #8d8579; }
+
+.drawer-sub { font-size: .58rem !important; letter-spacing: .22em; text-transform: uppercase; color: #8d8579 !important; margin-bottom: 16px !important; }
+.drawer-empty { color: #8d8579 !important; font-style: italic; }
+/* A stanza is one paragraph; its lines break where the lyric breaks. */
+.stanza { margin-bottom: 18px; }
+.stanza span { display: block; }
 .ph-flag { display: inline-block; padding: 1px 7px; border-radius: 3px; background: rgba(164, 80, 63, .28); color: #e08e7c !important; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; }
 
-.fade-enter-active, .fade-leave-active { transition: opacity .3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
 .slide-enter-active, .slide-leave-active { transition: transform .35s cubic-bezier(.2, .9, .25, 1); }
 .slide-enter-from, .slide-leave-to { transform: translateX(100%); }
 
 /* ---------- responsive ---------- */
+/* The layout above is the phone layout, grown up. What's left here is only
+   what a phone actually needs differently: a smaller record, no hover-only
+   affordances, and a console that wraps. */
 @media (max-width: 900px) {
-  /* The record is the page, so its row gets a floor and the lyrics give up the
-     space instead — on a short phone an `auto` lyric row squeezed the disc down
-     to 100px, far too small to aim a needle at. */
-  .deck-space { grid-template-columns: 1fr; grid-template-rows: minmax(190px, 1fr) minmax(0, auto); padding: 0 12px; gap: 10px; }
-  /* Height-driven, and capped at the row it sits in. Sizing the disc from raw
-     viewport units let it outgrow its grid row on short/mobile viewports and
-     overlap the header and the lyrics. */
-  .deck-frame { width: auto; height: min(38vh, 78vw, calc(100% - 30px)); }
-  /* Stacked layout puts the lyrics directly under the record, so the hint line
-     needs its own reserved strip rather than overlapping them. */
-  .drop-hint { bottom: -24px; }
-  .rack {
-    left: 0; right: 0; top: auto; bottom: 0; transform: none;
-    flex-direction: row; max-height: none; border-radius: 0;
-    border: 0; border-top: 1px solid rgba(255, 255, 255, .07);
-    overflow-x: auto;
-  }
+  .deck-space { padding: 0 12px; }
+  .deck-frame { height: min(46vh, 82vw, calc(100% - 34px)); }
+  .rack { gap: 8px; padding: 8px; }
+  /* Hover tooltip — no hover on a phone, and it would cover the record. */
   .rack-name { display: none; }
-  .prompter { max-height: min(30vh, 100%); }
-  .prompt-line { font-size: 1rem; }
   .console { flex-wrap: wrap; gap: 10px; padding: 12px 12px 14px; margin-bottom: 74px; }
   .meters { display: none; }
   /* `flex: 1` in the base rule sets flex-basis to 0, which beats `width: 100%`;
@@ -834,8 +875,6 @@ usePageSeo({
 @media (max-width: 900px) and (max-height: 720px) {
   .hud { padding-top: 8px; padding-bottom: 0; }
   .hud-album { font-size: .78rem; }
-  .prompter { max-height: min(20vh, 100%); }
-  .prompt-line { font-size: .88rem; line-height: 1.4; }
   .console { margin-bottom: 66px; padding-bottom: 10px; }
   .rack-item { width: 38px; }
 }

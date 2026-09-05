@@ -38,6 +38,13 @@ export interface VinylDeckOptions {
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v))
 
+/**
+ * How far back past the lead-in a drag may go, on `scrubProgress`'s scale.
+ * -1 is the rest post, which is also what `armProgress` reports when parked —
+ * the two coincide so the arm doesn't jump as a drag ends over the dock.
+ */
+const SCRUB_MIN = -1
+
 export function useVinylDeck(options: VinylDeckOptions = {}) {
   const album = ref<ListenAlbum | null>(null)
   const side = ref<'a' | 'b'>('a')
@@ -55,7 +62,12 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
   const cueing = ref(false)
   const flipping = ref(false)
   const scrubbing = ref(false)
-  /** 0..1 the visitor is dragging the arm to, before they let go. */
+  /**
+   * Where the visitor is dragging the arm to, before they let go. 0..1 spans
+   * the side; negative is the swing back out beyond the lead-in groove, with
+   * -1 the rest post. That's the same scale `armProgress` reports, so a drag
+   * runs continuously from the dock to the end of the last track.
+   */
   const scrubProgress = ref(0)
   const rotation = ref(0)
   const volume = ref(1)
@@ -327,13 +339,13 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
 
   function beginScrub(progress: number) {
     scrubbing.value = true
-    scrubProgress.value = clamp(progress, 0, 1)
+    scrubProgress.value = clamp(progress, SCRUB_MIN, 1)
     setMotor(true)
   }
 
   function moveScrub(progress: number) {
     if (!scrubbing.value) return
-    scrubProgress.value = clamp(progress, 0, 1)
+    scrubProgress.value = clamp(progress, SCRUB_MIN, 1)
   }
 
   function endScrub(park = false) {
@@ -343,7 +355,9 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
       lift()
       return
     }
-    dropNeedle(scrubProgress.value * sideLength.value, 'lead-in')
+    // The drag can sit just outside the lead-in without being a park (see
+    // PARK_RELEASE on the page), so the seconds still have to come off a floor.
+    dropNeedle(Math.max(0, scrubProgress.value) * sideLength.value, 'lead-in')
   }
 
   function endOfSide() {
@@ -457,22 +471,6 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
     raf = requestAnimationFrame(frame)
   }
 
-  // --- lyrics --------------------------------------------------------------
-
-  /**
-   * No per-line timestamps exist in the content, so lines are spread evenly
-   * across the body of the track. It reads as "roughly in step", which is the
-   * honest amount of sync available — do not present it as authoritative.
-   */
-  const activeLyricIndex = computed(() => {
-    const lines = track.value?.lyrics ?? []
-    if (!lines.length || !duration.value || !needleDown.value) return -1
-    const sung = lines.map((line, i) => ({ line, i })).filter((entry) => entry.line.trim() !== '')
-    if (!sung.length) return -1
-    const p = clamp((trackProgress.value - 0.05) / 0.88, 0, 0.9999)
-    return sung[Math.floor(p * sung.length)]?.i ?? -1
-  })
-
   onBeforeUnmount(() => {
     cancelCue()
     cancelFade()
@@ -488,7 +486,7 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
     needleDown, cueing, spinning, flipping, scrubbing, scrubProgress, rotation, rpm, volume,
     trackTime, duration, trackProgress,
     sidePosition, sideLength, sideProgress, armProgress, offsets,
-    level, bands, activeLyricIndex,
+    level, bands,
     playing: computed(() => needleDown.value || cueing.value),
     // transport
     load, eject, play, lift, toggle, playTrack, cueTrack, next, prev,

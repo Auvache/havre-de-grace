@@ -1,6 +1,52 @@
 const SITE_URL = 'https://havredegracemusic.com'
 const SITE_DESCRIPTION = 'Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, based in Vancouver, Washington. Albums, lyrics, credits, and booking.'
 
+// Legacy /listen URLs, redirected to the single record-player scene.
+//
+// Spelled out rather than globbed, for two separate reasons.
+//
+// A glob never worked here on a static host. `nuxt generate` prerenders a route
+// rule by visiting its pattern literally, so `/listen/*` wrote its redirect
+// document to a directory named `*` on disk. S3 serves that only for a request
+// containing a literal asterisk, so every one of these URLs was 404ing anyway.
+//
+// The worse failure was `/listen/_payload.json`. Route rules run as h3
+// middleware, ahead of the renderer, so `/listen/*` also matched the extracted
+// payload nitro emits beside the prerendered page — and replaced it with a
+// meta-refresh redirect document. On the live site hydration then fetched HTML
+// where it expected JSON, `useAsyncData('listen-albums')` resolved to
+// undefined, and the rack of records that SSR had rendered was wiped the moment
+// the page hydrated. Dev never showed it: payload extraction only happens on a
+// static build.
+//
+// `/listen/**` is not a way out either — the double wildcard matches `/listen`
+// itself and redirects the page to itself in a loop.
+const LEGACY_LISTEN_ROUTES = Object.fromEntries(
+  [
+    'into-the-wild',
+    'into-the-wild/andalusia',
+    'into-the-wild/conman',
+    'into-the-wild/ghost',
+    'into-the-wild/goodbye-norma-jeane',
+    'into-the-wild/into-the-wild',
+    'into-the-wild/ivory',
+    'into-the-wild/meet-me-at-the-horizon',
+    'into-the-wild/new-york',
+    'into-the-wild/rocks-in-the-sea',
+    'into-the-wild/ship-to-stockholm',
+    'i-want-to-be-yours-and-other-songs',
+    'i-want-to-be-yours-and-other-songs/demolition-woman-live',
+    'i-want-to-be-yours-and-other-songs/i-want-to-be-yours',
+    'i-want-to-be-yours-and-other-songs/i-want-to-be-yours-demo-version',
+    'i-want-to-be-yours-and-other-songs/jesus-creek',
+    'i-want-to-be-yours-and-other-songs/scarecrow',
+    'i-want-to-be-yours-and-other-songs/shades-of-blue-and-red',
+    'i-want-to-be-yours-and-other-songs/sky-blue',
+    'i-want-to-be-yours-and-other-songs/song-for-the-sick',
+    'i-want-to-be-yours-and-other-songs/white-raven-live',
+  ].map((path) => [`/listen/${path}`, { redirect: { to: '/listen', statusCode: 301 } }]),
+)
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
@@ -186,25 +232,13 @@ export default defineNuxtConfig({
     '/listen': {
       robots: 'noindex, follow',
     },
-    // The record player used to be one route per album (/listen/<album>) plus one
-    // per track. It's now a single scene with the records on the page, but those
-    // URLs were live and passed around, so they redirect rather than 404.
-    //
-    // Matched a segment at a time rather than with `/listen/**`: the double
-    // wildcard also matches `/listen` itself, which redirected the page to
-    // itself in an infinite loop.
-    '/listen/*': {
-      redirect: {
-        to: '/listen',
-        statusCode: 301,
-      },
-    },
-    '/listen/*/*': {
-      redirect: {
-        to: '/listen',
-        statusCode: 301,
-      },
-    },
+    // The record player used to be one route per album (/listen/<album>) plus
+    // one per track. It's now a single scene with the records on the page, but
+    // those URLs were live and passed around, so they redirect rather than 404.
+    // Built from LEGACY_LISTEN_ROUTES above — see the note there for why every
+    // path is spelled out instead of globbed.
+    ...LEGACY_LISTEN_ROUTES,
+
     // The influences canvas is client-rendered, so crawlers see an empty page.
     '/influences': {
       robots: 'noindex, follow',
