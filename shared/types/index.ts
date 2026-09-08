@@ -103,10 +103,7 @@ export interface TasteAlbum {
   coverImage: string
   tier: 1 | 2 | 3 | 4 | 5
   description: string
-  listenLinks?: {
-    spotify?: string
-    appleMusic?: string
-  }
+  listenLinks?: Pick<StreamingLinks, 'spotify' | 'appleMusic' | 'youtubeMusic' | 'amazonMusic'>
 }
 
 export interface TasteAlbumCollection {

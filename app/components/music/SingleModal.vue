@@ -3,7 +3,7 @@
     <Transition name="overlay">
       <div
         v-if="album"
-        class="fixed inset-0 z-[80] bg-black/75 backdrop-blur-md"
+        class="fixed inset-0 z-[80] flex items-center justify-center bg-black/75 px-[clamp(1rem,5vw,2rem)] py-[clamp(1rem,5vh,3rem)] backdrop-blur-md"
         role="dialog"
         aria-modal="true"
         :aria-label="album.title"
@@ -13,9 +13,7 @@
           <article
             v-if="album"
             ref="panelRef"
-            class="absolute inset-x-0 bottom-0 max-h-[100dvh] overflow-y-auto rounded-t-[1.5rem] border border-white/10 bg-[color:var(--color-bg-dark)] text-[var(--color-text-dark)] shadow-[0_30px_60px_rgb(0_0_0_/_0.42)] md:inset-1/2 md:w-[min(480px,90vw)] md:max-h-[min(88dvh,52rem)] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-[var(--radius-lg)]"
-            @pointerdown="onPanelPointerDown"
-            @pointerup="onPanelPointerUp"
+            class="max-h-full w-[min(30rem,100%)] overflow-y-auto rounded-[var(--radius-lg)] border border-white/10 bg-[color:var(--color-bg-dark)] text-[var(--color-text-dark)] shadow-[0_30px_60px_rgb(0_0_0_/_0.42)]"
           >
             <div class="sticky top-0 z-[1] flex justify-end bg-[linear-gradient(to_bottom,rgba(27,31,36,0.96),rgba(27,31,36,0.72),transparent)] px-5 pt-5">
               <button
@@ -35,7 +33,7 @@
                 :alt="album.coverAlt"
                 width="600"
                 height="600"
-                sizes="(max-width: 767px) 88vw, 400px"
+                sizes="(max-width: 767px) 70vw, 400px"
                 format="webp,avif"
                 class="mx-auto aspect-square w-full max-w-[min(400px,70vw)] rounded-[var(--radius-md)] object-cover shadow-[0_24px_50px_rgb(0_0_0_/_0.38)]"
               />
@@ -83,7 +81,6 @@ const emit = defineEmits<{
 const panelRef = ref<HTMLElement | null>(null)
 const closeButtonRef = ref<HTMLButtonElement | null>(null)
 const previousActiveElement = ref<HTMLElement | null>(null)
-let swipeStartY = 0
 
 const hasStreamingLinks = computed(() =>
   Object.values(props.album?.streamingLinks ?? {}).some(Boolean),
@@ -146,18 +143,6 @@ const handleKeydown = (event: KeyboardEvent) => {
   trapFocus(event)
 }
 
-const onPanelPointerDown = (event: PointerEvent) => {
-  swipeStartY = event.clientY
-}
-
-const onPanelPointerUp = (event: PointerEvent) => {
-  const swipeDeltaY = event.clientY - swipeStartY
-
-  if (window.matchMedia('(max-width: 767px)').matches && swipeDeltaY > 90) {
-    emit('close')
-  }
-}
-
 if (import.meta.client) {
   watch(() => props.album, (album) => {
     document.body.style.overflow = album ? 'hidden' : ''
@@ -193,14 +178,7 @@ if (import.meta.client) {
 .single-modal-enter-from,
 .single-modal-leave-to {
   opacity: 0;
-  transform: translateY(18px) scale(0.97);
-}
-
-@media (min-width: 768px) {
-  .single-modal-enter-from,
-  .single-modal-leave-to {
-    transform: translateY(0) scale(0.95);
-  }
+  transform: translateY(12px) scale(0.96);
 }
 
 @media (prefers-reduced-motion: reduce) {

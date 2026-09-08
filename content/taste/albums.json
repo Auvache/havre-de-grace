@@ -6,8 +6,13 @@
       "artist": "Bob Dylan",
       "coverImage": "/images/influences/bob-dylan-freewheelin.jpg",
       "tier": 1,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/0o1uFxZ1VTviqvNaYkTJek",
+        "appleMusic": "https://music.apple.com/us/album/the-freewheelin-bob-dylan/190758914",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nbrxY1_go_X2IYU44cQQVKPIyhAj7oDI0",
+        "amazonMusic": "https://music.amazon.com/albums/B0046JQ41U"
+      }
     },
     {
       "id": "album-02",
@@ -15,8 +20,13 @@
       "artist": "Nick Drake",
       "coverImage": "/images/influences/nick-drake-pink-moon.jpg",
       "tier": 1,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/5mwOo1zikswhmfHvtqVSXg",
+        "appleMusic": "https://music.apple.com/us/album/pink-moon-remastered/1440758653",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nfO2DnrgSkZSSuj1RowNNWlHsPBzWu2GY",
+        "amazonMusic": "https://music.amazon.com/albums/B095JGW972"
+      }
     },
     {
       "id": "album-03",
@@ -24,8 +34,13 @@
       "artist": "Led Zeppelin",
       "coverImage": "/images/influences/led-zeppelin-iv.jpg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1Ugdi2OTxKopVVqsprp5pb",
+        "appleMusic": "https://music.apple.com/us/album/led-zeppelin-iv-remastered/580708175",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_miixGWs374VbB0oCVRHZ2JWssBydwz7V8",
+        "amazonMusic": "https://music.amazon.com/albums/B00KGBCL64"
+      }
     },
     {
       "id": "album-04",
@@ -33,8 +48,13 @@
       "artist": "The Tallest Man on Earth",
       "coverImage": "/images/influences/the-tallest-man-on-earth-wild-hunt.jpg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/2iZD3ggZbHlAg64cM9iQco",
+        "appleMusic": "https://music.apple.com/us/album/the-wild-hunt-bonus-track-version/445968858",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kxvYKFgm63x8jA79oWbZqoZ6OnPyg0JmU",
+        "amazonMusic": "https://music.amazon.com/albums/B00HKST5U6"
+      }
     },
     {
       "id": "album-05",
@@ -42,8 +62,13 @@
       "artist": "My Chemical Romance",
       "coverImage": "/images/influences/my-chemical-romance-black-parade.jpg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6DYr5hX4WcZj4TemWXVzgt",
+        "appleMusic": "https://music.apple.com/us/album/the-black-parade/209388277",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kf2mr4s7G3ErS-ruCXgDFFwY8HyHQijfA",
+        "amazonMusic": "https://music.amazon.com/albums/B0011Z52EW"
+      }
     },
     {
       "id": "album-06",
@@ -51,8 +76,13 @@
       "artist": "Led Zeppelin",
       "coverImage": "/images/influences/led-zeppelin-physical-graffiti.jpg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Ex ea commodo consequat duis aute irure in reprehenderit voluptate velit esse.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1lZahjeu4AhPkg9JARZr5F",
+        "appleMusic": "https://music.apple.com/us/album/physical-graffiti-remastered/580707980",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_liX9-6189g7Nfz2fhhBgmLNwmdIxqea4I",
+        "amazonMusic": "https://music.amazon.com/albums/B00TLKOILW"
+      }
     },
     {
       "id": "album-07",
@@ -60,8 +90,13 @@
       "artist": "Heart",
       "coverImage": "/images/influences/heart-dreamboat-annie.png",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/2N0AgtWbCmVoNUl2GN1opH",
+        "appleMusic": "https://music.apple.com/us/album/dreamboat-annie/1440830899",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mGvdONyJiSjUFsz74-dO3YOWKyZCs69i8",
+        "amazonMusic": "https://music.amazon.com/albums/B000T00N12"
+      }
     },
     {
       "id": "album-08",
@@ -69,8 +104,13 @@
       "artist": "Led Zeppelin",
       "coverImage": "/images/influences/led-zeppelin-ii.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/58MQ0PLijVHePUonQlK76Y",
+        "appleMusic": "https://music.apple.com/us/album/led-zeppelin-ii-remastered/580708374",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mU2WL4YIcOtYwN5j9WEE-w6U-gf4D8O1U",
+        "amazonMusic": "https://music.amazon.com/albums/B00KGBCL64"
+      }
     },
     {
       "id": "album-09",
@@ -78,8 +118,12 @@
       "artist": "My Chemical Romance",
       "coverImage": "/images/influences/my-chemical-romance-danger-days.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/57ZQAFd01qhJ8VJddshy3I",
+        "appleMusic": "https://music.apple.com/us/album/danger-days-the-true-lives-of-the-fabulous-killjoys/396793722",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_lLgCAf5Fj7oMiB2Qlefez3iEXWDK0g4Qc"
+      }
     },
     {
       "id": "album-10",
@@ -87,8 +131,13 @@
       "artist": "REO Speedwagon",
       "coverImage": "/images/influences/reo-speedwagon-hi-infidelity.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/7yvlmAcOx3Ru6hDzJx1TWh",
+        "appleMusic": "https://music.apple.com/us/album/hi-infidelity-2024-remaster/203267123",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_n1IirLMf75Pe0E_JlY8FEvqZtVAOjxbyE",
+        "amazonMusic": "https://music.amazon.com/albums/B00138EXV0"
+      }
     },
     {
       "id": "album-11",
@@ -96,8 +145,13 @@
       "artist": "Loverboy",
       "coverImage": "/images/influences/loverboy-loverboy.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim id.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/3dDzAVWr5gjvJIOTEuS309",
+        "appleMusic": "https://music.apple.com/us/album/loverboy/1809169433",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mppsryNdzzHm9CZRFt5kRlVN9A00-rAsk",
+        "amazonMusic": "https://music.amazon.com/albums/B0F5BV7FLB"
+      }
     },
     {
       "id": "album-12",
@@ -105,8 +159,11 @@
       "artist": "The Milk Carton Kids",
       "coverImage": "/images/influences/milk-carton-kids-live-lincoln.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/2URAmWVraCITERP0FeuAvX",
+        "appleMusic": "https://music.apple.com/us/album/live-from-lincoln-theatre/1518805737"
+      }
     },
     {
       "id": "album-13",
@@ -114,8 +171,13 @@
       "artist": "The Milk Carton Kids",
       "coverImage": "/images/influences/milk-carton-kids-prologue.jpg",
       "tier": 1,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1FlNkbhrTnMma2VkDY6t9Q",
+        "appleMusic": "https://music.apple.com/us/album/prologue/1521363142",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nKQz4aMZo-UptHanWeLIsOC1jYgJYorIs",
+        "amazonMusic": "https://music.amazon.com/albums/B08C2P6ZWM"
+      }
     },
     {
       "id": "album-14",
@@ -123,8 +185,13 @@
       "artist": "John Mayer",
       "coverImage": "/images/influences/john-mayer-where-the-light-is.jpeg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/4Dgxy95K9BWkDUvQPTaYBb",
+        "appleMusic": "https://music.apple.com/us/album/where-the-light-is-john-mayer-live-in-los-angeles/388127285",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nrp3e2MAzLKYsrXAaq9Q7We3LIh7f4jHg",
+        "amazonMusic": "https://music.amazon.com/albums/B0040GURF8"
+      }
     },
     {
       "id": "album-15",
@@ -132,8 +199,13 @@
       "artist": "The Arcadian Wild",
       "coverImage": "/images/influences/arcadian-wild-finch-in-the-pantry.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/5GXqDQAqbb4sJ63OGZAaSh",
+        "appleMusic": "https://music.apple.com/us/album/finch-in-the-pantry/1895870476",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nXpqURKHzQmIwEA3P80q161jtiPVMbJuY",
+        "amazonMusic": "https://music.amazon.com/albums/B0B1RTNNMT"
+      }
     },
     {
       "id": "album-16",
@@ -141,8 +213,13 @@
       "artist": "Paul McCartney",
       "coverImage": "/images/influences/paul-mccartney-egypt-station.jpg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Ea commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/3uLrSFrNqa8CULSIU7e9v5",
+        "appleMusic": "https://music.apple.com/us/album/egypt-station/1399826275",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_l-bW7Pe1eJJHY7T2Hmex4mZMBKDw7WGvU",
+        "amazonMusic": "https://music.amazon.com/albums/B07DSCDBBB"
+      }
     },
     {
       "id": "album-17",
@@ -150,8 +227,13 @@
       "artist": "Greta Van Fleet",
       "coverImage": "/images/influences/greta-van-fleet-anthem-of-the-peaceful-army.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/7zeCZY6rQRufc8IHGKyXGX",
+        "appleMusic": "https://music.apple.com/us/album/anthem-of-the-peaceful-army/1435351050",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nJ2goglnezX5Maa0gUiUI1gMpKBSBF74A",
+        "amazonMusic": "https://music.amazon.com/albums/B07H45L411"
+      }
     },
     {
       "id": "album-18",
@@ -159,8 +241,12 @@
       "artist": "John Mayer",
       "coverImage": "/images/influences/john-mayer-born-and-raised.jpeg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6S0BIiWtnqU0PtumXMpin0",
+        "appleMusic": "https://music.apple.com/us/album/born-and-raised/516701586",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_llKmVqEIsI1GrfWn-cmvTu7N4vfsK-RBo"
+      }
     },
     {
       "id": "album-19",
@@ -168,8 +254,13 @@
       "artist": "John Mayer",
       "coverImage": "/images/influences/john-mayer-continuum.jpg",
       "tier": 1,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Elit sed do eiusmod tempor incididunt ut labore et dolore magna.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1Xsprdt1q9rOzTic7b9zYM",
+        "appleMusic": "https://music.apple.com/us/album/continuum/184335550",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kaI0YyJ5d6qizFqDGEaT6j_rf48vnRoas",
+        "amazonMusic": "https://music.amazon.com/albums/B07VPM8ZL7"
+      }
     },
     {
       "id": "album-20",
@@ -177,8 +268,13 @@
       "artist": "John Mayer",
       "coverImage": "/images/influences/john-mayer-sob-rock.png",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/2JmfwvRDitJlTUoLCkp61z",
+        "appleMusic": "https://music.apple.com/us/album/sob-rock/1578974375",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kRmUW2axb9fNk3avjzMEAaMhOMHwT6L7I",
+        "amazonMusic": "https://music.amazon.com/albums/B09BJ5FYXV"
+      }
     },
     {
       "id": "album-21",
@@ -186,8 +282,13 @@
       "artist": "Arctic Monkeys",
       "coverImage": "/images/influences/arctic-monkeys-am.png",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim id est.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu",
+        "appleMusic": "https://music.apple.com/us/album/am/663097964",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nw2f8Y7rbxFKNaDHwD7LRi0nvPNcT_bB8",
+        "amazonMusic": "https://music.amazon.com/albums/B00MAZ7QBO"
+      }
     },
     {
       "id": "album-22",
@@ -195,8 +296,13 @@
       "artist": "Noah Kahan",
       "coverImage": "/images/influences/noah-kahan-stick-season.jpeg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1fMRg0CNLKdnrXD0WPc2Ju",
+        "appleMusic": "https://music.apple.com/us/album/stick-season/1644787581",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_l_WQeh6XYW9X3y2uT_QcOdETY5C2mT580",
+        "amazonMusic": "https://music.amazon.com/albums/B0BF3VSQ95"
+      }
     },
     {
       "id": "album-23",
@@ -204,8 +310,13 @@
       "artist": "The Beatles",
       "coverImage": "/images/influences/beatles-white-album.jpg",
       "tier": 1,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1klALx0u4AavZNEvC4LrTL",
+        "appleMusic": "https://music.apple.com/us/album/the-beatles-the-white-album/1441133180",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_njHTOnoK_aQOAa3XvnvmzZ76n8cBIJquI",
+        "amazonMusic": "https://music.amazon.com/albums/B07HJHQT42"
+      }
     },
     {
       "id": "album-24",
@@ -213,8 +324,13 @@
       "artist": "The Beatles",
       "coverImage": "/images/influences/beatles-rubber-soul.png",
       "tier": 1,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/50o7kf2wLwVmOTVYJOTplm",
+        "appleMusic": "https://music.apple.com/us/album/rubber-soul/1441164359",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_lvTG69VbZm3r3r9crRBvT1Tj305YEbuaM",
+        "amazonMusic": "https://music.amazon.com/albums/B01929HXIG"
+      }
     },
     {
       "id": "album-25",
@@ -222,8 +338,13 @@
       "artist": "The Velvet Underground",
       "coverImage": "/images/influences/velvet-underground-loaded.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/4RMGrhJRnGiNqmKqhqpLlX",
+        "appleMusic": "https://music.apple.com/us/album/loaded-remastered/1050415251",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_knj6lw9T3B9va1hkHQhXAaCy0PmodZMf8",
+        "amazonMusic": "https://music.amazon.com/albums/B07VTTZBTC"
+      }
     },
     {
       "id": "album-26",
@@ -231,8 +352,13 @@
       "artist": "Lizzy McAlpine",
       "coverImage": "/images/influences/lizzy-mcalpine-five-seconds-flat.jpeg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Elit sed do eiusmod tempor incididunt ut labore et dolore.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/68L5xVV9wydotfDXEik7eD",
+        "appleMusic": "https://music.apple.com/us/album/five-seconds-flat/1604657567",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kzf-G8ixzNzl93ADbma72aozIg0JoC2R4",
+        "amazonMusic": "https://music.amazon.com/albums/B09QC16VHZ"
+      }
     },
     {
       "id": "album-27",
@@ -240,8 +366,13 @@
       "artist": "Courtney Barnett",
       "coverImage": "/images/influences/courtney-barnett-sometimes-i-sit-and-think.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6J3JbJfGecYw3HMvdgNwmw",
+        "appleMusic": "https://music.apple.com/us/album/sometimes-i-sit-and-think-and-sometimes-i-just-sit/1881406126",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kKzkySq8EZ7lQVjIJAfWWiRW1qVptOlGE",
+        "amazonMusic": "https://music.amazon.com/albums/B0CPKQ11GQ"
+      }
     },
     {
       "id": "album-28",
@@ -249,8 +380,13 @@
       "artist": "Of Monsters and Men",
       "coverImage": "/images/influences/of-monsters-and-men-my-head-is-an-animal.jpg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/7hzQuPeD1AT9ZL45nD8qmu",
+        "appleMusic": "https://music.apple.com/us/album/my-head-is-an-animal/1440808821",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kfDSrDLl_JCKS7PplRKAfGe1IlwJRtuVk",
+        "amazonMusic": "https://music.amazon.com/albums/B007QVLKI2"
+      }
     },
     {
       "id": "album-29",
@@ -258,8 +394,12 @@
       "artist": "The White Stripes",
       "coverImage": "/images/influences/white-stripes-under-great-white-northern-lights.jpg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/5LUyvB9pUPm4Lrgt1Go53W",
+        "appleMusic": "https://music.apple.com/us/album/under-great-white-northern-lights-live/1553406796",
+        "amazonMusic": "https://music.amazon.com/albums/B08WH7P9JS"
+      }
     },
     {
       "id": "album-30",
@@ -267,8 +407,13 @@
       "artist": "The White Stripes",
       "coverImage": "/images/influences/white-stripes-self-titled.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Aliquip ex ea commodo consequat duis aute irure in reprehenderit.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/4Nemfc7fJzJmmqhBQ8khhj",
+        "appleMusic": "https://music.apple.com/us/album/the-white-stripes/1533513447",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kfkOQ9fhvPZM8xw_k8nhSW4QM-CZyPIW8",
+        "amazonMusic": "https://music.amazon.com/albums/B08K47WMMR"
+      }
     },
     {
       "id": "album-31",
@@ -276,8 +421,13 @@
       "artist": "The Raconteurs",
       "coverImage": "/images/influences/raconteurs-consolers-of-the-lonely.jpg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/3yx8gEFlojRtt2WBhmxwfg",
+        "appleMusic": "https://music.apple.com/us/album/consolers-of-the-lonely/1552871264",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_l42hATJ5_tTv19ZwAYD5ZBMEsyTxqJLYM",
+        "amazonMusic": "https://music.amazon.com/albums/B08W8WC241"
+      }
     },
     {
       "id": "album-32",
@@ -285,8 +435,13 @@
       "artist": "Jack White",
       "coverImage": "/images/influences/jack-white-lazaretto.jpg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/75224XX4gZg2PjWeXzRjsa",
+        "appleMusic": "https://music.apple.com/us/album/lazaretto/855605167",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_l-Moo9N2kL8iNuKo5QAjplSqR-sOf6rNY",
+        "amazonMusic": "https://music.amazon.com/albums/B00JJ5CKIC"
+      }
     },
     {
       "id": "album-33",
@@ -294,8 +449,13 @@
       "artist": "Jack White",
       "coverImage": "/images/influences/jack-white-no-name.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Ex ea commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/4j6OkbZmVIqJYDLJbiWHbX",
+        "appleMusic": "https://music.apple.com/us/album/no-name/1760057427",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mXhfYlbEB7o5bq7_lmVW0POH9JA6xxlkU",
+        "amazonMusic": "https://music.amazon.com/albums/B0DBK5MCD8"
+      }
     },
     {
       "id": "album-34",
@@ -303,8 +463,13 @@
       "artist": "Michael Jackson",
       "coverImage": "/images/influences/michael-jackson-thriller.png",
       "tier": 1,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6RkgHosq3aLKkpaSuFWvek",
+        "appleMusic": "https://music.apple.com/us/album/thriller/269572838",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_lmkszQnwSe59ADO4IPsiGylSTgz15P_yY",
+        "amazonMusic": "https://music.amazon.com/albums/B0013D6LEM"
+      }
     },
     {
       "id": "album-35",
@@ -312,8 +477,13 @@
       "artist": "Boston",
       "coverImage": "/images/influences/boston-third-stage.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/3ZjhhUHc4jFc6ZOTchjXsv",
+        "appleMusic": "https://music.apple.com/us/album/third-stage/1440851310",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mBidq4wAzrJo82dOE--ILZnAUReiP_xAA",
+        "amazonMusic": "https://music.amazon.com/albums/B000VRIQ58"
+      }
     },
     {
       "id": "album-36",
@@ -321,8 +491,13 @@
       "artist": "The Lumineers",
       "coverImage": "/images/influences/lumineers-cleopatra.jpg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/5fY8mYgYGkyaJ9XvVOzVQA",
+        "appleMusic": "https://music.apple.com/us/album/cleopatra/1754016727",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_lOuVNOCOOTSIKO0tZ9-k9qp8cxLYiRAY0",
+        "amazonMusic": "https://music.amazon.com/albums/B01B03924A"
+      }
     },
     {
       "id": "album-37",
@@ -330,8 +505,13 @@
       "artist": "The Black Keys",
       "coverImage": "/images/influences/black-keys-brothers.jpg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "In reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/7lhJVTvqL3QbwGN12QLiVj",
+        "appleMusic": "https://music.apple.com/us/album/brothers/1052966893",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kPaI45m75MNBWljD7pRf8BH_bZQ9aLj4I",
+        "amazonMusic": "https://music.amazon.com/albums/B003L0HZ5O"
+      }
     },
     {
       "id": "album-38",
@@ -339,8 +519,13 @@
       "artist": "The Black Keys",
       "coverImage": "/images/influences/black-keys-el-camino.jpg",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/5DLhV9yOvZ7IxVmljMXtNm",
+        "appleMusic": "https://music.apple.com/us/album/el-camino/1052966287",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_nmEXRQ4KQiAqn9UByVX4gdnFNMWFeYvBw",
+        "amazonMusic": "https://music.amazon.com/albums/B0DK7TPK4N"
+      }
     },
     {
       "id": "album-39",
@@ -348,8 +533,13 @@
       "artist": "Mississippi John Hurt",
       "coverImage": "/images/influences/mississippi-john-hurt-rediscovered.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/7563JyVKfAPqonIxfTuU1p",
+        "appleMusic": "https://music.apple.com/us/album/rediscovered/712066780",
+        "youtubeMusic": "https://music.youtube.com/browse/MPREb_WzpRcZLuqf2",
+        "amazonMusic": "https://music.amazon.com/albums/B001EV2PS4"
+      }
     },
     {
       "id": "album-40",
@@ -357,17 +547,27 @@
       "artist": "Foxy Shazam",
       "coverImage": "/images/influences/foxy-shazam-church-of-rock-and-roll.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Laboris nisi aliquip ex ea commodo consequat duis aute irure.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6k6gbpR9h1fIuXSEKRp3Yo",
+        "appleMusic": "https://music.apple.com/us/album/the-church-of-rock-and-roll/715711354",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_k96dJX8LuihUGZE37_1i19IUVHhkMZkas",
+        "amazonMusic": "https://music.amazon.com/albums/B006K66G2O"
+      }
     },
     {
       "id": "album-41",
-      "title": "Blindkiller",
+      "title": "Blindfaller",
       "artist": "Watchhouse",
       "coverImage": "/images/influences/watchhouse-blindkiller.jpg",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/3CwgFOEB6g9vfADfAcYaIL",
+        "appleMusic": "https://music.apple.com/us/album/blindfaller/1132628500",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mMljYbkk8AQFW6LD5Z0Fk5XfPcbqAB1d8",
+        "amazonMusic": "https://music.amazon.com/albums/B01I744PA6"
+      }
     },
     {
       "id": "album-42",
@@ -375,8 +575,13 @@
       "artist": "Cage the Elephant",
       "coverImage": "/images/influences/cage-the-elephant-tell-me-im-pretty.png",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/0nW0w37lrQ87k7PLZvC4qJ",
+        "appleMusic": "https://music.apple.com/us/album/tell-me-im-pretty/1051876257",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mnBQ7C8FA42lOS8MbBFdzIMqC6KzfLLfg",
+        "amazonMusic": "https://music.amazon.com/albums/B0170V98C2"
+      }
     },
     {
       "id": "album-43",
@@ -384,8 +589,13 @@
       "artist": "Tommy Emmanuel",
       "coverImage": "/images/influences/tommy-emmanuel-best-of-tommysongs.jpeg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/32jU6NosOd3HMiQ2BneGhg",
+        "appleMusic": "https://music.apple.com/us/album/the-best-of-tommysongs/1758835805",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kyUweJFfFpemlJ7HvkvVznfpOnNZkhdmc",
+        "amazonMusic": "https://music.amazon.com/albums/B0D9WRSB7Z"
+      }
     },
     {
       "id": "album-44",
@@ -393,8 +603,13 @@
       "artist": "Houndmouth",
       "coverImage": "/images/influences/houndmouth-little-neon-limelight.png",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/4FcLsVJY0NIKB8V9aHc1wh",
+        "appleMusic": "https://music.apple.com/us/album/little-neon-limelight/956085205",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kcq1gP4Di2z7WiT2Xw4_J_2QrjrpluOSc",
+        "amazonMusic": "https://music.amazon.com/albums/B00S9PC2BI"
+      }
     },
     {
       "id": "album-45",
@@ -402,8 +617,13 @@
       "artist": "Lake Street Dive",
       "coverImage": "/images/influences/lake-street-dive-bad-self-portraits.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/5I4L2Ka63C2NfLvW5ioPcd",
+        "appleMusic": "https://music.apple.com/us/album/bad-self-portraits/794997239",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kfkLElbMXmbxLn2rjlDlex7tIe6eBAbkM",
+        "amazonMusic": "https://music.amazon.com/albums/B06WGLKQQG"
+      }
     },
     {
       "id": "album-46",
@@ -411,8 +631,13 @@
       "artist": "Silk Sonic",
       "coverImage": "/images/influences/silk-sonic-an-evening-with-silk-sonic.png",
       "tier": 2,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1YgekJJTEueWDaMr7BYqPk",
+        "appleMusic": "https://music.apple.com/us/album/an-evening-with-silk-sonic/1611637679",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_n9GBtFLVfAOwpQWGMpLpvmtxSENrpLazg",
+        "amazonMusic": "https://music.amazon.com/albums/B09TD1X5QV"
+      }
     },
     {
       "id": "album-47",
@@ -420,8 +645,13 @@
       "artist": "Bahamas",
       "coverImage": "/images/influences/bahamas-earthtones.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim id est.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1K3XPBfAfPO7jJhqTq4xME",
+        "appleMusic": "https://music.apple.com/us/album/earthtones/1440913969",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_mFEMAiy7YR7MbVZKmhBPZfwCP-Gnp5oto",
+        "amazonMusic": "https://music.amazon.com/albums/B079PR5G4J"
+      }
     },
     {
       "id": "album-48",
@@ -429,8 +659,12 @@
       "artist": "Pretty Vicious",
       "coverImage": "/images/influences/pretty-vicious-beauty-of-youth.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6am0g93vswJjC98p8mihkF",
+        "appleMusic": "https://music.apple.com/us/album/beauty-of-youth/1457348826",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_m0ZaA7N30RndTUIYiPiV1p-YcNOIUixiA"
+      }
     },
     {
       "id": "album-49",
@@ -438,8 +672,13 @@
       "artist": "Panic! at the Disco",
       "coverImage": "/images/influences/panic-at-the-disco-death-of-a-bachelor.png",
       "tier": 3,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6twKQ0EsUJHVlAr6XBylrj",
+        "appleMusic": "https://music.apple.com/us/album/death-of-a-bachelor/1050385369",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_n4kiDuy362kHzSmkr3Bs8aGSWSsTvdYOc",
+        "amazonMusic": "https://music.amazon.com/albums/B07VX9PHGS"
+      }
     },
     {
       "id": "album-50",
@@ -447,8 +686,13 @@
       "artist": "Julien Baker",
       "coverImage": "/images/influences/julien-baker-sprained-ankle.jpg",
       "tier": 4,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/3DvUGOMZgAr6PaToI7Vwwl",
+        "appleMusic": "https://music.apple.com/us/album/sprained-ankle/1874477871",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kSrqk5WE1Lkd3V-OHw1MqaZaPdx0jE0Wk",
+        "amazonMusic": "https://music.amazon.com/albums/B0GL9Q6WJR"
+      }
     },
     {
       "id": "album-51",
@@ -456,8 +700,11 @@
       "artist": "Kenneth Pattengale & Joey Ryan",
       "coverImage": "/images/influences/pattengale-ryan-retrospect.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Ut labore et dolore magna aliqua enim ad minim veniam quis nostrud.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6l2ibwtZoHYKqW34Ao9j0c",
+        "appleMusic": "https://music.apple.com/us/album/retrospect/1521583799"
+      }
     },
     {
       "id": "album-52",
@@ -465,17 +712,25 @@
       "artist": "Tyler Bryant & The Shakedown",
       "coverImage": "/images/influences/tyler-bryant-shakedown-live-from-79.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Sed do eiusmod tempor incididunt ut labore et dolore magna.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/1a2AowLK08hAhp1SyT4JE4",
+        "appleMusic": "https://music.apple.com/us/album/live-from-79/1719357639"
+      }
     },
     {
       "id": "album-53",
-      "title": "Unknown Album",
-      "artist": "Unknown Artist",
-      "coverImage": "/images/influences/unknown-album-41.jpg",
+      "title": "Rothko Sky",
+      "artist": "Arts Fishing Club",
+      "coverImage": "/images/influences/arts-fishing-club-rothko-sky.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Enim ad minim veniam quis nostrud exercitation ullamco laboris nisi.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/46ERwITcD6FF1oc6TEZRxV",
+        "appleMusic": "https://music.apple.com/us/album/rothko-sky/1692052004",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_l2P8A6s0wQAeEAR-Z6wNbZmr9CFxnOlWA",
+        "amazonMusic": "https://music.amazon.com/albums/B0C7NT43QD"
+      }
     },
     {
       "id": "album-54",
@@ -483,8 +738,12 @@
       "artist": "Flight of the Conchords",
       "coverImage": "/images/influences/flight-of-the-conchords-live-in-london.jpg",
       "tier": 5,
-      "description": "DESCRIPTION",
-      "listenLinks": { "spotify": "https://open.spotify.com/", "appleMusic": "https://music.apple.com/" }
+      "description": "Duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat.",
+      "listenLinks": {
+        "spotify": "https://open.spotify.com/album/6ScSu4iTMsuqbViSYRBTp0",
+        "appleMusic": "https://music.apple.com/us/album/live-in-london/1447320701",
+        "youtubeMusic": "https://music.youtube.com/playlist?list=OLAK5uy_kwP5rrw4GPpiSXbxwIew0BxcMZtYY6CfU"
+      }
     }
   ]
 }

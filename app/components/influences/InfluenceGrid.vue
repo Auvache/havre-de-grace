@@ -71,6 +71,8 @@
       </p>
     </div>
 
+    <InfluenceIntro :open="introOpen" @dismiss="dismissIntro" />
+
     <InfluenceModal :album="activeAlbum" @close="closeModal" />
   </section>
 </template>
@@ -97,6 +99,7 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 
 const scrollerRef = ref<HTMLElement | null>(null)
 const activeAlbum = ref<TasteAlbum | null>(null)
+const introOpen = ref(false)
 const isDragging = ref(false)
 const hintHidden = ref(false)
 const viewportWidth = ref(1280)
@@ -369,6 +372,13 @@ const openAlbum = (album: TasteAlbum) => {
   activeAlbum.value = album
 }
 
+const dismissIntro = () => {
+  introOpen.value = false
+  // The hint is the first thing to read once the intro is gone, so its
+  // countdown starts here rather than on mount.
+  hintTimer = setTimeout(noteInteraction, HINT_TIMEOUT)
+}
+
 const closeModal = () => {
   activeAlbum.value = null
   // InfluenceModal clears body overflow when it closes, which would also drop
@@ -408,7 +418,7 @@ onMounted(() => {
   syncViewport()
   nextTick(centerScroll)
   window.addEventListener('resize', onResize)
-  hintTimer = setTimeout(noteInteraction, HINT_TIMEOUT)
+  introOpen.value = true
 })
 
 onBeforeUnmount(() => {
