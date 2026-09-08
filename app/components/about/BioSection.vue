@@ -48,13 +48,14 @@
       </p>
 
       <p class="muted-text">
-        Growing up, his parents shared an eclectic mix of music with him, ranging from Led Zeppelin, REO Speedwagon,
-        and Heart to Michael Jackson and Donny Osmond. As he grew up, he fell in love with the music of Bob Dylan, Jack
-        White, John Mayer, and Kristian Matsson's The Tallest Man on Earth. These influences have shaped him as a guitar player and a songwriter.
+        Stefan was raised on an eclectic mix of music, ranging from Led Zeppelin, REO Speedwagon, and Heart to
+        Michael Jackson and Donny Osmond. As he grew up and branched out into his own musical discoveries, he fell
+        in love with the music of Bob Dylan, Jack White, John Mayer, and Kristian Matsson's Tallest Man on Earth.
+        All of these influences have shaped him as a guitar player, a songwriter, and a person.
       </p>
 
 	    <p class="muted-text">
-		    Stefan's first album, I Want to Be Yours and Other Songs, was originally released under the moniker Stefan Auvache in July 2025. His second album, Into the Wild, was released on July 17, 2026.
+		    His first album, I Want to Be Yours and Other Songs, was originally released under the moniker Stefan Auvache in July 2025. His second album, Into the Wild, was released in July 2026.
 	    </p>
     </ScrollReveal>
 

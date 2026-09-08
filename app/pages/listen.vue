@@ -54,7 +54,7 @@
         <div
           ref="discEl"
           class="disc"
-          :class="{ live: deck.playing.value }"
+          :class="{ live: deck.playing.value, flipping: deck.flipping.value, back: deck.flipTo.value === 'a' }"
           role="button"
           tabindex="0"
           :aria-label="discLabel"
@@ -78,7 +78,10 @@
           <p v-else-if="scrubCue" class="drop-hint live">
             {{ scrubCue.track?.title }} · {{ formatDuration(scrubCue.offset) }} in
           </p>
-          <p v-else-if="deck.album.value && !deck.playing.value" class="drop-hint">
+          <p v-else-if="!deck.album.value" class="drop-hint">
+            Select a record
+          </p>
+          <p v-else-if="!deck.playing.value" class="drop-hint">
             Drag the needle, or click a groove
           </p>
 
@@ -126,12 +129,12 @@
       </div>
 
       <div class="transport">
-        <button type="button" class="c-btn" @click="deck.prev()">⏮</button>
-        <button type="button" class="c-btn big" @click="deck.toggle()">
+        <button type="button" class="c-btn" :disabled="!deck.album.value" @click="deck.prev()">⏮</button>
+        <button type="button" class="c-btn big" :disabled="!deck.album.value" @click="deck.toggle()">
           {{ deck.cueing.value ? '…' : deck.playing.value ? '❚❚' : '▶' }}
         </button>
-        <button type="button" class="c-btn" @click="deck.next()">⏭</button>
-        <button type="button" class="c-btn" :disabled="!deck.hasOtherSide.value" @click="deck.flip({ keepPlaying: true })">Side {{ deck.otherSide.value.toUpperCase() }}</button>
+        <button type="button" class="c-btn" :disabled="!deck.album.value" @click="deck.next()">⏭</button>
+        <button type="button" class="c-btn" :disabled="!deck.hasOtherSide.value" @click="deck.flip()">Side {{ deck.otherSide.value.toUpperCase() }}</button>
       </div>
 
       <div class="now">
@@ -254,7 +257,26 @@ type PanelId = typeof PANELS[number]['id']
 const panel = ref<PanelId | null>(null)
 function togglePanel(id: PanelId) { panel.value = panel.value === id ? null : id }
 
-onMounted(() => { if (albums.value.length) deck.load(albums.value[0]!) })
+/*
+ * Nothing on the platter to start with: the deck sits empty until the visitor
+ * picks a record off the rack, the way the room would actually be found.
+ *
+ * Unless an album page sent them here — `?album=<slug>` puts that record on,
+ * so following "listen on digital vinyl" lands on the album they were reading
+ * about rather than an empty deck. The needle still stays up: arriving is not
+ * the same as pressing play. Loading has to wait for the client, since the
+ * deck reaches for rAF and an audio element as soon as a record goes on.
+ * An unknown or unlistenable slug just leaves the deck empty.
+ */
+const route = useRoute()
+
+onMounted(() => {
+  const wanted = route.query.album
+  if (typeof wanted !== 'string') return
+  const album = albums.value.find(a => a.slug === wanted)
+  if (album) deck.load(album)
+})
+
 
 // Choosing a record puts it on the platter with the needle still up. Starting
 // it is the visitor's move — a groove click, the tonearm, or play.
@@ -321,12 +343,14 @@ const discLabel = computed(() => (deck.album.value
 // --- arm readout ----------------------------------------------------------
 // Solved against the giant disc's centre and groove radii. The pivot sits just
 // off the disc (right: -6%) rather than far out, so the arm still fits beside
-// the record on a phone instead of running off the screen.
-const ARM_PARK = 90
-const ARM_OUTER = 70
-const ARM_INNER = 47.6
+// the record on a phone instead of running off the screen. It hangs from the
+// top corner, so the whole geometry is the mirror of a bottom pivot about the
+// disc's horizontal centre line: the pivot's y and every angle are negated.
+const ARM_PARK = -90
+const ARM_OUTER = -70
+const ARM_INNER = -47.6
 /** Pivot as a fraction of the deck frame — matches `.arm`'s right/top in CSS. */
-const ARM_PIVOT = { x: 1.06, y: 0.82 }
+const ARM_PIVOT = { x: 1.06, y: 0.18 }
 
 /**
  * How far back past the lead-in a release still counts as playing rather than
@@ -344,7 +368,7 @@ const PARK_RELEASE = -0.12
  */
 const armDeg = computed(() => {
   const deg = ARM_OUTER + deck.armProgress.value * (ARM_INNER - ARM_OUTER)
-  return Math.min(ARM_PARK, Math.max(ARM_INNER, deg))
+  return Math.min(ARM_INNER, Math.max(ARM_PARK, deg))
 })
 
 const armValueText = computed(() => (deck.album.value
@@ -631,6 +655,29 @@ usePageSeo({
 .disc.live { box-shadow: 0 40px 90px rgba(0, 0, 0, .75), 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent); }
 .disc:focus-visible { outline: 2px solid var(--accent); outline-offset: 8px; }
 
+/* Turning the record over. It tips away to edge-on, and the second half comes
+   back from the far side rather than carrying on through 180deg — otherwise
+   the new side would arrive mirrored. The swap in useVinylDeck is timed to
+   that edge-on beat, so the grooves change while there's nothing to see.
+   Duration matches FLIP_MS there; ease-in then ease-out across the jump reads
+   as one continuous turn.
+
+   Turning back to side A tips the opposite way, so the record un-flips the way
+   it came instead of tumbling the same direction twice. Playing the one set of
+   keyframes in reverse is exactly that mirror — and it carries the easing back
+   with it. The direction comes from `flipTo` rather than `side`, which doesn't
+   change until the midpoint: renaming the animation mid-flight would restart
+   it. */
+.disc.flipping { animation: disc-flip 700ms both; }
+.disc.flipping.back { animation-direction: reverse; }
+
+@keyframes disc-flip {
+  0% { transform: perspective(1400px) rotateX(0deg); animation-timing-function: cubic-bezier(.5, 0, .9, .45); }
+  50% { transform: perspective(1400px) rotateX(90deg); }
+  50.001% { transform: perspective(1400px) rotateX(-90deg); animation-timing-function: cubic-bezier(.1, .55, .5, 1); }
+  100% { transform: perspective(1400px) rotateX(0deg); }
+}
+
 .disc-spin { position: absolute; inset: 0; border-radius: 50%; will-change: transform; }
 
 .disc-vinyl {
@@ -712,7 +759,7 @@ usePageSeo({
 .arm {
   position: absolute;
   right: -6%;
-  top: 82%;
+  top: 18%;
   width: 72%;
   /* The tube is only 3px, far too thin to grab with a finger. The element is
      deliberately much taller than what it draws so the whole arm is a touch
@@ -730,7 +777,7 @@ usePageSeo({
 .arm.dragging { transition: none; cursor: grabbing; }
 .arm:focus-visible .arm-tube { box-shadow: 0 0 0 3px rgba(255, 255, 255, .75), 0 0 0 6px var(--accent); }
 .arm-tube { position: absolute; left: 4%; right: 9%; top: 50%; height: 3px; transform: translateY(-50%); border-radius: 999px; background: linear-gradient(90deg, #e8eef1, #6f787e 34%, #dbe3e7 68%, #f2f6f8); box-shadow: 0 3px 8px rgba(0, 0, 0, .6); }
-.arm-head { position: absolute; left: 0; top: 50%; width: 7%; height: 92%; transform: translateY(-50%) rotate(-8deg); border-radius: 2px; background: linear-gradient(180deg, #4b5257, #1e2226); }
+.arm-head { position: absolute; left: 0; top: 50%; width: 7%; height: 92%; transform: translateY(-50%) rotate(8deg); border-radius: 2px; background: linear-gradient(180deg, #4b5257, #1e2226); }
 .arm-pivot { position: absolute; right: -4%; top: 50%; width: 9%; aspect-ratio: 1; transform: translateY(-50%); border-radius: 50%; background: radial-gradient(circle at 40% 36%, #cbd4d9, #23282d); box-shadow: 0 6px 14px rgba(0, 0, 0, .6); }
 
 /* ---------- console ---------- */
@@ -875,5 +922,7 @@ usePageSeo({
 @media (prefers-reduced-motion: reduce) {
   .dust { animation: none; }
   .arm { transition-duration: 1ms; }
+  /* The side still swaps on the same beat; it just doesn't tumble to get there. */
+  .disc.flipping { animation: none; }
 }
 </style>

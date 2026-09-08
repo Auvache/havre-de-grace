@@ -62,6 +62,7 @@ const mobileOpen = ref(false)
 
 const navLinks = [
   { label: 'music', to: '/#music' },
+  { label: 'listen', to: '/listen' },
   { label: 'about', to: '/about' },
   { label: 'contact', to: '/#contact' },
   // { label: 'influences', to: '/influences' },

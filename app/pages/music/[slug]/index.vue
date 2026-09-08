@@ -1,15 +1,8 @@
 <template>
   <article v-if="album" class="pb-24">
-    <section class="page-container flex items-center justify-between gap-4 pt-[calc(var(--nav-height)+1.5rem)]">
+    <section class="page-container pt-[calc(var(--nav-height)+1.5rem)]">
       <NuxtLink to="/#music" class="nav-link inline-block text-sm muted-text hover:text-[var(--color-accent)]">
         back to home
-      </NuxtLink>
-      <NuxtLink
-        v-if="isListenable"
-        to="/listen"
-        class="nav-link inline-block text-sm font-semibold text-[var(--color-accent)]"
-      >
-        listen in digital vinyl format →
       </NuxtLink>
     </section>
 
@@ -56,6 +49,18 @@
         />
       </div>
     </template>
+
+    <!-- Last thing on the page, after the tracks and the credits: read the
+         album, then go and play it. -->
+    <section v-if="isListenable" class="page-container flex justify-center pt-6">
+      <NuxtLink
+        :to="{ path: '/listen', query: { album: album.slug } }"
+        class="nav-link text-sm font-semibold text-[var(--color-accent)]"
+      >
+        Listen on digital vinyl
+        <span aria-hidden="true">&rarr;</span>
+      </NuxtLink>
+    </section>
   </article>
 </template>
 

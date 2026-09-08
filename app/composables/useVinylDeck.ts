@@ -18,6 +18,8 @@ import { sideDuration as computeSideDuration, sideOffsets, sideTracks } from '~/
 // --- mechanical timings (ms) ---
 /** Tonearm swinging from the rest post to the lead-in groove. */
 const ARM_TRAVEL_MS = 1100
+/** Turning the record over — matches the `disc-flip` animation in listen.vue. */
+const FLIP_MS = 700
 /** The needle riding the silent lead-in before the music comes up. */
 const LEAD_IN_MS = 850
 /** Platter inertia. */
@@ -61,6 +63,12 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
   /** Arm is in flight from the rest post. */
   const cueing = ref(false)
   const flipping = ref(false)
+  /**
+   * The side being turned to, for as long as the flip runs. `side` itself is
+   * still the old one until the midpoint, so it can't tell the view which way
+   * the record is going without changing its answer mid-animation.
+   */
+  const flipTo = ref<'a' | 'b' | null>(null)
   const scrubbing = ref(false)
   /**
    * Where the visitor is dragging the arm to, before they let go. 0..1 spans
@@ -107,6 +115,7 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
   let spinRate = 0 // deg/ms
   let lastFrame = 0
   let cueTimer: ReturnType<typeof setTimeout> | null = null
+  let flipTimer: ReturnType<typeof setTimeout> | null = null
   let fadeFrame = 0
   /** Where a lifted needle would be put back down. */
   let heldPosition = 0
@@ -198,6 +207,13 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
   function cancelCue() {
     if (cueTimer) clearTimeout(cueTimer)
     cueTimer = null
+  }
+
+  function cancelFlip() {
+    if (flipTimer) clearTimeout(flipTimer)
+    flipTimer = null
+    flipping.value = false
+    flipTo.value = null
   }
 
   function loadTrackAudio(i: number, offsetSec: number, autoplay: boolean) {
@@ -381,27 +397,42 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
     loadTrackAudio(index.value + 1, 0, true)
   }
 
-  function setSide(next: 'a' | 'b', { keepPlaying = false } = {}) {
-    if (next === side.value) return
-    const wasPlaying = needleDown.value || cueing.value
+  /**
+   * Turning the record over, like the real thing: the needle comes up and
+   * stays up. Starting the new side is the visitor's move again — a groove
+   * click, the tonearm, or play.
+   *
+   * `flipping` drives the disc's flip animation, which is edge-on at its
+   * halfway point — so the side changes there rather than up front, and the
+   * new grooves are never seen on the face that's still turning away. The
+   * whole logical change lands in that one beat. Ignored while a flip is
+   * already running, so the record can't be turned over twice at once.
+   */
+  function setSide(next: 'a' | 'b') {
+    if (next === side.value || flipping.value) return
     lift()
     flipping.value = true
-    side.value = next
-    index.value = 0
-    trackTime.value = 0
-    heldPosition = 0
-    setTimeout(() => {
-      flipping.value = false
-      if (keepPlaying && wasPlaying) dropNeedle(0, 'full')
-    }, 700)
+    flipTo.value = next
+    flipTimer = setTimeout(() => {
+      side.value = next
+      index.value = 0
+      trackTime.value = 0
+      heldPosition = 0
+      flipTimer = setTimeout(() => {
+        flipTimer = null
+        flipping.value = false
+        flipTo.value = null
+      }, FLIP_MS / 2)
+    }, FLIP_MS / 2)
   }
 
-  function flip(opts?: { keepPlaying?: boolean }) {
-    setSide(otherSide.value, opts)
+  function flip() {
+    setSide(otherSide.value)
   }
 
   function load(next: ListenAlbum | null, opts: { autoplay?: boolean } = {}) {
     lift()
+    cancelFlip()
     album.value = next
     side.value = 'a'
     index.value = 0
@@ -413,6 +444,7 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
 
   function eject() {
     lift()
+    cancelFlip()
     album.value = null
   }
 
@@ -473,6 +505,7 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
 
   onBeforeUnmount(() => {
     cancelCue()
+    cancelFlip()
     cancelFade()
     if (raf) cancelAnimationFrame(raf)
     audio?.removeEventListener('ended', onTrackEnded)
@@ -483,7 +516,7 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
   return {
     // state
     album, side, otherSide, hasOtherSide, tracks, track, index,
-    needleDown, cueing, spinning, flipping, scrubbing, scrubProgress, rotation, rpm, volume,
+    needleDown, cueing, spinning, flipping, flipTo, scrubbing, scrubProgress, rotation, rpm, volume,
     trackTime, duration, trackProgress,
     sidePosition, sideLength, sideProgress, armProgress, offsets,
     level, bands,

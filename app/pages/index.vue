@@ -2,7 +2,7 @@
   <div>
     <HeroAlbumSpotlight :album="latestAlbum" />
 
-    <AboutPreview :albums="albums" />
+    <AboutPreview />
 
     <MusicSection :albums="albums" />
 
