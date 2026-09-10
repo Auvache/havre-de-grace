@@ -176,6 +176,20 @@ export default defineNuxtConfig({
       {
         userAgent: '*',
         allow: '/',
+        // Content Signals (contentsignals.org). A usage preference expressed to
+        // crawlers, separate from the access permission `allow` grants — the
+        // point of the spec is that being allowed to fetch a page is not
+        // permission to do anything you like with it.
+        //
+        //   search=yes    normal indexing, so the site still ranks.
+        //   ai-input=no   not to be retrieved and summarised into a chatbot
+        //                 answer at query time.
+        //   ai-train=no   the lyrics and bio are not training corpus.
+        //
+        // Unenforceable against a crawler that ignores it, and deliberately so:
+        // it is a declaration of terms, which is what makes ignoring it a
+        // documented choice rather than an ambiguity.
+        contentSignal: ['ai-train=no, search=yes, ai-input=no'],
       },
     ],
     sitemap: ['/sitemap.xml'],

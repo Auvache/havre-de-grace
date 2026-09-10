@@ -11,16 +11,15 @@
         :aria-label="siteProfile.artistName"
       >
         <!--
-          Below sm the name is dropped and the seal rides in the bar alone.
-          At phone widths the wordmark would either crowd the menu button or
-          shrink the seal to the point where its rule stops resolving.
+          One mark at every width. Phones used to get the seal on its own
+          (variant="sealSmall") on the grounds that the full lockup would crowd
+          the menu button — it doesn't: the mark is 5.1:1, so the clamp's 9.5rem
+          floor puts it at about 30px tall inside a 64px bar, and 9.5rem beside
+          a 2.5rem button still clears the container padding on a 320px screen.
+          Dropping the wordmark cost the brand its name in the one place every
+          visitor looks, on the majority of the site's traffic.
         -->
-        <span class="hidden sm:block">
-          <BrandMark variant="navSeal" decorative class="w-[clamp(9.5rem,28vw,12.5rem)]" />
-        </span>
-        <span class="block sm:hidden">
-          <BrandMark variant="sealSmall" decorative class="w-[1.85rem]" />
-        </span>
+        <BrandMark variant="navSeal" decorative class="w-[clamp(9.5rem,28vw,12.5rem)]" />
       </NuxtLink>
       <div v-else aria-hidden="true" />
 

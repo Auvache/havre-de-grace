@@ -39,24 +39,18 @@
         heading-tag="h1"
       />
 
-	    <p class="muted-text">
-		    Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley.
-	    </p>
-
-      <p class="italic muted-text">
-	      "I love music and music loves me. I can't help but play the guitar and write songs."
+      <!--
+        Prose lives in shared/data/bio.ts so that /about.md (see
+        modules/agent-discovery.ts) renders the same words this section does.
+      -->
+      <p
+        v-for="(paragraph, index) in bioParagraphs"
+        :key="index"
+        class="muted-text"
+        :class="{ italic: paragraph.emphasis }"
+      >
+        {{ paragraph.text }}
       </p>
-
-      <p class="muted-text">
-        Stefan was raised on an eclectic mix of music, ranging from Led Zeppelin, REO Speedwagon, and Heart to
-        Michael Jackson and Donny Osmond. As he grew up and branched out into his own musical discoveries, he fell
-        in love with the music of Bob Dylan, Jack White, John Mayer, and Kristian Matsson's Tallest Man on Earth.
-        All of these influences have shaped him as a guitar player, a songwriter, and a person.
-      </p>
-
-	    <p class="muted-text">
-		    His first album, I Want to Be Yours and Other Songs, was originally released under the moniker Stefan Auvache in July 2025. His second album, Into the Wild, was released in July 2026.
-	    </p>
     </ScrollReveal>
 
     <div class="mx-auto mt-6 grid max-w-3xl gap-4 sm:grid-cols-2">
@@ -128,6 +122,7 @@
 
 <script setup lang="ts">
 import type { Album } from '~~/shared/types'
+import { bioParagraphs } from '~~/shared/data/bio'
 
 const props = defineProps<{
   latestAlbum: Album | null

@@ -53,6 +53,119 @@
           "value": "public, max-age=0, must-revalidate"
         }
       ]
+    },
+    {
+      "pattern": "/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</index.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"index\"; type=\"text/markdown\"; title=\"Site index for language models\", </.well-known/ai-catalog.json>; rel=\"describedby\"; type=\"application/json\"; title=\"Agent capability manifest\", </discography.json>; rel=\"related\"; type=\"application/json\"; title=\"Discography\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </about>; rel=\"author\""
+        }
+      ]
+    },
+    {
+      "pattern": "/index.html",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</index.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"index\"; type=\"text/markdown\"; title=\"Site index for language models\", </.well-known/ai-catalog.json>; rel=\"describedby\"; type=\"application/json\"; title=\"Agent capability manifest\", </discography.json>; rel=\"related\"; type=\"application/json\"; title=\"Discography\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </about>; rel=\"author\""
+        }
+      ]
+    },
+    {
+      "pattern": "/about",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</about.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"index\"; type=\"text/markdown\"; title=\"Site index for language models\", </.well-known/ai-catalog.json>; rel=\"describedby\"; type=\"application/json\"; title=\"Agent capability manifest\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\""
+        }
+      ]
+    },
+    {
+      "pattern": "/about/index.html",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</about.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"index\"; type=\"text/markdown\"; title=\"Site index for language models\", </.well-known/ai-catalog.json>; rel=\"describedby\"; type=\"application/json\"; title=\"Agent capability manifest\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\""
+        }
+      ]
+    },
+    {
+      "pattern": "/music/**",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"index\"; type=\"text/markdown\"; title=\"Site index for language models\", </.well-known/ai-catalog.json>; rel=\"describedby\"; type=\"application/json\"; title=\"Agent capability manifest\", </discography.json>; rel=\"related\"; type=\"application/json\"; title=\"Discography\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </about>; rel=\"author\""
+        }
+      ]
+    },
+    {
+      "pattern": "**/*.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "pattern": "/llms.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "pattern": "/.well-known/ai-catalog.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "pattern": "/discography.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
     }
   ]
 }

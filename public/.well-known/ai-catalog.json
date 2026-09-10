@@ -1,0 +1,67 @@
+{
+  "$comment": "Agentic Resource Discovery (ARD) manifest — agenticresourcediscovery.org. A machine-readable index of what this site publishes for agents. Every entry below points at a resource that actually exists: this site has no API, no MCP server and no authenticated endpoints, and nothing is advertised here that would 404.",
+  "specVersion": "0.1",
+  "host": {
+    "name": "Havre De Grace",
+    "domain": "havredegracemusic.com",
+    "description": "Official site of Havre De Grace, the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, based in Vancouver, Washington. Discography, lyrics, credits, liner notes, and booking contact.",
+    "url": "https://havredegracemusic.com/",
+    "contact": "booking@havredegracemusic.com"
+  },
+  "usage": {
+    "contentSignal": "ai-train=no, search=yes, ai-input=no",
+    "declaredAt": "https://havredegracemusic.com/robots.txt"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:havredegracemusic.com:site:llms-index",
+      "displayName": "Site index for language models",
+      "description": "llmstxt.org index of every page on the site, each linked to its markdown mirror, plus the structured catalogue and usage terms.",
+      "type": "text/markdown",
+      "url": "https://havredegracemusic.com/llms.txt",
+      "representativeQueries": [
+        "What is on the Havre De Grace website?",
+        "Where can I read the Havre De Grace pages as markdown?",
+        "How may I use Havre De Grace content?"
+      ]
+    },
+    {
+      "identifier": "urn:air:havredegracemusic.com:music:discography",
+      "displayName": "Discography",
+      "description": "Every release by Havre De Grace as structured JSON: title, release date, cover art, per-track titles and durations, credits, and streaming links on each platform. Lyrics are not included here; each song page carries its own.",
+      "type": "application/json",
+      "url": "https://havredegracemusic.com/discography.json",
+      "representativeQueries": [
+        "What albums has Havre De Grace released?",
+        "What is the tracklist of Into the Wild?",
+        "How long is the song Goodbye, Norma Jeane?",
+        "Where can I stream Havre De Grace?",
+        "When did I Want to Be Yours and Other Songs come out?"
+      ]
+    },
+    {
+      "identifier": "urn:air:havredegracemusic.com:site:sitemap",
+      "displayName": "Sitemap",
+      "description": "Every indexable URL on the site, with last-modified dates.",
+      "type": "application/xml",
+      "url": "https://havredegracemusic.com/sitemap.xml",
+      "representativeQueries": [
+        "List every page on havredegracemusic.com",
+        "What song pages does Havre De Grace have?"
+      ]
+    },
+    {
+      "identifier": "urn:air:havredegracemusic.com:artist:profile",
+      "displayName": "Artist biography and press kit",
+      "description": "Markdown biography of Stefan Auvache Bradley, performing as Havre De Grace: influences, genres, location, downloadable press photos, and booking contact.",
+      "type": "text/markdown",
+      "url": "https://havredegracemusic.com/about.md",
+      "representativeQueries": [
+        "Who is Havre De Grace?",
+        "What is Stefan Auvache Bradley's musical background?",
+        "How do I book Havre De Grace?",
+        "Where can I download Havre De Grace press photos?"
+      ]
+    }
+  ]
+}

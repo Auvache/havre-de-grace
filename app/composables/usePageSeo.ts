@@ -32,6 +32,15 @@ interface PageSeoOptions {
   type?: MaybeRefOrGetter<string>
 }
 
+/**
+ * Routes with no markdown mirror — the `robots: 'noindex'` set in
+ * nuxt.config.ts. Kept in step with EXCLUDED_ROUTES in
+ * modules/agent-discovery.ts, which is what decides whether the file is
+ * actually written; advertising an alternate that was never generated would
+ * point an agent at a 404.
+ */
+const NO_MARKDOWN_MIRROR = new Set(['/links', '/listen', '/logo', '/influences'])
+
 export const usePageSeo = (options: PageSeoOptions) => {
   const route = useRoute()
   const { toAbsoluteUrl } = useAbsoluteUrl()
@@ -40,9 +49,39 @@ export const usePageSeo = (options: PageSeoOptions) => {
   const imageUrl = computed(() => toAbsoluteUrl(SHARE_IMAGE.src))
   const pageType = computed(() => toValue(options.type) || 'website')
 
+  /**
+   * The page's markdown twin, generated at build time by
+   * modules/agent-discovery.ts.
+   *
+   * This is the in-page half of the "Markdown for Agents" convention. The
+   * canonical form of that is content negotiation on `Accept: text/markdown`,
+   * which a static bundle on S3 cannot do — one key, one body. So the markdown
+   * lives at its own URL and is advertised from here and from the Link header
+   * (see public/customHttp.json), which is the part an agent can actually
+   * discover without guessing.
+   */
+  const markdownUrl = computed(() => {
+    const path = toValue(options.path) || route.path
+    const normalized = path.replace(/\/$/, '') || '/'
+
+    if (NO_MARKDOWN_MIRROR.has(normalized)) {
+      return null
+    }
+
+    return toAbsoluteUrl(`${normalized === '/' ? '/index' : normalized}.md`)
+  })
+
   useHead(() => ({
     link: [
       { rel: 'canonical', href: canonicalUrl.value },
+      ...(markdownUrl.value
+        ? [{
+            rel: 'alternate',
+            type: 'text/markdown',
+            href: markdownUrl.value,
+            title: `${toValue(options.title)} (markdown)`,
+          }]
+        : []),
     ],
   }))
 
@@ -71,5 +110,6 @@ export const usePageSeo = (options: PageSeoOptions) => {
   return {
     canonicalUrl,
     imageUrl,
+    markdownUrl,
   }
 }
