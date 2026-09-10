@@ -111,8 +111,8 @@ useSchemaOrg([
 
 usePageSeo({
   // "Havre De Grace Music" leads so the exact target phrase (and the domain
-  // name) sits at the front of the title, with the genre terms behind it.
-  title: `Havre De Grace Music | Acoustic Folk Singer-Songwriter`,
+  // name) sits at the front of the title.
+  title: `Havre De Grace Music | Official`,
   description: pageDescription,
 })
 </script>

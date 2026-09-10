@@ -32,10 +32,7 @@
         :threshold="0.18"
         root-margin="0px 0px -8% 0px"
       >
-        <SectionHeading
-          title="about havre de grace"
-          eyebrow="bio"
-        />
+        <SectionHeading title="about" />
 
         <p class="max-w-2xl muted-text">
           Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley.
