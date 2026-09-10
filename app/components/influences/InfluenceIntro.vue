@@ -23,15 +23,17 @@
             </p>
 
             <p class="mt-5 text-[length:var(--font-size-body)] font-[350] leading-[1.65] text-[var(--color-text-dark)]/92">
-              Though the current musical ecosystem thrives on a consistent stream of singles and
-              playlists, there are few things that impress me more than an album that captures my
-              attention from start to finish. Each of these albums have influenced or touched me in
-              some way.
+              Though the modern musical ecosystem thrives on singles and curated playlists, few
+              things impress me more than a cohesive album that captures my attention from start to
+              finish.
+            </p>
+
+            <p class="mt-5 text-[length:var(--font-size-body)] font-[350] leading-[1.65] text-[var(--color-text-dark)]/92">
+              Each of these albums have impacted me in some way.
             </p>
 
             <p class="mt-5 text-[length:var(--font-size-body)] font-[350] leading-[1.65] text-[var(--color-muted-dark)]">
-              Scroll around in any direction and click around to see how these albums have impacted
-              me.
+              Scroll around/click to explore how these albums have influenced me.
             </p>
 
             <button

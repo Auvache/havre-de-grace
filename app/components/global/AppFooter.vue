@@ -2,9 +2,12 @@
   <footer class="border-t border-theme" :style="{ backgroundColor: 'var(--theme-bg)' }">
     <div class="page-container py-12">
       <div class="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
-        <p class="label-text">
-          {{ siteProfile.artistName }}
-        </p>
+        <!--
+          The stacked lockup stands in for the name here. It keeps its
+          role="img" and aria-label, so the footer still announces the artist
+          name where the text used to be.
+        -->
+        <BrandMark variant="lockup" class="w-[min(11rem,52vw)]" />
 
         <StreamingLinks :links="siteProfile.artistLinks" compact />
 

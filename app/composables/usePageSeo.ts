@@ -1,34 +1,34 @@
 import type { MaybeRefOrGetter } from 'vue'
 
 /**
- * Social-share image. Dimensions are declared explicitly rather than inferred:
- * nuxt-og-image used to stamp every page with 1200x630 / image/jpeg, which was
- * wrong for the square album artwork actually being served (and the artwork was
- * served as a raw 3000x3000, 5 MB PNG). That module is disabled in
- * nuxt.config.ts; these values are the source of truth.
+ * The share card, on every page: the anchor lockup reversed out of ink at
+ * 1200x630. Generated from public/logos/suite/d2-og-image-dark.svg by
+ * tools/logo/rasterize.mjs — edit the SVG and re-run that rather than touching
+ * the PNG.
+ *
+ * Pages used to hand their own artwork to this instead — an album cover on the
+ * home, album and song pages. One card everywhere is the deliberate choice: it
+ * is the mark that gets recognised in a feed, and the covers are square, which
+ * a summary_large_image card letterboxes or crops. The covers are still the
+ * schema.org image for the albums they belong to; this is only what a link
+ * unfurls to.
+ *
+ * Dimensions are declared rather than inferred. nuxt-og-image used to stamp
+ * every page with 1200x630 / image/jpeg regardless of what was being served,
+ * so it is disabled in nuxt.config.ts and these values are the source of truth.
  */
-export interface PageSeoImage {
-  src: string
-  width: number
-  height: number
-  type?: string
-  alt?: string
-}
-
-/** Brand fallback: 1200x630, 143 KB, reads "MUSIC BY HAVRE DE GRACE". */
-export const DEFAULT_SEO_IMAGE: PageSeoImage = {
-  src: '/og-image.jpg',
+export const SHARE_IMAGE = {
+  src: '/og-image.png',
   width: 1200,
   height: 630,
-  type: 'image/jpeg',
-  alt: 'Music by Havre De Grace',
-}
+  type: 'image/png',
+  alt: 'Havre De Grace',
+} as const
 
 interface PageSeoOptions {
   title: MaybeRefOrGetter<string>
   description: MaybeRefOrGetter<string>
   path?: MaybeRefOrGetter<string>
-  image?: MaybeRefOrGetter<PageSeoImage | undefined>
   type?: MaybeRefOrGetter<string>
 }
 
@@ -37,8 +37,7 @@ export const usePageSeo = (options: PageSeoOptions) => {
   const { toAbsoluteUrl } = useAbsoluteUrl()
 
   const canonicalUrl = computed(() => toAbsoluteUrl(toValue(options.path) || route.path))
-  const image = computed(() => toValue(options.image) ?? DEFAULT_SEO_IMAGE)
-  const imageUrl = computed(() => toAbsoluteUrl(image.value.src))
+  const imageUrl = computed(() => toAbsoluteUrl(SHARE_IMAGE.src))
   const pageType = computed(() => toValue(options.type) || 'website')
 
   useHead(() => ({
@@ -58,15 +57,15 @@ export const usePageSeo = (options: PageSeoOptions) => {
     ogUrl: () => canonicalUrl.value,
     ogSiteName: 'Havre De Grace Music',
     ogImage: () => imageUrl.value,
-    ogImageWidth: () => image.value.width,
-    ogImageHeight: () => image.value.height,
-    ogImageType: () => image.value.type ?? 'image/jpeg',
-    ogImageAlt: () => image.value.alt,
+    ogImageWidth: SHARE_IMAGE.width,
+    ogImageHeight: SHARE_IMAGE.height,
+    ogImageType: SHARE_IMAGE.type,
+    ogImageAlt: SHARE_IMAGE.alt,
     twitterCard: 'summary_large_image',
     twitterTitle: () => toValue(options.title),
     twitterDescription: () => toValue(options.description),
     twitterImage: () => imageUrl.value,
-    twitterImageAlt: () => image.value.alt,
+    twitterImageAlt: SHARE_IMAGE.alt,
   })
 
   return {

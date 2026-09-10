@@ -5,18 +5,15 @@
     aria-hidden="true"
   >
     <div class="influence-logo-glow" />
-    <img
-      :src="logoWhite"
-      alt=""
-      class="relative z-[1] w-[clamp(6rem,16vw,12rem)] select-none"
-      draggable="false"
-    >
+    <BrandMark
+      variant="lockup"
+      decorative
+      class="relative z-[1] w-[clamp(9rem,26vw,19rem)] select-none text-[#f4f6f7]"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import logoWhite from '~~/assets/images/logo-white.png'
-
 const props = defineProps<{
   x: number
   y: number

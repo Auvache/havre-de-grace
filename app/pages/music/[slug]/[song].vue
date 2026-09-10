@@ -230,15 +230,6 @@ const { canonicalUrl } = usePageSeo({
   title: computed(() => `${song.value?.track.title} — ${siteProfile.artistName} | Lyrics`),
   description: pageDescription,
   path: songPath,
-  image: computed(() => (album.value
-    ? {
-        src: album.value.ogImage ?? album.value.coverImage,
-        width: 1200,
-        height: 1200,
-        type: 'image/jpeg',
-        alt: album.value.coverAlt,
-      }
-    : undefined)),
   type: 'music.song',
 })
 

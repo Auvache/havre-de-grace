@@ -65,7 +65,7 @@ useSchemaOrg([
       roleName: 'Singer-songwriter',
     },
     image: toAbsoluteUrl('/press/media-pic-wide.jpg'),
-    logo: toAbsoluteUrl('/android-chrome-512x512.png'),
+    logo: toAbsoluteUrl('/brand-logo.png'),
     email: siteProfile.bookingEmail,
     sameAs: siteProfile.entityUrls,
   }),

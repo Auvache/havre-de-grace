@@ -114,14 +114,5 @@ usePageSeo({
   // name) sits at the front of the title, with the genre terms behind it.
   title: `Havre De Grace Music | Acoustic Folk Singer-Songwriter`,
   description: pageDescription,
-  image: computed(() => (latestAlbum.value
-    ? {
-        src: latestAlbum.value.ogImage ?? latestAlbum.value.coverImage,
-        width: 1200,
-        height: 1200,
-        type: 'image/jpeg',
-        alt: latestAlbum.value.coverAlt,
-      }
-    : undefined)),
 })
 </script>

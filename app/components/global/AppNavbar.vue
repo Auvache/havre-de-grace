@@ -4,8 +4,23 @@
     :style="headerStyle"
   >
     <nav aria-label="Primary" class="page-container flex h-[var(--nav-height)] items-center justify-between">
-      <NuxtLink v-if="!props.immersive" to="/" class="label-text leading-none tracking-[0.18em]">
-        {{ siteProfile.artistName }}
+      <NuxtLink
+        v-if="!props.immersive"
+        to="/"
+        class="block leading-none"
+        :aria-label="siteProfile.artistName"
+      >
+        <!--
+          Below sm the name is dropped and the seal rides in the bar alone.
+          At phone widths the wordmark would either crowd the menu button or
+          shrink the seal to the point where its rule stops resolving.
+        -->
+        <span class="hidden sm:block">
+          <BrandMark variant="navSeal" decorative class="w-[clamp(9.5rem,28vw,12.5rem)]" />
+        </span>
+        <span class="block sm:hidden">
+          <BrandMark variant="sealSmall" decorative class="w-[1.85rem]" />
+        </span>
       </NuxtLink>
       <div v-else aria-hidden="true" />
 

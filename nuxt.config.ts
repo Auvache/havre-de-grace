@@ -85,8 +85,8 @@ export default defineNuxtConfig({
     defaults: true,
   },
 
-  // og:image dimensions are declared explicitly per page in usePageSeo; the
-  // module's inferred 1200x630 default was wrong for square album artwork.
+  // Every page shares one card, declared with its real dimensions in
+  // usePageSeo; the module stamped its own inferred values on top of that.
   ogImage: {
     enabled: false,
   },
@@ -137,8 +137,13 @@ export default defineNuxtConfig({
       title: 'Havre De Grace',
       titleTemplate: '%s',
       link: [
+        // SVG first, for browsers that support it; the .ico is the fallback.
+        // Both are the same opaque tile, so the mark reads the same whatever
+        // colour the tab strip is.
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/site.webmanifest' },
       ],
       htmlAttrs: {
         lang: 'en',
@@ -243,6 +248,11 @@ export default defineNuxtConfig({
     '/influences': {
       robots: 'noindex, follow',
     },
+    // Work in progress: a review page of candidate logo marks, shared by link
+    // rather than navigated to. Nothing here should compete in search.
+    '/logo': {
+      robots: 'noindex, nofollow',
+    },
   },
 
   nitro: {
@@ -253,6 +263,7 @@ export default defineNuxtConfig({
         '/',
         '/about',
         '/links',
+        '/logo',
         '/influences',
         '/listen',
         '/music/i-want-to-be-yours-and-other-songs',

@@ -201,15 +201,6 @@ const pageDescription = computed(() => {
 const { canonicalUrl } = usePageSeo({
   title: computed(() => `${album.value?.title ?? 'Album'} by Havre De Grace | Lyrics & Credits`),
   description: pageDescription,
-  image: computed(() => (album.value
-    ? {
-        src: album.value.ogImage ?? album.value.coverImage,
-        width: 1200,
-        height: 1200,
-        type: 'image/jpeg',
-        alt: album.value.coverAlt,
-      }
-    : undefined)),
   type: 'music.album',
 })
 
