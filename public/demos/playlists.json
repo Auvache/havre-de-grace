@@ -1,0 +1,39 @@
+{
+  "_readme": [
+    "The demo shelf behind /tools/demos.",
+    "",
+    "Every audio file lives flat in this folder (public/demos/). This file is the",
+    "only thing that groups them: a playlist is a name and an ordered list of",
+    "tracks, and a track is a title plus the bare filename it points at.",
+    "",
+    "A file may appear in as many playlists as you like — nothing is moved or",
+    "copied, the playlist is just an ordering.",
+    "",
+    "Shape:",
+    "  playlists[].name          the playlist name, shown on the chip",
+    "  playlists[].note          optional, one line under the heading",
+    "  playlists[].tracks[].title  the track name, shown in the list",
+    "  playlists[].tracks[].file   the filename inside public/demos/",
+    "  playlists[].tracks[].note   optional, shown small beside the filename",
+    "",
+    "Any extension the browser can play works — .wav, .mp3, .m4a, .opus, .flac.",
+    "Swapping a track from .wav to .mp3 is a one-word edit to its `file`.",
+    "",
+    "This key is ignored by the page; only `playlists` is read."
+  ],
+  "playlists": [
+    {
+      "name": "Insane, Okay",
+      "tracks": [
+        {
+          "title": "parker master",
+          "file": "Insane Okay - parker master.wav"
+        },
+        {
+          "title": "live — 9/3/26",
+          "file": "Insane, Okay - live - 9_3_26, 10.03\u202fAM.m4a"
+        }
+      ]
+    }
+  ]
+}
