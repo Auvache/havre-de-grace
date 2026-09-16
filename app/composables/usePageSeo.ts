@@ -39,7 +39,7 @@ interface PageSeoOptions {
  * actually written; advertising an alternate that was never generated would
  * point an agent at a 404.
  */
-const NO_MARKDOWN_MIRROR = new Set(['/links', '/listen', '/logo', '/influences'])
+const NO_MARKDOWN_MIRROR = new Set(['/links', '/listen', '/logo', '/influences', '/tools', '/tools/demos'])
 
 export const usePageSeo = (options: PageSeoOptions) => {
   const route = useRoute()

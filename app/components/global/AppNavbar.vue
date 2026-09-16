@@ -78,7 +78,8 @@ const navLinks = [
   { label: 'music', to: '/#music' },
   { label: 'listen', to: '/listen' },
   { label: 'about', to: '/about' },
-  { label: 'contact', to: '/#contact' },
+  { label: 'press', to: '/press' },
+  { label: 'contact', to: '/contact' },
   // { label: 'influences', to: '/influences' },
 ]
 

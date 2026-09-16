@@ -202,23 +202,10 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/press': {
-      redirect: {
-        to: '/about',
-        statusCode: 301,
-      },
-    },
     // The discography now lives as a section on the homepage.
     '/music': {
       redirect: {
         to: '/#music',
-        statusCode: 301,
-      },
-    },
-    // Contact is now a section on the homepage.
-    '/contact': {
-      redirect: {
-        to: '/#contact',
         statusCode: 301,
       },
     },
@@ -267,6 +254,30 @@ export default defineNuxtConfig({
     '/logo': {
       robots: 'noindex, nofollow',
     },
+    // --- Unlisted ---
+    // The private workbench. Not in the navigation, not in the sitemap (a
+    // noindex rule drops the URL from it), not in the markdown mirrors or
+    // llms.txt (EXCLUDED_ROUTES in modules/agent-discovery.ts), and linked from
+    // nowhere. Typing the URL is the only way in.
+    //
+    // `nofollow` as well as `noindex`, unlike /links and /listen: those two are
+    // kept crawlable so they pass signal on to the pages that should rank,
+    // whereas nothing under here should hand a crawler anything at all.
+    //
+    // Deliberately absent from the `robots` groups above: a `Disallow: /tools`
+    // line would publish the path to everyone who reads robots.txt, which is
+    // the opposite of what an unlisted page is for. The files themselves —
+    // playlists.json and the audio, which no meta tag can reach — are covered
+    // by the X-Robots-Tag header on /demos/** in public/customHttp.json.
+    //
+    // Unlisted is not private. This is a static bundle on S3; there is nothing
+    // to authenticate against, so the URL is the only thing keeping anyone out.
+    '/tools': {
+      robots: 'noindex, nofollow',
+    },
+    '/tools/**': {
+      robots: 'noindex, nofollow',
+    },
   },
 
   nitro: {
@@ -276,9 +287,16 @@ export default defineNuxtConfig({
       routes: [
         '/',
         '/about',
+        '/press',
+        '/contact',
         '/links',
         '/logo',
         '/influences',
+        // Unlisted, but still has to exist as a document: a static host serves
+        // keys, so a route that was never prerendered 404s however private it
+        // is. Every page added under app/pages/tools/ needs a line here.
+        '/tools',
+        '/tools/demos',
         '/listen',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',

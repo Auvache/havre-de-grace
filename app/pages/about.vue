@@ -1,7 +1,30 @@
 <template>
   <section class="page-container section-space">
     <BioSection :latest-album="latestAlbum" />
-    <PressKit id="press" :latest-album="latestAlbum" />
+
+    <!--
+      The press kit used to live here as an #press section. It is its own page
+      now (/press), so this is the hand-off rather than a second copy.
+    -->
+    <ScrollReveal
+      as="div"
+      class-name="mx-auto mt-16 max-w-3xl border-t border-theme pt-10 text-center"
+      variant="section-up"
+      :delay-ms="80"
+      :distance-px="44"
+      :threshold="0.12"
+      root-margin="0px 0px -8% 0px"
+    >
+      <p class="muted-text">
+        Writing about the record? Bios, photos, and release details are ready to download.
+      </p>
+      <NuxtLink
+        to="/press"
+        class="nav-link mt-3 inline-block hover:text-[var(--color-accent)]"
+      >
+        press kit
+      </NuxtLink>
+    </ScrollReveal>
   </section>
 </template>
 

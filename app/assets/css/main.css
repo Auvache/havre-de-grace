@@ -19,8 +19,8 @@
   --space-7: 5rem;
   --space-8: 7rem;
 
-  --color-bg: #ffffff;
-  --color-text: #1b1f24;
+  --color-bg: #faf9f5;
+  --color-text: #16191d;
   --color-muted: #6a7681;
   --color-border: #dfe4e8;
 
@@ -119,9 +119,11 @@ a {
 .section-heading {
   font-size: var(--font-size-heading);
   font-weight: 450;
-  letter-spacing: 0.01em;
+  /* Caps at this size need a touch more air than lowercase did, but nowhere
+     near the 0.21em of .label-text — that tracking is for small type. */
+  letter-spacing: 0.04em;
   line-height: 1.1;
-  text-transform: lowercase;
+  text-transform: uppercase;
 }
 
 .display-heading {

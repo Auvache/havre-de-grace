@@ -12,8 +12,7 @@
       root-margin="0px 0px -8% 0px"
     >
       <SectionHeading
-        title="music"
-        eyebrow="discography"
+        title="discography"
         align="center"
       />
     </ScrollReveal>

@@ -28,11 +28,17 @@
           >
             {{ album.title }}
           </NuxtLink>
+          <NuxtLink to="/listen" class="nav-link muted-text hover:text-[var(--color-accent)]">
+            record player
+          </NuxtLink>
           <NuxtLink to="/about" class="nav-link muted-text hover:text-[var(--color-accent)]">
             about
           </NuxtLink>
-          <NuxtLink to="/about#press" class="nav-link muted-text hover:text-[var(--color-accent)]">
+          <NuxtLink to="/press" class="nav-link muted-text hover:text-[var(--color-accent)]">
             press kit
+          </NuxtLink>
+          <NuxtLink to="/contact" class="nav-link muted-text hover:text-[var(--color-accent)]">
+            contact
           </NuxtLink>
         </nav>
 

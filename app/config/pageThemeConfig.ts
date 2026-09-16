@@ -59,6 +59,20 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
+    match: /^\/press\/?$/,
+    config: {
+      theme: 'light',
+      gradient: 'light-fjord',
+    },
+  },
+  {
+    match: /^\/contact\/?$/,
+    config: {
+      theme: 'light',
+      gradient: 'light-fjord',
+    },
+  },
+  {
     match: /^\/links\/?$/,
     config: {
       theme: 'light',
@@ -80,6 +94,16 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     config: {
       theme: 'dark',
       gradient: 'blackout',
+    },
+  },
+  {
+    // The unlisted workbench. Dark, because these are pages for working in
+    // rather than pages for arriving at — and because a demo shelf is read at
+    // night as often as not.
+    match: /^\/tools(?:\/|$)/,
+    config: {
+      theme: 'dark',
+      gradient: 'music-dark',
     },
   },
 ]

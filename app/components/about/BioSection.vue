@@ -35,7 +35,6 @@
     >
       <SectionHeading
         title="about"
-        eyebrow="bio"
         heading-tag="h1"
       />
 

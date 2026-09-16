@@ -72,5 +72,8 @@ export const siteProfile: SiteProfile = {
       downloadName: 'havre-de-grace-press-photo-wide.jpg',
     },
   ],
-  epkDownloadUrl: '/press/havre-de-grace-epk-placeholder.txt',
+  // Generated at build time by modules/press-kit.ts from these same
+  // `pressAssets` plus the bios in shared/data/press.ts, so it can never
+  // disagree with the /press page it is downloaded from.
+  epkDownloadUrl: '/press/havre-de-grace-press-kit.zip',
 }

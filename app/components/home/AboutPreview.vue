@@ -34,10 +34,6 @@
       >
         <SectionHeading title="about" />
 
-        <p class="max-w-2xl muted-text">
-          Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley.
-        </p>
-
         <p class="max-w-2xl italic muted-text">
           "I love music and music loves me. I can't help but play the guitar and write songs."
         </p>

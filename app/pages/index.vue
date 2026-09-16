@@ -4,6 +4,8 @@
 
     <AboutPreview />
 
+    <ListenPreview />
+
     <MusicSection :albums="albums" />
 
     <section
@@ -21,7 +23,6 @@
       >
         <SectionHeading
           title="contact"
-          eyebrow="booking and press"
           description="For inquiries, please reach out directly by email."
           align="center"
         />
@@ -43,10 +44,10 @@
           Email is the fastest way to connect.
         </p>
         <NuxtLink
-          to="/about#press"
-          class="mt-4 inline-block text-sm hover:text-[var(--color-accent)]"
+          to="/contact"
+          class="nav-link mt-4 inline-block text-sm hover:text-[var(--color-accent)]"
         >
-          Go to press kit
+          booking, press, and licensing
         </NuxtLink>
       </ScrollReveal>
     </section>

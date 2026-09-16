@@ -6,6 +6,7 @@ import type { Album, StreamingLinks } from '../shared/types'
 import { toSongRefs } from '../shared/utils/songSlug'
 import { siteProfile } from '../shared/data/site'
 import { bioParagraphs } from '../shared/data/bio'
+import { pressBios } from '../shared/data/press'
 
 /**
  * Build-time agent-discovery artefacts.
@@ -70,8 +71,12 @@ const INCLUDE_LYRICS = true
  * that would compete with the homepage — apply just as well to an agent, and a
  * mirror of a page that is deliberately not a search result would be a mirror
  * of nothing.
+ *
+ * `/tools` and its pages are here for a stronger reason than the rest: they are
+ * unlisted, and a markdown mirror plus an llms.txt entry would be the site
+ * handing an agent the URL it was never meant to find.
  */
-const EXCLUDED_ROUTES = new Set(['/links', '/listen', '/logo', '/influences'])
+const EXCLUDED_ROUTES = new Set(['/links', '/listen', '/logo', '/influences', '/tools', '/tools/demos'])
 
 const PLATFORM_LABELS: Record<string, string> = {
   spotify: 'Spotify',
@@ -182,7 +187,11 @@ export default defineNuxtModule({
           '## Booking',
           `Booking and press enquiries: ${siteProfile.bookingEmail}`,
           '## More',
-          `- [About the artist](${siteUrl}/about)`,
+          [
+            `- [About the artist](${siteUrl}/about)`,
+            `- [Press kit](${siteUrl}/press)`,
+            `- [Contact and booking](${siteUrl}/contact)`,
+          ].join('\n'),
         ))
 
         // --- /about ---------------------------------------------------------
@@ -203,10 +212,55 @@ export default defineNuxtModule({
             `- **Genres:** ${siteProfile.genres.join(', ')}`,
             `- **Booking:** ${siteProfile.bookingEmail}`,
           ].join('\n'),
-          '## Press assets',
+          '## Press',
+          `Bios, high-resolution photos and release details: ${siteUrl}/press`,
+        ))
+
+        // --- /press ---------------------------------------------------------
+        await emit('/press', {
+          title: 'Havre De Grace press kit',
+          description: 'Short, medium and long bios, high-resolution press photos, and booking contact.',
+        }, blocks(
+          '# Havre De Grace — press kit',
+          'Everything here is cleared for publication.',
+          `[Download the full press kit (.zip)](${siteUrl}${siteProfile.epkDownloadUrl})`,
+          '## Details',
+          [
+            `- **Performing name:** ${siteProfile.artistName}`,
+            `- **Legal name:** ${siteProfile.legalName}`,
+            `- **Based in:** ${siteProfile.location}`,
+            `- **Genres:** ${siteProfile.genres.join(', ')}`,
+            latest && `- **Latest release:** ${latest.title} (${latest.year})`,
+            `- **Booking and press:** ${siteProfile.bookingEmail}`,
+          ].filter(Boolean).join('\n'),
+          '## Bios',
+          // The same three strings the page renders, at the same three lengths,
+          // so an agent asked for "the short bio" can hand over the real one
+          // instead of summarising the long one itself.
+          pressBios
+            .map((bio) => `### ${bio.label}\n\n${bio.usage}\n\n${bio.text}`)
+            .join('\n\n'),
+          '## Press photos',
           siteProfile.pressAssets
             .map((asset) => `- [${asset.label}](${siteUrl}${asset.src})`)
             .join('\n'),
+        ))
+
+        // --- /contact -------------------------------------------------------
+        await emit('/contact', {
+          title: 'Contact Havre De Grace',
+          description: 'Booking, press, and licensing enquiries.',
+        }, blocks(
+          '# Contact',
+          `Email is the fastest way to get in touch: ${siteProfile.bookingEmail}`,
+          '## What to include',
+          [
+            '- **Booking:** the date, the city, the venue, and the kind of night it is. Solo acoustic, travelling from the Portland-Vancouver area.',
+            `- **Press:** bios and high-resolution photos are ready to download at ${siteUrl}/press — no need to ask first.`,
+            '- **Licensing and collaboration:** what you have in mind, and which song it is for.',
+          ].join('\n'),
+          '## Elsewhere',
+          linkList(siteProfile.artistLinks),
         ))
 
         // --- /music/<album> and /music/<album>/<song> ------------------------
