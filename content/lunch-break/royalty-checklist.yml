@@ -1,0 +1,226 @@
+# Royalty Registration Checklist — /resources/tools/royalty-checklist
+#
+# Stefan: this file is the whole tool. Add, remove or reword an item here and
+# the checklist, the overview table and the print view all follow. Nothing in
+# the components needs touching.
+#
+# Fields:
+#   id            stable key. NEVER change one after release — it is what a
+#                 visitor's saved progress in localStorage is keyed on, so
+#                 renaming an id silently resets everybody's checklist.
+#   label         the checkbox label
+#   short         the column heading in the overview table (keep it to ~2 words)
+#   collects      one line: what money this item is about
+#   whoNeedsThis  who it applies to, so people can mark N/A with confidence
+#   url           where to actually do it
+#   sourceUrl     the page the description was verified against
+#   optional      true = not counted against completion unless ticked
+#   caution       shown in amber on the item; use sparingly
+#
+# Everything factual here was checked against the organisation's own site on
+# the date in `lastVerified`. If you change a description, change that date.
+
+lastVerified: '2026-09-21'
+
+# One-time, account-level steps. These are not per song — you do them once and
+# then every release runs through them.
+setup:
+  - id: setup-pro
+    label: Affiliate with a PRO as a writer
+    collects: >-
+      Public performance royalties for the composition: radio, TV, live venues,
+      bars and restaurants, and the performance side of streaming.
+    whoNeedsThis: Anyone who writes songs. One PRO per writer, worldwide.
+    url: https://www.ascap.com/join
+    urlLabel: ASCAP
+    sourceUrl: https://www.ascap.com/help/my-ascap-membership/join-as-publisher
+    note: >-
+      Joining ASCAP as a writer is free. BMI is the other main US option
+      (bmi.com/join) — pick one, not both.
+
+  - id: setup-pro-publisher
+    label: Sort out the publisher share at your PRO
+    collects: >-
+      The other half of every performance royalty. PROs split performance money
+      50/50 between the writer share and the publisher share.
+    whoNeedsThis: >-
+      Every self-published writer, but the mechanism differs by PRO — this is
+      the single most commonly missed step.
+    url: https://www.ascap.com/help/my-ascap-membership/join-as-publisher
+    urlLabel: How ASCAP handles it
+    sourceUrl: https://www.ascap.com/help/my-ascap-membership/join-as-publisher
+    note: >-
+      ASCAP: if you have not signed a publishing deal and you want the
+      publisher's share, you have to set up a publishing company with ASCAP —
+      the Individual/Sole Proprietor option needs a mailing address, an email
+      address and a US tax ID, and nothing else. BMI: its Royalty Policy Manual
+      says that where no performing rights have been assigned to a publisher,
+      the writers receive the entire 200%, so an unpublished BMI writer is
+      already collecting both halves.
+
+  - id: setup-mlc
+    label: Create a The MLC account as a self-administered writer
+    collects: >-
+      US digital audio mechanical royalties — the composition's share of every
+      stream and download on services licensed under the US blanket licence.
+    whoNeedsThis: >-
+      Any songwriter who has not assigned those rights to a publisher or a
+      publishing administrator. If you use a publishing admin service, they do
+      this and you should not also join.
+    url: https://www.themlc.com/
+    urlLabel: The MLC
+    sourceUrl: https://www.themlc.com/faqs/categories/connect-collect
+    note: Membership is free. US only — it does not cover other countries.
+
+  - id: setup-soundexchange
+    label: Register with SoundExchange (artist and rights-owner sides)
+    collects: >-
+      US digital performance royalties for the sound recording, from
+      non-interactive services like SiriusXM, Pandora and internet radio.
+    whoNeedsThis: >-
+      Featured performers, and separately the owner of the master. If you
+      recorded and released it yourself, you are both and should register as
+      both.
+    url: https://www.soundexchange.com/
+    urlLabel: SoundExchange
+    sourceUrl: https://www.soundexchange.com/digital-performance-royalties/
+    note: >-
+      Free to register. The statute splits this money 45% to the featured
+      artists, 5% to a fund for non-featured performers, and 50% to the sound
+      recording rights owner — so the artist half and the owner half are two
+      separate claims.
+
+  - id: setup-artist-profiles
+    label: Claim your artist profiles
+    collects: >-
+      Nothing directly, but Spotify for Artists is where you pitch unreleased
+      songs to editorial playlists, for free, and where you would see a
+      suspicious stream spike first.
+    whoNeedsThis: Everyone releasing music.
+    url: https://artists.spotify.com/
+    urlLabel: Spotify for Artists
+    sourceUrl: https://support.spotify.com/artists/article/pitching-music-to-playlist-editors
+
+  - id: setup-splits-template
+    label: Have a split sheet template ready before the next co-write
+    collects: >-
+      Nothing on its own. It is what stops a disputed registration years later,
+      when nobody remembers who wrote the bridge.
+    whoNeedsThis: Anyone who ever writes with another person.
+
+# Per-song items. Every song or release added to the tool gets this list.
+items:
+  - id: distributed
+    label: Distributed to DSPs, with an ISRC assigned
+    short: Distributed
+    collects: >-
+      Master-side streaming and download income — the part your distributor
+      does collect, and usually the only part.
+    whoNeedsThis: Every release.
+    sourceUrl: https://www.soundexchange.com/digital-performance-royalties/
+
+  - id: pro-work
+    label: Registered as a work with your PRO (writer share)
+    short: PRO work
+    collects: Public performance royalties for the composition.
+    whoNeedsThis: >-
+      Every song you wrote. Registering the release with a distributor does not
+      register the work with your PRO — they are separate systems.
+    url: https://www.ascap.com/
+    urlLabel: ASCAP work registration
+    sourceUrl: https://www.bmi.com/creators/royalty-policy-manual
+
+  - id: pro-publisher
+    label: Publisher share claimed on the registration
+    short: Publisher
+    collects: The 50% of performance royalties that sits on the publisher side.
+    whoNeedsThis: >-
+      Every self-published writer at a PRO that requires a publishing entity
+      (ASCAP does). At BMI an unpublished writer is credited the whole 200%,
+      so there is nothing separate to claim — check your own PRO's rule rather
+      than assuming.
+    sourceUrl: https://www.ascap.com/help/my-ascap-membership/join-as-publisher
+
+  - id: mlc-work
+    label: Work registered with The MLC, splits matching your co-writers
+    short: MLC
+    collects: US digital mechanicals for the composition.
+    whoNeedsThis: >-
+      Self-administered songwriters. Splits have to add up to 100% across every
+      writer and match what the other writers filed, or the money sits
+      unmatched.
+    url: https://portal.themlc.com/
+    urlLabel: The MLC Portal
+    sourceUrl: https://www.themlc.com/faqs/categories/connect-collect
+
+  - id: soundexchange-recording
+    label: Sound recording registered with SoundExchange
+    short: SoundExchange
+    collects: >-
+      US digital performance royalties for the recording, on non-interactive
+      services.
+    whoNeedsThis: >-
+      The featured artist, and the owner of the master. Both sides, even when
+      that is the same person.
+    url: https://www.soundexchange.com/
+    urlLabel: SoundExchange
+    sourceUrl: https://www.soundexchange.com/digital-performance-royalties/
+
+  - id: iswc
+    label: ISWC recorded
+    short: ISWC
+    collects: >-
+      Nothing on its own. It is the composition's international ID, and it is
+      what lets societies in other countries match a foreign performance back
+      to you.
+    whoNeedsThis: >-
+      Every registered work. You do not apply for it separately — it is issued
+      through your PRO, so check the work registration and write it down where
+      you will find it again.
+    url: https://www.iswc.org/
+    urlLabel: About the ISWC
+    sourceUrl: https://www.iswc.org/
+    caution: >-
+      TODO(Stefan): verify how ASCAP and BMI each surface the ISWC on a work
+      registration before this goes live.
+
+  - id: split-sheet
+    label: Split sheet signed by every co-writer
+    short: Splits
+    collects: >-
+      Nothing directly. It is the document every other registration has to
+      agree with, and the one thing that is hard to reconstruct later.
+    whoNeedsThis: Any song with more than one writer.
+
+  - id: content-id
+    label: YouTube Content ID (optional)
+    short: Content ID
+    collects: >-
+      Ad revenue from other people's videos that use your recording.
+    whoNeedsThis: >-
+      Usually opted into through a distributor — YouTube grants Content ID
+      access to rights holders with a substantial catalogue, not to individual
+      creators applying directly.
+    optional: true
+    url: https://support.google.com/youtube/answer/2797370
+    urlLabel: How Content ID works
+    sourceUrl: https://support.google.com/youtube/answer/2797370
+    caution: >-
+      Content ID claims every match automatically, including uploads on your
+      own channel and live videos where you play your own song. Ask your
+      distributor to whitelist your channel before you opt in, and check what
+      cut they take of Content ID revenue.
+
+  - id: sync-libraries
+    label: Submitted to sync or licensing platforms (optional)
+    short: Sync
+    collects: >-
+      One-off licence fees for film, TV, ads and games, plus the performance
+      royalties that follow a broadcast.
+    whoNeedsThis: >-
+      Anyone who wants the song placed. Read what each platform asks for in
+      return — some want exclusivity on the track, which closes other doors.
+    optional: true
+    caution: >-
+      Songtradr and Musicbed are two Stefan has used; they are examples, not
+      endorsements, and neither has any relationship with this site.
