@@ -39,7 +39,7 @@
             <button
               ref="dismissButtonRef"
               type="button"
-              class="mt-8 inline-flex rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-6 py-2.5 text-sm font-medium text-white transition-opacity duration-200 hover:opacity-90"
+              class="cta-solo mt-8 inline-flex rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-6 py-2.5 text-sm font-medium text-white transition-opacity duration-200 hover:opacity-90"
               @click="emit('dismiss')"
             >
               Start exploring

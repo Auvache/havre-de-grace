@@ -50,6 +50,14 @@
       </button>
     </nav>
 
+    <!--
+      Inside the fixed header rather than beside it, so the strip follows the
+      page for free and sits hard against the bottom of the nav row. The
+      immersive scenes (the influences canvas) are chrome-free by design and
+      don't get it.
+    -->
+    <NewsletterBanner v-if="!props.immersive" />
+
     <MobileNavOverlay
       :open="mobileOpen"
       :links="navLinks"

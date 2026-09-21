@@ -48,6 +48,14 @@
   --max-content-width: 75rem;
   --nav-height: 4.5rem;
 
+  /* The mailing-list strip sits under the nav row inside the same fixed
+     header, so what content has to clear is the pair of them, not the nav
+     alone. Everything that used to offset by --nav-height now offsets by
+     --chrome-height, which collapses back to the nav height on its own once
+     --banner-height goes to zero. */
+  --banner-height: 2.75rem;
+  --chrome-height: calc(var(--nav-height) + var(--banner-height));
+
   --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
   --dur-fast: 200ms;
   --dur-medium: 300ms;
@@ -106,6 +114,35 @@ a {
   outline-offset: 2px;
 }
 
+/*
+  Whether the mailing-list banner shows is a per-visitor fact, and every page
+  here is prerendered to one shared HTML file — so the markup always ships and
+  the state is carried on <html> instead.
+
+  `data-banner="hidden"` is the visitor's cookie, set before first paint by the
+  inline script in nuxt.config. Without it, anyone who had already subscribed or
+  dismissed the thing would watch it flash in and shove the page down on every
+  single load. `data-banner-route="off"` is the route opting out (the subscribe
+  pages themselves, the unlisted workbench), baked into those pages at build
+  time by NewsletterBanner.
+
+  Either one zeroes --banner-height, which is what removes the offset; the
+  display rule is only needed for the cookie case, because an opted-out route
+  never renders the element in the first place.
+*/
+html[data-banner="hidden"],
+html[data-banner-route="off"] {
+  --banner-height: 0rem;
+}
+
+html[data-banner="hidden"] .mailing-banner {
+  display: none;
+}
+
+.banner-offset {
+  padding-top: var(--banner-height);
+}
+
 .page-container {
   margin-inline: auto;
   width: min(var(--max-content-width), 100%);
@@ -151,6 +188,31 @@ a {
   border: 1px solid var(--theme-border);
   border-radius: var(--radius-md);
   background: var(--theme-surface);
+}
+
+/*
+  A call to action that stands on its own, rather than in a row with a sibling.
+  On phones it takes the full width of its column: a lone pill sitting in the
+  middle of a full-bleed measure reads as an afterthought at that size, and the
+  wider target is easier to hit with a thumb.
+
+  Buttons that come in a set keep their intrinsic width — the hero's
+  explore/all-releases pair, the press kit's per-file downloads. Stacking those
+  would turn a glanceable choice into a list, and the second option would start
+  to look like the first one's consequence.
+
+  Mobile-first with a min-width query so the breakpoint is Tailwind's own `sm`,
+  which is what the rest of the site is laid out against.
+*/
+.cta-solo {
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .cta-solo {
+    width: auto;
+  }
 }
 
 .interactive-lift {

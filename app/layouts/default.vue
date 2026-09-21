@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen text-[var(--theme-text)]">
+  <div class="banner-offset min-h-screen text-[var(--theme-text)]">
     <AppNavbar />
-    <main class="min-h-[calc(100vh-var(--nav-height))]">
+    <main class="min-h-[calc(100vh-var(--chrome-height))]">
       <slot />
     </main>
     <AppFooter />

@@ -67,7 +67,7 @@
               short shelf the card is taller than everything under it, so
               pinning it would cover the very rows it is meant to sit above.
             -->
-            <div :class="pinTransport ? 'sticky top-[calc(var(--nav-height)+0.75rem)] z-20' : ''">
+            <div :class="pinTransport ? 'sticky top-[calc(var(--chrome-height)+0.75rem)] z-20' : ''">
               <DemoTransport :player="player" />
             </div>
 

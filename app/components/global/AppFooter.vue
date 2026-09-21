@@ -11,6 +11,8 @@
 
         <StreamingLinks :links="siteProfile.artistLinks" compact />
 
+        <NewsletterSignup compact />
+
         <!--
           The footer previously carried no internal links at all. On a site this
           small that's the cheapest crawl path and internal-link surface there
@@ -39,6 +41,9 @@
           </NuxtLink>
           <NuxtLink to="/contact" class="nav-link muted-text hover:text-[var(--color-accent)]">
             contact
+          </NuxtLink>
+          <NuxtLink to="/subscribe" class="nav-link muted-text hover:text-[var(--color-accent)]">
+            mailing list
           </NuxtLink>
         </nav>
 

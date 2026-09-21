@@ -1,6 +1,6 @@
 <template>
   <article v-if="album && song" class="pb-24">
-    <section class="page-container pt-[calc(var(--nav-height)+1.5rem)]">
+    <section class="page-container pt-[calc(var(--chrome-height)+1.5rem)]">
       <nav aria-label="Breadcrumb" class="text-sm muted-text">
         <ol class="flex flex-wrap items-center gap-2">
           <li>

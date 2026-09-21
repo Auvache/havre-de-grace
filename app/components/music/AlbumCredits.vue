@@ -1,5 +1,5 @@
 <template>
-  <section id="credits" class="scroll-mt-[calc(var(--nav-height)+4.75rem)]">
+  <section id="credits" class="scroll-mt-[calc(var(--chrome-height)+4.75rem)]">
     <SectionHeading title="credits" />
 
     <div class="mt-8 space-y-3 text-left text-sm leading-7 muted-text">

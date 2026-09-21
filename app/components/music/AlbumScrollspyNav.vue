@@ -1,7 +1,7 @@
 <template>
   <nav
     v-if="sections.length"
-    class="sticky top-[var(--nav-height)] z-40 border-y border-theme bg-[color-mix(in_srgb,var(--theme-bg)_90%,transparent)] supports-[backdrop-filter]:backdrop-blur"
+    class="sticky top-[var(--chrome-height)] z-40 border-y border-theme bg-[color-mix(in_srgb,var(--theme-bg)_90%,transparent)] supports-[backdrop-filter]:backdrop-blur"
     aria-label="Album sections"
   >
     <ul class="page-container flex items-center gap-2 overflow-x-auto py-3 text-sm [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

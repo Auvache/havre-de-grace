@@ -1,6 +1,6 @@
 <template>
   <section class="hero-spotlight relative isolate overflow-hidden">
-    <div class="page-container flex min-h-[calc(100vh-var(--nav-height))] flex-col items-center justify-center gap-10 pb-12 pt-[clamp(var(--space-6),11vw,var(--space-8))] text-center">
+    <div class="page-container flex min-h-[calc(100vh-var(--chrome-height))] flex-col items-center justify-center gap-10 pb-12 pt-[clamp(var(--space-6),11vw,var(--space-8))] text-center">
       <component
         :is="albumHref ? NuxtLinkComponent : 'button'"
         v-if="album"

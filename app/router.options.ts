@@ -1,21 +1,21 @@
 import type { RouterConfig } from '@nuxt/schema'
 
-// Offset scroll targets by the fixed navbar height so anchored sections
+// Offset scroll targets by the height of the fixed header so anchored sections
 // (e.g. the homepage `#music` section) are not hidden underneath it.
-const navHeightOffset = () => {
+//
+// Measured off the element rather than read from --chrome-height, because that
+// token is a `calc()` of two others: getPropertyValue hands back an unresolved
+// custom property as its literal token stream, so parseFloat("calc(4.5rem +
+// 2.75rem)") is NaN and every anchor would quietly fall back to the constant.
+// The header is the thing being cleared anyway, and measuring it is also what
+// keeps this honest when the mailing-list banner inside it comes and goes.
+const chromeHeightOffset = () => {
   if (import.meta.server) {
     return 0
   }
 
-  const value = getComputedStyle(document.documentElement).getPropertyValue('--nav-height')
-  const rem = Number.parseFloat(value)
-
-  if (Number.isNaN(rem)) {
-    return 72
-  }
-
-  const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
-  return rem * rootFontSize + 16
+  const header = document.querySelector('header')
+  return (header?.getBoundingClientRect().height ?? 0) + 16
 }
 
 // Cross-route hash navigation (e.g. `/about` -> `/#music`) can resolve before
@@ -59,7 +59,7 @@ export default <RouterConfig>{
 
       return {
         el: to.hash,
-        top: navHeightOffset(),
+        top: chromeHeightOffset(),
         behavior: 'smooth',
       }
     }

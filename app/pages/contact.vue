@@ -19,7 +19,7 @@
 
         <a
           :href="`mailto:${siteProfile.bookingEmail}`"
-          class="interactive-lift mt-8 inline-flex rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white"
+          class="cta-solo interactive-lift mt-8 inline-flex rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white"
         >
           {{ siteProfile.bookingEmail }}
         </a>

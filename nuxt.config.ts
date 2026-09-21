@@ -148,6 +148,23 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en',
       },
+      // Whether the mailing-list banner shows is a per-visitor fact, and every
+      // page here is prerendered to one shared HTML file — so the banner ships
+      // in the markup for everybody and this takes it back out again for the
+      // people who have already subscribed or closed it.
+      //
+      // It has to be an inline script in <head> rather than anything Vue does:
+      // hydration runs long after first paint, so a Vue-side check would show
+      // the banner to everyone for a beat and then yank it, shoving the page up
+      // by its height. See the `data-banner` rules in main.css, and
+      // useMailingListBanner for the writer.
+      script: [
+        {
+          key: 'mailing-list-banner',
+          tagPosition: 'head',
+          innerHTML: `try{if(/(?:^|;\\s*)hdg-mailing-list=/.test(document.cookie))document.documentElement.setAttribute('data-banner','hidden')}catch(e){}`,
+        },
+      ],
       meta: [
         { name: 'description', content: SITE_DESCRIPTION },
         { property: 'og:site_name', content: 'Havre De Grace Music' },
@@ -249,6 +266,13 @@ export default defineNuxtConfig({
     '/influences': {
       robots: 'noindex, follow',
     },
+    // The exit door for the mailing list. /subscribe is a real landing page and
+    // stays indexable; this one is three paragraphs of housekeeping that only
+    // matter to someone already on the list, and it has nothing to win a query
+    // with. "follow" so it still passes signal back to the pages that do.
+    '/unsubscribe': {
+      robots: 'noindex, follow',
+    },
     // Work in progress: a review page of candidate logo marks, shared by link
     // rather than navigated to. Nothing here should compete in search.
     '/logo': {
@@ -289,6 +313,8 @@ export default defineNuxtConfig({
         '/about',
         '/press',
         '/contact',
+        '/subscribe',
+        '/unsubscribe',
         '/links',
         '/logo',
         '/influences',

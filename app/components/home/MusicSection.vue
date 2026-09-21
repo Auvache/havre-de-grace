@@ -1,7 +1,7 @@
 <template>
   <section
     id="music"
-    class="page-container section-space border-t border-theme text-center scroll-mt-[calc(var(--nav-height)+1.5rem)]"
+    class="page-container section-space border-t border-theme text-center scroll-mt-[calc(var(--chrome-height)+1.5rem)]"
   >
     <ScrollReveal
       as="div"

@@ -73,6 +73,13 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
+    match: /^\/(?:subscribe|unsubscribe)\/?$/,
+    config: {
+      theme: 'light',
+      gradient: 'light-fjord',
+    },
+  },
+  {
     match: /^\/links\/?$/,
     config: {
       theme: 'light',

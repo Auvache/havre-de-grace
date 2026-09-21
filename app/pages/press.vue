@@ -24,7 +24,7 @@
           <a
             :href="siteProfile.epkDownloadUrl"
             download
-            class="interactive-lift inline-flex rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white"
+            class="cta-solo interactive-lift inline-flex rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white"
           >
             download the full press kit (.zip)
           </a>
@@ -133,7 +133,7 @@
 
         <NuxtLink
           to="/contact"
-          class="interactive-lift mt-8 inline-flex rounded-full border border-theme px-6 py-3 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          class="cta-solo interactive-lift mt-8 inline-flex rounded-full border border-theme px-6 py-3 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
         >
           get in touch
         </NuxtLink>

@@ -1,5 +1,5 @@
 <template>
-  <section id="tracks" class="scroll-mt-[calc(var(--nav-height)+4.75rem)]">
+  <section id="tracks" class="scroll-mt-[calc(var(--chrome-height)+4.75rem)]">
     <SectionHeading title="tracks" />
 
     <div v-if="tracks.length" class="mt-8 space-y-4">
@@ -7,7 +7,7 @@
         v-for="track in tracks"
         :id="`track-${track.trackNumber}`"
         :key="`track-${track.trackNumber}`"
-        class="scroll-mt-[calc(var(--nav-height)+5.5rem)] rounded-[var(--radius-md)] border border-theme bg-[color-mix(in_srgb,var(--theme-surface)_88%,transparent)]"
+        class="scroll-mt-[calc(var(--chrome-height)+5.5rem)] rounded-[var(--radius-md)] border border-theme bg-[color-mix(in_srgb,var(--theme-surface)_88%,transparent)]"
       >
         <h3>
           <!-- Tracks without lyrics still list, they just don't expand. -->
