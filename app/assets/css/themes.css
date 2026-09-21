@@ -80,3 +80,30 @@ html[data-page-gradient="music-charcoal-offwhite"] {
       #ddd5cc 100%
     );
 }
+
+/*
+ * --- Album night palettes --------------------------------------------------
+ * An album page is a dark room lit by its own sleeve (the blurred cover wash in
+ * app/pages/music/[slug]/index.vue), so these set the floor the artwork glows
+ * against and an accent that survives on near-black. Each is pulled from the
+ * cover it belongs to.
+ */
+
+html[data-page-gradient="album-night-sea"] {
+  /* Into the Wild: open water under an overcast sky, after dark. The daytime
+     accent (#3f6896) goes muddy at this depth, so it lifts to a moonlit blue. */
+  --color-accent: #7ea6cd;
+  --theme-page-gradient:
+    radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, #3d5f85 38%, transparent), transparent 64%),
+    linear-gradient(180deg, #16222f 0%, #0e1822 46%, #080d13 100%);
+}
+
+html[data-page-gradient="album-night-forest"] {
+  /* I Want to Be Yours: a black-and-white photograph of a pine wood, so the
+     floor stays neutral and the warmth comes from the accent alone — a blue
+     one would tint a monochrome cover that has no colour of its own. */
+  --color-accent: #cbb8a2;
+  --theme-page-gradient:
+    radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, #4a443d 34%, transparent), transparent 64%),
+    linear-gradient(180deg, #1d1c1a 0%, #131211 48%, #0a0a09 100%);
+}

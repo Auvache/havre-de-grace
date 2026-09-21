@@ -8,6 +8,8 @@ export type PageGradient =
   | 'music-dark'
   | 'music-into-the-wild'
   | 'music-charcoal-offwhite'
+  | 'album-night-sea'
+  | 'album-night-forest'
 
 export interface PageThemeConfig {
   theme: PageTheme
@@ -24,14 +26,21 @@ const DEFAULT_PAGE_THEME_CONFIG: PageThemeConfig = {
   gradient: 'light-fjord',
 }
 
+/*
+ * Album pages are dark rooms lit by their own cover art (see
+ * app/pages/music/[slug]/index.vue), so each release gets a night palette
+ * pulled from its sleeve rather than the light themes these two used to have.
+ * The accent has to survive on near-black, which is what separates these from
+ * the daytime versions kept below them.
+ */
 const ALBUM_PAGE_THEME_CONFIG_BY_SLUG: Record<string, PageThemeConfig> = {
   'i-want-to-be-yours-and-other-songs': {
-    theme: 'light',
-    gradient: 'music-charcoal-offwhite',
+    theme: 'dark',
+    gradient: 'album-night-forest',
   },
   'into-the-wild': {
-    theme: 'light',
-    gradient: 'music-into-the-wild',
+    theme: 'dark',
+    gradient: 'album-night-sea',
   },
 }
 
@@ -87,6 +96,17 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
+    // Lunch Break Records (/resources). Reading pages and working tools, so
+    // they take the same daylight palette as the rest of the prose on the
+    // site rather than a look of their own — the sub-brand is a wordmark and
+    // a voice, not a second theme.
+    match: /^\/resources(?:\/|$)/,
+    config: {
+      theme: 'light',
+      gradient: 'light-fjord',
+    },
+  },
+  {
     // The record player is a dark, full-bleed scene that paints its own
     // background; the site theme only needs to stop fighting it.
     match: /^\/listen(?:\/|$)/,
@@ -98,6 +118,16 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
   {
     // The influences canvas is a deliberately immersive dark experience.
     match: /^\/influences\/?$/,
+    config: {
+      theme: 'dark',
+      gradient: 'blackout',
+    },
+  },
+  {
+    // A 16:9 film that paints its own frame in ink, bone and red. The page
+    // around it gets out of the way entirely, because the only colour anyone
+    // should be judging is the film's.
+    match: /^\/music-video-test\/?$/,
     config: {
       theme: 'dark',
       gradient: 'blackout',

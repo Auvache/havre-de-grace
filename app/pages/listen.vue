@@ -261,20 +261,45 @@ function togglePanel(id: PanelId) { panel.value = panel.value === id ? null : id
  * Nothing on the platter to start with: the deck sits empty until the visitor
  * picks a record off the rack, the way the room would actually be found.
  *
- * Unless an album page sent them here — `?album=<slug>` puts that record on,
+ * Unless an album page sent them here — `/listen#<slug>` puts that record on,
  * so following "listen on digital vinyl" lands on the album they were reading
  * about rather than an empty deck. The needle still stays up: arriving is not
  * the same as pressing play. Loading has to wait for the client, since the
  * deck reaches for rAF and an audio element as soon as a record goes on.
  * An unknown or unlistenable slug just leaves the deck empty.
+ *
+ * `?album=<slug>` does the same thing and is kept working indefinitely: it is
+ * the form this page shipped with, so it is out there in whatever has already
+ * been shared or linked. The hash is what gets written from here on — it reads
+ * as a place rather than a parameter, and it survives being pasted into
+ * somewhere that strips query strings.
  */
 const route = useRoute()
 
-onMounted(() => {
-  const wanted = route.query.album
-  if (typeof wanted !== 'string') return
+function requestedSlug(): string | null {
+  if (import.meta.client) {
+    const fragment = window.location.hash.replace(/^#/, '')
+    if (fragment) return decodeURIComponent(fragment)
+  }
+  return typeof route.query.album === 'string' ? route.query.album : null
+}
+
+function loadRequested() {
+  const wanted = requestedSlug()
+  if (!wanted) return
   const album = albums.value.find(a => a.slug === wanted)
-  if (album) deck.load(album)
+  // Changing records mid-play is the visitor's call, not a link's — a hash that
+  // names what is already on the platter must not restart it.
+  if (album && deck.album.value?.slug !== album.slug) deck.load(album)
+}
+
+onMounted(() => {
+  loadRequested()
+  window.addEventListener('hashchange', loadRequested)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('hashchange', loadRequested)
 })
 
 
