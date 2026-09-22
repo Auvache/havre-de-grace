@@ -63,3 +63,40 @@ export function compact<T extends Record<string, unknown>>(node: T): T {
     }),
   ) as T
 }
+
+/**
+ * The JSON-LD node for a /resources tool page.
+ *
+ * `WebApplication` rather than the broader `SoftwareApplication`: these run in
+ * the browser, with nothing to download and nothing to install, which is
+ * exactly the distinction the subtype exists to draw. `offers` at price 0 is
+ * how "free" is stated in a way a parser can read — schema.org has no
+ * `isFree`, and leaving it out reads as "price unknown".
+ *
+ * The publisher is the site's one MusicGroup entity rather than a second
+ * organisation of its own: the tools are part of Havre De Grace, and the whole
+ * point of putting them here is that somebody who finds one can find the music.
+ */
+export const toolSchema = (options: {
+  tool: { name: string, summary: string }
+  canonicalUrl: string
+  siteUrl: string
+  /** e.g. "MusicApplication", "BusinessApplication". */
+  category?: string
+}) => ({
+  '@type': 'WebApplication',
+  '@id': `${options.canonicalUrl}#tool`,
+  name: options.tool.name,
+  description: options.tool.summary,
+  url: options.canonicalUrl,
+  applicationCategory: options.category ?? 'BusinessApplication',
+  operatingSystem: 'Any — runs in a web browser',
+  browserRequirements: 'Requires JavaScript',
+  isAccessibleForFree: true,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  publisher: { '@id': schemaId.artist(options.siteUrl) },
+})

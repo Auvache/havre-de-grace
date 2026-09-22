@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="vs-sheet" viewBox="0 0 1600 1260" width="1600" height="1260" role="img" aria-labelledby="a1-ghost-plate--sheet-title a1-ghost-plate--sheet-desc">
+  <title id="a1-ghost-plate--sheet-title">Ghost Plate — music video style reference (a1-ghost-plate)</title>
+  <desc id="a1-ghost-plate--sheet-desc">The film as it stands, with the slate stripped off and a drawing of what the line is about held behind the type at seven per cent. Frame is 1600x900; the strip below the frame is apparatus, not part of the film.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap');
+    svg.vs-sheet text { font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    svg.vs-sheet .sheet-label { font-weight: 600; text-transform: uppercase; }
+    svg.vs-sheet .sheet-note { font-weight: 400; }
+  </style>
+  <defs><clipPath id="a1-ghost-plate--thumb-0"><rect x="40" y="960" width="284" height="160"/></clipPath><clipPath id="a1-ghost-plate--thumb-1"><rect x="349" y="960" width="284" height="160"/></clipPath><clipPath id="a1-ghost-plate--thumb-2"><rect x="658" y="960" width="284" height="160"/></clipPath><clipPath id="a1-ghost-plate--thumb-3"><rect x="967" y="960" width="284" height="160"/></clipPath><clipPath id="a1-ghost-plate--thumb-4"><rect x="1276" y="960" width="284" height="160"/></clipPath></defs>
+
+  <rect width="1600" height="1260" fill="#08080a"/>
+
+  <!-- ── The frame. Everything above y=900 is the film. ── -->
+  <g clip-path="url(#a1-ghost-plate--hero-clip)">
+    <rect x="0" y="0" width="1600" height="900" fill="#0d0d0c"/>
+    <line x1="80" y1="0" x2="80" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="200" y1="0" x2="200" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="320" y1="0" x2="320" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="440" y1="0" x2="440" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="560" y1="0" x2="560" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="680" y1="0" x2="680" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="800" y1="0" x2="800" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="920" y1="0" x2="920" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1040" y1="0" x2="1040" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1160" y1="0" x2="1160" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1280" y1="0" x2="1280" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1400" y1="0" x2="1400" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1520" y1="0" x2="1520" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/>
+    <g transform="translate(1095 175) scale(4.3) rotate(-7 50 50)" fill="none" stroke="#f2ede3" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.17">
+  <path d="M28 8 L54 8 L54 44 L74 50 L86 66 L28 66 Z"/>
+  <path d="M22 66 L92 66 L92 78 L22 78 Z"/>
+  <path d="M28 20 H54 M28 30 H54 M28 40 H54"/></g>
+    <g transform="translate(1000 320) scale(3) rotate(5 50 50)" fill="none" stroke="#f2ede3" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.085">
+  <path d="M28 8 L54 8 L54 44 L74 50 L86 66 L28 66 Z"/>
+  <path d="M22 66 L92 66 L92 78 L22 78 Z"/>
+  <path d="M28 20 H54 M28 30 H54 M28 40 H54"/></g>
+    <text x="80" y="305.3" font-size="130.8" font-weight="700" fill="#f2ede3" textLength="1020" lengthAdjust="spacing">WALK UNTIL MY</text>
+<text x="80" y="489.5" font-size="188.9" font-weight="700" fill="#f2ede3" textLength="1020" lengthAdjust="spacing">BOOTS ARE</text>
+<clipPath id="a1-ghost-plate--sung-3"><rect x="80" y="496.2" width="591.6" height="143.4"/></clipPath>
+<text x="80" y="602.4" font-size="106.3" font-weight="700" fill="#f2ede3" textLength="1020" lengthAdjust="spacing">BREAKING THROUGH</text>
+<text x="80" y="602.4" font-size="106.3" font-weight="700" fill="#d8382b" textLength="1020" lengthAdjust="spacing" clip-path="url(#a1-ghost-plate--sung-3)">BREAKING THROUGH</text>
+    <line x1="0" y1="790" x2="1600" y2="790" stroke="#f2ede3" stroke-width="2" opacity="0.16"/>
+    <g transform="translate(165 658) scale(1.5)" fill="none" stroke="#f2ede3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.22">
+  <circle cx="52" cy="14" r="9"/>
+  <path d="M52 23 V54"/>
+  <path d="M52 30 L34 42 M52 32 L72 26"/>
+  <path d="M52 54 L38 88 M52 54 L68 84"/>
+  <path d="M34 88 H44 M64 84 H74"/></g><g transform="translate(379 682.6) scale(1.22)" fill="none" stroke="#f2ede3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.19">
+  <circle cx="52" cy="14" r="9"/>
+  <path d="M52 23 V54"/>
+  <path d="M52 30 L34 42 M52 32 L72 26"/>
+  <path d="M52 54 L38 88 M52 54 L68 84"/>
+  <path d="M34 88 H44 M64 84 H74"/></g><g transform="translate(550 702) scale(1)" fill="none" stroke="#f2ede3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.16">
+  <circle cx="52" cy="14" r="9"/>
+  <path d="M52 23 V54"/>
+  <path d="M52 30 L34 42 M52 32 L72 26"/>
+  <path d="M52 54 L38 88 M52 54 L68 84"/>
+  <path d="M34 88 H44 M64 84 H74"/></g><g transform="translate(685 717.8) scale(0.82)" fill="none" stroke="#f2ede3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.13">
+  <circle cx="52" cy="14" r="9"/>
+  <path d="M52 23 V54"/>
+  <path d="M52 30 L34 42 M52 32 L72 26"/>
+  <path d="M52 54 L38 88 M52 54 L68 84"/>
+  <path d="M34 88 H44 M64 84 H74"/></g><g transform="translate(795 731.9) scale(0.66)" fill="none" stroke="#f2ede3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.1">
+  <circle cx="52" cy="14" r="9"/>
+  <path d="M52 23 V54"/>
+  <path d="M52 30 L34 42 M52 32 L72 26"/>
+  <path d="M52 54 L38 88 M52 54 L68 84"/>
+  <path d="M34 88 H44 M64 84 H74"/></g></g>
+  <clipPath id="a1-ghost-plate--hero-clip"><rect width="1600" height="900"/></clipPath>
+
+  <!-- ── Apparatus ── -->
+  <rect y="900" width="1600" height="360" fill="#08080a"/>
+  <rect y="900" width="1600" height="2" fill="#23232a"/>
+  <text class="sheet-label" x="40" y="938" font-size="16" letter-spacing="3" fill="#e8e5de">A1-GHOST-PLATE · GHOST PLATE</text>
+  <text class="sheet-label" x="1560" y="938" font-size="16" letter-spacing="3" fill="#77746d" text-anchor="end">SECTION VARIATION — THE SAME STYLE AT FIVE POINTS IN THE SONG</text>
+
+    <g clip-path="url(#a1-ghost-plate--thumb-0)">
+      <g transform="translate(40 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#0d0d0c"/><line x1="80" y1="0" x2="80" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="200" y1="0" x2="200" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="320" y1="0" x2="320" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="440" y1="0" x2="440" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="560" y1="0" x2="560" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="680" y1="0" x2="680" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="800" y1="0" x2="800" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="920" y1="0" x2="920" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1040" y1="0" x2="1040" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1160" y1="0" x2="1160" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1280" y1="0" x2="1280" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1400" y1="0" x2="1400" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1520" y1="0" x2="1520" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/>
+        <g transform="translate(350 20) scale(9)" fill="none" stroke="#f2ede3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.07">
+  <path d="M50 32 c15 0 21 10 21 19 c0 6 -4 10 -4 16 c0 11 -8 19 -17 19 s-17 -8 -17 -19 c0 -6 -4 -10 -4 -16 c0 -9 6 -19 21 -19 z"/>
+  <path d="M44 6 H56 V32 H44 Z"/>
+  <path d="M41 2 H59 V8 H41 Z"/>
+  <circle cx="50" cy="57" r="7"/>
+  <path d="M40 76 H60"/>
+  <path d="M46 8 V32 M50 8 V32 M54 8 V32"/></g>
+        <text x="800" y="300" font-size="40" font-weight="500" fill="#f2ede3" text-anchor="middle" letter-spacing="26">HAVRE DE GRACE</text>
+        <text x="80" y="560" font-size="230" font-weight="700" fill="#f2ede3" textLength="1440" lengthAdjust="spacing">ANDALUSIA</text></g>
+    </g>
+    <rect x="40" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="40" y="1146" font-size="15" letter-spacing="2.4" fill="#d8382b">TITLE</text>
+    <text class="sheet-note" x="40" y="1170" font-size="14.5" fill="#77746d">Mark, then title, over a ghost of the guitar</text>
+    <text class="sheet-note" x="40" y="1189" font-size="14.5" fill="#77746d">the intro is.</text>
+
+    <g clip-path="url(#a1-ghost-plate--thumb-1)">
+      <g transform="translate(349 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#0d0d0c"/><line x1="80" y1="0" x2="80" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="200" y1="0" x2="200" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="320" y1="0" x2="320" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="440" y1="0" x2="440" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="560" y1="0" x2="560" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="680" y1="0" x2="680" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="800" y1="0" x2="800" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="920" y1="0" x2="920" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1040" y1="0" x2="1040" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1160" y1="0" x2="1160" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1280" y1="0" x2="1280" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1400" y1="0" x2="1400" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/><line x1="1520" y1="0" x2="1520" y2="900" stroke="#f2ede3" stroke-width="1" opacity="0.1"/>
+        <g transform="translate(1100 220) scale(4.6)" fill="none" stroke="#f2ede3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.18">
+  <path d="M50 4 V18 M44 10 H56"/>
+  <path d="M34 46 L50 18 L66 46 Z"/>
+  <path d="M30 46 H70 V90 H30 Z"/>
+  <path d="M44 68 H56 V90"/>
+  <circle cx="50" cy="58" r="5"/>
+  <path d="M6 90 H94"/></g>
+        <text x="80" y="272.8" font-size="106.3" font-weight="700" fill="#f2ede3" textLength="1020" lengthAdjust="spacing">BUT LIKE A LOVER</text>
+<text x="80" y="446.9" font-size="180" font-weight="700" fill="#f2ede3" textLength="1020" lengthAdjust="spacing">STRANDED</text>
+<text x="80" y="591.6" font-size="141.7" font-weight="700" fill="#f2ede3" textLength="1020" lengthAdjust="spacing">UNDERNEATH A</text>
+<clipPath id="a1-ghost-plate--sung-0"><rect x="80" y="589.3" width="336.6" height="229.5"/></clipPath>
+<text x="80" y="759.3" font-size="170" font-weight="700" fill="#f2ede3" textLength="1020" lengthAdjust="spacing">CHURCHYARD</text>
+<text x="80" y="759.3" font-size="170" font-weight="700" fill="#d8382b" textLength="1020" lengthAdjust="spacing" clip-path="url(#a1-ghost-plate--sung-0)">CHURCHYARD</text></g>
+    </g>
+    <rect x="349" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="349" y="1146" font-size="15" letter-spacing="2.4" fill="#d8382b">VERSE</text>
+    <text class="sheet-note" x="349" y="1170" font-size="14.5" fill="#77746d">Type left, ghost right. The motif changes on</text>
+    <text class="sheet-note" x="349" y="1189" font-size="14.5" fill="#77746d">every line.</text>
+
+    <g clip-path="url(#a1-ghost-plate--thumb-2)">
+      <g transform="translate(658 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#d8382b"/>
+        <g transform="translate(250 -120) scale(11)" fill="none" stroke="#f2ede3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.14">
+  <path d="M18 66 L12 24 L34 44 L50 14 L66 44 L88 24 L82 66 Z"/>
+  <path d="M16 66 H84 V80 H16 Z"/>
+  <circle cx="12" cy="24" r="4"/><circle cx="50" cy="14" r="4"/><circle cx="88" cy="24" r="4"/></g>
+        <text x="80" y="397.7" font-size="171.4" font-weight="700" fill="#f2ede3" textLength="1440" lengthAdjust="spacing">IF I WERE KING</text>
+<clipPath id="a1-ghost-plate--sung-1"><rect x="80" y="397.7" width="864" height="231.4"/></clipPath>
+<text x="80" y="569.1" font-size="171.4" font-weight="700" fill="#f2ede3" textLength="1440" lengthAdjust="spacing">FOR JUST A DAY</text>
+<text x="80" y="569.1" font-size="171.4" font-weight="700" fill="#0d0d0c" textLength="1440" lengthAdjust="spacing" clip-path="url(#a1-ghost-plate--sung-1)">FOR JUST A DAY</text></g>
+    </g>
+    <rect x="658" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="658" y="1146" font-size="15" letter-spacing="2.4" fill="#d8382b">CHORUS</text>
+    <text class="sheet-note" x="658" y="1170" font-size="14.5" fill="#77746d">Field flips to red, ghost goes bone, motif</text>
+    <text class="sheet-note" x="658" y="1189" font-size="14.5" fill="#77746d">fills the frame.</text>
+
+    <g clip-path="url(#a1-ghost-plate--thumb-3)">
+      <g transform="translate(967 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#0d0d0c"/>
+        <g transform="translate(150 -250) scale(13)" fill="none" stroke="#f2ede3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.1">
+  <path d="M6 34 q12 -14 22 0 q10 -14 22 0"/>
+  <path d="M48 62 q9 -11 17 0 q8 -11 17 0"/>
+  <path d="M34 82 q7 -8 13 0 q6 -8 13 0"/></g>
+        <circle cx="800" cy="450" r="190" fill="none" stroke="#f2ede3" stroke-width="3" opacity="0.34"/><circle cx="800" cy="450" r="340" fill="none" stroke="#f2ede3" stroke-width="2.4" opacity="0.25"/><circle cx="800" cy="450" r="490" fill="none" stroke="#f2ede3" stroke-width="1.8" opacity="0.16000000000000003"/>
+        <text x="210" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="342" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="474" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="606" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="738" y="380" font-size="66" font-weight="700" fill="#d8382b" text-anchor="middle">OH</text><text x="870" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="1002" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="1134" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="1266" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text><text x="1398" y="380" font-size="66" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.42">OH</text>
+        <text x="236" y="660" font-size="92" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.3">OH</text><text x="424" y="660" font-size="92" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.3">OH</text><text x="612" y="660" font-size="92" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.3">OH</text><text x="800" y="660" font-size="92" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.3">OH</text><text x="988" y="660" font-size="92" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.3">OH</text><text x="1176" y="660" font-size="92" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.3">OH</text><text x="1364" y="660" font-size="92" font-weight="700" fill="#f2ede3" text-anchor="middle" opacity="0.3">OH</text></g>
+    </g>
+    <rect x="967" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="967" y="1146" font-size="15" letter-spacing="2.4" fill="#d8382b">OH-OHS</text>
+    <text class="sheet-note" x="967" y="1170" font-size="14.5" fill="#77746d">No lyric to set, so the ghost is the whole</text>
+    <text class="sheet-note" x="967" y="1189" font-size="14.5" fill="#77746d">frame and the OHs count.</text>
+
+    <g clip-path="url(#a1-ghost-plate--thumb-4)">
+      <g transform="translate(1276 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#07070a"/>
+        <g transform="translate(650 320) scale(3)" fill="none" stroke="#f2ede3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.06">
+  <path d="M28 8 L54 8 L54 44 L74 50 L86 66 L28 66 Z"/>
+  <path d="M22 66 L92 66 L92 78 L22 78 Z"/>
+  <path d="M28 20 H54 M28 30 H54 M28 40 H54"/></g>
+        <text x="800" y="419.4" font-size="75.4" font-weight="400" fill="#f2ede3" text-anchor="middle" textLength="860" lengthAdjust="spacing">WALK UNTIL MY BOOTS</text>
+<clipPath id="a1-ghost-plate--sung-2"><rect x="370" y="417.4" width="430" height="135"/></clipPath>
+<text x="800" y="517.4" font-size="100" font-weight="400" fill="#f2ede3" text-anchor="middle" textLength="860" lengthAdjust="spacing">ARE FADED BLUE</text>
+<text x="800" y="517.4" font-size="100" font-weight="400" fill="#d8382b" text-anchor="middle" textLength="860" lengthAdjust="spacing" clip-path="url(#a1-ghost-plate--sung-2)">ARE FADED BLUE</text></g>
+    </g>
+    <rect x="1276" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="1276" y="1146" font-size="15" letter-spacing="2.4" fill="#d8382b">QUIET VERSE</text>
+    <text class="sheet-note" x="1276" y="1170" font-size="14.5" fill="#77746d">Arrangement drops away and the type drops with</text>
+    <text class="sheet-note" x="1276" y="1189" font-size="14.5" fill="#77746d">it. Light weight, centred, air.</text>
+
+    <rect x="40" y="1206" width="22" height="22" fill="#0d0d0c" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="71" y="1223" font-size="14.5" fill="#77746d">Ink #0D0D0C</text>
+    <rect x="186.4" y="1206" width="22" height="22" fill="#f2ede3" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="217.4" y="1223" font-size="14.5" fill="#77746d">Bone #F2EDE3</text>
+    <rect x="340.20000000000005" y="1206" width="22" height="22" fill="#d8382b" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="371.20000000000005" y="1223" font-size="14.5" fill="#77746d">Red #D8382B</text>
+</svg>

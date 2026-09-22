@@ -38,3 +38,6 @@ logs
 
 # Press kit zip — generated from shared/data/press.ts by modules/press-kit.ts
 public/press/havre-de-grace-press-kit.zip
+
+# The contact sheet tools/video-styles/frames.mjs writes. Scratch, always.
+.frames.html

@@ -4,61 +4,16 @@ export default defineContentConfig({
   collections: {
 
     /*
-     * --- Lunch Break Records -------------------------------------------
+     * --- Tools at /resources -------------------------------------------
      *
-     * The resources section at /resources (see shared/lunch-break/config.ts).
-     * Everything it renders lives under content/lunch-break/ so the whole
-     * sub-brand can be lifted to its own site in one move.
-     *
-     * Articles are markdown with frontmatter; the three tools are each a
-     * single YAML file so Stefan can edit a checklist item, a directory entry
-     * or a scoring weight without opening a component.
+     * Three browser-based tools for independent musicians (see
+     * shared/data/resources.ts). Each one is a single YAML file so Stefan can
+     * edit a checklist item, a directory entry or a scoring weight without
+     * opening a component.
      */
-    lunchBreakArticles: defineCollection({
-      type: 'page',
-      source: 'lunch-break/articles/*.md',
-      schema: z.object({
-        title: z.string(),
-        description: z.string(),
-        slug: z.string(),
-        /** Tool slug this article is paired with, or null for a standalone. */
-        pairedTool: z.string().nullable().optional(),
-        /** ISO date the factual claims on the page were last checked. */
-        lastVerified: z.string(),
-        /** Drafts are Stefan's to edit; see LUNCH_BREAK.showDrafts. */
-        draft: z.boolean().default(true),
-        /** Sort order on the hub, low to high. */
-        order: z.number().default(50),
-        /** Rough read time in minutes, stated rather than computed. */
-        readingMinutes: z.number().optional(),
-        /**
-         * The brand's signature: the five-minute answer, above the guide.
-         * Lives in frontmatter rather than in the body so the hub, the meta
-         * description and the FAQ JSON-LD can all reuse the same words.
-         */
-        lunchBreak: z.object({
-          answer: z.string(),
-          today: z.array(z.string()),
-        }),
-        /** Primary sources behind the page, shown at the foot of the article. */
-        sources: z.array(z.object({
-          label: z.string(),
-          url: z.string(),
-          lastVerified: z.string(),
-        })).default([]),
-        /** Question-shaped Q&A pairs, emitted as FAQPage JSON-LD when >= 3. */
-        faq: z.array(z.object({
-          question: z.string(),
-          answer: z.string(),
-        })).default([]),
-        /** Slugs of other articles to send the reader to at the end. */
-        related: z.array(z.string()).default([]),
-      }),
-    }),
-
-    lunchBreakChecklist: defineCollection({
+    resourcesChecklist: defineCollection({
       type: 'data',
-      source: 'lunch-break/royalty-checklist.yml',
+      source: 'resources/royalty-checklist.yml',
       schema: z.object({
         lastVerified: z.string(),
         /** Account-level steps, done once rather than per song. */
@@ -89,9 +44,9 @@ export default defineContentConfig({
       }),
     }),
 
-    lunchBreakFunding: defineCollection({
+    resourcesFunding: defineCollection({
       type: 'data',
-      source: 'lunch-break/funding.yml',
+      source: 'resources/funding.yml',
       schema: z.object({
         lastVerified: z.string(),
         /** One line per type, shown as a legend above the filters. */
@@ -99,8 +54,6 @@ export default defineContentConfig({
           type: z.string(),
           label: z.string(),
           blurb: z.string(),
-          /** Anchor in the paired article, e.g. "#grants". */
-          articleAnchor: z.string().optional(),
         })),
         entries: z.array(z.object({
           name: z.string(),
@@ -126,9 +79,9 @@ export default defineContentConfig({
       }),
     }),
 
-    lunchBreakPromoChecker: defineCollection({
+    resourcesPromoChecker: defineCollection({
       type: 'data',
-      source: 'lunch-break/promo-checker.yml',
+      source: 'resources/promo-checker.yml',
       schema: z.object({
         lastVerified: z.string(),
         /** Risk bands, applied to the share of the available weight scored. */

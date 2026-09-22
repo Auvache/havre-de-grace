@@ -96,10 +96,9 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
-    // Lunch Break Records (/resources). Reading pages and working tools, so
-    // they take the same daylight palette as the rest of the prose on the
-    // site rather than a look of their own — the sub-brand is a wordmark and
-    // a voice, not a second theme.
+    // The tools at /resources. Working pages, so they take the same daylight
+    // palette as the rest of the prose on the site rather than a look of
+    // their own.
     match: /^\/resources(?:\/|$)/,
     config: {
       theme: 'light',
@@ -124,10 +123,10 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
-    // A 16:9 film that paints its own frame in ink, bone and red. The page
-    // around it gets out of the way entirely, because the only colour anyone
-    // should be judging is the film's.
-    match: /^\/music-video-test\/?$/,
+    // 16:9 films that paint their own frames — ink and bone and red, or chart
+    // and route red. The page around them gets out of the way entirely,
+    // because the only colour anyone should be judging is the film's.
+    match: /^\/music-videos(?:\/|$)/,
     config: {
       theme: 'dark',
       gradient: 'blackout',

@@ -198,6 +198,14 @@ export const ANDALUSIA_SCORE = {
   /** From `afinfo`, not from the tracklist's rounded 2:53. */
   duration: DURATION,
   /**
+   * The end card lands on the guitar harmonic at 2:46.27 — the one loud note
+   * after the last line. Measured, not tapped: the sharpest broadband onset in
+   * the final sixteen seconds, found with a 16 ms window at 0.7–5 kHz, with
+   * overtones at about 1130 and 1710 Hz jumping ~30 dB on it. Absolute song
+   * time, so it is not moved by TRIM, which corrects the voice, not the guitar.
+   */
+  endCardAt: 166.27,
+  /**
    * 105.2 BPM, first downbeat at 18.27. Fitted to the strum onsets across the
    * first verse, where they sit on the grid to within 30 ms — over the whole
    * song it drifts, because nobody played to a click. Decorative only: every

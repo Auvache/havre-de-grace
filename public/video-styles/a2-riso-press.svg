@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="vs-sheet" viewBox="0 0 1600 1260" width="1600" height="1260" role="img" aria-labelledby="a2-riso-press--sheet-title a2-riso-press--sheet-desc">
+  <title id="a2-riso-press--sheet-title">Riso Press — music video style reference (a2-riso-press)</title>
+  <desc id="a2-riso-press--sheet-desc">Two inks on uncoated paper with the plates a few pixels out of register. Grain everywhere, stamped motifs, one poster per line. Frame is 1600x900; the strip below the frame is apparatus, not part of the film.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap');
+    svg.vs-sheet text { font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    svg.vs-sheet .sheet-label { font-weight: 600; text-transform: uppercase; }
+    svg.vs-sheet .sheet-note { font-weight: 400; }
+  </style>
+  <defs><clipPath id="a2-riso-press--thumb-0"><rect x="40" y="960" width="284" height="160"/></clipPath><clipPath id="a2-riso-press--thumb-1"><rect x="349" y="960" width="284" height="160"/></clipPath><clipPath id="a2-riso-press--thumb-2"><rect x="658" y="960" width="284" height="160"/></clipPath><clipPath id="a2-riso-press--thumb-3"><rect x="967" y="960" width="284" height="160"/></clipPath><clipPath id="a2-riso-press--thumb-4"><rect x="1276" y="960" width="284" height="160"/></clipPath><filter id="a2-riso-press--riso-grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="4" seed="7" result="n"/>
+    <feColorMatrix in="n" type="saturate" values="0" result="g"/>
+    <feComponentTransfer in="g" result="a"><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+    <feComposite in="a" in2="SourceGraphic" operator="in"/>
+  </filter></defs>
+
+  <rect width="1600" height="1260" fill="#08080a"/>
+
+  <!-- ── The frame. Everything above y=900 is the film. ── -->
+  <g clip-path="url(#a2-riso-press--hero-clip)">
+    <rect x="0" y="0" width="1600" height="900" fill="#efe7d6"/>
+    <g transform="translate(980 70) scale(5.2)" fill="none" stroke="#2f4d8c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.22">
+  <circle cx="50" cy="50" r="42"/>
+  <path d="M50 8 a30 42 0 0 1 0 84 a30 42 0 0 1 0 -84"/>
+  <path d="M50 8 V92"/>
+  <path d="M8 50 H92 M15 29 H85 M15 71 H85"/></g>
+    <g transform="translate(1215 565) scale(2.5)" fill="none" stroke="#e2402f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
+  <path d="M50 4 q7 0 7 15 v20 l33 19 v11 l-33 -9 v18 l11 9 v7 l-18 -5 l-18 5 v-7 l11 -9 v-18 l-33 9 v-11 l33 -19 v-20 q0 -15 7 -15 z"/></g>
+    <line x1="80" y1="120" x2="1520" y2="120" stroke="#1a1a18" stroke-width="6"/>
+    <line x1="80" y1="176" x2="1520" y2="176" stroke="#1a1a18" stroke-width="2"/>
+    <g transform="translate(7 5)"><g opacity="0.85"><text x="80" y="415.6" font-size="180" font-weight="700" fill="#e2402f" textLength="1200" lengthAdjust="spacing">BANGKOK,</text>
+<text x="80" y="595.6" font-size="180" font-weight="700" fill="#e2402f" textLength="1200" lengthAdjust="spacing">BUDAPEST,</text>
+<text x="80" y="741.4" font-size="142.9" font-weight="700" fill="#e2402f" textLength="1200" lengthAdjust="spacing">OR BATON ROUGE</text></g></g>
+    <text x="80" y="415.6" font-size="180" font-weight="700" fill="#1a1a18" textLength="1200" lengthAdjust="spacing">BANGKOK,</text>
+<text x="80" y="595.6" font-size="180" font-weight="700" fill="#1a1a18" textLength="1200" lengthAdjust="spacing">BUDAPEST,</text>
+<text x="80" y="741.4" font-size="142.9" font-weight="700" fill="#1a1a18" textLength="1200" lengthAdjust="spacing">OR BATON ROUGE</text>
+    <line x1="80" y1="820" x2="1520" y2="820" stroke="#1a1a18" stroke-width="6"/>
+    <text x="1520" y="800" font-size="30" font-weight="600" fill="#1a1a18" text-anchor="end" letter-spacing="4">03</text>
+    <rect x="0" y="0" width="1600" height="900" fill="#1a1a18" opacity="1" filter="url(#a2-riso-press--riso-grain)"/></g>
+  <clipPath id="a2-riso-press--hero-clip"><rect width="1600" height="900"/></clipPath>
+
+  <!-- ── Apparatus ── -->
+  <rect y="900" width="1600" height="360" fill="#08080a"/>
+  <rect y="900" width="1600" height="2" fill="#23232a"/>
+  <text class="sheet-label" x="40" y="938" font-size="16" letter-spacing="3" fill="#e8e5de">A2-RISO-PRESS · RISO PRESS</text>
+  <text class="sheet-label" x="1560" y="938" font-size="16" letter-spacing="3" fill="#77746d" text-anchor="end">SECTION VARIATION — THE SAME STYLE AT FIVE POINTS IN THE SONG</text>
+
+    <g clip-path="url(#a2-riso-press--thumb-0)">
+      <g transform="translate(40 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#efe7d6"/>
+        <g transform="translate(490 160) scale(6.2)" fill="none" stroke="#2f4d8c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.16">
+  <path d="M50 32 c15 0 21 10 21 19 c0 6 -4 10 -4 16 c0 11 -8 19 -17 19 s-17 -8 -17 -19 c0 -6 -4 -10 -4 -16 c0 -9 6 -19 21 -19 z"/>
+  <path d="M44 6 H56 V32 H44 Z"/>
+  <path d="M41 2 H59 V8 H41 Z"/>
+  <circle cx="50" cy="57" r="7"/>
+  <path d="M40 76 H60"/>
+  <path d="M46 8 V32 M50 8 V32 M54 8 V32"/></g>
+        <line x1="80" y1="150" x2="1520" y2="150" stroke="#1a1a18" stroke-width="6"/>
+        <text x="800" y="300" font-size="36" font-weight="600" fill="#1a1a18" text-anchor="middle" letter-spacing="22">HAVRE DE GRACE</text>
+        <g transform="translate(6 4)"><text x="800" y="520" font-size="210" font-weight="700" fill="#e2402f" text-anchor="middle" textLength="1200" lengthAdjust="spacing">ANDALUSIA</text></g>
+        <text x="800" y="520" font-size="210" font-weight="700" fill="#1a1a18" text-anchor="middle" textLength="1200" lengthAdjust="spacing">ANDALUSIA</text>
+        <line x1="80" y1="760" x2="1520" y2="760" stroke="#1a1a18" stroke-width="6"/>
+        <rect x="0" y="0" width="1600" height="900" fill="#1a1a18" filter="url(#a2-riso-press--riso-grain)"/></g>
+    </g>
+    <rect x="40" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="40" y="1146" font-size="15" letter-spacing="2.4" fill="#e2402f">TITLE</text>
+    <text class="sheet-note" x="40" y="1170" font-size="14.5" fill="#77746d">Both plates land square once, on the title,</text>
+    <text class="sheet-note" x="40" y="1189" font-size="14.5" fill="#77746d">and never again.</text>
+
+    <g clip-path="url(#a2-riso-press--thumb-1)">
+      <g transform="translate(349 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#efe7d6"/>
+        <g transform="translate(900 200) scale(5.6)" fill="none" stroke="#2f4d8c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
+  <path d="M50 8 V68"/>
+  <path d="M52 16 L80 66 H52 Z"/>
+  <path d="M46 26 L22 66 H46 Z"/>
+  <path d="M12 70 H88 L74 86 H26 Z"/>
+  <path d="M4 94 q12 -6 24 0 t 24 0 t 24 0 t 24 0"/></g>
+        <text x="80" y="190" font-size="26" font-weight="600" fill="#e2402f" letter-spacing="10">I'D SIT AND WATCH</text>
+        <g transform="translate(5 4)"><text x="80" y="375.5" font-size="136.4" font-weight="700" fill="#e2402f" textLength="900" lengthAdjust="spacing">THE SAILORS</text>
+<text x="80" y="511.8" font-size="136.4" font-weight="700" fill="#e2402f" textLength="900" lengthAdjust="spacing">IN THE COLD</text></g>
+        <text x="80" y="375.5" font-size="136.4" font-weight="700" fill="#1a1a18" textLength="900" lengthAdjust="spacing">THE SAILORS</text>
+<text x="80" y="511.8" font-size="136.4" font-weight="700" fill="#1a1a18" textLength="900" lengthAdjust="spacing">IN THE COLD</text>
+        <line x1="80" y1="790" x2="980" y2="790" stroke="#1a1a18" stroke-width="5"/>
+        <rect x="0" y="0" width="1600" height="900" fill="#1a1a18" filter="url(#a2-riso-press--riso-grain)"/></g>
+    </g>
+    <rect x="349" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="349" y="1146" font-size="15" letter-spacing="2.4" fill="#e2402f">VERSE</text>
+    <text class="sheet-note" x="349" y="1170" font-size="14.5" fill="#77746d">Poster layout rotates every line — eight in</text>
+    <text class="sheet-note" x="349" y="1189" font-size="14.5" fill="#77746d">the set, none repeats inside a verse.</text>
+
+    <g clip-path="url(#a2-riso-press--thumb-2)">
+      <g transform="translate(658 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#e2402f"/>
+        <g transform="translate(420 70) scale(7.6)" fill="none" stroke="#efe7d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
+  <path d="M18 66 L12 24 L34 44 L50 14 L66 44 L88 24 L82 66 Z"/>
+  <path d="M16 66 H84 V80 H16 Z"/>
+  <circle cx="12" cy="24" r="4"/><circle cx="50" cy="14" r="4"/><circle cx="88" cy="24" r="4"/></g>
+        <g transform="translate(8 6)"><text x="80" y="407.7" font-size="171.4" font-weight="700" fill="#1a1a18" textLength="1440" lengthAdjust="spacing">IF I WERE KING</text>
+<text x="80" y="579.1" font-size="171.4" font-weight="700" fill="#1a1a18" textLength="1440" lengthAdjust="spacing">FOR JUST A DAY</text></g>
+        <text x="80" y="407.7" font-size="171.4" font-weight="700" fill="#efe7d6" textLength="1440" lengthAdjust="spacing">IF I WERE KING</text>
+<text x="80" y="579.1" font-size="171.4" font-weight="700" fill="#efe7d6" textLength="1440" lengthAdjust="spacing">FOR JUST A DAY</text>
+        <rect x="0" y="0" width="1600" height="900" fill="#1a1a18" filter="url(#a2-riso-press--riso-grain)"/></g>
+    </g>
+    <rect x="658" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="658" y="1146" font-size="15" letter-spacing="2.4" fill="#e2402f">CHORUS</text>
+    <text class="sheet-note" x="658" y="1170" font-size="14.5" fill="#77746d">Red floods the sheet and the type is knocked</text>
+    <text class="sheet-note" x="658" y="1189" font-size="14.5" fill="#77746d">out of it.</text>
+
+    <g clip-path="url(#a2-riso-press--thumb-3)">
+      <g transform="translate(967 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#efe7d6"/>
+        <circle cx="190" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="326" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="462" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="598" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="734" cy="330" r="56" fill="#e2402f" opacity="1"/><circle cx="870" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="1006" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="1142" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="1278" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/><circle cx="1414" cy="330" r="44" fill="#2f4d8c" opacity="0.5"/>
+        <circle cx="240" cy="630" r="62" fill="#e2402f" opacity="0.32"/><circle cx="426" cy="630" r="62" fill="#e2402f" opacity="0.32"/><circle cx="612" cy="630" r="62" fill="#e2402f" opacity="0.32"/><circle cx="798" cy="630" r="62" fill="#e2402f" opacity="0.32"/><circle cx="984" cy="630" r="62" fill="#e2402f" opacity="0.32"/><circle cx="1170" cy="630" r="62" fill="#e2402f" opacity="0.32"/><circle cx="1356" cy="630" r="62" fill="#e2402f" opacity="0.32"/>
+        <text x="800" y="480" font-size="42" font-weight="600" fill="#1a1a18" text-anchor="middle" letter-spacing="18">OH OH OH</text>
+        <rect x="0" y="0" width="1600" height="900" fill="#1a1a18" filter="url(#a2-riso-press--riso-grain)"/></g>
+    </g>
+    <rect x="967" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="967" y="1146" font-size="15" letter-spacing="2.4" fill="#e2402f">OH-OHS</text>
+    <text class="sheet-note" x="967" y="1170" font-size="14.5" fill="#77746d">No words to print, so the plate prints dots —</text>
+    <text class="sheet-note" x="967" y="1189" font-size="14.5" fill="#77746d">one per oh, red on blue.</text>
+
+    <g clip-path="url(#a2-riso-press--thumb-4)">
+      <g transform="translate(1276 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#efe7d6"/>
+        <line x1="400" y1="300" x2="1200" y2="300" stroke="#1a1a18" stroke-width="3"/>
+        <text x="800" y="430" font-size="74" font-weight="600" fill="#1a1a18" text-anchor="middle">WALK UNTIL MY BOOTS</text>
+        <text x="800" y="520" font-size="74" font-weight="600" fill="#1a1a18" text-anchor="middle">ARE FADED BLUE</text>
+        <line x1="400" y1="600" x2="1200" y2="600" stroke="#1a1a18" stroke-width="3"/>
+        <text x="1520" y="800" font-size="30" font-weight="600" fill="#1a1a18" text-anchor="end" letter-spacing="4">24</text>
+        <rect x="0" y="0" width="1600" height="900" fill="#1a1a18" filter="url(#a2-riso-press--riso-grain)"/></g>
+    </g>
+    <rect x="1276" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="1276" y="1146" font-size="15" letter-spacing="2.4" fill="#e2402f">QUIET VERSE</text>
+    <text class="sheet-note" x="1276" y="1170" font-size="14.5" fill="#77746d">The press has been cleaned. One ink, no</text>
+    <text class="sheet-note" x="1276" y="1189" font-size="14.5" fill="#77746d">offset, wide margins, small type.</text>
+
+    <rect x="40" y="1206" width="22" height="22" fill="#efe7d6" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="71" y="1223" font-size="14.5" fill="#77746d">Paper #EFE7D6</text>
+    <rect x="201.2" y="1206" width="22" height="22" fill="#1a1a18" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="232.2" y="1223" font-size="14.5" fill="#77746d">Ink #1A1A18</text>
+    <rect x="347.6" y="1206" width="22" height="22" fill="#e2402f" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="378.6" y="1223" font-size="14.5" fill="#77746d">Red #E2402F</text>
+    <rect x="494" y="1206" width="22" height="22" fill="#2f4d8c" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="525" y="1223" font-size="14.5" fill="#77746d">Blue #2F4D8C</text>
+</svg>

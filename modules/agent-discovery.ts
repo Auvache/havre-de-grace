@@ -75,8 +75,24 @@ const INCLUDE_LYRICS = true
  * `/tools` and its pages are here for a stronger reason than the rest: they are
  * unlisted, and a markdown mirror plus an llms.txt entry would be the site
  * handing an agent the URL it was never meant to find.
+ *
+ * `/resources` and its tools are here for the opposite reason: they are
+ * indexed and meant to be found, but they are interactive, and a markdown
+ * mirror of a checklist you fill in would be a mirror of nothing. Keep this in
+ * step with NO_MARKDOWN_MIRROR in app/composables/usePageSeo.ts.
  */
-const EXCLUDED_ROUTES = new Set(['/links', '/listen', '/logo', '/influences', '/tools', '/tools/demos'])
+const EXCLUDED_ROUTES = new Set([
+  '/links',
+  '/listen',
+  '/logo',
+  '/influences',
+  '/tools',
+  '/tools/demos',
+  '/resources',
+  '/resources/tools/royalty-checklist',
+  '/resources/tools/funding',
+  '/resources/tools/promo-checker',
+])
 
 const PLATFORM_LABELS: Record<string, string> = {
   spotify: 'Spotify',

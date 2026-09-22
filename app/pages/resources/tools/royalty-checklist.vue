@@ -1,11 +1,5 @@
 <template>
-  <LbToolShell
-    :tool="tool"
-    :article="tool.pairedArticle"
-    :article-title="articleTitle"
-    :article-description="articleDescription"
-    :last-verified="checklist?.lastVerified"
-  >
+  <ToolShell :tool="tool">
     <template #intro>
       A song earns several different royalties, and they are collected by
       different organisations that will not find you on their own. Add your
@@ -13,42 +7,40 @@
       still outstanding.
     </template>
 
-    <LbRoyaltyChecklist v-if="checklist" :data="checklist" />
-  </LbToolShell>
+    <RoyaltyChecklist v-if="checklist" :data="checklist" />
+  </ToolShell>
 </template>
 
 <script setup lang="ts">
-import { findToolBySlug, lunchBreakToolPath } from '~~/shared/lunch-break/config'
-import { lunchBreakToolSchema } from '~/composables/useLunchBreakSeo'
+import { findToolBySlug, resourceToolPath } from '~~/shared/data/resources'
+import { toolSchema } from '~/utils/schema'
 
 definePageMeta({
-  layout: 'lunchbreak',
+  layout: 'resources',
 })
 
 const tool = findToolBySlug('royalty-checklist')!
-const path = lunchBreakToolPath(tool.slug)
 
 const { data: checklist } = await useAsyncData(
-  'lunch-break-royalty-checklist',
-  () => queryCollection('lunchBreakChecklist').first(),
+  'resources-royalty-checklist',
+  () => queryCollection('resourcesChecklist').first(),
 )
 
-const { data: article } = await useAsyncData(
-  'lunch-break-royalty-checklist-article',
-  () => queryCollection('lunchBreakArticles').where('slug', '=', tool.pairedArticle).first(),
-)
-
-const articleTitle = computed(() => article.value?.title ?? 'Royalties your distributor isn\'t collecting')
-const articleDescription = computed(() => article.value?.description ?? undefined)
-
-const { canonicalUrl } = useLunchBreakSeo({
-  title: tool.name,
+const { canonicalUrl } = usePageSeo({
+  title: `${tool.name} | Havre De Grace`,
   description: 'A free per-song tracker for PRO, MLC, SoundExchange and Content ID registrations. Works in your browser, saves your progress, exports to JSON. Nothing you enter is sent anywhere.',
-  path,
+  path: resourceToolPath(tool.slug),
 })
+
+const { siteUrl } = useAbsoluteUrl()
 
 useSchemaOrg([
   defineWebPage(),
-  lunchBreakToolSchema({ tool, canonicalUrl: canonicalUrl.value, category: 'MusicApplication' }),
+  toolSchema({
+    tool,
+    canonicalUrl: canonicalUrl.value,
+    siteUrl,
+    category: 'MusicApplication',
+  }),
 ])
 </script>

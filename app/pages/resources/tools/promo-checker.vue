@@ -1,11 +1,5 @@
 <template>
-  <LbToolShell
-    :tool="tool"
-    :article="tool.pairedArticle"
-    :article-title="articleTitle"
-    :article-description="articleDescription"
-    :last-verified="checker?.lastVerified"
-  >
+  <ToolShell :tool="tool">
     <template #intro>
       Answer a few questions about the offer in front of you, or about a
       playlist that added you, and get a structured read on how much of it
@@ -14,42 +8,40 @@
       things only you can see.
     </template>
 
-    <LbPromoChecker v-if="checker" :data="checker" />
-  </LbToolShell>
+    <PromoChecker v-if="checker" :data="checker" />
+  </ToolShell>
 </template>
 
 <script setup lang="ts">
-import { findToolBySlug, lunchBreakToolPath } from '~~/shared/lunch-break/config'
-import { lunchBreakToolSchema } from '~/composables/useLunchBreakSeo'
+import { findToolBySlug, resourceToolPath } from '~~/shared/data/resources'
+import { toolSchema } from '~/utils/schema'
 
 definePageMeta({
-  layout: 'lunchbreak',
+  layout: 'resources',
 })
 
 const tool = findToolBySlug('promo-checker')!
-const path = lunchBreakToolPath(tool.slug)
 
 const { data: checker } = await useAsyncData(
-  'lunch-break-promo-checker',
-  () => queryCollection('lunchBreakPromoChecker').first(),
+  'resources-promo-checker',
+  () => queryCollection('resourcesPromoChecker').first(),
 )
 
-const { data: article } = await useAsyncData(
-  'lunch-break-promo-checker-article',
-  () => queryCollection('lunchBreakArticles').where('slug', '=', tool.pairedArticle).first(),
-)
-
-const articleTitle = computed(() => article.value?.title ?? 'How to spot playlist and promo scams')
-const articleDescription = computed(() => article.value?.description ?? undefined)
-
-const { canonicalUrl } = useLunchBreakSeo({
-  title: tool.name,
+const { canonicalUrl } = usePageSeo({
+  title: `${tool.name} | Havre De Grace`,
   description: 'A free questionnaire for working out whether a promo offer or a Spotify playlist matches the known scam patterns — with the red flags and the reasoning shown, and next steps if you are already caught up in one.',
-  path,
+  path: resourceToolPath(tool.slug),
 })
+
+const { siteUrl } = useAbsoluteUrl()
 
 useSchemaOrg([
   defineWebPage(),
-  lunchBreakToolSchema({ tool, canonicalUrl: canonicalUrl.value, category: 'BusinessApplication' }),
+  toolSchema({
+    tool,
+    canonicalUrl: canonicalUrl.value,
+    siteUrl,
+    category: 'BusinessApplication',
+  }),
 ])
 </script>

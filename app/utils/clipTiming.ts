@@ -1,7 +1,7 @@
 /*
  * The small vocabulary the music-video styles are written in.
  *
- * Every scene on /music-video-test is a pure function of one number — the local
+ * Every scene under /music-videos is a pure function of one number — the local
  * time in the clip — so there is no animation state anywhere: no timeline
  * objects, no CSS keyframes to keep in step with the audio, nothing that can
  * drift out of sync or be left mid-transition when the clip is scrubbed or

@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="vs-sheet" viewBox="0 0 1600 1260" width="1600" height="1260" role="img" aria-labelledby="a4-wide-margin--sheet-title a4-wide-margin--sheet-desc">
+  <title id="a4-wide-margin--sheet-title">Wide Margin — music video style reference (a4-wide-margin)</title>
+  <desc id="a4-wide-margin--sheet-desc">Swiss editorial. A narrow measure of quiet type at the left, one large line drawing at the right, and a great deal of paper left alone. Frame is 1600x900; the strip below the frame is apparatus, not part of the film.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap');
+    svg.vs-sheet text { font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    svg.vs-sheet .sheet-label { font-weight: 600; text-transform: uppercase; }
+    svg.vs-sheet .sheet-note { font-weight: 400; }
+  </style>
+  <defs><clipPath id="a4-wide-margin--thumb-0"><rect x="40" y="960" width="284" height="160"/></clipPath><clipPath id="a4-wide-margin--thumb-1"><rect x="349" y="960" width="284" height="160"/></clipPath><clipPath id="a4-wide-margin--thumb-2"><rect x="658" y="960" width="284" height="160"/></clipPath><clipPath id="a4-wide-margin--thumb-3"><rect x="967" y="960" width="284" height="160"/></clipPath><clipPath id="a4-wide-margin--thumb-4"><rect x="1276" y="960" width="284" height="160"/></clipPath></defs>
+
+  <rect width="1600" height="1260" fill="#08080a"/>
+
+  <!-- ── The frame. Everything above y=900 is the film. ── -->
+  <g clip-path="url(#a4-wide-margin--hero-clip)">
+    <rect x="0" y="0" width="1600" height="900" fill="#f0ede5"/>
+    <line x1="560" y1="0" x2="560" y2="900" stroke="#1b1b19" stroke-width="1" opacity="0.16"/>
+    <text x="80" y="190" font-size="120" font-weight="300" fill="#b4553b" opacity="0.35">07</text>
+    <text x="80" y="355.8" font-size="60.6" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">I'D SIT AND</text>
+<text x="80" y="437.2" font-size="74.1" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">WATCH THE</text>
+<text x="80" y="514.9" font-size="66.7" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">SAILORS IN</text>
+<clipPath id="a4-wide-margin--sung-7"><rect x="80" y="522.9" width="248" height="112.5"/></clipPath>
+<text x="80" y="606.2" font-size="83.3" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">THE COLD</text>
+<text x="80" y="606.2" font-size="83.3" font-weight="700" fill="#b4553b" textLength="400" lengthAdjust="spacing" clip-path="url(#a4-wide-margin--sung-7)">THE COLD</text>
+    <g transform="translate(780 120) scale(6.2)" fill="none" stroke="#b4553b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85">
+  <path d="M50 8 V68"/>
+  <path d="M52 16 L80 66 H52 Z"/>
+  <path d="M46 26 L22 66 H46 Z"/>
+  <path d="M12 70 H88 L74 86 H26 Z"/>
+  <path d="M4 94 q12 -6 24 0 t 24 0 t 24 0 t 24 0"/></g>
+    <g transform="translate(1385 675) scale(1.7)" fill="none" stroke="#4a6670" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">
+  <path d="M50 6 V94 M12 28 L88 72 M88 28 L12 72"/>
+  <path d="M50 20 L40 12 M50 20 L60 12 M50 80 L40 88 M50 80 L60 88"/>
+  <path d="M25 35 L14 34 M25 35 L21 24 M75 65 L86 66 M75 65 L79 76"/>
+  <path d="M75 35 L86 34 M75 35 L79 24 M25 65 L14 66 M25 65 L21 76"/></g></g>
+  <clipPath id="a4-wide-margin--hero-clip"><rect width="1600" height="900"/></clipPath>
+
+  <!-- ── Apparatus ── -->
+  <rect y="900" width="1600" height="360" fill="#08080a"/>
+  <rect y="900" width="1600" height="2" fill="#23232a"/>
+  <text class="sheet-label" x="40" y="938" font-size="16" letter-spacing="3" fill="#e8e5de">A4-WIDE-MARGIN · WIDE MARGIN</text>
+  <text class="sheet-label" x="1560" y="938" font-size="16" letter-spacing="3" fill="#77746d" text-anchor="end">SECTION VARIATION — THE SAME STYLE AT FIVE POINTS IN THE SONG</text>
+
+    <g clip-path="url(#a4-wide-margin--thumb-0)">
+      <g transform="translate(40 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#f0ede5"/>
+        <line x1="80" y1="300" x2="1520" y2="300" stroke="#1b1b19" stroke-width="3"/>
+        <text x="80" y="270" font-size="26" font-weight="600" fill="#b4553b" letter-spacing="18">HAVRE DE GRACE</text>
+        <text x="80" y="470" font-size="150" font-weight="700" fill="#1b1b19" textLength="1100" lengthAdjust="spacing">ANDALUSIA</text>
+        <g transform="translate(1130 470) scale(3.4)" fill="none" stroke="#b4553b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.7">
+  <path d="M50 32 c15 0 21 10 21 19 c0 6 -4 10 -4 16 c0 11 -8 19 -17 19 s-17 -8 -17 -19 c0 -6 -4 -10 -4 -16 c0 -9 6 -19 21 -19 z"/>
+  <path d="M44 6 H56 V32 H44 Z"/>
+  <path d="M41 2 H59 V8 H41 Z"/>
+  <circle cx="50" cy="57" r="7"/>
+  <path d="M40 76 H60"/>
+  <path d="M46 8 V32 M50 8 V32 M54 8 V32"/></g></g>
+    </g>
+    <rect x="40" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="40" y="1146" font-size="15" letter-spacing="2.4" fill="#b4553b">TITLE</text>
+    <text class="sheet-note" x="40" y="1170" font-size="14.5" fill="#77746d">The only centred frame in the style — and the</text>
+    <text class="sheet-note" x="40" y="1189" font-size="14.5" fill="#77746d">only full-width rule.</text>
+
+    <g clip-path="url(#a4-wide-margin--thumb-1)">
+      <g transform="translate(349 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#f0ede5"/>
+        <line x1="560" y1="0" x2="560" y2="900" stroke="#1b1b19" stroke-width="1" opacity="0.16"/>
+        <text x="80" y="560" font-size="120" font-weight="300" fill="#b4553b" opacity="0.35">11</text>
+        <text x="80" y="661.3" font-size="66.7" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">BUT LIKE A</text>
+<text x="80" y="719.8" font-size="47.6" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">LOVER STRANDED</text>
+<text x="80" y="781.4" font-size="55.6" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">UNDERNEATH A</text>
+<clipPath id="a4-wide-margin--sung-4"><rect x="80" y="788.3" width="160" height="90"/></clipPath>
+<text x="80" y="855" font-size="66.7" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing">CHURCHYARD</text>
+<text x="80" y="855" font-size="66.7" font-weight="700" fill="#b4553b" textLength="400" lengthAdjust="spacing" clip-path="url(#a4-wide-margin--sung-4)">CHURCHYARD</text>
+        <g transform="translate(800 140) scale(5.6)" fill="none" stroke="#b4553b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.8">
+  <path d="M50 4 V18 M44 10 H56"/>
+  <path d="M34 46 L50 18 L66 46 Z"/>
+  <path d="M30 46 H70 V90 H30 Z"/>
+  <path d="M44 68 H56 V90"/>
+  <circle cx="50" cy="58" r="5"/>
+  <path d="M6 90 H94"/></g></g>
+    </g>
+    <rect x="349" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="349" y="1146" font-size="15" letter-spacing="2.4" fill="#b4553b">VERSE</text>
+    <text class="sheet-note" x="349" y="1170" font-size="14.5" fill="#77746d">Measure slides down the page line by line; the</text>
+    <text class="sheet-note" x="349" y="1189" font-size="14.5" fill="#77746d">drawing changes with the noun.</text>
+
+    <g clip-path="url(#a4-wide-margin--thumb-2)">
+      <g transform="translate(658 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#b4553b"/>
+        <line x1="1040" y1="0" x2="1040" y2="900" stroke="#f0ede5" stroke-width="1" opacity="0.3"/>
+        <g transform="translate(190 130) scale(6.2)" fill="none" stroke="#f0ede5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.75">
+  <path d="M18 66 L12 24 L34 44 L50 14 L66 44 L88 24 L82 66 Z"/>
+  <path d="M16 66 H84 V80 H16 Z"/>
+  <circle cx="12" cy="24" r="4"/><circle cx="50" cy="14" r="4"/><circle cx="88" cy="24" r="4"/></g>
+        <text x="1120" y="388.1" font-size="74.1" font-weight="700" fill="#f0ede5" textLength="400" lengthAdjust="spacing">IF I WERE</text>
+<text x="1120" y="481.1" font-size="83.3" font-weight="700" fill="#f0ede5" textLength="400" lengthAdjust="spacing">KING FOR</text>
+<clipPath id="a4-wide-margin--sung-5"><rect x="1120" y="494.1" width="220" height="90"/></clipPath>
+<text x="1120" y="560.8" font-size="66.7" font-weight="700" fill="#f0ede5" textLength="400" lengthAdjust="spacing">JUST A DAY</text>
+<text x="1120" y="560.8" font-size="66.7" font-weight="700" fill="#1b1b19" textLength="400" lengthAdjust="spacing" clip-path="url(#a4-wide-margin--sung-5)">JUST A DAY</text></g>
+    </g>
+    <rect x="658" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="658" y="1146" font-size="15" letter-spacing="2.4" fill="#b4553b">CHORUS</text>
+    <text class="sheet-note" x="658" y="1170" font-size="14.5" fill="#77746d">Paper goes clay, drawing goes to paper colour,</text>
+    <text class="sheet-note" x="658" y="1189" font-size="14.5" fill="#77746d">measure moves to the right.</text>
+
+    <g clip-path="url(#a4-wide-margin--thumb-3)">
+      <g transform="translate(967 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#f0ede5"/>
+        <circle cx="210" cy="380" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="342" cy="401.8782456050053" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="474" cy="403.64173309746775" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="606" cy="383.6691202095565" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="738" cy="360.32313512199386" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="870" cy="355.0679688587584" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="1002" cy="372.7351970468279" r="26" fill="#b4553b" opacity="1"/><circle cx="1134" cy="397.0816515666885" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="1266" cy="405.7233144122079" r="13" fill="#1b1b19" opacity="0.35"/><circle cx="1398" cy="390.71508061628566" r="13" fill="#1b1b19" opacity="0.35"/>
+        <circle cx="280" cy="580" r="13" fill="#4a6670" opacity="0.4"/><circle cx="458" cy="570.8060461173628" r="13" fill="#4a6670" opacity="0.4"/><circle cx="636" cy="551.6770632690572" r="13" fill="#4a6670" opacity="0.4"/><circle cx="814" cy="540.2001500679911" r="13" fill="#4a6670" opacity="0.4"/><circle cx="992" cy="546.9271275827277" r="13" fill="#4a6670" opacity="0.4"/><circle cx="1170" cy="565.6732437092645" r="13" fill="#4a6670" opacity="0.4"/><circle cx="1348" cy="579.2034057330073" r="13" fill="#4a6670" opacity="0.4"/>
+        <g transform="translate(970 490) scale(4.2)" fill="none" stroke="#b4553b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.55">
+  <path d="M6 34 q12 -14 22 0 q10 -14 22 0"/>
+  <path d="M48 62 q9 -11 17 0 q8 -11 17 0"/>
+  <path d="M34 82 q7 -8 13 0 q6 -8 13 0"/></g></g>
+    </g>
+    <rect x="967" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="967" y="1146" font-size="15" letter-spacing="2.4" fill="#b4553b">OH-OHS</text>
+    <text class="sheet-note" x="967" y="1170" font-size="14.5" fill="#77746d">No measure at all. Seventeen small clay marks</text>
+    <text class="sheet-note" x="967" y="1189" font-size="14.5" fill="#77746d">walking across the paper.</text>
+
+    <g clip-path="url(#a4-wide-margin--thumb-4)">
+      <g transform="translate(1276 960) scale(0.1775)">
+        <rect x="0" y="0" width="1600" height="900" fill="#f0ede5"/>
+        <text x="80" y="330" font-size="120" font-weight="300" fill="#b4553b" opacity="0.35">26</text>
+        <text x="800" y="414.8" font-size="48.7" font-weight="700" fill="#1b1b19" text-anchor="middle" textLength="380" lengthAdjust="spacing">WALK UNTIL MY</text>
+<text x="800" y="492.9" font-size="70" font-weight="700" fill="#1b1b19" text-anchor="middle" textLength="380" lengthAdjust="spacing">BOOTS ARE</text>
+<clipPath id="a4-wide-margin--sung-6"><rect x="610" y="507.4" width="209" height="85.5"/></clipPath>
+<text x="800" y="570.7" font-size="63.3" font-weight="700" fill="#1b1b19" text-anchor="middle" textLength="380" lengthAdjust="spacing">FADED BLUE</text>
+<text x="800" y="570.7" font-size="63.3" font-weight="700" fill="#b4553b" text-anchor="middle" textLength="380" lengthAdjust="spacing" clip-path="url(#a4-wide-margin--sung-6)">FADED BLUE</text></g>
+    </g>
+    <rect x="1276" y="960" width="284" height="160" fill="none" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-label" x="1276" y="1146" font-size="15" letter-spacing="2.4" fill="#b4553b">QUIET VERSE</text>
+    <text class="sheet-note" x="1276" y="1170" font-size="14.5" fill="#77746d">Smallest type in the film, measure dead</text>
+    <text class="sheet-note" x="1276" y="1189" font-size="14.5" fill="#77746d">centre, no drawing at all.</text>
+
+    <rect x="40" y="1206" width="22" height="22" fill="#f0ede5" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="71" y="1223" font-size="14.5" fill="#77746d">Paper #F0EDE5</text>
+    <rect x="201.2" y="1206" width="22" height="22" fill="#1b1b19" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="232.2" y="1223" font-size="14.5" fill="#77746d">Ink #1B1B19</text>
+    <rect x="347.6" y="1206" width="22" height="22" fill="#b4553b" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="378.6" y="1223" font-size="14.5" fill="#77746d">Clay #B4553B</text>
+    <rect x="501.40000000000003" y="1206" width="22" height="22" fill="#4a6670" stroke="#23232a" stroke-width="1"/>
+    <text class="sheet-note" x="532.4000000000001" y="1223" font-size="14.5" fill="#77746d">Sea #4A6670</text>
+</svg>

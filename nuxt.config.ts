@@ -1,30 +1,7 @@
-import { LUNCH_BREAK, lunchBreakRoutes } from './shared/lunch-break/config'
+import { resourcesRoutes } from './shared/data/resources'
 
 const SITE_URL = 'https://havredegracemusic.com'
 const SITE_DESCRIPTION = 'Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, based in Vancouver, Washington. Albums, lyrics, credits, and booking.'
-
-// Lunch Break Records — the resources section at /resources.
-//
-// Everything about the sub-brand lives in shared/lunch-break/config.ts, which
-// is imported here rather than duplicated, so adding an article is one line
-// there and nothing at all in this file.
-//
-// While `LUNCH_BREAK.published` is false the whole section is `noindex,
-// follow`: the pages are built and reachable by URL for review, but they are
-// kept out of search and — because a noindex route rule also drops the URL —
-// out of sitemap.xml. Flipping that one flag launches the section.
-//
-// Spelled out route by route rather than globbed as `/resources/**`, for the
-// reason documented on LEGACY_LISTEN_ROUTES above: a pattern route rule is
-// matched by h3 before the renderer, so it also catches the `_payload.json`
-// nitro writes beside each prerendered page. A `robots` rule is survivable
-// there where a redirect was not, but the route list already exists, so there
-// is no reason to take the risk.
-const LUNCH_BREAK_ROUTE_RULES = LUNCH_BREAK.published
-  ? {}
-  : Object.fromEntries(
-      lunchBreakRoutes().map((route) => [route, { robots: 'noindex, follow' }]),
-    )
 
 // Legacy /listen URLs, redirected to the single record-player scene.
 //
@@ -148,7 +125,7 @@ export default defineNuxtConfig({
       // 400, so every `font-weight` in the stylesheets — 350 on the display
       // heading, 450 on section headings, 500 on labels — has been matching
       // that one file and rendering at 400. The music video at
-      // /music-video-test needs a real bold, and a family with no bold in it
+      // /music-videos needs a real bold, and a family with no bold in it
       // does not get synthesised: the browser matches the 400 face and draws
       // 400.
       //
@@ -318,12 +295,13 @@ export default defineNuxtConfig({
     '/logo': {
       robots: 'noindex, nofollow',
     },
-    // "Andalusia" as a kinetic-typography film: the whole song, cut to the
-    // record. Shared by link for a decision, and it restates a published
-    // song's entire lyric — so `nofollow` as well as `noindex`, like the
-    // /music/itw-* mockups. Temporary: it comes out with the experiment, or
-    // moves somewhere real if the film gets made.
-    '/music-video-test': {
+    // The music-video workbench: the style suite, the song pages, and the
+    // kinetic-typography cut of "Andalusia". Shared by link for a decision, and
+    // every page under here restates a published song's entire lyric — so
+    // `nofollow` as well as `noindex`, like the /music/itw-* mockups. Covered
+    // as a subtree so a new song's page arrives noindexed rather than
+    // remembering to add a rule for it.
+    '/music-videos/**': {
       robots: 'noindex, nofollow',
     },
     // --- Unlisted ---
@@ -350,10 +328,6 @@ export default defineNuxtConfig({
     '/tools/**': {
       robots: 'noindex, nofollow',
     },
-
-    // Unpublished while Stefan edits the drafts — see LUNCH_BREAK_ROUTE_RULES
-    // above. This spreads to nothing once the section launches.
-    ...LUNCH_BREAK_ROUTE_RULES,
   },
 
   nitro: {
@@ -376,17 +350,21 @@ export default defineNuxtConfig({
         '/tools',
         '/tools/demos',
         '/listen',
-        // Unlisted and noindexed by its route rule above, but a static host
+        // Unlisted and noindexed by the route rule above, but a static host
         // serves keys — a route that was never prerendered 404s however
-        // private it is. Comes out with the music-video experiment.
-        '/music-video-test',
+        // private it is, and nothing links to these, so nothing crawls to them
+        // either. Every page added under app/pages/music-videos/ needs a line
+        // here.
+        '/music-videos/styles',
+        '/music-videos/andalusia',
+        '/music-videos/kinetic',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
-        // Lunch Break Records: the hub, every article and every tool. Built
-        // from shared/lunch-break/config.ts so a new article cannot be added
-        // without its route existing — a static host serves keys, and a route
-        // that was never prerendered 404s however correct the page component is.
-        ...lunchBreakRoutes(),
+        // The /resources hub and its tools. Built from
+        // shared/data/resources.ts so a new tool cannot be added without its
+        // route existing — a static host serves keys, and a route that was
+        // never prerendered 404s however correct the page component is.
+        ...resourcesRoutes(),
       ],
     },
   },
