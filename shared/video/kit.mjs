@@ -194,7 +194,10 @@ export { r }
 let clipSeq = 0
 export function sung(o) {
   const { x = 80, y = 0, size = 100, text = '', len = 1440, fill = '#f2ede3', accent = '#d8382b', through = 0.4, anchor = 'start', weight = 700, opacity = 1 } = o
-  const id = `sung-${clipSeq++}`
+  // A film must pass `id`, built from its uid: the counter is module state, so
+  // the server and the hydrating client would number the same clip differently.
+  // It is only safe for the still sheets, which are rendered once.
+  const id = o.id ?? `sung-${clipSeq++}`
   const left = anchor === 'middle' ? x - len / 2 : anchor === 'end' ? x - len : x
   return `<clipPath id="${id}"><rect x="${r(left)}" y="${r(y - size)}" width="${r(len * through)}" height="${r(size * 1.35)}"/></clipPath>
 ${t({ x, y, size, text, fill, len, anchor, weight, opacity })}

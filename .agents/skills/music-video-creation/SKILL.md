@@ -58,29 +58,16 @@ Inside a style module, never:
 | File | Owns |
 | --- | --- |
 | `app/config/andalusiaScore.ts` | **The cut.** Words with measured onsets, and the section table. One per song. |
-| `app/config/intoTheWildScore.ts` | The second song's cut. Its header documents the centre-channel method (below) and says which numbers to trust. |
-| `app/config/albumStyle.ts` | **The album decision.** Every Into the Wild song gets its own film; all ten are printmaking on one paper, ink and red, on one sheet layout, moving like Cartography. Constants, motion rules, per-song technique. **Read this before starting any song on the album.** |
-| `shared/video/album.mjs` | The album's inks, `paper()`, `plateClip()`, `lyricMargin()`, `titleCard()`, and the smoothness helpers `glide()` / `easeCamera` / `land()` / `presence()`. |
-| `shared/video/films/relief.mjs` | The album's woodcut for Into the Wild, whole song — the smooth rework of `woodcut.mjs`. The reference for a film with a **followed figure**: the runner as an integrated velocity schedule, and every cue placed from where the camera is on its word (`planFor`). |
-| `tools/video-styles/album.mjs` | Builds `public/video-styles/album/<slug>.svg` from `tools/video-styles/album/<slug>.mjs`, and the ten-up `album-sheet.svg`. `node tools/video-styles/album.mjs [slug …]`. |
 | `app/config/videoStyles.ts` | **The written spec** for all seven styles — premise, palette, type rules, what each driver does, what each section does, and `avoid`. This is the file to hand an agent, not the styles page. |
 | `shared/video/kit.mjs` | Drawing primitives (`t`, `rect`, `line`, `path`, `circle`, `fit`, `block`, `sung`, `rng`, `r`, `esc`) and timing (`ramp`, `fall`, `easeOut`, `easeInOut`, `easeOutBack`, `decay`, `lerp`, `clamp01`). |
-| `shared/video/motifs.mjs` | The motif library — line drawings of the nouns the song sings, each in a 100×100 box. `motif()` / `motifAt()`, and `motifBody()` for drawing a motif on with `pathLength`. |
-| `shared/video/score.mjs` | Score reading for films: `sectionAt`, `lineAt`, `cutIn`/`shownLineAt`, `splitLine`, `bankWords`, `throughRow`, `wordHit`, `sizeToMeasure`. Cartography keeps private copies; new films import these. |
-| `shared/video/cues.mjs` | Lyric → drawing, per song, in plain JS (`INTO_THE_WILD_CUES`, `cueFor`, `cuesIn`). Andalusia's list is still `MOTIF_CUES` in `videoStyles.ts`. |
-| `shared/video/figure.mjs` | A person as joints: `POSES`, the six-pose `RUN` cycle, `joints()`, `strokes()`. The style supplies the pen. |
-| `shared/video/ending.mjs` | The shared end card, for films after Cartography. |
-| `shared/video/films/cartography.mjs` | **The worked example.** Style B2, all ten sections. Read this before writing a second style. Two editions of one function: `cartographyFrame` (the original, kept byte-identical for its still sheet) and `cartographyAlbumFrame` (the album sheet — approved, and what `/music-videos/andalusia` runs). |
+| `shared/video/motifs.mjs` | The motif library — line drawings of the nouns the song sings, each in a 100×100 box. `motif()` / `motifAt()`. |
+| `shared/video/films/cartography.mjs` | **The worked example.** Style B2, all ten sections. Read this before writing a second style. |
 | `tools/video-styles/frames.mjs` | **The review loop.** Contact sheet of N frames. |
-| `tools/video-styles/mp4.mjs` | **The export.** A whole film (or `--from`/`--to`) as a 4K60 and a 1080p60 mp4 with the record under it, into `exports/` (gitignored). `FILM`/`SONG` as for `frames.mjs`. |
 | `tools/video-styles/build.mjs` | Renders every still sheet to `public/video-styles/*.svg`. |
 | `tools/video-styles/kit.mjs` | Re-exports the shared kit, plus the Node-only helpers that read the lockup off disk (`mark`, `logoScreen`, `creditsScreen`). |
 | `tools/video-styles/styles/*.mjs` | One still reference sheet per style: a hero frame plus five thumbnails. |
-| `app/components/musicvideo/MusicVideoCartography.vue` | Four lines: hand the clock to the style module, `v-html` the result. Hard-wired to the original edition; now only `MusicVideoClip`'s default film. |
-| `app/components/musicvideo/MusicVideoSvgFilm.vue` | The same four lines with the frame function as a prop. Use this for a new style rather than copying the Cartography component. `/music-videos/andalusia` and `/music-videos/album` both use it. |
-| `app/pages/music-videos/into-the-wild.vue` | Into the Wild whole, in `relief.mjs` — the same shape as the Andalusia page. The five-style test that was at this address is `into-the-wild-styles.vue`. |
-| `app/pages/music-videos/andalusia.vue` | **The finished film.** Andalusia whole, album edition, with its own projector (`useMusicVideoPlayer`), transport, section list and cut. The shape for a song whose film is done. |
-| `app/components/musicvideo/MusicVideoClip.vue` | One snippet — stage, transport, caption. The film is a `#film="{ t, uid }"` slot (Cartography if none) and `src` picks the record. |
+| `app/components/musicvideo/MusicVideoCartography.vue` | Four lines: hand the clock to the style module, `v-html` the result. Copy this for a new style. |
+| `app/components/musicvideo/MusicVideoClip.vue` | One snippet — stage, transport, caption. Style-agnostic apart from the film tag inside it. |
 | `app/composables/useFilmClip.ts` | Windowed player: `from`/`to` in song seconds, one clip at a time across the page. |
 | `app/components/musicvideo/MusicVideoFilm.vue` | The kinetic-typography film, whole song, at `/music-videos/kinetic`. **Legacy shape** — a 675-line Vue template. Do not copy it; it is the thing the contract above exists to replace. |
 | `app/utils/clipTiming.ts` | The typed twin of the kit's timing functions, for Vue components. |
@@ -141,22 +128,6 @@ Rules for the file:
 
 Audio lives at `public/albums/<album>/music/<song>.mp3`.
 
-**When the vocal band does not work.** On "Into the Wild" the 1.2–2.6 kHz share
-was useless — electric guitar and cymbals live there for the whole record. What
-worked was that the voice is the only thing mixed dead centre: decode in stereo
-(`afconvert -c 2`), take the centre-only energy `max(|L+R|² − k·|L−R|², 0)` in
-300 Hz–3.5 kHz against the side energy, and phrases separate from the band by
-10–15 dB. Try that before tuning thresholds. And check for a click first: a
-comb fit of onset flux that gives the same tempo and phase in every sung block
-means the band played to one, and the grid can then be used to snap syllables —
-which it cannot be on a record played without one, like Andalusia.
-
-**Pool evidence across repeats.** Lines sung to the same words (every chorus)
-should be solved once on the summed onset evidence of all of them and shifted
-by the measured section offsets; solved one at a time, each chorus put 'into'
-somewhere different. numpy/scipy are not installed system-wide — a venv in the
-scratchpad takes a minute.
-
 ### Session 2 — the style module (once per style, per song)
 
 **Deliverable:** `shared/video/films/<style>.mjs`, reviewed to completion with
@@ -181,34 +152,8 @@ passing `npm run generate`. See "Wiring a page" below.
 
 ### Session 4 — mp4, if it is wanted
 
-Only once the page has been looked at and approved. Nothing about the style
-changes; the film is walked frame by frame under `node`.
-
-```sh
-FILM=cartography-album SONG=andalusia node tools/video-styles/mp4.mjs
-FILM=cartography-album node tools/video-styles/mp4.mjs --from 72.8 --to 76.8   # a test window
-```
-
-Needs `ffmpeg` with libx264 (`brew install ffmpeg`) and Google Chrome. Andalusia
-takes about ten minutes on eight workers and writes exports/<song>-<film>-2160p.mp4
-and -1080p.mp4. What it does, and why:
-
-- **Frame n is `frame({ time: n / fps })`**, the call the page makes, with the
-  same lockup and uid. Sync is by construction. Checked on Andalusia: the first
-  black frame in the mp4 is the frame the function first returns the end card.
-- **Drawn by Chrome at 3840×2160 natively**, a 3840×2160 viewport with the svg
-  sized to it. Do not use `deviceScaleFactor` for this: CDP's surface capture
-  ignores it and hands back 1600×900 frames labelled 4K.
-- **Jost is the variable face** (`wght@100..900`), as @nuxt/fonts serves it.
-  Loading only 400 and 700, as `frames.mjs` does, turns every 600 into a 700.
-  The tool refuses to render if Jost did not load.
-- **Audio is the mp3 decoded by ffmpeg**, which trims the encoder's padding the
-  way afconvert does. afconvert's decode is the one the score was measured on,
-  and on Andalusia the two agree to the sample. Encoded AAC 320k.
-- **Colour tagged BT.709 limited range.** An untagged file plays back a shade
-  off in some players. Paper comes back within one 8-bit step.
-- 4K at CRF 12 is roughly 5 MB a second. That is a master, not an upload
-  budget; the 1080p is the one to send around.
+Only once the page has been looked at and approved. The module can be walked
+frame by frame under `node`; nothing about the style needs to change.
 
 ---
 
@@ -248,9 +193,7 @@ When you do need the real page — fonts as the site serves them, layout, or tha
 audio actually seeks — one pass at the end is enough.
 
 Register a new style in `FILMS` at the top of `frames.mjs` and select it with
-`FILM=<name>`, and a new song in `SCORES` with `SONG=<name>`. `OUT=<path>`
-writes the sheet somewhere other than `.frames.html` — needed when more than one
-review is running at once, or they overwrite each other.
+`FILM=<name>`.
 
 ### Looking at the frames yourself
 
@@ -422,11 +365,9 @@ These are general. They cost rounds; none of them is obvious from a spec.
 
 ## Wiring a page
 
-Don't write a component: pass the frame function to `MusicVideoSvgFilm.vue`
-(`:film`, `:name`, `:score`, `:t`, `:uid`), the way `/music-videos/andalusia`
-does. It inlines the lockup with Vite's `?raw` and `v-html`s the frame.
-(`MusicVideoCartography.vue` is the same four lines with the original
-Cartography edition baked in, from before there was a second film.) `v-html` is correct here: every byte is built by our own
+The component is four lines — copy `MusicVideoCartography.vue`. It imports the
+style module, imports the score, inlines the lockup with Vite's `?raw`, and
+`v-html`s the frame. `v-html` is correct here: every byte is built by our own
 code from our own score, and the only outside string (the lyric) is escaped by
 the kit's `esc` on the way in.
 
@@ -509,13 +450,4 @@ change to a look belongs in a module, never in a `.svg`.
 And a note on scope when taking the brief: ask for **specific windows**, not
 "the whole video". Three fifteen-second snippets — the beginning, something from
 the middle, and the end — bound the review to the three places a film fails
-differently. `/music-videos/andalusia` was built that way, as three snippets,
-and became the whole film only once the style had shown it had somewhere to go.
-
-**Editions.** A film made before the album joins it as an edition of the same
-frame function (`edition: 'album'`), not a rewrite. The original stays
-byte-identical while the edition is a motion test. Once the person watching
-approves it, the song's page switches to the edition and the original survives
-only as its still sheet. Andalusia went through this on 2026-09-23. When the
-lyric moves off the image into the margin, check any furniture that used to
-stand down for type: it needs a new reason to stand down (see `ALBUM_NOTES`).
+differently, and that is the shape `/music-videos/andalusia` is built in.

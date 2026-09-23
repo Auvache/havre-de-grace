@@ -6,7 +6,7 @@
           Unlisted / art direction
         </p>
         <h1 class="display-heading">
-          Seven ways to film a song
+          Twelve ways to film a song
         </h1>
         <p class="text-base leading-relaxed muted-text">
           A style suite for full-length lyric videos and music videos, drawn
@@ -19,6 +19,18 @@
           the fourth. The other three are not that film at all.
         </p>
         <p class="text-base leading-relaxed muted-text">
+          Family C is five more, drawn against "Into the Wild" — a song that is a
+          list of found things and places, so every one of them is built to draw.
+          Four of them, and Flipbook from family B, are running over the same
+          fifteen seconds at
+          <NuxtLink to="/music-videos/into-the-wild-styles" class="underline">/music-videos/into-the-wild-styles</NuxtLink>.
+          The direction chosen from all this — a printmaking technique per song
+          across the whole album — is at
+          <NuxtLink to="/music-videos/album" class="underline">/music-videos/album</NuxtLink>,
+          and its first song as a whole film at
+          <NuxtLink to="/music-videos/into-the-wild" class="underline">/music-videos/into-the-wild</NuxtLink>.
+        </p>
+        <p class="text-base leading-relaxed muted-text">
           Nothing here is animated. Each sheet is one still, deliberately loaded
           with everything the style uses, plus five thumbnails of the same style at
           five points in the arrangement — because a single frame cannot show the
@@ -26,14 +38,14 @@
         </p>
         <p class="text-base leading-relaxed muted-text">
           Nothing on screen names a section, and the band name appears once, in the
-          opening title, then leaves. All seven end on the same two cards.
+          opening title, then leaves. All twelve end on the same two cards.
         </p>
       </header>
 
       <!-- ── The rules every style is built against ──────────────── -->
       <section class="surface-card mt-12 space-y-4 p-6">
         <h2 class="label-text">
-          True of all seven
+          True of all twelve
         </h2>
         <ul class="space-y-3">
           <li v-for="rule in SUITE_RULES" :key="rule" class="flex gap-3 text-sm leading-relaxed muted-text">
@@ -97,6 +109,31 @@
         </div>
       </section>
 
+      <!-- ── Family C ─────────────────────────────────────────────── -->
+      <section class="mt-24">
+        <div class="max-w-3xl">
+          <h2 class="section-heading">
+            Family C — five drawn for Into the Wild
+          </h2>
+          <p class="mt-3 text-base leading-relaxed muted-text">
+            "Into the Wild" names more things than "Andalusia" does — ebony, ivory
+            and bone, glaciers and gardens and grottos, a harbor and a crowd — and
+            its chorus is one idea, running out into it. So these five are all
+            ways of drawing a world rather than of setting type over one: a
+            naturalist's notebook, a survey sheet, a museum drawer, a relief
+            print and a national-park poster. Their sheets are drawn against
+            the new score, so their section tables are that song's — a break, a
+            horn solo, and no oh-ohs. Field Journal, Contour, Woodcut and
+            Trailhead are built; their sheets are frames of the films
+            themselves, and the clips are at
+            <NuxtLink to="/music-videos/into-the-wild-styles" class="underline">/music-videos/into-the-wild-styles</NuxtLink>.
+          </p>
+        </div>
+        <div class="mt-12 space-y-16">
+          <VideoStyleCard v-for="style in STYLES_C" :key="style.id" :spec="style" />
+        </div>
+      </section>
+
       <!-- ── The shared ending ────────────────────────────────────── -->
       <section class="mt-24">
         <div class="max-w-3xl">
@@ -148,10 +185,10 @@
  * one would be built from.
  *
  * Unlisted and noindexed for the same reason /music-videos/kinetic is: it restates
- * a published lyric across seven sheets and exists to be shared by link for a
+ * a published lyric across twelve sheets and exists to be shared by link for a
  * decision.
  */
-import { VIDEO_STYLES, STYLES_A, STYLES_B, SUITE_RULES } from '~/config/videoStyles'
+import { VIDEO_STYLES, STYLES_A, STYLES_B, STYLES_C, SUITE_RULES } from '~/config/videoStyles'
 
 definePageMeta({ layout: 'default' })
 
@@ -165,8 +202,9 @@ const BUILD_NOTES = [
   'app/config/videoStyles.ts is the written spec — premise, palette, type, layout, what every moving thing is driven by, what each of the ten sections does, and what would ruin it. SUITE_RULES holds what is true of all seven and END_CARD holds the shared ending, down to the hex values. It is the file to hand an agent, not this page.',
   'The drawings come from tools/video-styles/motifs.mjs, and MOTIF_CUES in the config maps lyric to drawing once for the whole suite: "underneath a churchyard" is a church in every style that draws, because that is a reading of the song rather than a look.',
   'app/config/andalusiaScore.ts is the cut and is unchanged. Every style is timed off the same 31 lines and 297 measured word onsets, so a style can be swapped under a finished film without retiming anything.',
+  'app/config/intoTheWildScore.ts is the second song\'s cut, measured the same way with one change forced by the mix: the voice is found as the only thing panned dead centre, not by its frequency band. Family C is drawn against it, and its lyric-to-drawing list lives in shared/video/cues.mjs rather than in this config, so a film module can import it.',
   'The existing MusicVideoFilm component is the reference implementation of the pattern all seven use: one pure function of the song\'s clock in, one frame of SVG out, no animation state anywhere. That is what makes the film seekable, and it is also what makes frames capturable off it for an mp4.',
-  'Cartography is built, and it is built the way the rest should be. shared/video/films/cartography.mjs is one pure function — `cartographyFrame({ time, score })` — and three different things call it: this page\'s reference sheet at build time, the clips at /music-videos/andalusia sixty times a second, and `node`, which can walk the clock and write out frames for an mp4 because the module is plain JS and takes the score as an argument rather than importing it. The chart furniture on the sheet above is drawn by that same file, so the still and the film cannot disagree about what a sounding looks like.',
+  'Cartography is built, and it is built the way the rest should be. shared/video/films/cartography.mjs is one pure function — `cartographyFrame({ time, score })` — and three different things call it: this page\'s reference sheet at build time, the whole film at /music-videos/andalusia sixty times a second (in its album edition, `cartographyAlbumFrame`, which is the same function with `edition: \'album\'`), and `node`, which can walk the clock and write out frames for an mp4 because the module is plain JS and takes the score as an argument rather than importing it. The chart furniture on the sheet above is drawn by that same file, so the still and the film cannot disagree about what a sounding looks like.',
   'Write the style module before the page that shows it, not after. Everything above that was expensive to get right — the two-row banking, the leg rules, the label sides — was found by rendering a grid of frames as one contact sheet and looking at eight moments at once. A style is not judged a frame at a time.',
 ]
 </script>

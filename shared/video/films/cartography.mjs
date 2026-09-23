@@ -38,6 +38,7 @@ import {
   clamp01, lerp, ramp, fall, easeOut, easeInOut, easeOutBack, decay,
 } from '../kit.mjs'
 import { motifAt } from '../motifs.mjs'
+import * as A from '../album.mjs'
 import { LAND_FINE, LAND_COARSE, LAKES } from '../geo/earth.mjs'
 
 /* ── The palette. Five colours, and only one of them is saturated. ──── */
@@ -58,6 +59,26 @@ const LYRIC_UNSUNG = INK
 // sung/unsung split is kept so a second colour is one constant away.
 const LYRIC_SUNG = INK
 
+/*
+ * The inks the frame is drawn in. The original edition's are the five above;
+ * the album edition re-inks the same chart on the album's paper, black and red
+ * (shared/video/album.mjs). `P` is set at the top of every call and put back
+ * at the end — it is configuration for one call, not state between frames —
+ * so the furniture exported for the still sheet always draws in the original.
+ */
+const ORIGINAL_INKS = { CHART, SEA, INK, ROUTE, NEAT }
+const ALBUM_INKS = {
+  // The land a shade under the margin's paper, so the plate reads as a plate.
+  CHART: '#e3d7bc',
+  // The album's sea green, let down with paper: at full strength it is a tint
+  // for a swatch, not for two thirds of a frame.
+  SEA: '#bfcbbd',
+  INK: A.INK,
+  ROUTE: A.RED,
+  NEAT: '#8d8068',
+}
+let P = ORIGINAL_INKS
+
 /* ══ CHART FURNITURE ══════════════════════════════════════════════════
  *
  * Exported because tools/video-styles/styles/b2-cartography.mjs draws its
@@ -74,19 +95,19 @@ export const graticule = (view = null, opacity = 0.28) => {
     const a = place({ x: i * 100, y: -900 }, view)
     const b = place({ x: i * 100, y: 1800 }, view)
     if (a.x < -40 || a.x > 1640) continue
-    out.push(line(a.x, a.y, b.x, b.y, NEAT, 1, { opacity }))
+    out.push(line(a.x, a.y, b.x, b.y, P.NEAT, 1, { opacity }))
   }
   for (let i = -8; i <= 18; i++) {
     const a = place({ x: -1600, y: i * 100 }, view)
     const b = place({ x: 3200, y: i * 100 }, view)
     if (a.y < -40 || a.y > 940) continue
-    out.push(line(a.x, a.y, b.x, b.y, NEAT, 1, { opacity }))
+    out.push(line(a.x, a.y, b.x, b.y, P.NEAT, 1, { opacity }))
   }
   return out.join('')
 }
 
 /** Nested contours — the same shape offset, the way a depth chart draws one. */
-export function contours(cx, cy, base, rings, seed, colour = NEAT) {
+export function contours(cx, cy, base, rings, seed, colour = P.NEAT) {
   const out = []
   for (let k = 0; k < rings; k++) {
     const rand = rng(seed + k)
@@ -110,7 +131,7 @@ export const soundings = (seed, view = null, opacity = 0.45) =>
     const rand = rng(seed + i)
     const p = place({ x: 60 + rand() * 1480, y: 80 + rand() * 780 }, view)
     if (p.x < -30 || p.x > 1630 || p.y < -20 || p.y > 920) return ''
-    return t({ x: p.x, y: p.y, size: 17, text: String(Math.floor(6 + rand() * 90)), fill: NEAT, weight: 400, opacity })
+    return t({ x: p.x, y: p.y, size: 17, text: String(Math.floor(6 + rand() * 90)), fill: P.NEAT, weight: 400, opacity })
   }).join('')
 
 /**
@@ -133,9 +154,9 @@ export const portMark = (x, y, name, o = {}) => {
         ? { x, y: y - 34, anchor: 'middle' }
         : { x: x + 26, y: y + 10, anchor: 'start' }
   return `
-  ${circle(x, y, active ? 15 : 9, { fill: active ? ROUTE : 'none', stroke: ROUTE, sw: 4, opacity })}
-  ${active ? circle(x, y, 34 + landing * 26, { stroke: ROUTE, sw: 2, opacity: 0.5 * (1 - landing) * opacity }) : ''}
-  ${name && opacity * label > 0.005 ? t({ ...at, size, text: name, fill: active ? ROUTE : INK, weight: 600, tracking: 3, opacity: opacity * label }) : ''}`
+  ${circle(x, y, active ? 15 : 9, { fill: active ? P.ROUTE : 'none', stroke: P.ROUTE, sw: 4, opacity })}
+  ${active ? circle(x, y, 34 + landing * 26, { stroke: P.ROUTE, sw: 2, opacity: 0.5 * (1 - landing) * opacity }) : ''}
+  ${name && opacity * label > 0.005 ? t({ ...at, size, text: name, fill: active ? P.ROUTE : P.INK, weight: 600, tracking: 3, opacity: opacity * label }) : ''}`
 }
 
 /* ══ THE FLAT CHART (the still sheet only) ════════════════════════════ */
@@ -180,26 +201,41 @@ function slerp(a, b, u) {
   return [a[0] * ka + b[0] * kb, a[1] * ka + b[1] * kb, a[2] * ka + b[2] * kb]
 }
 
+/*
+ * Where the globe is centred and how big a pixel of radius is. The original
+ * edition fills the frame; the album edition fills the plate, which is
+ * shorter, so its radius is scaled by the plate's height over the frame's —
+ * in the projection, never as a transform, so the pen does not change.
+ */
+const ORIGINAL_VIEW = { cx: 800, cy: 450, k: 1, half: HALF_DIAGONAL }
+const ALBUM_VIEW = (() => {
+  const { x, y, w, h } = A.SHEET.plate
+  return { cx: x + w / 2, cy: y + h / 2, k: h / 900, half: Math.hypot(w / 2, h / 2) }
+})()
+
 /** The camera's basis, worked out once per frame. */
-function basis(cam) {
+function basis(cam, view = ORIGINAL_VIEW) {
   const l = cam.lon * RAD
   const p = cam.lat * RAD
+  const R = view.k === 1 ? cam.R : cam.R * view.k
   return {
-    R: cam.R,
+    R,
+    cx: view.cx,
+    cy: view.cy,
     f: [Math.cos(p) * Math.cos(l), Math.cos(p) * Math.sin(l), Math.sin(p)],
     e: [-Math.sin(l), Math.cos(l), 0],
     n: [-Math.sin(p) * Math.cos(l), -Math.sin(p) * Math.sin(l), Math.cos(p)],
     // How far from the facing point the frame's corners reach, as an angle.
     // Anything further away than this plus its own size cannot be on screen.
-    reach: cam.R > HALF_DIAGONAL ? Math.asin(HALF_DIAGONAL / cam.R) : Math.PI / 2,
+    reach: R > view.half ? Math.asin(view.half / R) : Math.PI / 2,
   }
 }
 
 /** A unit vector to the screen, with its depth: z > 0 is the near side. */
 function onScreen(v, b) {
   return {
-    x: 800 + b.R * dot(v, b.e),
-    y: 450 - b.R * dot(v, b.n),
+    x: b.cx + b.R * dot(v, b.e),
+    y: b.cy - b.R * dot(v, b.n),
     z: dot(v, b.f),
   }
 }
@@ -316,7 +352,7 @@ function ringsPath(list, b) {
   return d
 }
 
-const screenOf = (v, b) => ({ x: clampX(800 + b.R * dot(v, b.e)), y: clampY(450 - b.R * dot(v, b.n)) })
+const screenOf = (v, b) => ({ x: clampX(b.cx + b.R * dot(v, b.e)), y: clampY(b.cy - b.R * dot(v, b.n)) })
 const offFrame = (box) => box.maxX < 0 || box.minX > 1600 || box.maxY < 0 || box.minY > 900
 
 function clipRing(ring, b) {
@@ -377,7 +413,7 @@ function clipRing(ring, b) {
     const x = dot(p, b.e)
     const y = dot(p, b.n)
     const th = Math.atan2(-y, x)
-    return { th, at: { x: clampX(800 + b.R * Math.cos(th)), y: clampY(450 + b.R * Math.sin(th)) } }
+    return { th, at: { x: clampX(b.cx + b.R * Math.cos(th)), y: clampY(b.cy + b.R * Math.sin(th)) } }
   }
 
   // The visible runs, starting the walk from a hidden point so none wraps.
@@ -413,7 +449,7 @@ function clipRing(ring, b) {
     const list = []
     for (let k = 1; k < steps; k++) {
       const th = from + D * (span * k) / steps
-      list.push({ x: clampX(800 + b.R * Math.cos(th)), y: clampY(450 + b.R * Math.sin(th)) })
+      list.push({ x: clampX(b.cx + b.R * Math.cos(th)), y: clampY(b.cy + b.R * Math.sin(th)) })
     }
     return list
   }
@@ -511,7 +547,7 @@ function globeGraticule(cam, b, opacity) {
       for (let lon = cam.lon - lonSpan; lon <= cam.lon + lonSpan; lon += sample / Math.max(Math.cos(lat * RAD), 0.2)) pts.push(vec(lon, lat))
       d += sphereLine(pts, b, 3)
     }
-    if (d) out.push(path(d, { stroke: NEAT, sw: 1, opacity: r(opacity * weight, 3) }))
+    if (d) out.push(path(d, { stroke: P.NEAT, sw: 1, opacity: r(opacity * weight, 3) }))
   }
   return out.join('')
 }
@@ -950,7 +986,7 @@ function homecomingCamera(plan, now) {
 /** A town inside the province: a small dot. */
 function townMark(x, y, o = {}) {
   const { reached = false, opacity = 1 } = o
-  return circle(x, y, 6, { fill: reached ? ROUTE : 'none', stroke: ROUTE, sw: 3, opacity })
+  return circle(x, y, 6, { fill: reached ? P.ROUTE : 'none', stroke: P.ROUTE, sw: 3, opacity })
 }
 
 /* ══ TYPE ═════════════════════════════════════════════════════════════ */
@@ -1044,7 +1080,7 @@ function sungRow({ id, x, y, size, text, len, through, fill, accent, opacity = 1
   // White type carries an ink keyline, drawn under the fill, so it holds on
   // chart paper and on sea alike. Ink type gets the same keyline, so the
   // glyphs do not change weight as the voice crosses them.
-  const keyline = `stroke="${INK}" stroke-width="${r(Math.max(2, size * 0.05), 2)}" stroke-linejoin="round" paint-order="stroke"`
+  const keyline = `stroke="${P.INK}" stroke-width="${r(Math.max(2, size * 0.05), 2)}" stroke-linejoin="round" paint-order="stroke"`
   return `<clipPath id="${id}"><rect x="${r(left)}" y="${r(y - size)}" width="${r(len * clamp01(through))}" height="${r(size * 1.35)}"/></clipPath>
     ${t({ x, y, size, text, fill, len, anchor: 'middle', weight: 600, opacity, extra: keyline })}
     ${t({ x, y, size, text, fill: accent, len, anchor: 'middle', weight: 600, opacity, extra: `${keyline} clip-path="url(#${id})"` })}`
@@ -1062,9 +1098,22 @@ function sungRow({ id, x, y, size, text, len, through, fill, accent, opacity = 1
  * @param {string} [o.uid]  Prefix for every id in the frame. Two films on one
  *                          page share a document, and `url(#x)` resolves to
  *                          whichever one is first in it.
+ * @param {'original'|'album'} [o.edition] The album edition draws the same
+ *                          film on the album's sheet — see albumStyle.ts.
  * @returns {{ svg: string, label: string }}
  */
-export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
+export function cartographyFrame(o) {
+  P = o.edition === 'album' ? ALBUM_INKS : ORIGINAL_INKS
+  try {
+    return drawFrame(o)
+  }
+  finally {
+    P = ORIGINAL_INKS
+  }
+}
+
+function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'original' }) {
+  const album = edition === 'album'
   const now = time
   const plan = planFor(score)
   const section = sectionAt(score, now)
@@ -1082,17 +1131,21 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
   if (now >= plan.endAt) return endCard({ now, section: score.sections[score.sections.length - 1], lockup, uid })
 
   const cam = cameraAt(plan, now)
-  const b = basis(cam)
+  const view = album ? ALBUM_VIEW : ORIGINAL_VIEW
+  const b = basis(cam, view)
   // 0 when the whole world is in the frame, 1 once the globe is bigger than it.
-  const disc = cam.R < HALF_DIAGONAL + 40
+  const disc = album ? b.R < view.half + 40 : cam.R < HALF_DIAGONAL + 40
 
   /* ── The lyric, decided first: it sets how loud the names may be ──── */
   let lyric = ''
-  if (kind === 'intro') lyric = cartouche(now, section, score)
+  if (album) lyric = marginLyric({ now, score, section, uid })
+  else if (kind === 'intro') lyric = cartouche(now, section, score)
   else if (shownLine && shownLine.section === section.id && kind !== 'ohs') {
     lyric = straightLyric({ now, line: shownLine, from: cutIn(score, shownLine), scope: section.id, uid, low: kind !== 'chorus' })
   }
-  const quiet = Boolean(lyric) && kind !== 'intro'
+  // In the album edition the lyric is in the margin, not on the chart, so
+  // nothing on the chart has to stand down for it.
+  const quiet = !album && Boolean(lyric) && kind !== 'intro'
 
   /*
    * The chorus stands the map down — but not the route. Under the first cut
@@ -1100,7 +1153,9 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
    * nowhere and the line barely moved. Now the choruses are where the line
    * travels, so the land goes back and the red stays at full pen.
    */
-  const hush = kind === 'chorus'
+  // The album edition sets its lyric in the margin, so the chart has nothing
+  // to stand down for.
+  const hush = album ? 1 : kind === 'chorus'
     ? lerp(1, 0.7, easeInOut(ramp(now, section.from, section.from + 0.7)))
     // The moment of globe before the end card keeps the last chorus's look.
     : kind === 'outro' ? 0.7 : 1
@@ -1109,23 +1164,23 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
   const ground = []
   if (disc) {
     // A plate in an atlas: the world on the chart paper, with a shadow ring.
-    ground.push(circle(800, 450, cam.R + 9, { stroke: NEAT, sw: 10, opacity: 0.18 }))
-    ground.push(circle(800, 450, cam.R, { fill: SEA }))
+    ground.push(circle(b.cx, b.cy, b.R + 9, { stroke: P.NEAT, sw: 10, opacity: 0.18 }))
+    ground.push(circle(b.cx, b.cy, b.R, { fill: P.SEA }))
   }
-  else ground.push(rect(0, 0, 1600, 900, SEA))
+  else ground.push(rect(0, 0, 1600, 900, P.SEA))
 
   const land = ringsPath(
     cam.R < 1150 ? rings('coarse', LAND_COARSE) : cam.R < 3800 ? rings('mid', LAND_FINE, 0.07) : rings('fine', LAND_FINE),
     b,
   )
   const coastWeight = cam.R < 900 ? 1.6 : cam.R < 3000 ? 2.4 : 3.5
-  if (land) ground.push(`<path d="${land}" fill="${CHART}" stroke="${INK}" stroke-width="${coastWeight}" stroke-linejoin="round" fill-rule="nonzero"/>`)
+  if (land) ground.push(`<path d="${land}" fill="${P.CHART}" stroke="${P.INK}" stroke-width="${coastWeight}" stroke-linejoin="round" fill-rule="nonzero"/>`)
   if (cam.R > 1000) {
     const lakes = ringsPath(rings('lakes', LAKES), b)
-    if (lakes) ground.push(`<path d="${lakes}" fill="${SEA}" stroke="${INK}" stroke-width="${r(coastWeight * 0.6, 2)}" stroke-linejoin="round"/>`)
+    if (lakes) ground.push(`<path d="${lakes}" fill="${P.SEA}" stroke="${P.INK}" stroke-width="${r(coastWeight * 0.6, 2)}" stroke-linejoin="round"/>`)
   }
   ground.push(globeGraticule(cam, b, 0.3 * (0.3 + 0.7 * ramp(now, 0.3, 2.2))))
-  if (disc) ground.push(circle(800, 450, cam.R, { stroke: INK, sw: 3 }))
+  if (disc) ground.push(circle(b.cx, b.cy, b.R, { stroke: P.INK, sw: 3 }))
 
   /* ── The route: every leg run so far, and the one being run ──────── */
   const route = []
@@ -1140,7 +1195,7 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
     d += sphereLine(pts, b)
   }
   const routeWidth = cam.R < 600 ? 3.2 : 4.5
-  if (d) route.push(path(d, { stroke: ROUTE, sw: routeWidth, cap: 'round', join: 'round', opacity: 0.92 }))
+  if (d) route.push(path(d, { stroke: P.ROUTE, sw: routeWidth, cap: 'round', join: 'round', opacity: 0.92 }))
 
   /* ── Places, once the leg that reaches them has set out ──────────── */
   /*
@@ -1149,6 +1204,9 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
    * and the song between them say where it is.
    */
   const marks = []
+  // Where each visible port landed on screen — the album edition's rose keeps
+  // clear of them.
+  const markAt = []
   const seen = new Set()
   for (const l of plan.legs) {
     for (const [p, opens] of [[l.from, l.t0], [l.to, l.t0]]) {
@@ -1167,6 +1225,7 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
         continue
       }
       const landsAt = p.id === 'sevilla' ? plan.dotFrom : firstReach
+      if (opacity > 0.05) markAt.push(s)
       marks.push(portMark(s.x, s.y, null, {
         active: now >= landsAt,
         landing: ramp(now, landsAt, landsAt + 1.2),
@@ -1186,8 +1245,8 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
       // The last landfall pulses, the way home did in the fourth verse.
       const phase = ((now - plan.arrive) / 2.6) % 1
       const breath = 0.5 - 0.5 * Math.cos(phase * Math.PI * 2)
-      marks.push(circle(hs.x, hs.y, 13 * (1 + 0.28 * breath), { fill: ROUTE, opacity: 0.95 }))
-      marks.push(circle(hs.x, hs.y, 21 + phase * 60, { stroke: ROUTE, sw: 2.5, opacity: r(0.55 * (1 - phase), 3) }))
+      marks.push(circle(hs.x, hs.y, 13 * (1 + 0.28 * breath), { fill: P.ROUTE, opacity: 0.95 }))
+      marks.push(circle(hs.x, hs.y, 21 + phase * 60, { stroke: P.ROUTE, sw: 2.5, opacity: r(0.55 * (1 - phase), 3) }))
     }
     else {
       // Grows from a pinprick while the first verse wanders the province.
@@ -1195,29 +1254,69 @@ export function cartographyFrame({ time, score, lockup = '', uid = 'carto' }) {
       // Home again in the fourth verse: the dot breathes, slowly.
       const home = now >= plan.home && now < plan.pulseTo
       const breath = home ? 0.5 - 0.5 * Math.cos(((now - plan.home) / 2.6) * Math.PI * 2) : 0
-      marks.push(circle(hs.x, hs.y, grown * (1 + 0.28 * breath) + wordHit * 7, { fill: ROUTE, opacity: 0.95 }))
+      marks.push(circle(hs.x, hs.y, grown * (1 + 0.28 * breath) + wordHit * 7, { fill: P.ROUTE, opacity: 0.95 }))
       if (home) {
         const phase = ((now - plan.home) / 2.6) % 1
-        marks.push(circle(hs.x, hs.y, grown + 8 + phase * 60, { stroke: ROUTE, sw: 2.5, opacity: r(0.55 * (1 - phase), 3) }))
+        marks.push(circle(hs.x, hs.y, grown + 8 + phase * 60, { stroke: P.ROUTE, sw: 2.5, opacity: r(0.55 * (1 - phase), 3) }))
       }
     }
   }
 
   /* ── Furniture that does not move with the chart ─────────────────── */
   const furniture = []
-  furniture.push(motifAt('compass', 200, 706, 190, {
-    stroke: INK,
+  const rose = album ? { x: A.SHEET.plate.x + 150, y: A.SHEET.plate.y + A.SHEET.plate.h - 140, size: 170 } : { x: 200, y: 706, size: 190 }
+  /*
+   * The album edition has no lyric on the chart to stand the rose down, so it
+   * stands down for the route instead: as a port or the head of the line
+   * comes under it, by distance, so it eases as the chart moves and never
+   * steps. The West Coast in the second chorus is where it matters.
+   */
+  let roseRoom = 1
+  if (album) {
+    const near = [...(hs.z > 0 && now >= plan.dotFrom ? [hs] : []), ...markAt]
+      .reduce((out, s) => Math.min(out, Math.hypot(s.x - rose.x, s.y - rose.y)), Infinity)
+    roseRoom = lerp(0.35, 1, easeInOut(clamp01((near - rose.size * 0.45) / (rose.size * 0.5))))
+  }
+  furniture.push(motifAt('compass', rose.x, rose.y, rose.size, {
+    stroke: P.INK,
     width: 1.8,
-    opacity: (quiet ? 0.2 : 0.55) * ramp(now, 3.2, 4.4),
+    opacity: (quiet ? 0.2 : 0.55) * roseRoom * ramp(now, 3.2, 4.4),
     rotate: r(lerp(-14, 0, easeOutBack(ramp(now, 3.2, 6.0), 1.4)), 2),
   }))
-  furniture.push(rect(40, 40, 1520, 820, 'none', { stroke: INK, sw: 4, opacity: ramp(now, 1.1, 2.4) }))
-  furniture.push(rect(56, 56, 1488, 788, 'none', { stroke: INK, sw: 1.5, opacity: ramp(now, 1.6, 2.9) }))
+  if (album) {
+    // The neatline becomes the plate's own edge: a heavy rule on the plate and
+    // a hairline inside it, drawn in as the chart is, as before.
+    const { x, y, w, h } = A.SHEET.plate
+    furniture.push(rect(x, y, w, h, 'none', { stroke: P.INK, sw: 3, opacity: ramp(now, 1.1, 2.4) }))
+    furniture.push(rect(x + 12, y + 12, w - 24, h - 24, 'none', { stroke: P.INK, sw: 1.2, opacity: 0.8 * ramp(now, 1.6, 2.9) }))
+  }
+  else {
+    furniture.push(rect(40, 40, 1520, 820, 'none', { stroke: P.INK, sw: 4, opacity: ramp(now, 1.1, 2.4) }))
+    furniture.push(rect(56, 56, 1488, 788, 'none', { stroke: P.INK, sw: 1.5, opacity: ramp(now, 1.6, 2.9) }))
+  }
 
   const groundSvg = ground.join('\n')
+  if (album) {
+    const clip = A.plateClip(uid)
+    return {
+      svg: [
+        A.paper(),
+        clip.def,
+        `<g clip-path="${clip.url}">`,
+        rect(0, 0, 1600, 900, P.CHART),
+        hush < 1 ? `<g opacity="${r(hush, 3)}">${groundSvg}</g>` : groundSvg,
+        route.join('\n'),
+        marks.join('\n'),
+        '</g>',
+        furniture.join('\n'),
+        lyric,
+      ].join('\n'),
+      label: activeLine?.text ?? section.label,
+    }
+  }
   return {
     svg: [
-      rect(0, 0, 1600, 900, CHART),
+      rect(0, 0, 1600, 900, P.CHART),
       hush < 1 ? `<g opacity="${r(hush, 3)}">${groundSvg}</g>` : groundSvg,
       route.join('\n'),
       marks.join('\n'),
@@ -1275,8 +1374,8 @@ function straightLyric({ now, line: lyric, from = lyric.start, scope, uid, low =
   const top = bottom - (rows.length > 1 ? gap : 0) - sizes[0] * 0.92 - 20
   const plate = low
     ? `<g opacity="${r(arrive, 3)}">
-      ${rect(56, top, 1488, 844 - top, CHART, { opacity: 0.93 })}
-      ${line(56, top, 1544, top, NEAT, 1.5, { opacity: 0.8 })}
+      ${rect(56, top, 1488, 844 - top, P.CHART, { opacity: 0.93 })}
+      ${line(56, top, 1544, top, P.NEAT, 1.5, { opacity: 0.8 })}
     </g>`
     : ''
 
@@ -1317,6 +1416,28 @@ function straightLyric({ now, line: lyric, from = lyric.start, scope, uid, low =
  * bearing, one per oh. No words — there are none to set.
 
 /**
+ * The album edition's lyric: in the margin under the plate, the album's way.
+ *
+ * The intro carries the album's title card instead. Every line after it is the
+ * album's: solid ink, and timed by lineSpan in album.mjs — up just before its
+ * first word, held a beat past its last, handed over inside the next line's
+ * lead, and gone with its section. The same rule as every other album film.
+ */
+function marginLyric({ now, score, section, uid }) {
+  if (section.kind === 'intro') {
+    const intro = score.sections[0]
+    const on = easeOut(ramp(now, 1.0, 2.3))
+    const off = 1 - easeInOut(ramp(now, intro.to - 1.8, intro.to - 0.4))
+    return A.titleCard({ title: score.title, track: score.track ?? 5, opacity: Math.min(on, off) })
+  }
+  // The album's one timing rule for the margin (lineSpan in album.mjs). The
+  // oh-ohs have no words to set, and the margin stays empty for them.
+  const ohs = new Set(score.sections.filter((x) => x.kind === 'ohs').map((x) => x.id))
+  const out = A.marginLyric({ now, score, uid: `${uid}-m`, skip: (line) => ohs.has(line.section) })
+  return out
+}
+
+/**
  * The title, in a cartouche.
  *
  * A plain rectangle of chart colour with a rule round it, the way a chart
@@ -1344,11 +1465,11 @@ function cartouche(now, section, score) {
   const y = 280
 
   return `<g opacity="${r(leave, 3)}">
-    ${rect(x, y, w, h, CHART, { stroke: INK, sw: 3 })}
-    ${rect(x + 12, y + 12, Math.max(w - 24, 0), h - 24, 'none', { stroke: INK, sw: 1, opacity: 0.5 })}
-    ${t({ x: 800, y: 430, size: 130, text: score.title, fill: INK, anchor: 'middle', weight: 600, opacity: r(ramp(now, 1.7, 2.5), 3) })}
-    ${t({ x: 800, y: 510, size: 28, text: score.artist, fill: ROUTE, anchor: 'middle', weight: 600, tracking: 14, opacity: r(ramp(now, 3.0, 3.7), 3) })}
-    ${t({ x: 800, y: 566, size: 20, text: `From the album ${score.album}`, fill: INK, anchor: 'middle', weight: 400, tracking: 6, opacity: r(0.7 * ramp(now, 4.4, 5.1), 3) })}
+    ${rect(x, y, w, h, P.CHART, { stroke: P.INK, sw: 3 })}
+    ${rect(x + 12, y + 12, Math.max(w - 24, 0), h - 24, 'none', { stroke: P.INK, sw: 1, opacity: 0.5 })}
+    ${t({ x: 800, y: 430, size: 130, text: score.title, fill: P.INK, anchor: 'middle', weight: 600, opacity: r(ramp(now, 1.7, 2.5), 3) })}
+    ${t({ x: 800, y: 510, size: 28, text: score.artist, fill: P.ROUTE, anchor: 'middle', weight: 600, tracking: 14, opacity: r(ramp(now, 3.0, 3.7), 3) })}
+    ${t({ x: 800, y: 566, size: 20, text: `From the album ${score.album}`, fill: P.INK, anchor: 'middle', weight: 400, tracking: 6, opacity: r(0.7 * ramp(now, 4.4, 5.1), 3) })}
   </g>`
 }
 
@@ -1439,3 +1560,10 @@ export const CARTOGRAPHY = {
   accent: ROUTE,
   palette: { CHART, SEA, INK, ROUTE, NEAT },
 }
+
+/**
+ * The album edition: the same film on the album's paper, inks, sheet and title
+ * card (app/config/albumStyle.ts). /music-videos/andalusia runs it; the
+ * original edition is kept for the still sheet on /music-videos/styles.
+ */
+export const cartographyAlbumFrame = (o) => cartographyFrame({ ...o, edition: 'album' })

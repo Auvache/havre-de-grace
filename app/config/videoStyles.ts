@@ -1,6 +1,7 @@
 /*
- * The music-video style suite — seven looks for "Andalusia", and for whatever
- * gets made after it.
+ * The music-video style suite — seven looks drawn for "Andalusia" (families A
+ * and B) and five for "Into the Wild" (family C), and for whatever gets made
+ * after them.
  *
  * WHAT THIS FILE IS FOR
  * The reference sheets in public/video-styles are what a style looks like. This
@@ -47,7 +48,7 @@
  *     below maps lyric to drawing once for all seven.
  */
 
-export type StyleFamily = 'A' | 'B'
+export type StyleFamily = 'A' | 'B' | 'C'
 
 /** What a moving thing is hung off. The whole vocabulary — there is no other. */
 export type Driver =
@@ -77,6 +78,12 @@ export interface StyleColour {
 export interface VideoStyle {
   id: string
   family: StyleFamily
+  /**
+   * The song the sheet and the section table are drawn against. Families A and
+   * B were drawn against Andalusia; family C against Into the Wild, whose
+   * arrangement has different sections (a break, a horn solo, no oh-ohs).
+   */
+  song?: 'andalusia' | 'into-the-wild'
   name: string
   /** The generated reference sheet. */
   sheet: string
@@ -90,11 +97,11 @@ export interface VideoStyle {
   layout: string[]
   /** Everything that moves, and what moves it. */
   motion: StyleMotion[]
-  /** What each of the ten sections does. Keys are score section ids. */
-  sections: Partial<Record<
-    'intro' | 'verse-1' | 'verse-2' | 'chorus-1' | 'verse-3' | 'chorus-2' | 'ohs' | 'verse-4' | 'chorus-3' | 'outro',
-    string
-  >>
+  /**
+   * What each section does. Keys are the section ids of the style's song —
+   * andalusiaScore.ts for families A and B, intoTheWildScore.ts for family C.
+   */
+  sections: Partial<Record<string, string>>
   /** How this style draws the motifs, or why it does not. */
   motifs: string
   /** The mistakes that would ruin it. */
@@ -146,11 +153,11 @@ export const SUITE_RULES = [
   'One frame is one pure function of t. If a look needs to remember the previous frame, the look is wrong for this film.',
   'Cuts land on measured words. Never on a beat grid, never on a round number of seconds.',
   'No burned-in slate, clock, section label or progress bar. The page around the film owns the transport.',
-  'The frame draws what the line is about. Pick the motif from MOTIF_CUES; do not invent one per style.',
+  'The frame draws what the line is about. Pick the motif from the song\'s cue list — MOTIF_CUES below for Andalusia, INTO_THE_WILD_CUES in shared/video/cues.mjs for Into the Wild; do not invent one per style.',
   'A section that repeats musically must not repeat visually. The three choruses are the test: if chorus 3 is chorus 1 at a larger size, it has failed.',
   'Type is Jost, already served on the site. Declare family and weight in CSS, not as SVG attributes, or @nuxt/fonts will not see them and the browser will synthesise a bold.',
   'Rows of lyric are fitted to the measure and stretched to it with textLength. No line is laid out by hand.',
-  'The oh-ohs section has no words to set. Every style needs an answer for seventeen syllables and no lyric — that is where most of them will fail.',
+  'The oh-ohs section has no words to set. Every style needs an answer for seventeen syllables and no lyric — that is where most of them will fail. Into the Wild\'s equivalent is forty seconds of horns between the second chorus and the third verse, and it asks the same question for longer.',
   'Nothing on screen names a section. No VERSE TWO, no CHORUS, no bar count. Somebody listening to a song already knows where they are in it, and a label is the surest way to make a film look like a preview of itself rather than the thing.',
   'The band name appears once, in the opening title, and leaves with it. The album name does not appear at all. Between the title card and the end card the frame carries the song and nothing else — no footer, no corner mark, no running lockup.',
   'Every film ends on the same two screens. See END_CARD: a style does not design its own ending.',
@@ -426,6 +433,7 @@ export const VIDEO_STYLES: VideoStyle[] = [
     tagline: 'Somebody drawing the song. Lyric flat and still along the top, a stick-figure stage underneath where everything that moves lives.',
     premise:
       'The frame is cut in two and the halves never trade places. The top 250 units are the lyric, set flat and quiet and completely still — you read it, it does not perform. The bottom 650 is a stage where the line is acted out by stick figures on a ground line, and that is where every moving thing in the film lives. It is drawn, so it is drawn badly on purpose: every straight line is five segments with a pixel or two of tremble on each, every circle is an eighteen-point polygon that does not quite close, and the tremble is seeded off the frame number so the whole picture boils the way hand-inked animation does. The discipline this style demands is that the stage has to actually act the line — a figure walking for "walk", a figure standing still under a church for "stranded" — which means the storyboard is a real piece of work and cannot be generated.',
+    // Built as a film for Into the Wild (shared/video/films/flipbook.mjs). This sheet and the sections below are still Andalusia's; the Into the Wild storyboard is in the film module's header.
     palette: [
       { name: 'Paper', hex: '#f7f4ea', role: 'The page. Ruled, with a margin line.' },
       { name: 'Pencil', hex: '#23262b', role: 'Everything drawn, and the chorus ground.' },
@@ -448,6 +456,7 @@ export const VIDEO_STYLES: VideoStyle[] = [
       { driver: 'line', does: 'The scene is replaced. New figures, new props, same ground line. Hard cut, no transition.' },
       { driver: 'section', does: 'The paper inverts for the choruses — pencil ground, paper drawing — and the ground line moves.' },
       { driver: 'clock', does: 'The tremble reseeds every second frame. At 30fps that is the boil; at 60 it is too fast and reads as noise.' },
+      { driver: 'clock', does: 'Where there are no words — the run cycle during a held note, a horn solo — step on the score\'s beat grid. Only allowed on a record measured to be on a click, as Into the Wild is at 120 BPM; on one that drifts, step on onsets or not at all.' },
       { driver: 'audio', does: 'Nothing. A drawing does not know what the music is doing, and pretending otherwise is the one thing that would make this look cheap.' },
     ],
     sections: {
@@ -467,6 +476,10 @@ export const VIDEO_STYLES: VideoStyle[] = [
       'Making the type wobble too. The contrast between clean caption and shaky drawing is the entire style.',
       'Tweening a pose. Poses are replaced, never interpolated.',
       'Letting the stage be decorative. If the figures are not acting the line, use a different style.',
+      'Drawing a figure in the same pencil as a busy background with nothing between them. The runner in Into the Wild\'s third chorus vanished into the forest the moment the trees reached him. Draw a knockout under anything that has to read against scenery: the figure\'s own strokes, fat, in the page colour, drawn first — what an animator does with an eraser.',
+      'Scrolling scenery smoothly under a boiling drawing. It reads as a camera, and a flipbook has no camera. Step the scroll at the boil rate — fifteen positions a second — so the world moves the way the pencil does.',
+      'Filling a trembling outline. A wobbled line is many subpaths, and each fills as a sliver. Anything solid gets its own clean closed shape under the outline.',
+      'Running every chorus through the same country. Each chorus is a different landscape past the same runner — pines, then hills and birds, then mountains into a forest that closes in on "wild" — or the three choruses are one chorus three times.',
     ],
     effort: 'high',
   },
@@ -526,6 +539,7 @@ export const VIDEO_STYLES: VideoStyle[] = [
     },
     motifs: 'As chart furniture: a compass rose, a sailboat drawn on the water, a globe when the chart is pulled out. Always in ink or neatline colour, never in route red.',
     avoid: [
+      'Album edition (cartographyAlbumFrame, `edition: \'album\'`): the same film on the album sheet (app/config/albumStyle.ts). The globe is centred on the plate (800, 367) and its radius scaled by 0.74 inside the projection; the neatline is the plate edge; the compass sits in the plate\'s bottom-left; all lyric is in the margin, so the chart never stands down for it. Inks: land #e3d7bc, sea #bfcbbd (the album sea green let down with paper), neatline #8d8068, route album red. The album edition is approved and /music-videos/andalusia runs it; the original edition is kept byte-identical for the still sheet on /music-videos/styles. With no lyric on the chart, the compass stands down for the route instead — to 35% as a port or the head of the line comes within its box, eased by distance so it never steps (the West Coast in the second chorus sat under it at full strength).',
       'Handing one camera to another mid-move. After the oh-ohs the spinning globe was blended back into the keyed camera, which had spent the whole tour drifting from Toronto towards Iceland out of sight, and then zoomed world-to-province in three seconds — the join showed twice and read as choppy. The homecoming is now one move from exactly where the spin came to rest: the globe turns to face Andalusia while still pulled back, then falls onto the province over about five seconds, settling two seconds after the line lands.',
       'Cutting a line in on its first word. It was only half faded in as that word was sung, and once the lyric stopped changing colour on each word there was nothing else to carry the timing, so every line read as late. A line cuts in 0.3 s early and is fully up by its first word — never before the previous line has finished, nor before its own section.',
       'Reading `audio.currentTime` raw as the film\'s clock. Browsers step it — Firefox and Safari about every quarter second — so the picture freezes on a moment already past and then jumps: in sync just after an update, late just before the next. Anchor to the last reported value and run on the wall clock between reports (useMusicVideoPlayer does).',
@@ -601,6 +615,323 @@ export const VIDEO_STYLES: VideoStyle[] = [
     ],
     effort: 'medium',
   },
+
+  /*
+   * FAMILY C — five drawn against "Into the Wild".
+   *
+   * The second song names more things than the first — ebony, ivory and bone;
+   * glaciers, gardens and grottos; a harbor and a crowd — and its chorus is one
+   * idea, running out into it. So these are all ways of drawing a world rather
+   * than of setting type over one. Section keys are intoTheWildScore.ts's. Four
+   * are built (shared/video/films/), and their sheets are frames of the films.
+   */
+  {
+    id: 'c1-field-journal',
+    family: 'C',
+    song: 'into-the-wild',
+    name: 'Field Journal',
+    sheet: '/video-styles/c1-field-journal.svg',
+    tagline: 'A naturalist\'s notebook, open flat. The line is the entry; what it names is sketched in pencil on the facing page while it is sung, and every find stays in the book.',
+    premise:
+      'The song as the notebook somebody keeps on the trip it describes — "stumble upon all the splendorous things", "take stories with meaning from the tales that my life\'s taught to me". The frame is a two-page spread on a dark desk, with a gutter shadow down the middle. In a verse the line being sung is the entry, written across the top of the left leaf; the thing it names is sketched on a card taped to the right leaf, drawn on stroke by stroke while the voice sings it, with a watercolour wash blooming behind it and a fig. number and a word under it. Nothing is thrown away: every figure a verse has drawn waits, small and numbered, in a grid under the entry, so the last line of a verse is a page of finds and looks nothing like the first. The page turns at a section boundary, and a chorus is a different kind of page altogether — a sketch map across both leaves, a dotted trail, pines with spots of wash, and somebody running the trail in red pencil. The instrumentals get pages of their own: specimens pressed and taped in for the break, a panorama drawn one thing at a time across forty seconds of horns.',
+    palette: [
+      { name: 'Desk', hex: '#2a231c', role: 'The four edges of the frame round the book.' },
+      { name: 'Page', hex: '#efe6d2', role: 'The leaves, ruled in a faint blue grid (verses 1 and 3) or feint lines (verse 2), blank for the maps.' },
+      { name: 'Graphite', hex: '#3b3a36', role: 'Every sketch, the entry, the runner. Unsung words are the same pencil at 30%.' },
+      { name: 'Sepia', hex: '#6b4f36', role: 'Fig. labels, pressed specimens, footprints.' },
+      { name: 'Sea', hex: '#8fb3c4', role: 'Wash: harbor, water, glacier, moon, globe; the river in chorus 2.' },
+      { name: 'Sage', hex: '#9fb59a', role: 'Wash: pines, sprig, flower, grotto, stone — and every chorus\'s wild.' },
+      { name: 'Ochre', hex: '#d9b46a', role: 'Wash: crowd, stage, sun, gem, crown, compass, bone and the made things.' },
+      { name: 'Red pencil', hex: '#b8432f', role: 'The trail already run, the ring round a drawing sung twice, the roar. Never type.' },
+    ],
+    type: [
+      'Jost 500, sentence case — it is somebody\'s entry, not a headline. Left leaf at x=92, 650 measure, up to 92 units; the chorus across both leaves on a 1360 measure, centred, up to 124.',
+      'Sentence case needs its own widths: the kit\'s JOST_ADVANCE is caps, and a lower-case row sized off it comes out a fifth too small. The film carries a lower-case table and sets each row to its width with textLength.',
+      'A verse line breaks at its commas, then in half — and into three rows, by length, if two would come out under 66. "Oh, I want to take stories with meaning" in two rows was fifty-odd units: legible up close, not across a room.',
+      'The voice is the pencil pressing harder. The row is drawn at 30% and again at full strength clipped to the words sung, the edge landing on word boundaries and sweeping each word in the time it takes to say it.',
+      'Fig. numbers count through the whole song — fig. 1 is "adventure", fig. 24 the crowd — so a number is a place in the book, not a count. A chorus draws no figures.',
+    ],
+    layout: [
+      'Book 24–1576 by 22–878 on the desk, 6 corner radius, three page-stack rules at each outer edge, a 160-unit gutter gradient centred on 800.',
+      'Verse: entry top-left; specimen grid below it, 4 columns at 168 from x=154, rows at 478 and 684, each figure 132 with its own wash and "fig. N" under it — the eight most recent finds of that verse. Card 610 by 700 centred at (1188, 452), taped at both top corners, tilted a degree or so differently per line.',
+      'One figure on the card at 430; two at 340 and 210, the second low right; three at 230 in a triangle. Label under each, centred, in sepia.',
+      'Chorus: the map fills both leaves below y≈250 and is clipped to them — the trail, the river and the runner used to run out over the desk. Three pencil ridgelines from 400, thirteen pines off the trail, the trail a dotted graphite line with the run part redrawn in red pencil, footprints either side of it.',
+    ],
+    motion: [
+      { driver: 'word', does: 'The sketch goes down a stroke at a time, one step per measured word and per click eighth, each step eased over 90 ms. The strokes of a motif draw in turn — given one shared progress every element draws at once and a crowd of twelve strokes comes up as twelve fragments.' },
+      { driver: 'word', does: 'The entry\'s heavy pencil advances word by word. In "the roar of a crowd", red noise marks burst off the drawing on each word from "roar", each further out than the last.' },
+      { driver: 'line', does: 'A new card and a new sketch at the line\'s cut-in; the last line\'s figure is already in the grid. A line that names the drawing the line before made ("lose my way", "sleeping alone") gets that drawing back, circled in red pencil, "fig. N, again".' },
+      { driver: 'section', does: 'The page turns — a hard cut to a new spread, a new ruling, a new wash. Verses are entries, choruses are maps, the break is pressed specimens, the horns a panorama.' },
+      { driver: 'clock', does: 'The runner advances one stride per eighth of the click (120 BPM, 0.03 + 0.25k) and changes pose on the same tick — six poses from shared/video/figure.mjs, replaced, never tweened. The grid is measured in this song, so the run is on it.' },
+      { driver: 'audio', does: 'Nothing. A notebook does not know what the band is doing.' },
+    ],
+    sections: {
+      intro: 'A title spread: a sprig pressed and taped into the left leaf; "Into the Wild" and the band name on the right, and a compass drawing itself on underneath from 6.5 s. The band name goes with the page.',
+      'verse-1': 'Grid paper, ochre and sea washes. Compass, gem, sun, wave, globe, bone, stone, moon — eight finds, with "lose my way" and "sleeping alone" circled rather than drawn twice.',
+      'chorus-1': 'The first map: a small sun, pines in ochre, the runner starting low on the left and gone off the right in about seven seconds; "the wild" is a big pine drawn on its word.',
+      break: 'Pressed specimens: a flower on the left leaf, a sprig on the right, drawn on in turn and taped down once they are.',
+      'verse-2': 'Feint-ruled paper — the entries get more like writing: hourglass, key, clock, book, door, guitar. Long lines take three rows.',
+      'chorus-2': 'The map again with a river through it in sea wash; the trail crosses it.',
+      solo: 'Forty seconds with no lyric: a panorama drawn one element at a time across the spread — mountain, glacier, pines, birds, sun — each in a slice of the solo, washes blooming as they finish.',
+      'verse-3': 'Grid paper again, and the richest page of the film: treasures and a crossed crown, then "glaciers and gardens and grottos" as three sketches landing on their own words, sage, harbor, and the crowd with its red roar and a microphone.',
+      'chorus-3': 'The map with a range drawn in: mountains and a glacier behind the trail, more pines, the runner off the top-right corner of the page by 190.5.',
+      outro: 'The shared end card. It is the same in all films and a style does not get its own: the splash-screen lockup centred on pure black, landing on the last note and held three seconds, then a hard cut to the credits on the same black. A style\'s own work ends when its last lyric clears.',
+    },
+    motifs: 'Every verse line, from INTO_THE_WILD_CUES (shared/video/cues.mjs), sketched in graphite with a second lighter pass a hair off the first, drawn on via pathLength (no DOM measurement) and washed behind in the noun\'s colour. The runner is the shared rig, not the runner motif.',
+    avoid: [
+      'Drawing every stroke of a motif on one shared progress. Each element with pathLength="1" draws at once and a many-stroke drawing (the crowd) reads as scattered dashes. Stroke after stroke.',
+      'A second compass for "lose my way". Consecutive repeats of a drawing are one figure; the second line gets the first one back with a red ring round it.',
+      'Letting the map out of the book. A trail generated edge to edge runs onto the desk; clip the map to the leaves.',
+      'Things above the ridgelines in a chorus — the lyric owns the top 250 units across both leaves. A sun at y=300 by the "wild" pine was also in the runner\'s way; it now sits left, low and small.',
+      'Sizing sentence case off the caps table. The row comes out small and textLength then blows the spaces open.',
+      'Blur on every wash. The big card wash is blurred; the grid thumbnails and the dozen map pines get flat low-opacity blobs, which is what keeps a frame near 0.05 ms and under 20 KB.',
+    ],
+    effort: 'medium',
+  },
+  {
+    id: 'c2-contour',
+    family: 'C',
+    song: 'into-the-wild',
+    name: 'Contour',
+    sheet: '/video-styles/c2-contour.svg',
+    tagline: 'A topographic survey sheet. Every noun the song sings becomes a landform in contour lines, and the lyric is the quadrangle\'s name along the foot.',
+    premise:
+      'A quadrangle, the way a national survey prints one: generative terrain drawn as contour lines, heavier index contours carrying their elevations along them, water as a blue tint with its shoreline and depth lines, woodland as a pale green tint, a neatline with its ticks, and one red dashed trail. The map collar — a paper band along the foot — carries the lyric the way a quad carries its own name. The device is that the song\'s nouns are ground: the hush of a harbor is a drowned bay with soundings, the roar of a crowd is a range whose contours pile up word by word until the benchmark on its summit reads 2720, glaciers and gardens and grottos are cirques, terraces and a hachured depression on one sheet, and the wild is a massif the trail runs up into. A verse is a new sheet per line; a chorus is one sheet, and the red line is the only thing on it that moves continuously. Nothing in the frame is instrumentation — the numbers are elevations and depths, which is what numbers on a survey are.',
+    palette: [
+      { name: 'Paper', hex: '#f2eee3', role: 'The sheet and the collar.' },
+      { name: 'Contour', hex: '#a0714a', role: 'Intermediate contours at 1.5, and the lyric before it is sung.' },
+      { name: 'Index', hex: '#6b4426', role: 'Every fifth contour at 2.6, its elevation labels, and the feature names.' },
+      { name: 'Water', hex: '#cfe0e6', role: 'Water tint; the shoreline and depth lines are #4f86a3.' },
+      { name: 'Wood', hex: '#dfe6cf', role: 'Woodland tint, and the ground in the collar\'s cross-section.' },
+      { name: 'Trail', hex: '#c8412d', role: 'The trail, its head, and the light on the harbor headland. The only saturated ink.' },
+      { name: 'Ink', hex: '#23211e', role: 'Neatline, spot heights, benchmarks, and the lyric once sung.' },
+    ],
+    type: [
+      'The lyric is Jost 700 caps with 6 units of tracking, sized to a 1440 measure with sizeToMeasure and stretched to it — one row up to 104 if it fits at 70 or more, otherwise two rows capped at 76. Centred in the collar (y 712–900).',
+      'Brown until sung, ink once sung — the colours of an unfinished survey and a finished one. The row is drawn twice and the ink copy clipped by throughRow, so the edge lands on word boundaries.',
+      'Elevation labels are Jost 500 at 17 in index brown, set along the longest runs of index contours and rotated to read uphill-right (never upside down), with a 6-unit paper stroke under them via paint-order so the contour breaks round the number.',
+      'Feature names (Glaciers, Gardens, Grottos) are the sung word in Jost 500 italic at 26 with 3 tracking — survey lettering, not labels. Spot heights and the benchmark are Jost 500/600 at 20–26 in ink.',
+      'The title is the quad\'s name: the song title in the collar at up to 118 with 14 tracking, the band name tracked small in trail red above it. Both leave by 15.5 s.',
+    ],
+    layout: [
+      'Neatline at 30 units inset, running to y=700; ticks every 200 units outside it. The collar is y 712–900 with one hairline rule on its top edge.',
+      'North arrow top right inside the neatline, at 35% while a lyric is up. There is no scale bar — it was tried in the lower right and every summit that landed near it collided with it.',
+      'Terrain is generated in 800-unit tiles on a 16-unit marching-squares grid and cached per (scene, tile, step). A pan is one translate over the tiles in view; tile paths are already in field coordinates.',
+      'The chorus sheet is wider than the frame (2600–3000 units) and the view follows the trail head, holding it about 980 units in from the left, so the frame stays full of ground at every moment of the pan.',
+      'The two sections with no words (break, horns) print a cross-section in the collar: the ground along a dashed line A—A′ at y=320, filled wood-green, exaggerated to its own relief.',
+    ],
+    motion: [
+      { driver: 'word', does: 'A step. In most lines one more band of contours goes down per word, counted up from the sea, with a 90 ms fade on the newest. In the roar the range itself rises one cached step per word (amplitude 0.16 → 1). In the hush the sea comes in 8 ft per word and three more soundings appear.' },
+      { driver: 'word', does: 'The cue word lands a symbol: the light on the harbor headland, a spot height on the summit, the benchmark on the crowd\'s range, or the feature name for glaciers, gardens and grottos.' },
+      { driver: 'line', does: 'In a verse, the sheet is replaced on the line\'s cut-in (0.3 s before its first word): a new terrain from the line\'s own seed, chosen by its cue.' },
+      { driver: 'section', does: 'A chorus is one sheet. The trail runs 34% of its length across the first line and the rest across the second, and the view pans with its head.' },
+      { driver: 'clock', does: 'The trail and the pans in the break and the horns are continuous. The intro inks one contour per beat of the measured 120 BPM grid, from 1.53 s.' },
+      { driver: 'audio', does: 'Nothing. A survey is a document.' },
+    ],
+    sections: {
+      intro: 'The quad is named in the collar — song title, band name above it — while the sheet inks its contours in one per beat from the sea up. Both names are gone by 15.5 s.',
+      'verse-1': 'A new sheet per line, chosen by the line\'s cue: rolling hills for the adventure, a small hachured depression under "bone", a spot height on "sun" and "moon".',
+      'chorus-1': 'The massif. A red dashed trail leaves a lake in the south-west and runs up the valley on "So I\'m running", the view following it east on "Oh, I\'m running". A spot height on the highest summit in view.',
+      break: 'Open slopes, panning slowly east, with the section A—A′ dashed across the map and printed in the collar. No words.',
+      'verse-2': 'Terraces for the stories, a depression for "revealing", hills for the rest — every line a different sheet.',
+      'chorus-2': 'The massif mirrored north-south, a different seed: the same idea, not the same map.',
+      solo: 'The horns: a long ridge, 4000 units, panned across the whole forty seconds with its cross-section printed in the collar.',
+      'verse-3': 'The most drawn verse. Glaciers, gardens and grottos is one sheet with three landforms lettered as each is sung (the glacier gets an ice tint with a dashed blue edge); open slopes and scrub for the sage; the drowned bay for the harbor, with its light on the headland; the rising range for the crowd.',
+      'chorus-3': 'The biggest massif, 25% taller, 3000 units wide. The trail runs out of the roar and up into it, and the sheet pans along it for the long "running".',
+      outro: 'The shared end card. It is the same in every film and a style does not get its own: the splash-screen lockup centred on pure black, landing on the last note and held three seconds, then a hard cut to the credits on the same black. A style\'s own work ends when its last lyric clears.',
+    },
+    motifs: 'None from the motif library — the cue list in shared/video/cues.mjs is read, and each cue picks a landform recipe instead (lighthouse → drowned bay, crowd/microphone → rising range, pine/runner → massif, glacier → the composite sheet, flower → terraces, cave → depression, sprig → open slopes). A line drawing of a lighthouse on a contour map would be clip art; a headland with a light symbol is the same idea said in the map\'s own language.',
+    avoid: [
+      'Marching squares per frame. It is fine once; sixty times a second it is the whole budget. Cache every contour set, and let the terrain change only in steps on words — each step is one more cache entry, drawn once.',
+      'Translating a tile by its own offset. Tile paths are generated in field coordinates, so the view is one translate for every tile; offsetting each tile by k×800 as well put every second tile off screen, and half of every frame was empty paper.',
+      'Filling water or woodland tile by tile to the tile edge. Two fills that meet exactly on a line leave a hairline of paper between them. Generate each fill a cell past the tile on both sides so neighbours overlap underneath.',
+      'Terracing with a sawtooth. A staircase with a kink in it comes out of marching squares as noise — the first garden terraces read as letters. Use a smooth staircase (u − 0.85·sin 2πu / 2π).',
+      'Treating any line with two cues as the three-landform sheet. "The roar of a crowd center stage" names a crowd and a stage, and was drawn as glaciers and gardens. Only the glaciers line gets the composite.',
+      'A pale ice tint under bunched contours. On a ridge the contours are dense enough that a near-paper blue reads as streaks. Use a stronger tint and give it a dashed blue edge, the way a survey marks a glacier.',
+      'A scale bar in the lower right. Summits land there. The sheet has a north arrow and ticks, and that is enough furniture.',
+      'Measuring the cross-section from sea level. Open slopes three hundred feet high print as a flat line; exaggerate each section to its own relief.',
+      'Contours denser than about one every 12 units at 1600 wide. Past that the range is a brown smudge and the frame passes 40 KB. Interval 50 on the range and 80 on the massif, Douglas–Peucker at 1.5 units, and drop chains under 48 units.',
+    ],
+    effort: 'medium',
+  },
+  {
+    id: 'c3-specimen-cabinet',
+    family: 'C',
+    song: 'into-the-wild',
+    name: 'Specimen Cabinet',
+    sheet: '/video-styles/c3-specimen-cabinet.svg',
+    tagline: 'A walnut specimen drawer that fills as the song names things — every noun a specimen on its own card, lit when it is sung.',
+    premise:
+      'Into the Wild is a list of found things — ebony, ivory and bone; the Earth out of water and iron; glaciers, gardens and grottos; treasures that are not silver or gold — and a museum drawer is how a list of found things is shown. A walnut specimen drawer divided into twelve card-bottomed compartments. Each noun the song sings is drawn in ink on its own card with a brass label holder under it, and the drawer fills as the verse goes on: nothing is ever taken out, so by the end of a verse the drawer is the verse. The lyric is the drawer\'s placard along the foot. The one moving idea is light — the compartment being sung is lit and its label stamped red, so the eye walks the drawer in the order the song names things. What keeps it from being a grid for three and a half minutes is that the choruses break the cabinet: running into the wild is the specimens getting out, the dividers down and the back of the drawer open onto pines.',
+    palette: [
+      { name: 'Walnut', hex: '#2e2119', role: 'The drawer, the dividers, the ground between cards.' },
+      { name: 'Card', hex: '#ece3cf', role: 'Compartment floors, the placard, the label cards.' },
+      { name: 'Ink', hex: '#27231e', role: 'Specimens and the unsung placard.' },
+      { name: 'Brass', hex: '#b3903f', role: 'Label holders, placard screws, the title plate.' },
+      { name: 'Stamp', hex: '#b23a2a', role: 'The sung part of the placard, the lit label, anything crossed out.' },
+    ],
+    type: [
+      'Placard: Jost 700 caps at up to 92, one row, sized to 1320 and set at natural width. The sung part is stamp red, the rest ink, the edge on a word boundary.',
+      'Labels: Jost 600 caps at 17 with 3 tracking, in the brass holders. A label names the thing, not the lyric — WATER, IRON, BONE — and is written by the cue list, not by hand.',
+      'The title is engraved on a brass plate over the empty drawer, the only centred type in the film. The band name is under it and leaves with it.',
+    ],
+    layout: [
+      'Six columns by two rows of compartments, 230 by 285 with 20-unit walnut dividers, from x=60 y=50. A specimen that matters most in a line may take two cells.',
+      'Placard 1480 by 182 at y=668, card with a hairline inner rule and four brass screws.',
+      'Specimens are motif-library drawings at 150 units, 2.6 stroke, centred 118 below the cell top. Dimmed to 35% once their verse has moved on.',
+    ],
+    motion: [
+      { driver: 'word', does: 'A specimen lands in the next free compartment on the measured onset of its noun; the light moves to it and its label goes red.' },
+      { driver: 'word', does: 'The placard\'s red advances along the line, on word boundaries.' },
+      { driver: 'line', does: 'The placard is replaced. The drawer is not — it keeps everything the verse has named.' },
+      { driver: 'section', does: 'A verse starts on an empty drawer. A chorus takes the dividers out and opens the back of the drawer onto pines, with the runner in stamp red.' },
+      { driver: 'audio', does: 'Nothing. It is a museum.' },
+    ],
+    sections: {
+      intro: 'The empty drawer and its brass nameplate — Into the Wild, Havre De Grace. The plate lifts off before the first verse.',
+      'verse-1': 'Adventure, the lost way, splendour, the gods, water, iron, ebony, ivory, bone — the drawer fills to nine. Stone-cold and sleeping close it: the light goes out cell by cell.',
+      'chorus-1': 'The dividers are down; the back of the drawer is open onto pines and the runner is out.',
+      break: 'The drawer again, closed: the verse-1 specimens under glass, no light and no placard.',
+      'verse-2': 'Harder things to keep in a drawer: an hourglass, a key, a clock, a book, a guitar. The cards that do not fit are left empty with only a label.',
+      'chorus-2': 'As chorus 1, but further in — the pines nearer and larger.',
+      solo: 'No placard. The drawer becomes an instrument case lined in red, the horn and the microphone in brass.',
+      'verse-3': 'Treasures that are not silver or gold: the crown is drawn and crossed out in stamp red. Glaciers, gardens and grottos land in three cards on their own three words; sage, harbor, crowd and stage fill the second row.',
+      'chorus-3': 'The whole cabinet gone. Pines to the edge of the frame; the runner crosses it.',
+      outro: 'The shared end card. It is the same in every film and a style does not get its own: the splash-screen lockup centred on pure black, landing on the last note and held three seconds, then a hard cut to the credits on the same black. A style\'s own work ends when its last lyric clears.',
+    },
+    motifs: 'From the motif library via INTO_THE_WILD_CUES in shared/video/cues.mjs, one per cell, drawn in ink. This is the one style where every drawing on screen at once is a different noun, so the cue list is the whole storyboard.',
+    avoid: [
+      'Lighting more than one compartment. The light is the voice; two lights is two voices.',
+      'Taking a specimen out. The drawer only fills — that is what makes a verse read as a collection instead of a slideshow.',
+      'A second row of placard. It is a museum label, not a subtitle track; a line that will not fit one row at 60 or more is a line to shorten on the placard, not to wrap.',
+    ],
+    effort: 'medium',
+  },
+  {
+    id: 'c4-woodcut',
+    family: 'C',
+    song: 'into-the-wild',
+    name: 'Woodcut',
+    sheet: '/video-styles/c4-woodcut.svg',
+    tagline: 'A two-block relief print. Every measured word takes another cut out of the block, so each line is finished as it is sung.',
+    premise:
+      'The song as a folk relief print — mythic, the way the first verse is ("the gods hid about when they made the Earth out of water and iron"). A black key block and one colour block, vermilion, on off-white paper, with a muted slate used sparingly for water, ice and a night range. Nothing is drawn: everything is what the knife left. The frame is two blocks with paper round them — a picture block with a rough edge, and under it a lyric block whose letters are cut out of the black. The idea that drives every moving thing is carving. A line arrives as an uncut block, its big shapes only, and each measured word takes another cut out of it — a ray of light, a row of waves, a tree — stepped on the word, never faded or slid, so the block is finished when the line has been sung. The lyric carves the same way: every letter is drawn faintly on the block and cut through to full paper as it is sung. Variety comes from the block itself changing with the noun: a night harbour with almost nothing cut, a crowd lit by rays gouged two to a word, a triptych cut on three words, a sunburst emblem for the abstract nouns, and three different choruses.',
+    palette: [
+      { name: 'Paper', hex: '#ebe2cc', role: 'The stock, and every cut. Never white.' },
+      { name: 'Ink', hex: '#15130f', role: 'The key block: the ground of most scenes, and the lyric block.' },
+      { name: 'Vermilion', hex: '#c23b22', role: 'The colour block — sun, moon, the spotlight pool, the flood in the last chorus. Printed a few units out of register.' },
+      { name: 'Slate', hex: '#56666a', role: 'The muted third ink: water, ice, the night range. Never type, never the sun.' },
+    ],
+    type: [
+      'Jost 700 caps with 3 units of tracking, reversed out of the lyric block (x 70–1530, y 668–846). Sized to a 1330 measure with sizeToMeasure, then stretched to its own advance width with textLength — never wider than it was set.',
+      'One row caps at 104, two rows at 66, both rows at the smaller of their two fitted sizes so a two-row line is one block of type, not two.',
+      'Unsung letters are paper at 30%: drawn on the block, not yet cut. Sung letters are full paper, the edge landing on word boundaries (throughRow). Legibility first — 30% was the lowest that still read as the whole line.',
+      'The title is the only other type: the song name cut letter by letter over the first six bars, the band name small in vermilion above it until 13.5 s, then gone.',
+    ],
+    layout: [
+      'Picture block x 70–1530, y 56–640; lyric block y 668–846. Both edges are jittered polygons, fixed per film, so the blocks read as cut wood rather than rectangles.',
+      'The colour block is drawn translated a few units from the key — a different offset per section (a new pull), never inside one.',
+      'Paper specks at 40% over every block: ink never lies flat on a real print. One cached path, about 5 KB.',
+      'Nothing uses an SVG filter. Rough edges are in the geometry (seeded jitter), gouges are lenses (two quadratics), rays are wedges. It keeps a frame at about 20 KB and costs nothing to repaint.',
+    ],
+    motion: [
+      { driver: 'word', does: 'One step of carving per measured word: the scene\'s cuts are shared out across the line\'s onsets and each lands with a 90 ms ease. Cuts that belong to a word (the three panels, the buried bone, the tree on "wild") land on that word\'s onset.' },
+      { driver: 'word', does: 'The lyric cuts through letter by letter as the voice crosses it.' },
+      { driver: 'line', does: 'A new block. Hard cut on the line\'s cut-in (0.3 s before its first word); scene chosen by the line\'s cue.' },
+      { driver: 'section', does: 'The colour block\'s register moves. And in the choruses the scene is the section\'s, not the line\'s: one block carved across both lines and the held note, with a cut per bar once the words stop.' },
+      { driver: 'clock', does: 'The runner steps one pose per eighth on the measured 120 BPM grid (0.03 + 0.25k) and moves 16 units a step — replaced, never tweened. In the instrumentals a ray is cut per bar.' },
+      { driver: 'audio', does: 'Nothing. A print does not know the music is playing.' },
+    ],
+    sections: {
+      intro: 'A vermilion sun behind a range, the rays cut behind the mountains every bar and a half. The title cut out of the lower block letter by letter, the band name small above it until 13.5 s.',
+      'verse-1': 'One block per line, by cue: a compass emblem for the adventure, a gem, the sunrise again for the gods, the ground in section for "Ebony, ivory, and bone" (a log, a tusk, the bone — each cut on its word), a moon over sleeping hills with a cairn.',
+      'chorus-1': 'Paper dawn: a half sun on the horizon, vermilion rays, black range, the runner on a paper mist band between the mountains and the ridge.',
+      break: 'The sun set on the sea, a sail, a ray per bar. The lower block counts the bars in carved diamonds.',
+      'verse-2': 'Mostly emblems — hourglass, key, clock, book, door, guitar — each in its own sunburst (the ray count and angle change by line, so two lines naming the same thing are still two blocks).',
+      'chorus-2': 'Night run: ink sky with cut stars, vermilion moon, slate range. The same runner and ridge as chorus 1 and 3; everything above them different.',
+      solo: 'The horns: a great sun on the sea, twenty rays cut one per bar from both flanks inwards; the diamonds count along underneath.',
+      'verse-3': 'Emblems for the treasures (the crown struck through with a vermilion X for "silver or gold"), then the triptych — glaciers, gardens, grottos, one panel cut on each word — the harbor at night with almost nothing cut, and the crowd, whose rays go in two to a word and whose arms go up in waves.',
+      'chorus-3': 'The flood: the colour block over the whole sky, a paper sun cut out of it, rays cut from both flanks, the big pine cut on "wild", trees interleaved with rays so every word takes something out of every part of the block.',
+      outro: 'The shared end card. It is the same in all seven films and a style does not get its own: the splash-screen lockup centred on pure black, landing on the last note and held three seconds, then a hard cut to the credits on the same black. A style\'s own work ends when its last lyric clears.',
+    },
+    motifs: 'Library motifs are cut as thick paper strokes (weight 6–8 in the 100 box) on the key block — in emblems, in the triptych panels, for the bone and the cairn. The scenes that matter most (harbor, crowd, the runs) are built from the knife\'s own vocabulary instead: lenses, wedges, scallops, rough polygons.',
+    avoid: [
+      'Stepping. This study carves, cuts and poses in steps, and the person watching liked everything about it except that: "great except for the smoothness". The album version is shared/video/films/relief.mjs — the same block as one continuous panorama the camera travels, carving that sweeps open, a blended run cycle. Build on that one.',
+      'Two paper discs in one sky: a stage halo and the moon read as two suns. The moon sets while "hollow" rings, before the stage arrives.',
+      'Spotlights on in daylight — they go out as the singer leaves the stage — and rays that stop short of the plate edge, which leave a hard edge in the sky.',
+      'Drawing the rays over the range. A black range on a black sky vanished and the sun read as a torn red scrap; cut the rays behind it (`under` cuts) and give every ridge a thin paper rim.',
+      'Carving rays in angle order. Half a line in, the sun was lopsided — all its rays on one side. Cut from both flanks inwards.',
+      'Carving one kind of thing at a time. With all the rays first, the chorus\'s trees arrived after the window had closed; interleave rays, flanks and trees so every word touches every part of the block.',
+      'Putting the colour block under something the key covers. The strata sun sat under the paper sky strip and never printed; if the key covers it, draw it in the key.',
+      'Letting the runner cross a tree. Black on black, the figure disappears; the big pine lives at the far left, behind where the run starts.',
+      'Fading anything. Cuts step on words with a 90 ms ease; lines hard-cut. A dissolve reads as video, not as a print.',
+      'An SVG displacement filter for rough edges. It would be the most expensive thing in the frame for an effect seeded geometry gives for free.',
+    ],
+    effort: 'medium',
+  },
+  {
+    id: 'c5-trailhead',
+    family: 'C',
+    song: 'into-the-wild',
+    name: 'Trailhead',
+    sheet: '/video-styles/c5-trailhead.svg',
+    tagline: 'A national-park screenprint poster per line: flat spot colour in silhouette layers, the lyric as the headline, the print pulled one ink per sung word.',
+    premise:
+      'Every line of the song is a WPA park poster. Flat spot colour, no outlines, the picture built from silhouette layers stacked back to front — sky with its screenprint stripe-gradient, a sun or a moon on a disc, a far range, mid hills with a tree line, a near ridge — inside a cream border, with the lyric set as the headline in the banner underneath. The headline is always there and always the first thing legible; the picture is what gets made while it is sung. A line cuts in on its first ink, and every measured word lays one more down, stepped with a 90 ms ease and a few pixels of registration that settle as it lands, so by the last word the poster is finished and holds until the next line cuts it. Between the pulls, parallax: every layer drifts at its own depth off the clock, slowly in a verse and at a run in a chorus. The noun of the line picks the picture (harbor, crowd, glacier, garden, grotto, sage, the sun, the ocean, the range and the pines), and a line that names three nouns becomes a triptych. The one figure in the film is a runner, stepped through the six-pose cycle in shared/video/figure.mjs one pose per eighth note on the record\'s measured 120 BPM click.',
+    palette: [
+      { name: 'Cream', hex: '#efe2c4', role: 'The paper: border, banner, and any sky that is left unprinted. Also the snow caps, as paper-coloured ink.' },
+      { name: 'Pine', hex: '#1e3a33', role: 'Near ridges and trees, and the headline before it is sung.' },
+      { name: 'Sage', hex: '#7d9a78', role: 'Far ranges, headlands, the sage.' },
+      { name: 'Lake', hex: '#3f6f80', role: 'Water, mid ranges, the midday sky.' },
+      { name: 'Ochre', hex: '#e0a13a', role: 'Sky stripes, suns, the lighthouse lamp and beam.' },
+      { name: 'Rust', hex: '#b8492f', role: 'The sung headline, the stage ground, the rising sun.' },
+      { name: 'Night', hex: '#1b2433', role: 'Night skies, the harbor, the runner and the performer.' },
+    ],
+    type: [
+      'Jost 700 caps, tracked (9 per glyph on one row, 6 on two), centred in the banner. Sized to a 1380 measure with sizeToMeasure — solved, not scaled, because tracking is a flat number of units per glyph — capped at 124 on one row and 92 on two, then textLength-stretched only to its own natural width.',
+      'Any line over four words breaks into two rows, at its comma if it has one. Six words on one row came out at 65 next to two-row lines at 90, and the chorus — the title — was the smallest line in the film.',
+      'Pine until sung, Rust once sung, the edge on a word boundary (throughRow). The headline is drawn once and a clipped Rust copy laid over it, clip ids namespaced with the uid.',
+      'The band name appears once, small and tracked, over the intro poster from 2.03 to 13.03, and the title is the intro poster\'s headline. Nothing else is named.',
+    ],
+    layout: [
+      'Cream border 34 all round. Picture 34–668; banner 668–866 holds the headline. In the instrumentals (break, horns, outro) the picture takes the whole sheet inside the border.',
+      'The picture is clipped to its own rectangle — layers are drawn generously and a crowd or a tree row otherwise prints over the border and the banner.',
+      'Ridges are sums of sines with whole periods across 3200 units, so they scroll forever without a seam. Mountains use the alpine form: the maximum of several 1 − |sin| cusps, which is separate peaks; a sum of them is a plateau.',
+      'Horizon at about 0.62–0.74 of the picture. Trees stand on the ridge they belong to and scroll with it.',
+      'A triptych is three panels with 14-unit cream gutters, each a whole scene drawn into its own rectangle. Every scene therefore places things as fractions of its picture, never at absolute x — the grotto arch and the disc landed off-panel until they did.',
+    ],
+    motion: [
+      { driver: 'line', does: 'Hard cut to a new poster on the line\'s cut-in (0.3 s early, never before the previous line ends or its section starts). The first ink — the ground, with its sky stripes — goes down on the cut.' },
+      { driver: 'word', does: 'One more ink lands per measured word, 90 ms ease with a 5–7 px registration settle. Inks without an assigned word are spread so the last lands on the last word; an ink can name its own word (the runner lands on "running").' },
+      { driver: 'clock', does: 'Parallax: depth × the integral of a per-section speed (16 px/s in a verse, 150 in a chorus), so it is continuous inside a poster. The lighthouse beam turns, the moon\'s reflection shimmers, the sun rises across the final chorus\'s first line.' },
+      { driver: 'clock', does: 'The runner steps one pose per eighth note, 0.03 + 0.25k — the record is on a click, so this is the measured grid. Never tweened.' },
+      { driver: 'section', does: 'Instrumentals are full-bleed posters with no headline, a new one every four bars from the section\'s first beat, inks pulled every beat. A section\'s last poster runs long rather than starting one it has no time to print.' },
+      { driver: 'audio', does: 'Nothing. A print does not know what the music is doing.' },
+    ],
+    sections: {
+      intro: 'The title poster: dawn range, a pine emblem on the sun, "Into the Wild" as the headline. Inks pulled every three beats from 1.03; the band name over it 2.03–13.03.',
+      'verse-1': 'A poster per line from the noun: the compass trail (twice, in alternating palettes), a grotto, a sunburst for the gods, the ocean for "water and iron", a desert with a bone, two night posters for the sleeping.',
+      'chorus-1': 'Midday: lake sky, a paper sun, the range and the pines with a rust runner on the ridge; then "Oh, I\'m running" in close, the runner in silhouette against the sun.',
+      break: 'Full bleed, no headline: a glacier poster pulled on the beat.',
+      'verse-2': 'The abstract verse — conjecture, goals, pressure, stories — as landscapes with the line\'s drawing as an emblem on the disc, the way a park poster carries a symbol.',
+      'chorus-2': 'Sunset: ochre sky, rust band, a cream sun going down, the ranges going to night.',
+      solo: 'Five full-bleed posters, one per four bars: sage hills in the wind, a night range, the ocean, a glacier, the desert.',
+      'verse-3': 'The treasures: a gold sunburst with a crown for "silver or gold", then the triptych — glacier, garden, grotto, each panel printed on its own word — the sage hills, the harbor at dusk with its lighthouse, and the crowd at centre stage drawn as the poster\'s hill layers.',
+      'chorus-3': 'Sunrise, the last and biggest: the sun comes up out of the range as the line is sung, the runner on the ridge, then in close against the sun with the tree line going past at a run.',
+      outro: 'The shared end card. It is the same in every film and a style does not get its own: the splash-screen lockup centred on pure black, landing on the last note and held three seconds, then a hard cut to the credits on the same black. A style\'s own work ends when its last lyric clears.',
+    },
+    motifs: 'Mostly redrawn as landscape — a lighthouse, a crowd, a glacier are scenes, not icons. Where a line names something that is not a place (compass, key, book, crown, bone, pine) the library drawing sits on the sun disc as a heavy-stroked emblem, which is how a park poster carries a symbol. Never floating free in the picture.',
+    avoid: [
+      'Cutting in on bare paper. A cream sky is the paper colour, so a poster whose first ink is only its sky reads as a dropped frame for the 0.2 s before the first word — print the sky stripes with the ground.',
+      'Driving a slow rotation off the song clock. The sunburst turned 0.01 rad a second from zero and was ninety degrees off the horizon by 2:45; anything that turns inside a poster turns from that poster\'s cut-in.',
+      'Letting the foreground cross the subject. A tree line in front of the runner hid him completely; one slim trunk every few seconds is depth, a wall of them is a curtain.',
+      'Dropping to an instrumental poster in the gap between a section starting and its first line cutting in — verse 3 starts 0.18 s before its first line and flashed a new, empty poster. Hold the picture the section came out of.',
+      'A new four-bar poster at the very end of a section. The horns end 0.37 s into a fresh four bars; that poster would be one ink on blank paper.',
+      'A runner the same colour as the sun behind him. The silhouette is Night whatever the palette.',
+      'Seeding the scene choice with index × 5 when the palette table has five entries — every verse-2 poster came out at night.',
+    ],
+    effort: 'medium',
+  },
 ]
 
 /** Family A — alternates of the film that exists. */
@@ -608,6 +939,9 @@ export const STYLES_A = VIDEO_STYLES.filter((style) => style.family === 'A')
 
 /** Family B — the ten that are not it. */
 export const STYLES_B = VIDEO_STYLES.filter((style) => style.family === 'B')
+
+/** Family C — drawn against Into the Wild. */
+export const STYLES_C = VIDEO_STYLES.filter((style) => style.family === 'C')
 
 export const styleById = (id: string): VideoStyle | undefined =>
   VIDEO_STYLES.find((style) => style.id === id)

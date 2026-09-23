@@ -6,7 +6,7 @@
           Unlisted / proof of concept
         </p>
         <h1 class="display-heading">
-          Andalusia — Cartography
+          Andalusia — the chart
         </h1>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
           Two minutes fifty-three of "Andalusia" as an admiralty chart, in the
@@ -17,6 +17,14 @@
           file anywhere: every frame is SVG drawn from the song's own clock, so
           it lands where it is sung and weighs about what its markup weighs.
         </p>
+        <p class="max-w-3xl text-base leading-relaxed muted-text">
+          This is the
+          <NuxtLink to="/music-videos/album" class="underline">album edition</NuxtLink>,
+          track five of ten on Into the Wild. It is the same globe, route and
+          camera, printed on the album's sheet: paper, black and one red, the chart
+          inside a plate mark, and the lyric in the margin under it, where a
+          printmaker pencils a print's title.
+        </p>
       </header>
 
       <!-- ── The film ───────────────────────────────────────────────── -->
@@ -26,7 +34,7 @@
           class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
           :style="{ aspectRatio: '16 / 9' }"
         >
-          <MusicVideoCartography :t="frameTime" uid="film" />
+          <MusicVideoSvgFilm :film="cartographyAlbumFrame" name="Cartography, album edition" :score="score" :t="frameTime" uid="film" />
 
           <!-- The whole frame is the play button until it is playing. -->
           <button
@@ -158,6 +166,10 @@
             — the seven-style suite, and the written spec each one is built from.
           </li>
           <li>
+            <NuxtLink to="/music-videos/album" class="underline">/music-videos/album</NuxtLink>
+            — the album's art direction: the sheet, inks and motion all ten songs share.
+          </li>
+          <li>
             <NuxtLink to="/music-videos/kinetic" class="underline">/music-videos/kinetic</NuxtLink>
             — the same song in the kinetic-typography cut this suite was drawn
             against.
@@ -170,25 +182,29 @@
 
 <script setup lang="ts">
 /*
- * /music-videos/andalusia — the whole song, in the Cartography style.
+ * /music-videos/andalusia — the whole song, in the Cartography style, album
+ * edition (app/config/albumStyle.ts).
  *
  * Unlisted and noindexed, like /music-videos/kinetic and the /music/itw-*
  * mockups and for the same reason: it restates a published song's lyric in full
  * and exists to be shared by link for a decision, not to be arrived at.
  *
- * The page owns the projector and the furniture; MusicVideoCartography is the
- * film, shared/video/films/cartography.mjs is the style, and
- * app/config/andalusiaScore.ts is the cut. This page was three fifteen-second
- * snippets while the question was "does this style have anywhere to go". It
- * does, so it is now the film.
+ * The page owns the projector and the furniture; MusicVideoSvgFilm runs the
+ * film, cartographyAlbumFrame in shared/video/films/cartography.mjs is the
+ * style, and app/config/andalusiaScore.ts is the cut. This page was three
+ * fifteen-second snippets while the question was "does this style have
+ * anywhere to go". It does, so it is now the film — and since the album
+ * direction was chosen, it is the album's edition of it, the same one the
+ * snippet on /music-videos/album plays.
  */
 import { ANDALUSIA_SCORE, lineAt, sectionAt } from '~/config/andalusiaScore'
 import { useMusicVideoPlayer } from '~/composables/useMusicVideoPlayer'
+import { cartographyAlbumFrame } from '~~/shared/video/films/cartography.mjs'
 
 definePageMeta({ layout: 'default' })
 
 useHead({
-  title: 'Andalusia — Cartography',
+  title: 'Andalusia — the chart, album edition',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 
@@ -205,7 +221,8 @@ const stage = useTemplateRef<HTMLElement>('stage')
 /*
  * The poster frame. The film opens on blank paper — the chart draws itself over
  * the first four seconds — so before anyone presses play the frame is held at
- * the moment the cartouche is full, where the type is. A video that looks like
+ * the moment the title card is full: the chart in the plate, the title, 5/10
+ * and the band in the margin. A video that looks like
  * an empty rectangle until you play it does not get played.
  */
 const POSTER_AT = 6.4
@@ -281,9 +298,9 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'Andalusia at province scale, pushing in slowly under the title. The '
-      + 'title sits in a cartouche and fades as the intro ends. '
-      + 'As it leaves, the dot appears.',
+    note: 'Andalusia at province scale, pushing in slowly. The album\'s title '
+      + 'card sits in the margin — 5/10, the title, the band in red — and '
+      + 'fades as the intro ends. As it leaves, the dot appears.',
   },
   {
     id: 'verse-1',
@@ -301,7 +318,7 @@ const BEATS = [
     id: 'chorus-1',
     label: 'Chorus',
     note: 'Round the North Sea: Copenhagen, Oslo, London, Dublin, one leg per '
-      + 'line. The land stands down behind the type; the red line does not.',
+      + 'line. The lyric is in the margin, so the chart stays at full strength.',
   },
   {
     id: 'verse-3',
@@ -318,7 +335,8 @@ const BEATS = [
     id: 'ohs',
     label: 'Oh-oh-oh',
     note: 'The whole globe, twice round eastward through fifteen cities. One '
-      + 'eased-out clock drives it, so the world spins down as it fills with red.',
+      + 'eased-out clock drives it, so the world spins down as it fills with red. '
+      + 'No words, so the margin is empty.',
   },
   {
     id: 'verse-4',
@@ -362,8 +380,11 @@ const NOTES = [
   'The zoom is in the projection, not in a transform. The coast, the graticule, '
     + 'the red line and the type keep the same pen from a province to the whole '
     + 'world.',
-  'One function draws all of it: cartographyFrame(t). The same file renders '
-    + 'this film sixty times a second and can be walked frame by frame under '
-    + 'node to write an mp4.',
+  'The sheet is the album\'s: the globe is centred on the plate and scaled to '
+    + 'its height inside the projection, not squeezed with a transform, and the '
+    + 'lyric is timed by the same margin rule as every other film on the album.',
+  'One function draws all of it: cartographyAlbumFrame(t). The same file renders '
+    + 'this film sixty times a second, draws the snippet on /music-videos/album, '
+    + 'and can be walked frame by frame under node to write an mp4.',
 ]
 </script>

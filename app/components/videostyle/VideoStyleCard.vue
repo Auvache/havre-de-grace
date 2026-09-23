@@ -114,7 +114,8 @@
 
 <script setup lang="ts">
 import type { VideoStyle } from '~/config/videoStyles'
-import { SECTIONS } from '~/config/andalusiaScore'
+import { SECTIONS as ANDALUSIA_SECTIONS } from '~/config/andalusiaScore'
+import { SECTIONS as INTO_THE_WILD_SECTIONS } from '~/config/intoTheWildScore'
 
 const props = defineProps<{ spec: VideoStyle }>()
 
@@ -136,10 +137,10 @@ const bulletSections = computed(() => [
  * quietly omitting the hardest fifteen seconds in the song.
  */
 const sectionRows = computed(() =>
-  SECTIONS.map((section) => ({
+  (props.spec.song === 'into-the-wild' ? INTO_THE_WILD_SECTIONS : ANDALUSIA_SECTIONS).map((section) => ({
     id: section.id,
     label: section.label,
-    text: props.spec.sections[section.id as keyof VideoStyle['sections']] ?? '— not specified —',
+    text: props.spec.sections[section.id] ?? '— not specified —',
   })),
 )
 </script>

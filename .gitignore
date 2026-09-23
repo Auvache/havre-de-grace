@@ -41,3 +41,6 @@ public/press/havre-de-grace-press-kit.zip
 
 # The contact sheet tools/video-styles/frames.mjs writes. Scratch, always.
 .frames.html
+
+# Rendered music videos — tools/video-styles/mp4.mjs
+/exports

@@ -31,7 +31,8 @@ export interface MusicVideoPlayerOptions {
 }
 
 export function useMusicVideoPlayer(
-  score = ANDALUSIA_SCORE,
+  /* Only the record and its length are read, so any song's score will do. */
+  score: { src: string, duration: number } = ANDALUSIA_SCORE,
   { analyse = true }: MusicVideoPlayerOptions = {},
 ) {
   /** Seconds into the song. */

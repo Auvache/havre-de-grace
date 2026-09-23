@@ -5,7 +5,10 @@
       class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
       :style="{ aspectRatio: '16 / 9' }"
     >
-      <MusicVideoCartography :t="frameTime" :uid="uid" />
+      <!-- The film. Cartography unless the page hands in another style. -->
+      <slot name="film" :t="frameTime" :uid="uid">
+        <MusicVideoCartography :t="frameTime" :uid="uid" />
+      </slot>
 
       <!-- The whole frame is the play button until it is playing. -->
       <button
@@ -101,6 +104,10 @@
  * untranslated. That is what "synced to Andalusia" means here: second 78.1 of
  * this component is second 78.1 of the master, so a snippet cannot be in sync
  * with itself and out of sync with the song.
+ *
+ * The film is a slot, with the clip's clock and uid handed out to it, so a page
+ * can put any style in the stage — see /music-videos/into-the-wild-styles, which runs
+ * five of them through MusicVideoSvgFilm. With no slot it is Cartography.
  */
 import { ANDALUSIA_SCORE } from '~/config/andalusiaScore'
 
@@ -116,10 +123,12 @@ const props = defineProps<{
    */
   posterAt: number
   uid: string
+  /** The record the window is cut from. Andalusia, which the clips were first built for, unless given. */
+  src?: string
 }>()
 
 const clip = useFilmClip({
-  src: ANDALUSIA_SCORE.src,
+  src: props.src ?? ANDALUSIA_SCORE.src,
   from: props.from,
   to: props.to,
 })

@@ -5,6 +5,7 @@
  *   node tools/video-styles/frames.mjs 0 15          # 8 frames, the default
  *   node tools/video-styles/frames.mjs @6 @14 @16.2  # exactly those seconds
  *   FILM=cartography SONG=andalusia node ... 0 173 12
+ *   FILM=woodcut SONG=into-the-wild node ... 175.7 190.7 6
  *
  * Writes .frames.html and opens it. FILM and SONG default to cartography and
  * andalusia; both registries are a few lines below.
@@ -33,7 +34,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { ANDALUSIA_SCORE } from '../../app/config/andalusiaScore.ts'
-import { cartographyFrame } from '../../shared/video/films/cartography.mjs'
+import { INTO_THE_WILD_SCORE } from '../../app/config/intoTheWildScore.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../..')
@@ -45,12 +46,26 @@ const root = resolve(here, '../..')
  *
  *   FILM=cartography SONG=andalusia node tools/video-styles/frames.mjs 0 173 12
  */
+/*
+ * Films are [module, export] and imported lazily — only the one asked for.
+ * Importing all of them up front meant one half-written module anywhere broke
+ * the review loop for every style, which is what happened the first time five
+ * were built at once.
+ */
 const FILMS = {
-  cartography: cartographyFrame,
+  cartography: ['cartography.mjs', 'cartographyFrame'],
+  'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
+  trailhead: ['trailhead.mjs', 'trailheadFrame'],
+  contour: ['contour.mjs', 'contourFrame'],
+  woodcut: ['woodcut.mjs', 'woodcutFrame'],
+  relief: ['relief.mjs', 'reliefFrame'],
+  'field-journal': ['field-journal.mjs', 'fieldJournalFrame'],
+  flipbook: ['flipbook.mjs', 'flipbookFrame'],
 }
 
 const SCORES = {
   andalusia: ANDALUSIA_SCORE,
+  'into-the-wild': INTO_THE_WILD_SCORE,
 }
 
 const pick = (table, key, what) => {
@@ -59,7 +74,9 @@ const pick = (table, key, what) => {
   return found
 }
 
-const film = pick(FILMS, process.env.FILM ?? 'cartography', 'film')
+const [filmFile, filmExport] = pick(FILMS, process.env.FILM ?? 'cartography', 'film')
+const film = (await import(resolve(root, 'shared/video/films', filmFile)))[filmExport]
+if (typeof film !== 'function') throw new Error(`${filmFile} has no export ${filmExport}`)
 const score = pick(SCORES, process.env.SONG ?? 'andalusia', 'song')
 
 /*
@@ -95,7 +112,8 @@ const cells = times.map((time, index) => {
 <figcaption>${time.toFixed(2)}s &middot; ${frame.label.replace(/[<&]/g, '')}</figcaption></figure>`
 }).join('\n')
 
-const out = resolve(root, '.frames.html')
+// OUT=<path> writes somewhere else — for two reviews running at once.
+const out = resolve(root, process.env.OUT ?? '.frames.html')
 writeFileSync(out, `<!doctype html><meta charset="utf-8"><title>${score.title} — frames</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap">

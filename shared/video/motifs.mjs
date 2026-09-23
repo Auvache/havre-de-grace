@@ -158,7 +158,117 @@ P.door = `
   <path d="M50 92 V26"/>
   <path d="M6 92 H94"/>`
 
+/* ── Into the Wild ────────────────────────────────────────────────────
+ *
+ * The nouns of the second song. Same rules as the rest: a 100-unit box,
+ * stroke only, nothing that fills. INTO_THE_WILD_CUES in ./cues.mjs says which
+ * line wants which.
+ */
+
+// "So I'm running into the wild" — the walker's other gait, leaning into it.
+P.runner = `
+  <circle cx="63" cy="13" r="8"/>
+  <path d="M59 22 L49 52"/>
+  <path d="M57 28 L70 40 L80 32"/>
+  <path d="M57 28 L43 38 L34 30"/>
+  <path d="M49 52 L66 62 L62 84 L70 86"/>
+  <path d="M49 52 L38 72 L20 68"/>`
+
+// "The roar of a crowd center stage"
+P.crowd = `
+  <circle cx="23" cy="44" r="5"/><circle cx="50" cy="42" r="5"/><circle cx="77" cy="44" r="5"/>
+  <path d="M14 62 q9 -12 18 0 M41 60 q9 -12 18 0 M68 62 q9 -12 18 0"/>
+  <circle cx="12" cy="68" r="7"/><circle cx="37" cy="66" r="7"/><circle cx="63" cy="68" r="7"/><circle cx="88" cy="66" r="7"/>
+  <path d="M0 94 q12 -20 24 0 M25 92 q12 -20 24 0 M51 94 q12 -20 24 0 M76 92 q12 -20 24 0"/>
+  <path d="M31 80 L24 44 M43 80 L50 44 M93 80 L98 52"/>`
+
+// "…center stage" / "put them in songs that I sing"
+P.microphone = `
+  <rect x="40" y="6" width="20" height="30" rx="10"/>
+  <path d="M34 26 q0 20 16 20 q16 0 16 -20"/>
+  <path d="M50 46 V88 M34 94 L50 88 L66 94"/>
+  <path d="M40 16 H60 M40 24 H60"/>`
+
+// "The hush of a harbor so hollow"
+P.lighthouse = `
+  <path d="M40 88 L44 34 H56 L60 88 Z"/>
+  <path d="M42 22 H58 V34 H42 Z"/>
+  <path d="M39 22 L50 12 L61 22"/>
+  <path d="M42.8 52 H57.2 M41.6 70 H58.4"/>
+  <path d="M60 26 L94 16 M60 30 L94 40"/>
+  <path d="M26 88 H74"/>
+  <path d="M4 96 q8 -5 16 0 t16 0 t16 0 t16 0 t16 0 t16 0"/>`
+
+// "I mean glaciers…"
+P.glacier = `
+  <path d="M4 78 L16 46 L28 52 L40 24 L54 40 L66 18 L80 44 L96 78 Z"/>
+  <path d="M40 24 L44 50 L36 64 M66 18 L62 44 L70 60 M16 46 L22 66"/>
+  <path d="M2 86 H98 M12 94 H40 M56 94 H88"/>`
+
+// "…and gardens…"
+P.flower = `
+  <circle cx="50" cy="28" r="7"/>
+  <path d="M50 21 q-10 -16 0 -18 q10 2 0 18 M57 28 q16 -10 18 0 q-2 10 -18 0 M50 35 q10 16 0 18 q-10 -2 0 -18 M43 28 q-16 10 -18 0 q2 -10 18 0"/>
+  <path d="M50 53 V94"/>
+  <path d="M50 76 q-20 -2 -24 -16 q18 0 24 16 Z M50 68 q18 -2 22 -14 q-16 0 -22 14 Z"/>`
+
+// "…and grottos"
+P.cave = `
+  <path d="M2 90 L10 50 Q20 16 50 12 Q82 14 92 48 L98 90 Z"/>
+  <path d="M24 90 V66 Q26 36 50 34 Q74 36 76 66 V90"/>
+  <path d="M36 40 L40 52 L44 38 M56 38 L59 48 L63 40"/>
+  <path d="M30 90 q6 -6 12 0 M56 90 q6 -6 12 0"/>`
+
+// "The sound of the wind through the sage"
+P.sprig = `
+  <path d="M50 96 Q48 60 56 8"/>
+  <path d="M49 80 q-20 -4 -24 -16 q18 0 24 16 Z M50 64 q18 -6 22 -18 q-18 2 -22 18 Z M51 50 q-18 -4 -22 -16 q16 0 22 16 Z M53 34 q16 -6 18 -18 q-16 2 -18 18 Z"/>`
+
+// "Ebony, ivory, and bone"
+P.bone = `
+  <path d="M28 45 H72 C74 38 78 32 84 33 C91 34 92 44 86 50 C92 56 91 66 84 67 C78 68 74 62 72 55 H28 C26 62 22 68 16 67 C9 66 8 56 14 50 C8 44 9 34 16 33 C22 32 26 38 28 45 Z"/>`
+
+// "…those treasures that aren't made of silver or gold" / "splendorous things"
+P.gem = `
+  <path d="M20 36 L34 18 H66 L80 36 L50 86 Z"/>
+  <path d="M20 36 H80 M34 18 L42 36 L50 18 L58 36 L66 18 M42 36 L50 86 L58 36"/>`
+
+// "Stone-cold these beauties are sleeping" — a cairn, which is a trail's own mark.
+P.stone = `
+  <path d="M22 90 Q20 74 40 72 H62 Q80 74 78 90 Z"/>
+  <path d="M30 72 Q30 58 48 57 Q68 58 68 72"/>
+  <path d="M38 57 Q38 44 50 43 Q62 44 61 57"/>
+  <path d="M44 43 Q44 32 51 32 Q58 33 57 43"/>
+  <path d="M8 90 H92"/>`
+
+// "You know they hate sleeping alone"
+P.moon = `
+  <path d="M60 10 A40 40 0 1 0 90 60 A32 32 0 0 1 60 10 Z"/>
+  <path d="M20 16 v10 M15 21 h10 M84 24 v6 M81 27 h6 M28 84 v6 M25 87 h6"/>`
+
+// "…stories with meaning from the tales that my life's taught to me"
+P.book = `
+  <path d="M50 26 Q34 16 8 20 V80 Q34 76 50 86 Q66 76 92 80 V20 Q66 16 50 26 Z"/>
+  <path d="M50 26 V86"/>
+  <path d="M16 34 Q30 31 42 36 M16 46 Q30 43 42 48 M16 58 Q30 55 42 60 M58 36 Q70 31 84 34 M58 48 Q70 43 84 46"/>`
+
+// "…into the wild"
+P.pine = `
+  <path d="M50 6 L30 36 H40 L24 60 H38 L18 86 H82 L62 60 H76 L60 36 H70 Z"/>
+  <path d="M50 86 V96"/>`
+
 export const MOTIF_NAMES = Object.keys(P)
+
+/**
+ * A motif's own markup, unplaced — for a style that needs to do something to
+ * each stroke, such as drawing it on with `pathLength` (which needs no DOM
+ * measurement, so it is allowed in a pure frame function).
+ */
+export const motifBody = (name) => {
+  const body = P[name]
+  if (!body) throw new Error(`No motif named "${name}". Have: ${MOTIF_NAMES.join(', ')}`)
+  return body
+}
 
 /** One motif, placed. `size` is the width of its 100-unit box after scaling. */
 export function motif(name, o = {}) {

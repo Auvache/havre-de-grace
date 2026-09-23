@@ -358,6 +358,9 @@ export default defineNuxtConfig({
         '/music-videos/styles',
         '/music-videos/andalusia',
         '/music-videos/kinetic',
+        '/music-videos/into-the-wild',
+        '/music-videos/into-the-wild-styles',
+        '/music-videos/album',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
         // The /resources hub and its tools. Built from
