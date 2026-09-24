@@ -177,7 +177,13 @@ export function marginLyric({ now, score, uid = '', fill = INK, skip = null }) {
  */
 export function titleCard({ title, track, of = 10, opacity = 1 }) {
   const pencil = '#6f675b'
-  const size = Math.min(96, 1000 / Math.max(advance(title), 0.001))
+  // The title may not reach the signature: it is centred, so its measure is
+  // twice the room between the middle of the sheet and the signature's left
+  // edge, less a gap. A long title ("Goodbye, Norma Jeane") set to the full
+  // 1000 ran into it; short ones are capped at 96 long before this binds.
+  const signature = advance('Havre De Grace', 26, 6)
+  const room = 2 * (1530 - signature - 800) - 80
+  const size = Math.min(96, Math.min(1000, room) / Math.max(advance(title), 0.001))
   return `<g opacity="${r(opacity, 3)}">
     ${t({ x: 800, y: SHEET.lyricY + size * 0.36, size, text: title, fill: INK, anchor: 'middle', weight: 700 })}
     ${t({ x: 70, y: SHEET.lyricY + 12, size: 30, text: `${track}/${of}`, fill: pencil, weight: 400, upper: false })}

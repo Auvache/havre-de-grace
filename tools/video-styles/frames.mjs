@@ -35,6 +35,7 @@ import { fileURLToPath } from 'node:url'
 
 import { ANDALUSIA_SCORE } from '../../app/config/andalusiaScore.ts'
 import { INTO_THE_WILD_SCORE } from '../../app/config/intoTheWildScore.ts'
+import { GOODBYE_NORMA_JEANE_SCORE } from '../../app/config/goodbyeNormaJeaneScore.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../..')
@@ -59,6 +60,7 @@ const FILMS = {
   contour: ['contour.mjs', 'contourFrame'],
   woodcut: ['woodcut.mjs', 'woodcutFrame'],
   relief: ['relief.mjs', 'reliefFrame'],
+  screenprint: ['screenprint.mjs', 'screenprintFrame'],
   'field-journal': ['field-journal.mjs', 'fieldJournalFrame'],
   flipbook: ['flipbook.mjs', 'flipbookFrame'],
 }
@@ -66,6 +68,7 @@ const FILMS = {
 const SCORES = {
   andalusia: ANDALUSIA_SCORE,
   'into-the-wild': INTO_THE_WILD_SCORE,
+  'goodbye-norma-jeane': GOODBYE_NORMA_JEANE_SCORE,
 }
 
 const pick = (table, key, what) => {

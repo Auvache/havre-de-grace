@@ -132,6 +132,9 @@
             </h3>
             <span class="label-text text-[0.58rem] text-[color:var(--color-accent)]">{{ song.technique }}</span>
             <span class="label-text text-[0.55rem] muted-text">{{ song.status }}</span>
+            <NuxtLink v-if="song.page" :to="song.page" class="label-text text-[0.55rem] underline">
+              Watch the whole film
+            </NuxtLink>
           </header>
           <VideoStyleSheet :src="song.still" ratio="16 / 9" />
           <div class="grid gap-6 md:grid-cols-[2fr_1fr]">

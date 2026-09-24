@@ -359,6 +359,7 @@ export default defineNuxtConfig({
         '/music-videos/andalusia',
         '/music-videos/kinetic',
         '/music-videos/into-the-wild',
+        '/music-videos/goodbye-norma-jeane',
         '/music-videos/into-the-wild-styles',
         '/music-videos/album',
         '/music/i-want-to-be-yours-and-other-songs',

@@ -59,9 +59,11 @@ Inside a style module, never:
 | --- | --- |
 | `app/config/andalusiaScore.ts` | **The cut.** Words with measured onsets, and the section table. One per song. |
 | `app/config/intoTheWildScore.ts` | The second song's cut. Its header documents the centre-channel method (below) and says which numbers to trust. |
+| `app/config/goodbyeNormaJeaneScore.ts` | The third song's cut, measured on a **separated vocal stem** (Demucs + Whisper, below). The cheapest score so far. |
 | `app/config/albumStyle.ts` | **The album decision.** Every Into the Wild song gets its own film; all ten are printmaking on one paper, ink and red, on one sheet layout, moving like Cartography. Constants, motion rules, per-song technique. **Read this before starting any song on the album.** |
 | `shared/video/album.mjs` | The album's inks, `paper()`, `plateClip()`, `lyricMargin()`, `titleCard()`, and the smoothness helpers `glide()` / `easeCamera` / `land()` / `presence()`. |
 | `shared/video/films/relief.mjs` | The album's woodcut for Into the Wild, whole song — the smooth rework of `woodcut.mjs`. The reference for a film with a **followed figure**: the runner as an integrated velocity schedule, and every cue placed from where the camera is on its word (`planFor`). |
+| `shared/video/films/screenprint.mjs` | Goodbye, Norma Jeane, whole song — the album's screenprint. The reference for **printing in screens**: every prop returns `{ back, pink, key, red }` and the frame pulls them in that order, the pink shifted off register by `registerAt(t)`. Also the reference for a film that goes to **night** (ink zones with drawn halftone seams, pools of light) and for a red line that is not a function of x (the signature, a prolate cycloid). |
 | `tools/video-styles/album.mjs` | Builds `public/video-styles/album/<slug>.svg` from `tools/video-styles/album/<slug>.mjs`, and the ten-up `album-sheet.svg`. `node tools/video-styles/album.mjs [slug …]`. |
 | `app/config/videoStyles.ts` | **The written spec** for all seven styles — premise, palette, type rules, what each driver does, what each section does, and `avoid`. This is the file to hand an agent, not the styles page. |
 | `shared/video/kit.mjs` | Drawing primitives (`t`, `rect`, `line`, `path`, `circle`, `fit`, `block`, `sung`, `rng`, `r`, `esc`) and timing (`ramp`, `fall`, `easeOut`, `easeInOut`, `easeOutBack`, `decay`, `lerp`, `clamp01`). |
@@ -150,6 +152,29 @@ worked was that the voice is the only thing mixed dead centre: decode in stereo
 comb fit of onset flux that gives the same tempo and phase in every sung block
 means the band played to one, and the grid can then be used to snap syllables —
 which it cannot be on a record played without one, like Andalusia.
+
+**Separate the voice first — the fastest route yet.** "Goodbye, Norma Jeane"
+defeated both measures above (a wide doubled part sits on the voice in every
+chorus). What worked, in about twenty minutes end to end, in a scratchpad venv
+(`pip install demucs soundfile openai-whisper`; torch comes with them, and
+ffmpeg is already on the machine):
+
+1. `python -m demucs --two-stems=vocals` on the mp3 decoded at 44.1 kHz. The
+   vocal stem's energy alone then marks every sung block to a frame.
+2. Whisper `medium` on the stem with `word_timestamps=True`, the lyric as
+   `initial_prompt` and `condition_on_previous_text=False`. **Keep its times,
+   throw away its text** — it misheard a third of the words ("When I sell a
+   white like Juliet") but put them in the right place. It merged lines into
+   one segment and skipped one whole chorus line: find those from the stem's
+   energy and the repeat offsets.
+3. A comb fit for the click, cross-correlation for the repeats, then the
+   shortest-path word placement of step 4 above, now over a ±0.3 s window
+   round each Whisper time on the stem's onset flux.
+4. Read every line start against the stem's energy at 30 ms per character in a
+   text strip. The solver was early on five of thirty lines, by 0.2–0.5 s:
+   Whisper's word starts sit on the consonant or the previous word's tail.
+
+The model downloads are flaky (a connection reset on the first try); retry.
 
 **Pool evidence across repeats.** Lines sung to the same words (every chorus)
 should be solved once on the summed onset evidence of all of them and shifted

@@ -37,6 +37,7 @@ import { chromium } from 'playwright-core'
 
 import { ANDALUSIA_SCORE } from '../../app/config/andalusiaScore.ts'
 import { INTO_THE_WILD_SCORE } from '../../app/config/intoTheWildScore.ts'
+import { GOODBYE_NORMA_JEANE_SCORE } from '../../app/config/goodbyeNormaJeaneScore.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../..')
@@ -46,10 +47,12 @@ const FILMS = {
   cartography: ['cartography.mjs', 'cartographyFrame'],
   'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
   relief: ['relief.mjs', 'reliefFrame'],
+  screenprint: ['screenprint.mjs', 'screenprintFrame'],
 }
 const SCORES = {
   andalusia: ANDALUSIA_SCORE,
   'into-the-wild': INTO_THE_WILD_SCORE,
+  'goodbye-norma-jeane': GOODBYE_NORMA_JEANE_SCORE,
 }
 
 const { values: opt } = parseArgs({

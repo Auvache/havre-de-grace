@@ -67,6 +67,8 @@ export interface AlbumSong {
   still: string
   /** How far it has got. */
   status: 'film' | 'motion test' | 'still'
+  /** Where the whole film runs, once there is one. */
+  page?: string
 }
 
 /*
@@ -127,6 +129,11 @@ export const ALBUM_NOTES = [
   'Moving the lyric to the margin takes away the reason plate furniture used to stand down. Cartography\'s compass dimmed while a lyric was on the chart; in the album edition it sat at full strength over the second chorus\'s West Coast ports. A mark that once stood down for type stands down for the subject instead — by distance from the nearest place and the head of the route, eased, so it fades as the camera carries things under it and never steps.',
   'In a relief print with a paper band behind the ground, anything standing on the ground prints in ink and anything cut into the ground or sky is paper. Sage sprigs cut in paper stood against the paper band and vanished; flowers, stones, signposts and houses are ink.',
   'An ink range on an ink night sky is invisible, so it gets a cut along the ridge. And a full circle drawn as one SVG arc vanishes once both endpoints round to the same point, so draw it as two half-arcs.',
+  // Found building the whole of Goodbye, Norma Jeane (screenprint.mjs, 2026-09-24).
+  'On a night plate, anything printed in the key\'s black is gone: a bedroom, a table, a clapperboard all vanished into the sky. Either draw the night\'s things in paper and the second ink (the searchlights, the posters, the globe), or light them — a pool of paper breaking into halftone at its edge, laid under everything. A pool also gives the night an event: when the lamp goes out, the room goes with it and only the second ink is left.',
+  'A paper-coloured thing that is meant to carry the second ink — a poster, a ring box — goes under the second ink, not over it: laid in the key, its paper knocks out the pink printed under it. Screenprint pulls in order, and paper is the absence of ink, so it belongs to the ground.',
+  'A halftone seam only reads as a seam if its dots close up: at full tone the dot must be wider than half the diagonal of its cell (0.71 of the pitch), or the flat beyond it starts with a visible edge.',
+  'The title card sizes a long title to the room between the middle of the sheet and the signature, not to the full measure: "Goodbye, Norma Jeane" set to 1000 ran into Havre De Grace. Titles of the length of the first two are capped at 96 before this binds, so their cards did not move.',
   'The contact sheet read darkest-to-palest as mezzotint, wood engraving, woodcut … engraving, and that range is welcome — the album should have a night and a day in it. What would not be welcome is a frame that breaks the sheet: every one keeps the paper margin, the plate mark and the lyric in ink.',
 ]
 
@@ -143,6 +150,7 @@ export const ALBUM_SONGS: AlbumSong[] = [
     heroLine: 'So I\'m running into the wild',
     still: '/video-styles/album/into-the-wild.svg',
     status: 'motion test',
+    page: '/music-videos/into-the-wild',
   },
   {
     slug: 'conman',
@@ -165,10 +173,11 @@ export const ALBUM_SONGS: AlbumSong[] = [
     second: SECOND_INK['goodbye-norma-jeane']!,
     journey: 'A red lipstick line — the one colour printed in register.',
     premise: 'Silkscreen, halftone and off-register, the way a studio sold its stars — no likeness of anybody, only the things around them: a marquee, a diamond, a film reel, a telephone, pills. The screens slide into and out of register with the song.',
-    moves: 'A studio lot as one long strip of props the camera dollies along. The pink screen drifts out of register through the verses and eases almost — never quite — into register on each "Goodbye". The red lipstick line draws on along the whole strip and never lifts.',
-    heroLine: 'Diamonds are your only friend',
+    moves: 'One strip of film, sprocket holes and all, the camera dollies down for the whole song — a picture house, a studio cheque, a clapperboard that never shuts, a dressing room, searchlights and a wall pasted with her mouth on "more, more, more", the walk of fame, the diamond, the pills, a telephone off the hook. The pink screen drifts out of register through the verses, eases almost — never quite — into register on each "Goodbye", and comes apart in the last chorus. The red lipstick line draws on along the whole strip and never lifts until the lipstick is dropped; on the last hit the clapper shuts and that is the cut to the end card. The whole film is at /music-videos/goodbye-norma-jeane.',
+    heroLine: 'Know you want the world, it\'s more, more, more',
     still: '/video-styles/album/goodbye-norma-jeane.svg',
-    status: 'still',
+    status: 'motion test',
+    page: '/music-videos/goodbye-norma-jeane',
   },
   {
     slug: 'ivory',
@@ -195,6 +204,7 @@ export const ALBUM_SONGS: AlbumSong[] = [
     heroLine: 'Bangkok, Budapest, or Baton Rouge',
     still: '/video-styles/album/andalusia.svg',
     status: 'film',
+    page: '/music-videos/andalusia',
   },
   {
     slug: 'new-york',
