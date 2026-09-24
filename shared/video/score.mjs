@@ -66,11 +66,13 @@ export const wordHit = (line, time, halfLife = 0.16) =>
  *
  * "Oh, I'm headed out on an adventure" splits at its comma into one word and
  * six, which is a row of type and a row of shouting. A first part that short is
- * an interjection, not a half of the line.
+ * an interjection, not a half of the line — and so is a last one: "…waves that
+ * hit a shore, oh" split at its comma left OH alone on the second row.
  */
 export function splitLine(text, maxOneRow = 6) {
   const parts = text.split(',').map((part) => part.trim()).filter(Boolean)
-  if (parts.length >= 2 && parts[0].split(' ').length > 1) {
+  const rest = parts.slice(1).join(' ').split(' ').length
+  if (parts.length >= 2 && parts[0].split(' ').length > 1 && rest > 1) {
     return [parts[0] + ',', parts.slice(1).join(', ')]
   }
   const words = text.split(' ')

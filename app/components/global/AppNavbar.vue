@@ -68,28 +68,32 @@
 </template>
 
 <script setup lang="ts">
+import { SITE_NAV_LINKS } from '~/config/navLinks'
+
 const props = withDefaults(defineProps<{
   theme?: 'light' | 'dark'
   immersive?: boolean
+  /*
+   * For pages whose hero carries its own navigation (the homepage): the bar
+   * stays parked above the viewport until the hero has mostly scrolled away,
+   * then slides in as the usual sticky nav.
+   */
+  revealAfterHero?: boolean
 }>(), {
   theme: 'light',
   immersive: false,
+  revealAfterHero: false,
 })
 
 const route = useRoute()
 const siteProfile = useSiteProfile()
 const { isSolid } = useNavScroll()
+const { y: scrollY } = useWindowScroll()
+const { height: viewportHeight } = useWindowSize()
 
 const mobileOpen = ref(false)
 
-const navLinks = [
-  { label: 'music', to: '/#music' },
-  { label: 'listen', to: '/listen' },
-  { label: 'about', to: '/about' },
-  { label: 'press', to: '/press' },
-  { label: 'contact', to: '/contact' },
-  // { label: 'influences', to: '/influences' },
-]
+const navLinks = SITE_NAV_LINKS
 
 const isActive = (to: string) => {
   // Hash links (music/contact) point at homepage sections; without real
@@ -114,7 +118,36 @@ const headerClass = computed(() => [
   (isSolid.value || mobileOpen.value) && !props.immersive ? 'supports-[backdrop-filter]:backdrop-blur-md' : '',
 ])
 
-const headerStyle = computed(() => {
+// Parked until the page's [data-hero] element has all but scrolled away.
+const heroEnd = () => {
+  const hero = import.meta.client ? document.querySelector<HTMLElement>('[data-hero]') : null
+  return hero ? hero.offsetTop + hero.offsetHeight : viewportHeight.value
+}
+
+const isParked = computed(() =>
+  props.revealAfterHero && !mobileOpen.value && scrollY.value < heroEnd() - 96,
+)
+
+// Visibility rides along with the slide so the parked bar is out of the tab
+// order too, not just off screen.
+const revealStyle = computed(() => {
+  if (!props.revealAfterHero) {
+    return {}
+  }
+
+  return {
+    transform: isParked.value ? 'translateY(-110%)' : 'none',
+    visibility: isParked.value ? 'hidden' as const : 'visible' as const,
+    transition: 'transform 420ms var(--ease-standard), visibility 420ms, background-color 300ms ease-in-out, border-color 300ms ease-in-out',
+  }
+})
+
+const headerStyle = computed(() => ({
+  ...baseHeaderStyle.value,
+  ...revealStyle.value,
+}))
+
+const baseHeaderStyle = computed(() => {
   if (props.immersive) {
     return {
       backgroundColor: '#000',

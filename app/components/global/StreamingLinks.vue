@@ -38,16 +38,6 @@
 
 <script setup lang="ts">
 import type { StreamingLinks } from '~~/shared/types'
-import amazonMusicIcon from '~~/assets/images/amazon-music.png'
-import appleMusicIcon from '~~/assets/images/apple-music.png'
-import bandcampIcon from '~~/assets/images/bandcamp.png'
-import bandsintownIcon from '~~/assets/images/bandsintown.png'
-import instagramIcon from '~~/assets/images/instagram.png'
-import soundcloudIcon from '~~/assets/images/soundcloud.png'
-import spotifyIcon from '~~/assets/images/spotify.png'
-import youtubeIcon from '~~/assets/images/youtube.png'
-import youtubeMusicIcon from '~~/assets/images/youtube-music.png'
-
 const props = withDefaults(defineProps<{
   links: StreamingLinks | Record<string, string | undefined>
   compact?: boolean
@@ -55,26 +45,7 @@ const props = withDefaults(defineProps<{
   compact: false,
 })
 
-const platformMeta: Record<string, { label: string, iconSrc: string | null }> = {
-  spotify: { label: 'Spotify', iconSrc: spotifyIcon },
-  appleMusic: { label: 'Apple Music', iconSrc: appleMusicIcon },
-  youtubeMusic: { label: 'YouTube Music', iconSrc: youtubeMusicIcon },
-  amazonMusic: { label: 'Amazon Music', iconSrc: amazonMusicIcon },
-  bandcamp: { label: 'Bandcamp', iconSrc: bandcampIcon },
-  bandsintown: { label: 'Bandsintown', iconSrc: bandsintownIcon },
-  soundcloud: { label: 'SoundCloud', iconSrc: soundcloudIcon },
-  youtube: { label: 'YouTube', iconSrc: youtubeIcon },
-  instagram: { label: 'Instagram', iconSrc: instagramIcon },
-}
-
-const entries = computed(() => Object.entries(props.links)
-  .filter(([, value]) => Boolean(value))
-  .map(([platform, value]) => ({
-    platform,
-    label: platformMeta[platform]?.label ?? platform,
-    iconSrc: platformMeta[platform]?.iconSrc ?? null,
-    url: value as string,
-  })))
+const entries = computed(() => toStreamingEntries(props.links))
 
 const listEl = ref<HTMLUListElement | null>(null)
 

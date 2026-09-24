@@ -1,94 +1,20 @@
 <template>
   <div>
-    <HeroAlbumSpotlight :album="latestAlbum" />
+    <HeroEndlessSea :album="latestAlbum" />
 
-    <AboutPreview />
-
-    <ListenPreview />
-
-    <MusicSection :albums="albums" />
-
-    <section
-      id="contact"
-      class="page-container section-space border-t border-theme scroll-mt-[calc(var(--chrome-height)+1.5rem)]"
-    >
-      <ScrollReveal
-        as="div"
-        class-name="text-center"
-        variant="section-up"
-        :delay-ms="80"
-        :duration-ms="820"
-        :threshold="0.18"
-        root-margin="0px 0px -6% 0px"
-      >
-        <SectionHeading
-          title="contact"
-          description="For inquiries, please reach out directly by email."
-          align="center"
-        />
-      </ScrollReveal>
-
-      <ScrollReveal
-        as="div"
-        class-name="mt-8 text-center"
-        variant="section-up"
-        :delay-ms="220"
-        :distance-px="48"
-        :threshold="0.18"
-        root-margin="0px 0px -6% 0px"
-      >
-        <a :href="`mailto:${siteProfile.bookingEmail}`" class="text-base hover:text-[var(--color-accent)]">
-          {{ siteProfile.bookingEmail }}
-        </a>
-        <p class="mt-3 text-sm muted-text">
-          Email is the fastest way to connect.
-        </p>
-        <NuxtLink
-          to="/contact"
-          class="nav-link mt-4 inline-block text-sm hover:text-[var(--color-accent)]"
-        >
-          booking, press, and licensing
-        </NuxtLink>
-      </ScrollReveal>
-    </section>
+    <HomeSections :albums="albums" />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Album } from '~~/shared/types'
 import { schemaId } from '~/utils/schema'
 
-const siteProfile = useSiteProfile()
-
-const sortAlbums = (items: Album[]) => [...items]
-  .filter((album) => album.isVisible !== false)
-  .sort((a, b) => {
-    if (a.releaseDate && b.releaseDate) {
-      return b.releaseDate.localeCompare(a.releaseDate)
-    }
-
-    if (a.releaseDate) {
-      return -1
-    }
-
-    if (b.releaseDate) {
-      return 1
-    }
-
-    return b.year - a.year
-  })
-
-const { data } = await useAsyncData('home-albums', async () => {
-  const items = await queryCollection('music').all() as Album[]
-  return sortAlbums(items)
+// The hero carries its own navigation; see layouts/home.vue.
+definePageMeta({
+  layout: 'home',
 })
 
-const albums = computed(() => data.value ?? [])
-
-const latestAlbum = computed(() => {
-  const items = albums.value
-  return items.find((album) => album.isLatest) ?? items[0] ?? null
-})
+const { albums, latestAlbum } = await useHomeAlbums()
 
 const pageDescription = computed(() => {
   if (!latestAlbum.value) {

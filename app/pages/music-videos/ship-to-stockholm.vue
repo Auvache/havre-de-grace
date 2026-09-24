@@ -6,24 +6,28 @@
           Unlisted / for review
         </p>
         <h1 class="display-heading">
-          Goodbye, Norma Jeane — the screenprint
+          Ship to Stockholm — the wood engraving
         </h1>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          Four minutes forty-one of "Goodbye, Norma Jeane" as a studio's
-          silkscreen, track three of ten in the
+          Four minutes sixteen of "Ship to Stockholm" as an end-grain wood
+          engraving, track nine of ten in the
           <NuxtLink to="/music-videos/album" class="underline">album's</NuxtLink>
-          printmaking: paper, black, one pink and one red. It never draws her.
-          It draws what was put around her, in the order it was put there,
-          along one strip of film: a picture house, a studio cheque, a dressing
-          room, searchlights, a wall pasted with her mouth, the walk of fame,
-          a diamond, a bottle of pills, a telephone off the hook. The pink
-          screen drifts out of register and comes almost, never quite, back in
-          on every "Goodbye". The red is the journey: one lipstick line, drawn
-          the length of the film, that stops where the lipstick is dropped.
+          printmaking: white line cut out of a black block, the ice in one
+          grey-blue, and one red. The song is an ultimatum. A man has had enough
+          of the anger, of people going for each other instead of looking for an
+          answer, of talking and never hearing back, and the ship back to
+          Stockholm is the way out to a simpler time. But he is in love with what
+          he is leaving, and he does not want to go. So the film is one long quay
+          at night with the town behind him and the ship ahead, and he walks
+          between them the whole song, and keeps turning round. One window in the
+          town stays lit when every other light goes out, and it never answers.
         </p>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          No video file anywhere. Every frame is SVG drawn from the song's own
-          clock and cut to a measured score, so things land where they are sung.
+          Red is held back. Until he goes, the only red on the block is the
+          ship's stern lantern. The red wake is torn open through the ice only
+          once he is aboard and the ship moves. No video file anywhere: every
+          frame is SVG drawn from the song's own clock and cut to a measured
+          score, so things land where they are sung.
         </p>
       </header>
 
@@ -34,7 +38,7 @@
           class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
           :style="{ aspectRatio: '16 / 9' }"
         >
-          <MusicVideoSvgFilm :film="screenprintFrame" name="Screenprint" :score="score" :t="frameTime" uid="film" />
+          <MusicVideoSvgFilm :film="woodEngravingFrame" name="Wood engraving" :score="score" :t="frameTime" uid="film" />
 
           <!-- The whole frame is the play button until it is playing. -->
           <button
@@ -49,7 +53,7 @@
                 <path d="M8 5v14l11-7z" />
               </svg>
               <span class="label-text text-[0.62rem]">
-                {{ player.time.value > 0.5 ? 'Resume' : 'Play 4:41' }}
+                {{ player.time.value > 0.5 ? 'Resume' : 'Play 4:16' }}
               </span>
             </span>
           </button>
@@ -73,7 +77,7 @@
           Space plays and pauses, the arrow keys jump five seconds (hold shift
           for fifteen), <kbd>M</kbd> mutes and <kbd>F</kbd> fills the screen.
           When something is wrong, the most useful note is a time and what you
-          saw — "around 1:55 the posters go up before the word" — since the song's
+          saw — "around 3:40 the window goes out before the word" — since the song's
           seconds are the film's clock.
         </p>
       </section>
@@ -81,10 +85,10 @@
       <!-- ── What happens, section by section ───────────────────────── -->
       <section class="space-y-4">
         <h2 class="section-heading text-[1.35rem]">
-          One strip of film, left to right
+          One quay, left to right
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
-          Every part of the song is a stretch of the same strip. Click a section
+          Every part of the song is a stretch of the same quay. Click a section
           to jump to it.
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
@@ -116,7 +120,7 @@
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
           {{ score.lines.length }} lines and {{ wordCount }} measured words.
-          Everything that arrives in the print lands on one of these times.
+          Everything that arrives on the block lands on one of these times.
           Click a line to jump to it.
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
@@ -143,7 +147,7 @@
 
       <section class="surface-card space-y-4 p-6">
         <p class="label-text muted-text">
-          Nothing in the print is hand-placed
+          Nothing on the block is hand-placed
         </p>
         <ul class="space-y-3 text-sm leading-relaxed muted-text">
           <li v-for="note in NOTES" :key="note" class="flex gap-3">
@@ -171,16 +175,16 @@
             — track two, the line engraving.
           </li>
           <li>
+            <NuxtLink to="/music-videos/goodbye-norma-jeane" class="underline">/music-videos/goodbye-norma-jeane</NuxtLink>
+            — track three, the screenprint.
+          </li>
+          <li>
             <NuxtLink to="/music-videos/ivory" class="underline">/music-videos/ivory</NuxtLink>
             — track four, the etching.
           </li>
           <li>
             <NuxtLink to="/music-videos/andalusia" class="underline">/music-videos/andalusia</NuxtLink>
-            — track five, the engraved chart.
-          </li>
-          <li>
-            <NuxtLink to="/music-videos/ship-to-stockholm" class="underline">/music-videos/ship-to-stockholm</NuxtLink>
-            — track nine, the wood engraving.
+            — track five, the engraved chart, which shares Stockholm with this one.
           </li>
         </ul>
       </section>
@@ -190,39 +194,39 @@
 
 <script setup lang="ts">
 /*
- * /music-videos/goodbye-norma-jeane — the whole song, as the album's
- * screenprint (shared/video/films/screenprint.mjs, app/config/albumStyle.ts).
+ * /music-videos/ship-to-stockholm — the whole song, as the album's wood
+ * engraving (shared/video/films/wood-engraving.mjs, app/config/albumStyle.ts).
  *
  * Unlisted and noindexed like everything under /music-videos: it restates a
  * published song's lyric in full and exists to be shared by link for a
- * decision. Shaped like /music-videos/into-the-wild: the page owns the
- * projector and the furniture, MusicVideoSvgFilm runs the film, and
- * app/config/goodbyeNormaJeaneScore.ts is the cut.
+ * decision. Shaped like /music-videos/ivory: the page owns the projector and
+ * the furniture, MusicVideoSvgFilm runs the film, and
+ * app/config/shipToStockholmScore.ts is the cut.
  */
-import { GOODBYE_NORMA_JEANE_SCORE, lineAt, sectionAt } from '~/config/goodbyeNormaJeaneScore'
+import { SHIP_TO_STOCKHOLM_SCORE, lineAt, sectionAt } from '~/config/shipToStockholmScore'
 import { useMusicVideoPlayer } from '~/composables/useMusicVideoPlayer'
-import { screenprintFrame } from '~~/shared/video/films/screenprint.mjs'
+import { woodEngravingFrame } from '~~/shared/video/films/wood-engraving.mjs'
 
 definePageMeta({ layout: 'default' })
 
 useHead({
-  title: 'Goodbye, Norma Jeane — the screenprint',
+  title: 'Ship to Stockholm — the wood engraving',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 
-const score = GOODBYE_NORMA_JEANE_SCORE
+const score = SHIP_TO_STOCKHOLM_SCORE
 
 /* No analyser: the album's films are a function of the clock and nothing else. */
 const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card over the picture house, the leader
- * sweeping on the screen — the album's opening format, and what the film is at
- * rest before anyone presses play.
+ * The poster frame: the title card under the first image — the town's lights
+ * on the far shore, the ship a speck with its red lantern, and him walking in
+ * along the quay with his sea bag — the album's opening format, and what the
+ * film is at rest before anyone presses play.
  */
-const POSTER_AT = 9.4
-
+const POSTER_AT = 21
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
 )
@@ -287,80 +291,57 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'A picture house: pink curtains, pink seats, the projector\'s light. The leader counts down on the screen, one sweep a bar on the record\'s click, and runs out exactly as the voice comes in. The album\'s title card underneath — 3/10, the title, the band in red.',
+    note: 'The block is cut, a ragged edge sweeping across it: sky, the far shore, the sea, the ice along the quay. On the far shore to the left is the town, its windows lit; out on the water to the right is the ship, a speck with a red lantern. He walks in off the shingle with a sea bag on his shoulder. The album\'s title card underneath: 9/10, the title, the band in red.',
   },
   {
     id: 'verse-1',
-    label: 'Verse 1',
-    note: 'The screen goes silver on "Silver", the bulbs come on round it on "screen", and a star is born on it on "Norma Jeane". Nine blank sign panels stand up on a hill for "Something bigger\'s meant for me". A dress form on Juliet\'s balcony is filled in black on "silhouette". Then the lipstick climbs to a studio cheque and signs it while scissors cut it out of the book.',
-  },
-  {
-    id: 'pre-1',
-    label: 'Put an end',
-    note: 'A clapperboard. The sticks drop on "end" and lift again on "come on". It never closes — every pre-chorus is the same clapper, open. It closes once, on the last hit of the record.',
-  },
-  {
-    id: 'break-1',
-    label: 'Break',
-    note: 'The sound stage: a lamp coming up on the beat, the camera on its sticks, an empty director\'s chair, the boom, film cans.',
+    label: 'Away',
+    note: 'The town\'s windows go out behind him one by one across "away with the land and away with the light", all but one. Out on the water the ship\'s sails drop on "a\' sailing". The stars prick out through "follow the night". On "lost love" he stops and turns back to the one window still lit, and it glows.',
   },
   {
     id: 'verse-2',
-    label: 'Verse 2',
-    note: 'The dressing room. The dark hair on a wig stand bleaches platinum on "Die", curl by curl; a gingham frock comes off the dress form on "change" and the white halter dress goes on by "clothes". An eye in the mirror grows its lashes on "Bat" and closes, really slow. The snapshots of home — a church, a pine, a heart — fall out of the mirror frame one word at a time on "goodbye to all you know", and a ball is pitched across a baseball diamond and lands in the glove on "DiMaggio".',
+    label: 'The ship',
+    note: 'He turns and walks on to the harbour-master\'s hut: STOCKHOLM on the board, and a clock whose hands start to run on "waits on no man". The wind gets up on "the wind doesn\'t wait" — the snow goes sideways, the pennant streams. On "to get back to you" he turns and walks a few steps back towards the window with his hand out; on "bribing" coins spill from it, on "begging" he kneels, on "bleeding" he puts his hand to his chest.',
   },
   {
-    id: 'pre-2',
-    label: 'Put an end',
-    note: 'The clapper again. It comes nearer to closing on the second "end" than the first, and still does not.',
-  },
-  {
-    id: 'chorus-1',
-    label: 'Goodbye',
-    note: 'Night, and searchlights. On "Goodbye" the pink screen comes almost into register. The world rises on "world"; a ring box opens on "love" — a plain band, tiny in the dark — and glints on "seventeen". On "world, it\'s more, more, more" a wall is pasted up with her mouth: one poster, four more, five more, four more. The line ends "you wanted" with no "more", and the camera settles on the one space left empty.',
-  },
-  {
-    id: 'break-2',
-    label: 'Interlude',
-    note: 'The walk of fame: stars in the pavement, velvet rope, premiere marquees with blank letter boards, and flashbulbs on the bar.',
+    id: 'break',
+    label: 'Break',
+    note: 'He gets up and walks on along the quay. Lamp posts carry the telephone wire from post to post; the ship is bigger now.',
   },
   {
     id: 'verse-3',
-    label: 'Verse 3',
-    note: 'Daylight again, and the price. Dice come up doubles on "Double down" and the chips stack on "bets"; the diamond on "Diamonds", sparkling on "only" and "friend"; a squeegee pulls a stroke of pink across a screen on "Different lines paint different strokes"; a pill bottle tips on "these" and the pills come out one a word.',
+    label: 'Guns',
+    note: 'Two crowds face each other across the quay and he walks into the middle. Rifles come up on "guns", fists on "fight"; on "fading" the lamps over them go out. On "done trying to prove" he stands between them with his arms out, and across "everyone\'s beyond persuading" they turn their backs on him one by one.',
   },
   {
-    id: 'pre-3',
-    label: 'Put an end',
-    note: 'The third clapper, and still open.',
+    id: 'instrumental',
+    label: 'Instrumental',
+    note: 'The plate takes the whole sheet. A storm comes in: clouds over the moon, snow in streaks, the ice breaking into floes, the sea heaving, and the ship coming in through it with its lantern swinging. He walks into it bent double, and the lamps go out as he reaches them. Lightning; a wave breaks over the quay and puts him on one knee; the telephone wire snaps. When the bass drops out, so does the storm: the clouds tear away, the moon comes back, the harbour freezes to glass, and the ship lies moored in it with its sails furled.',
   },
   {
-    id: 'chorus-2',
-    label: 'Goodbye',
-    note: 'The same night, the same world and ring and wall — and this time, on "you wanted more", the last poster goes up in the empty space.',
+    id: 'verse-4',
+    label: 'Thin ice',
+    note: 'The band comes back in and he walks to the end of the quay. On "deep water" black lanes open in the ice; on "rescue" a plank is run out to him from the ship\'s stern; on "razor thin ice" cracks shoot across it. He walks out along the plank with his arms out like a tightrope walker, and on "Eden" a light comes up on the horizon. On "dogs" three dogs rush the end of the quay behind him, snarling at each other, and snap on "bite". The newspapers come over the ice — the same page, again and again on "repeating" — and on "no" the wind takes them.',
   },
   {
-    id: 'break-3',
-    label: 'Interlude',
-    note: 'A bedroom in a pool of lamplight: the bed, the bedside table, the telephone. The lamp goes out, and only the pink is left.',
-  },
-  {
-    id: 'chorus-3',
-    label: 'Last goodbye',
-    note: 'The last chorus. The world dims as it rises. The wall goes up again, but every poster is fainter and further out of register than the last — the right half of the Marilyn Diptych — and the searchlights go out one by one on "I wanted you, you wanted more". The lipstick line is wearing thin.',
+    id: 'verse-5',
+    label: 'Stockholm',
+    note: 'He turns round on the plank to face the window. On "make it back" he takes a letter from his coat and holds it up; on "reach you" he reaches; on "letter" the wind takes it back towards the town and it comes down short on the ice; on "phone" the broken wire sparks, and the window goes out. "So I\'m taking the ship": he turns, crosses, climbs the ladder, and the sails drop as he steps aboard. On "Stockholm" the ship casts off.',
   },
   {
     id: 'outro',
     label: 'Outro',
-    note: 'The telephone off the hook, the handset swinging on its cord; the bottle on its side. The lipstick is dropped beside it and the red line ends. The camera goes on alone to one last clapperboard, and on the last hit of the record it shuts — the cut to the end card is the clap.',
+    note: 'The plate takes the whole sheet again. The ship breaks out through the ice towards the light on the horizon, and behind it the red wake tears open — the one time in the film anything red travels. He stands at the stern looking back. The cut to the end card is the record\'s last hit.',
   },
 ]
 
 const NOTES = [
-  'Three screens, pulled in order: the pink, off the key by a register that wanders through the verses, comes almost into register on every "Goodbye", and in the last chorus and the outro drifts further out as the print fails; the key in black and paper; and one red, the only screen in register.',
-  'Where each thing is drawn is solved from where the camera will be when its word is sung: the clapper is where the camera is on "end", the wall where it is on "world". Retime the score and the strip rearranges itself to match.',
-  'The camera never stops: a drift, plus half-cosine moves between views, never faster than forty units a frame. The lipstick rides ahead of it and never goes backwards, except where it signs the cheque — a signature is loops, so there it is drawn as a prolate cycloid.',
-  'The score was measured, not tapped in: the voice separated from the mix, the words placed by a speech model and then moved onto the vocal\'s own onsets, the choruses solved once on their pooled evidence. The band played to a click, at 95 BPM, and the leader in the intro sweeps on it.',
-  'One function draws all of it: screenprintFrame(t). The same file renders this page sixty times a second, draws the album still on /music-videos/album, and can be walked frame by frame under node to write an mp4.',
+  'Left is home and right is the ship. The town is on the far shore behind him, and the ship out on the water ahead is drawn in perspective from one point at the end of the quay: a speck at the start of the song and full size by the end of the storm, and it shrinks again as it sails away, so its wake narrows to the horizon.',
+  'The one window that stays lit is never named — it can be a person, a place, a group or an idea. It swells when he turns to it on "lost love", "to get back to you" and "I just need to ask", and it goes out on "phone".',
+  'Tone is cut the way an engraver on end grain cuts it: horizontal lines that swell where it is light and thin to nothing where it is dark. Glows — the moon, the lamps, the window, Eden — are rows of line whose ends are solved exactly for each row, so a light can move and fade without a single line being resampled.',
+  'He is a walking speed, integrated: he walks, stops, turns back and walks a few steps the wrong way, kneels, walks into the storm bent double. The camera follows him but never slower than a drift, so it never stops; when he stops, it carries on and he slides back in the frame.',
+  'Where each thing stands is solved from where he is when its word is sung: the hut from "Stockholm", the crowds from "fight", the end of the quay from "razor". Retime the score and the quay rearranges itself to match.',
+  'The score was measured, not tapped in: the voice separated from the mix, the words placed by a speech model and then moved onto the vocal\'s own onsets, and the two lines verse 3 repeats of verse 1 solved once on their pooled evidence. The band played to a click at 105 BPM, and verses 2, 3 and 4 fall exactly 52, 144 and 260 beats after the first.',
+  'One function draws all of it: woodEngravingFrame(t). The same file renders this page sixty times a second, draws the album still on /music-videos/album, and can be walked frame by frame under node to write an mp4.',
 ]
 </script>

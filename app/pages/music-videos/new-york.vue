@@ -6,24 +6,28 @@
           Unlisted / for review
         </p>
         <h1 class="display-heading">
-          Goodbye, Norma Jeane — the screenprint
+          New York — the letterpress
         </h1>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          Four minutes forty-one of "Goodbye, Norma Jeane" as a studio's
-          silkscreen, track three of ten in the
+          Three minutes thirty-five of "New York" as a letterpress wall, track
+          six of ten in the
           <NuxtLink to="/music-videos/album" class="underline">album's</NuxtLink>
-          printmaking: paper, black, one pink and one red. It never draws her.
-          It draws what was put around her, in the order it was put there,
-          along one strip of film: a picture house, a studio cheque, a dressing
-          room, searchlights, a wall pasted with her mouth, the walk of fame,
-          a diamond, a bottle of pills, a telephone off the hook. The pink
-          screen drifts out of register and comes almost, never quite, back in
-          on every "Goodbye". The red is the journey: one lipstick line, drawn
-          the length of the film, that stops where the lipstick is dropped.
+          printmaking: wood type and picture cuts in ink, the poster yellow as a
+          second forme, and one red. The song is about being done with everybody's
+          formula — the one right way to make it, the city you have to move to,
+          the thing you have to bend or sell to get somewhere you may not even
+          want to be. So there is nobody in it. It is a wall flyposted with
+          advice, and every artifact on it — a love song, a gold record, a
+          lighthouse, a contract, a paint-by-numbers, a departures board, the
+          formula itself — gets burnt, melted, torn, shattered or crushed under
+          a NO.
         </p>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          No video file anywhere. Every frame is SVG drawn from the song's own
-          clock and cut to a measured score, so things land where they are sung.
+          Red is the one thing that travels: a printer's rule that runs the
+          length of the wall and strikes out every piece of advice it passes,
+          and at the end goes off the sheet on its own. No video file anywhere:
+          every frame is SVG drawn from the song's own clock and cut to a
+          measured score, so every NO lands where it is sung.
         </p>
       </header>
 
@@ -34,7 +38,7 @@
           class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
           :style="{ aspectRatio: '16 / 9' }"
         >
-          <MusicVideoSvgFilm :film="screenprintFrame" name="Screenprint" :score="score" :t="frameTime" uid="film" />
+          <MusicVideoSvgFilm :film="letterpressFrame" name="Letterpress" :score="score" :t="frameTime" uid="film" />
 
           <!-- The whole frame is the play button until it is playing. -->
           <button
@@ -49,7 +53,7 @@
                 <path d="M8 5v14l11-7z" />
               </svg>
               <span class="label-text text-[0.62rem]">
-                {{ player.time.value > 0.5 ? 'Resume' : 'Play 4:41' }}
+                {{ player.time.value > 0.5 ? 'Resume' : 'Play 3:35' }}
               </span>
             </span>
           </button>
@@ -73,7 +77,7 @@
           Space plays and pauses, the arrow keys jump five seconds (hold shift
           for fifteen), <kbd>M</kbd> mutes and <kbd>F</kbd> fills the screen.
           When something is wrong, the most useful note is a time and what you
-          saw — "around 1:55 the posters go up before the word" — since the song's
+          saw — "around 1:50 the third NO lands late" — since the song's
           seconds are the film's clock.
         </p>
       </section>
@@ -81,10 +85,10 @@
       <!-- ── What happens, section by section ───────────────────────── -->
       <section class="space-y-4">
         <h2 class="section-heading text-[1.35rem]">
-          One strip of film, left to right
+          One wall, left to right
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
-          Every part of the song is a stretch of the same strip. Click a section
+          Every part of the song is a stretch of the same wall. Click a section
           to jump to it.
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
@@ -116,7 +120,7 @@
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
           {{ score.lines.length }} lines and {{ wordCount }} measured words.
-          Everything that arrives in the print lands on one of these times.
+          Everything that is printed or destroyed on the wall lands on one of these times.
           Click a line to jump to it.
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
@@ -143,7 +147,7 @@
 
       <section class="surface-card space-y-4 p-6">
         <p class="label-text muted-text">
-          Nothing in the print is hand-placed
+          Nothing on the wall is hand-placed
         </p>
         <ul class="space-y-3 text-sm leading-relaxed muted-text">
           <li v-for="note in NOTES" :key="note" class="flex gap-3">
@@ -171,6 +175,10 @@
             — track two, the line engraving.
           </li>
           <li>
+            <NuxtLink to="/music-videos/goodbye-norma-jeane" class="underline">/music-videos/goodbye-norma-jeane</NuxtLink>
+            — track three, the screenprint.
+          </li>
+          <li>
             <NuxtLink to="/music-videos/ivory" class="underline">/music-videos/ivory</NuxtLink>
             — track four, the etching.
           </li>
@@ -190,39 +198,38 @@
 
 <script setup lang="ts">
 /*
- * /music-videos/goodbye-norma-jeane — the whole song, as the album's
- * screenprint (shared/video/films/screenprint.mjs, app/config/albumStyle.ts).
+ * /music-videos/new-york — the whole song, as the album's letterpress
+ * (shared/video/films/letterpress.mjs, app/config/albumStyle.ts).
  *
  * Unlisted and noindexed like everything under /music-videos: it restates a
  * published song's lyric in full and exists to be shared by link for a
- * decision. Shaped like /music-videos/into-the-wild: the page owns the
+ * decision. Shaped like /music-videos/ship-to-stockholm: the page owns the
  * projector and the furniture, MusicVideoSvgFilm runs the film, and
- * app/config/goodbyeNormaJeaneScore.ts is the cut.
+ * app/config/newYorkScore.ts is the cut.
  */
-import { GOODBYE_NORMA_JEANE_SCORE, lineAt, sectionAt } from '~/config/goodbyeNormaJeaneScore'
+import { NEW_YORK_SCORE, lineAt, sectionAt } from '~/config/newYorkScore'
 import { useMusicVideoPlayer } from '~/composables/useMusicVideoPlayer'
-import { screenprintFrame } from '~~/shared/video/films/screenprint.mjs'
+import { letterpressFrame } from '~~/shared/video/films/letterpress.mjs'
 
 definePageMeta({ layout: 'default' })
 
 useHead({
-  title: 'Goodbye, Norma Jeane — the screenprint',
+  title: 'New York — the letterpress',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 
-const score = GOODBYE_NORMA_JEANE_SCORE
+const score = NEW_YORK_SCORE
 
 /* No analyser: the album's films are a function of the clock and nothing else. */
 const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card over the picture house, the leader
- * sweeping on the screen — the album's opening format, and what the film is at
- * rest before anyone presses play.
+ * The poster frame: the title card under the first image — THE FORMULA
+ * broadside, pulled and nearly finished, the departures listed — the album's
+ * opening format, and what the film is at rest before anyone presses play.
  */
-const POSTER_AT = 9.4
-
+const POSTER_AT = 15.5
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
 )
@@ -287,80 +294,61 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'A picture house: pink curtains, pink seats, the projector\'s light. The leader counts down on the screen, one sweep a bar on the record\'s click, and runs out exactly as the voice comes in. The album\'s title card underneath — 3/10, the title, the band in red.',
+    note: 'The broadside is pulled block by block on the beat: a brass rule, THE ONE SURE WAY TO MAKE IT, the yellow forme, THE FORMULA in wood type, the departures — Memphis, Nashville, Austin, L.A., Detroit, New York — and a row of lights along a shore. The red rule comes in along the foot of the wall and underlines it. The album\'s title card underneath: 6/10, the title, the band in red.',
   },
   {
     id: 'verse-1',
-    label: 'Verse 1',
-    note: 'The screen goes silver on "Silver", the bulbs come on round it on "screen", and a star is born on it on "Norma Jeane". Nine blank sign panels stand up on a hill for "Something bigger\'s meant for me". A dress form on Juliet\'s balcony is filled in black on "silhouette". Then the lipstick climbs to a studio cheque and signs it while scissors cut it out of the book.',
-  },
-  {
-    id: 'pre-1',
-    label: 'Put an end',
-    note: 'A clapperboard. The sticks drop on "end" and lift again on "come on". It never closes — every pre-chorus is the same clapper, open. It closes once, on the last hit of the record.',
-  },
-  {
-    id: 'break-1',
-    label: 'Break',
-    note: 'The sound stage: a lamp coming up on the beat, the camera on its sticks, an empty director\'s chair, the boom, film cans.',
-  },
-  {
-    id: 'verse-2',
-    label: 'Verse 2',
-    note: 'The dressing room. The dark hair on a wig stand bleaches platinum on "Die", curl by curl; a gingham frock comes off the dress form on "change" and the white halter dress goes on by "clothes". An eye in the mirror grows its lashes on "Bat" and closes, really slow. The snapshots of home — a church, a pine, a heart — fall out of the mirror frame one word at a time on "goodbye to all you know", and a ball is pitched across a baseball diamond and lands in the glove on "DiMaggio".',
-  },
-  {
-    id: 'pre-2',
-    label: 'Put an end',
-    note: 'The clapper again. It comes nearer to closing on the second "end" than the first, and still does not.',
+    label: 'Love',
+    note: 'The camera whips along the wall to a poster: LOVE in wood type, a love song\'s sheet music. Rocks fall in on "rocks"; on "burning" it catches, and the whole poster burns away from the coals, which glow on "coals". Under it is a sea poster: easy dreams in a submarine that surfaces on "submarines", fires on "undermine", and brings down the trophy on its plinth — THE GOAL — on "goal".',
   },
   {
     id: 'chorus-1',
-    label: 'Goodbye',
-    note: 'Night, and searchlights. On "Goodbye" the pink screen comes almost into register. The world rises on "world"; a ring box opens on "love" — a plain band, tiny in the dark — and glints on "seventeen". On "world, it\'s more, more, more" a wall is pasted up with her mouth: one poster, four more, five more, four more. The line ends "you wanted" with no "more", and the camera settles on the one space left empty.',
+    label: 'The lights',
+    note: 'A night poster: five lighthouses built of the things that tell you where to go — a plain one, a microphone stand, a stack of amps, a metronome, a trophy — each beam carrying a piece of advice. On "follow" they all turn to point the same way; from "lights" to "shore" the red rule strikes the row of them out, and each goes dark as it is struck. Then a pole of loudspeaker horns and two megaphones shouting advice until headphones come down on "listen", the horns droop on "anybody", melt on "ever" and shatter on "anymore".',
   },
   {
-    id: 'break-2',
-    label: 'Interlude',
-    note: 'The walk of fame: stars in the pavement, velvet rope, premiere marquees with blank letter boards, and flashbulbs on the bar.',
+    id: 'break-1',
+    label: 'The gear',
+    note: 'A wall of amps. Records drop onto them on the bar and melt down the front; a guitar rises off the fourth stack and comes down on it on the downbeat. A cassette drops and its tape runs on down the wall, and the camera follows it.',
   },
   {
-    id: 'verse-3',
-    label: 'Verse 3',
-    note: 'Daylight again, and the price. Dice come up doubles on "Double down" and the chips stack on "bets"; the diamond on "Diamonds", sparkling on "only" and "friend"; a squeegee pulls a stroke of pink across a screen on "Different lines paint different strokes"; a pill bottle tips on "these" and the pills come out one a word.',
-  },
-  {
-    id: 'pre-3',
-    label: 'Put an end',
-    note: 'The third clapper, and still open.',
+    id: 'verse-2',
+    label: 'Move to',
+    note: 'A departures board, every flap spinning. Each city lands on its word and the red rule strikes it out, row by row, zigzagging down the board like a list crossed out; NEW YORK sits at the bottom, NOW BOARDING. After "Detroit" the flaps jam, blow off and the board comes apart. Then a conveyor belt under THE ONLY WAY, which drops off a chain on "break": the contract tears on "bargain", THE RULES bends and snaps on "bend", the guitar case falls through a trapdoor on "abandon", and the cash register — $0.003 a stream — bursts on "exploit".',
   },
   {
     id: 'chorus-2',
-    label: 'Goodbye',
-    note: 'The same night, the same world and ring and wall — and this time, on "you wanted more", the last poster goes up in the empty space.',
+    label: 'Art class',
+    note: 'TODAY: THE RIGHT WAY TO PAINT on the chalkboard, and three easels of the same paint-by-numbers filling in cell for cell on the words. They are torn to strips on "listen", "anybody" and "ever", and on "anymore" a tin of THE RIGHT COLOUR goes everywhere.',
   },
   {
-    id: 'break-3',
-    label: 'Interlude',
-    note: 'A bedroom in a pool of lamplight: the bed, the bedside table, the telephone. The lamp goes out, and only the pink is left.',
+    id: 'no-1',
+    label: 'No',
+    note: 'A fresh broadside, four yellow blocks pulled on the four beats before. Under them the formula in four parts — a metronome, a stack of how-to books, a punch clock, a report card of Fs — and each NO comes down on its word and crushes one. Then NEW YORK as a skyline in wood type: the cab waiting at the kerb leaves without him on "won\'t go", the rule strikes the city out on "New York", and it melts.',
+  },
+  {
+    id: 'break-2',
+    label: 'Instrumental',
+    note: 'The wall at speed. A run of forms — APPLICATION, FORM 27-B, TERMS & CONDITIONS — with a rubber stamp coming down on every beat; records thrown in and shattering on the beats; THE LADDER losing its rungs from the top; advice pulled in wood type on one beat and knocked out of the forme on the next. In the quiet bar, one metronome keeping the time it is given, the tape coming back — and it breaks.',
   },
   {
     id: 'chorus-3',
-    label: 'Last goodbye',
-    note: 'The last chorus. The world dims as it rises. The wall goes up again, but every poster is fainter and further out of register than the last — the right half of the Marilyn Diptych — and the searchlights go out one by one on "I wanted you, you wanted more". The lipstick line is wearing thin.',
+    label: 'Lights out',
+    note: 'The shore again, and this time the lighthouses topple into the sea one on each of "follow", "lights", "see", "out" and "shore", while the rule runs on along the horizon past all of them. Then a wall of televisions — STAY TUNED, BUY NOW, OBEY, GO VIRAL — that implode a row at a time on "listen", "anybody" and "ever", and take the shelf with them on "anymore".',
   },
   {
-    id: 'outro',
-    label: 'Outro',
-    note: 'The telephone off the hook, the handset swinging on its cord; the bottle on its side. The lipstick is dropped beside it and the red line ends. The camera goes on alone to one last clapperboard, and on the last hit of the record it shuts — the cut to the end card is the clap.',
+    id: 'no-2',
+    label: 'New York',
+    note: 'Everything the film has broken is lined up along the floor, and three rounds of NO come down on it, each bigger and more out of true than the last, printed over each other. Then the formula poster again. "Won\'t go" stamps NOT GOING over the big one; the band drops out and the camera leans in on New York; the rule strikes it out on "New York", and on "York" the poster tears in two and its type falls out. The wall comes down behind it in strips, everything rains past, and the red rule goes off the sheet on its own. The cut to the end card is the voice letting go.',
   },
 ]
 
 const NOTES = [
-  'Three screens, pulled in order: the pink, off the key by a register that wanders through the verses, comes almost into register on every "Goodbye", and in the last chorus and the outro drifts further out as the print fails; the key in black and paper; and one red, the only screen in register.',
-  'Where each thing is drawn is solved from where the camera will be when its word is sung: the clapper is where the camera is on "end", the wall where it is on "world". Retime the score and the strip rearranges itself to match.',
-  'The camera never stops: a drift, plus half-cosine moves between views, never faster than forty units a frame. The lipstick rides ahead of it and never goes backwards, except where it signs the cheque — a signature is loops, so there it is drawn as a prolate cycloid.',
-  'The score was measured, not tapped in: the voice separated from the mix, the words placed by a speech model and then moved onto the vocal\'s own onsets, the choruses solved once on their pooled evidence. The band played to a click, at 95 BPM, and the leader in the intro sweeps on it.',
-  'One function draws all of it: screenprintFrame(t). The same file renders this page sixty times a second, draws the album still on /music-videos/album, and can be walked frame by frame under node to write an mp4.',
+  'Nobody is in it. Every picture is a cut — a picture block locked up in the forme with the type — printed flat in ink with the poster yellow as a second forme, and every one is something a musician is handed on the way: a love song, a gold record, an amp, a contract, a guitar, a ticket out.',
+  'Red is the journey, and the journey is his own. The red rule runs the length of the wall along its foot, rises square to strike through every piece of advice it passes — the lights on the shore, the cities, New York twice — and leaves the sheet at the end, going nowhere anyone pointed.',
+  'Things are destroyed six ways, each a pure function of the time since its word: burnt from a point with a charred edge and ash, torn into strips that peel and fall, shattered into shards that tile until they fly, melted by bending their points, crushed flat, or knocked out of the forme letter by letter — pied, in the printer\'s word.',
+  'The camera never cuts: a drift plus eased whips, integrated from one speed curve, that bank into the turn; the sheet jumps a little with the kick on every beat of the click, and shakes on every NO. Where each thing stands is solved from where the camera is when its word is sung.',
+  'The score was measured, not tapped in: the voice separated from the mix, the words placed by a speech model and then moved onto the vocal\'s own onsets. The band played to a click at 98.5 BPM, and every NO was measured on its own.',
+  'One function draws all of it: letterpressFrame(t). The same file renders this page sixty times a second, draws the album still on /music-videos/album, and can be walked frame by frame under node to write an mp4.',
 ]
 </script>

@@ -36,6 +36,10 @@ import { fileURLToPath } from 'node:url'
 import { ANDALUSIA_SCORE } from '../../app/config/andalusiaScore.ts'
 import { INTO_THE_WILD_SCORE } from '../../app/config/intoTheWildScore.ts'
 import { GOODBYE_NORMA_JEANE_SCORE } from '../../app/config/goodbyeNormaJeaneScore.ts'
+import { IVORY_SCORE } from '../../app/config/ivoryScore.ts'
+import { CONMAN_SCORE } from '../../app/config/conmanScore.ts'
+import { SHIP_TO_STOCKHOLM_SCORE } from '../../app/config/shipToStockholmScore.ts'
+import { NEW_YORK_SCORE } from '../../app/config/newYorkScore.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../..')
@@ -61,6 +65,10 @@ const FILMS = {
   woodcut: ['woodcut.mjs', 'woodcutFrame'],
   relief: ['relief.mjs', 'reliefFrame'],
   screenprint: ['screenprint.mjs', 'screenprintFrame'],
+  etching: ['etching.mjs', 'etchingFrame'],
+  engraving: ['engraving.mjs', 'engravingFrame'],
+  'wood-engraving': ['wood-engraving.mjs', 'woodEngravingFrame'],
+  letterpress: ['letterpress.mjs', 'letterpressFrame'],
   'field-journal': ['field-journal.mjs', 'fieldJournalFrame'],
   flipbook: ['flipbook.mjs', 'flipbookFrame'],
 }
@@ -69,6 +77,10 @@ const SCORES = {
   andalusia: ANDALUSIA_SCORE,
   'into-the-wild': INTO_THE_WILD_SCORE,
   'goodbye-norma-jeane': GOODBYE_NORMA_JEANE_SCORE,
+  ivory: IVORY_SCORE,
+  conman: CONMAN_SCORE,
+  'ship-to-stockholm': SHIP_TO_STOCKHOLM_SCORE,
+  'new-york': NEW_YORK_SCORE,
 }
 
 const pick = (table, key, what) => {

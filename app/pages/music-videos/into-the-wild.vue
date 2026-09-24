@@ -164,12 +164,24 @@
             — the five styles this was chosen from, over the same fifteen seconds.
           </li>
           <li>
+            <NuxtLink to="/music-videos/conman" class="underline">/music-videos/conman</NuxtLink>
+            — track two, the line engraving.
+          </li>
+          <li>
             <NuxtLink to="/music-videos/goodbye-norma-jeane" class="underline">/music-videos/goodbye-norma-jeane</NuxtLink>
             — track three, the screenprint.
           </li>
           <li>
+            <NuxtLink to="/music-videos/ivory" class="underline">/music-videos/ivory</NuxtLink>
+            — track four, the etching.
+          </li>
+          <li>
             <NuxtLink to="/music-videos/andalusia" class="underline">/music-videos/andalusia</NuxtLink>
             — track five, the album's other finished film.
+          </li>
+          <li>
+            <NuxtLink to="/music-videos/ship-to-stockholm" class="underline">/music-videos/ship-to-stockholm</NuxtLink>
+            — track nine, the wood engraving.
           </li>
         </ul>
       </section>

@@ -136,6 +136,8 @@ export default defineNuxtConfig({
       // bold for one page and changes nothing anywhere else.
       { name: 'Jost', provider: 'google', weights: [400, 700] },
       { name: 'Patrick Hand', provider: 'google' },
+      // The homepage hero's title: the cover's thin, widely-tracked caps.
+      { name: 'Barlow Condensed', provider: 'google', weights: [200] },
     ],
   },
 
@@ -359,7 +361,11 @@ export default defineNuxtConfig({
         '/music-videos/andalusia',
         '/music-videos/kinetic',
         '/music-videos/into-the-wild',
+        '/music-videos/conman',
         '/music-videos/goodbye-norma-jeane',
+        '/music-videos/ivory',
+        '/music-videos/new-york',
+        '/music-videos/ship-to-stockholm',
         '/music-videos/into-the-wild-styles',
         '/music-videos/album',
         '/music/i-want-to-be-yours-and-other-songs',
