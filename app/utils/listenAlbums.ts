@@ -8,6 +8,7 @@
  * section rather than filling it in.
  */
 import type { Album, Credit } from '~~/shared/types'
+import { toSongRefs } from '~~/shared/utils/songSlug'
 
 export interface ListenTrack {
   number: number // 1-based index within the album
@@ -15,6 +16,8 @@ export interface ListenTrack {
   sideNumber: number // 1-based index within its side (A1, A2, ...)
   slug: string
   title: string
+  /** The song's own page, /music/<album>/<song>, when it has one. */
+  songPath?: string
   audioSrc: string
   durationSec: number
   durationLabel: string // "3:25"
@@ -29,6 +32,7 @@ export interface ListenAlbum {
   slug: string
   artist: string
   year: number
+  releaseDate?: string // YYYY-MM-DD
   coverImage: string
   coverAlt: string
   /** The accent the scene tints itself with, picked to sit with the cover art. */
@@ -111,6 +115,9 @@ function toListenAlbum(album: Album): ListenAlbum {
   const list = (album.tracklist ?? []).filter((track) => Boolean(track.audio))
   const sideOf = resolveSides(album, list.length)
   const counters = { a: 0, b: 0 }
+  // Song-page slugs come from toSongRefs so they can't drift from the routes
+  // that were actually prerendered (it de-duplicates colliding titles).
+  const songSlug = new Map(toSongRefs(album).map((ref) => [ref.track, ref.slug]))
 
   const tracks: ListenTrack[] = list.map((track, i) => {
     const side = sideOf[i]!
@@ -122,6 +129,7 @@ function toListenAlbum(album: Album): ListenAlbum {
       sideNumber: counters[side],
       slug: slugify(track.title),
       title: track.title,
+      songPath: songSlug.has(track) ? `/music/${album.slug}/${songSlug.get(track)}` : undefined,
       audioSrc: track.audio!,
       durationSec,
       durationLabel: track.duration ?? formatDuration(durationSec),
@@ -137,6 +145,7 @@ function toListenAlbum(album: Album): ListenAlbum {
     slug: album.slug,
     artist: 'Havre De Grace',
     year: album.year,
+    releaseDate: album.releaseDate || undefined,
     coverImage: album.coverImage,
     coverAlt: album.coverAlt,
     accent: ALBUM_ACCENT[album.slug] ?? DEFAULT_ACCENT,
@@ -146,13 +155,18 @@ function toListenAlbum(album: Album): ListenAlbum {
   }
 }
 
-/** Every playable album, newest first. */
+/** When an album came out, for ordering: its release date, else Jan 1 of its year. */
+function releasedAt(album: Album): number {
+  return (parseIsoDate(album.releaseDate) ?? new Date(album.year, 0, 1)).getTime()
+}
+
+/** Every playable album, newest release first — the page puts the head of this list on the deck. */
 export function buildListenAlbums(albums: Album[], now: Date = new Date()): ListenAlbum[] {
   return albums
     .filter((album) => isListenable(album, now))
+    .sort((a, b) => releasedAt(b) - releasedAt(a))
     .map(toListenAlbum)
     .filter((album) => album.tracks.length > 0)
-    .sort((a, b) => b.year - a.year)
 }
 
 // --- side helpers --------------------------------------------------------

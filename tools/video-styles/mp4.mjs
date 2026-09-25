@@ -42,6 +42,7 @@ import { IVORY_SCORE } from '../../app/config/ivoryScore.ts'
 import { CONMAN_SCORE } from '../../app/config/conmanScore.ts'
 import { SHIP_TO_STOCKHOLM_SCORE } from '../../app/config/shipToStockholmScore.ts'
 import { NEW_YORK_SCORE } from '../../app/config/newYorkScore.ts'
+import { MEET_ME_AT_THE_HORIZON_SCORE } from '../../app/config/meetMeAtTheHorizonScore.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../..')
@@ -54,8 +55,11 @@ const FILMS = {
   screenprint: ['screenprint.mjs', 'screenprintFrame'],
   etching: ['etching.mjs', 'etchingFrame'],
   engraving: ['engraving.mjs', 'engravingFrame'],
+  gallery: ['gallery.mjs', 'galleryFrame'],
+  wall: ['conman-wall.mjs', 'wallFrame'],
   'wood-engraving': ['wood-engraving.mjs', 'woodEngravingFrame'],
   letterpress: ['letterpress.mjs', 'letterpressFrame'],
+  mezzotint: ['mezzotint.mjs', 'mezzotintFrame'],
 }
 const SCORES = {
   andalusia: ANDALUSIA_SCORE,
@@ -65,6 +69,7 @@ const SCORES = {
   conman: CONMAN_SCORE,
   'ship-to-stockholm': SHIP_TO_STOCKHOLM_SCORE,
   'new-york': NEW_YORK_SCORE,
+  'meet-me-at-the-horizon': MEET_ME_AT_THE_HORIZON_SCORE,
 }
 
 const { values: opt } = parseArgs({

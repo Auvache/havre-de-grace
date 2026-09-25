@@ -6,26 +6,30 @@
           Unlisted / for review
         </p>
         <h1 class="display-heading">
-          Conman — the line engraving
+          Conman — the wall
         </h1>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          Four minutes of "Conman" as an uncut sheet of banknotes, track two of
-          ten in the
+          Four minutes of "Conman", track two of ten in the
           <NuxtLink to="/music-videos/album" class="underline">album's</NuxtLink>
-          printmaking: engraved line in black, one banknote green, and one red
-          serial number. The song is about how being inspired by other
-          musicians is a kind of theft — and how that is not a bad thing: we
-          take from each other all the time and build on it, and if we are
-          lucky, somebody takes from us. So the whole song is one sheet of notes
-          coming off a press, every one of them a copy of the one before with a
-          new face on it. The red serial is the conman. It follows the camera
-          from note to note, stamps every one it passes, rolls from 1968 to 2025
-          when the earth shakes, and at the end rolls on to 2068 on somebody
-          else's note.
+          printmaking, as one wall made of sections. The wall is black; each
+          section pasted onto it is a grid of one sheet repeated edge to edge:
+          fly-posters, stamps, flyers, tickets, banknotes, framed pictures, amps,
+          a tour schedule, sticker sheets. Each is one artist, the same stencil
+          on every sheet. The song is about how being inspired by other
+          musicians is a kind of theft, and how that is not a bad thing:
+          everybody takes from everybody. So the words tear the sheets up,
+          section by section; in the break the whole wall comes down into a
+          pile, the last verse builds a new musician out of the pieces, and the
+          last chorus pastes the wall back up in red, with his face on every
+          sheet.
         </p>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
           No video file anywhere. Every frame is SVG drawn from the song's own
-          clock and cut to a measured score, so things land where they are sung.
+          clock and cut to a measured score, so things tear where they are sung.
+        </p>
+        <p class="max-w-3xl text-base leading-relaxed muted-text">
+          Under the film:
+          <a href="#style-guide" class="underline">the style guide, ten seconds of every section</a>.
         </p>
       </header>
 
@@ -36,7 +40,7 @@
           class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
           :style="{ aspectRatio: '16 / 9' }"
         >
-          <MusicVideoSvgFilm :film="engravingFrame" name="Line engraving" :score="score" :t="frameTime" uid="film" />
+          <MusicVideoSvgFilm :film="wallFrame" name="The wall" :score="score" :t="frameTime" uid="film" />
 
           <!-- The whole frame is the play button until it is playing. -->
           <button
@@ -75,19 +79,90 @@
           Space plays and pauses, the arrow keys jump five seconds (hold shift
           for fifteen), <kbd>M</kbd> mutes and <kbd>F</kbd> fills the screen.
           When something is wrong, the most useful note is a time and what you
-          saw — "around 1:43 the serial lands before the word" — since the song's
+          saw — "around 1:43 the tickets tear before the word" — since the song's
           seconds are the film's clock.
         </p>
+      </section>
+
+      <!-- ── Style guide: every section, ten seconds each ──────────────── -->
+      <section id="style-guide" class="space-y-12" @pointerdown.capture="player.pause()">
+        <div class="space-y-4">
+          <p class="label-text muted-text">
+            Style guide / section by section
+          </p>
+          <h2 class="section-heading text-[1.6rem]">
+            One wall, ten sections
+          </h2>
+          <p class="max-w-3xl text-base leading-relaxed muted-text">
+            Each verse is split in two, and each half is its own section: one
+            sheet format, one artist, one ink. Each chorus gives a section to
+            each line it sings. The camera holds on a section and pans slowly
+            across it while the words tear it up, starting small and ending in
+            whole sheets, and moves quickly to the next. The red is the conman in
+            every section. It lands on a sheet, and the next word tears that
+            sheet.
+          </p>
+          <p class="max-w-3xl text-sm leading-relaxed muted-text">
+            Every clip is a window of the film above, at its own place in the
+            song. Starting a clip stops the film.
+          </p>
+        </div>
+
+        <div class="space-y-10">
+          <h3 class="section-heading text-[1.25rem]">
+            Motion: the opening, the break and the end
+          </h3>
+          <MusicVideoClip
+            v-for="clip in MOTION"
+            :key="clip.uid"
+            :title="clip.title"
+            :from="clip.from"
+            :to="clip.to"
+            :poster-at="clip.posterAt"
+            :uid="clip.uid"
+            :src="score.src"
+          >
+            <template #film="{ t, uid }">
+              <MusicVideoSvgFilm :film="wallFrame" name="The wall" :score="score" :t="t" :uid="uid" />
+            </template>
+            {{ clip.caption }}
+          </MusicVideoClip>
+        </div>
+
+        <div class="space-y-10">
+          <h3 class="section-heading text-[1.25rem]">
+            The sections, in order
+          </h3>
+          <MusicVideoClip
+            v-for="clip in SECTIONS"
+            :key="clip.uid"
+            :title="clip.title"
+            :from="clip.from"
+            :to="clip.to"
+            :poster-at="clip.posterAt"
+            :uid="clip.uid"
+            :src="score.src"
+          >
+            <template #film="{ t, uid }">
+              <MusicVideoSvgFilm :film="clip.film" :name="clip.title" :score="score" :t="t" :uid="uid" />
+            </template>
+            <span class="mr-2 inline-flex items-center gap-1.5 align-middle font-mono text-xs">
+              <span class="inline-block h-3 w-3 rounded-full border border-theme" :style="{ background: clip.ink }" />
+              {{ clip.inkName }}
+            </span>
+            {{ clip.caption }}
+          </MusicVideoClip>
+        </div>
       </section>
 
       <!-- ── What happens, section by section ───────────────────────── -->
       <section class="space-y-4">
         <h2 class="section-heading text-[1.35rem]">
-          One sheet, left to right
+          The wall, section by section
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
-          Every part of the song is a stretch of the same sheet. Click a section
-          to jump to it.
+          Every part of the song is a section of the same wall, or the moves
+          between them. Click a section to jump to it.
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
           <li v-for="beat in BEATS" :key="beat.id">
@@ -118,7 +193,7 @@
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
           {{ score.lines.length }} lines and {{ wordCount }} measured words.
-          Everything that arrives on the sheet lands on one of these times.
+          Everything that tears on the wall tears on one of these times.
           Click a line to jump to it.
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
@@ -145,7 +220,7 @@
 
       <section class="surface-card space-y-4 p-6">
         <p class="label-text muted-text">
-          Every note is the same note
+          Everybody takes from everybody
         </p>
         <ul class="space-y-3 text-sm leading-relaxed muted-text">
           <li v-for="note in NOTES" :key="note" class="flex gap-3">
@@ -192,8 +267,11 @@
 
 <script setup lang="ts">
 /*
- * /music-videos/conman — the whole song, as the album's line engraving
- * (shared/video/films/engraving.mjs, app/config/albumStyle.ts).
+ * /music-videos/conman — the whole song, as a wall of sections
+ * (shared/video/films/conman-wall.mjs, on the tear in shared/video/torn.mjs;
+ * app/config/albumStyle.ts). The torn gallery it replaced is still in
+ * shared/video/films/gallery.mjs, and the banknote film before that in
+ * engraving.mjs.
  *
  * Unlisted and noindexed like everything under /music-videos: it restates a
  * published song's lyric in full and exists to be shared by link for a
@@ -203,12 +281,12 @@
  */
 import { CONMAN_SCORE, lineAt, sectionAt } from '~/config/conmanScore'
 import { useMusicVideoPlayer } from '~/composables/useMusicVideoPlayer'
-import { engravingFrame } from '~~/shared/video/films/engraving.mjs'
+import { WALL_INKS, slotWindow, wallFrame } from '~~/shared/video/films/conman-wall.mjs'
 
 definePageMeta({ layout: 'default' })
 
 useHead({
-  title: 'Conman — the line engraving',
+  title: 'Conman — the wall',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 
@@ -219,11 +297,11 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card under the 1968 note half engraved — the
- * rosette's rings cut, the oval's tone coming down over the sitter — the
- * album's opening format, and what the film is at rest before anyone presses play.
+ * The poster frame: the title card under the whole wall, the last section just
+ * pasted up and nothing torn yet — the album's opening format, and what the
+ * film is at rest before anyone presses play.
  */
-const POSTER_AT = 19.4
+const POSTER_AT = 19.5
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
 )
@@ -283,66 +361,53 @@ const onKeydown = (event: KeyboardEvent) => {
 onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
+/*
+ * The style guide: ten seconds of every section, each at its own place in the
+ * song (slotWindow reads it off the score), and the parts of the film that are
+ * not a section: the opening, the break, the last verse and the last chorus.
+ */
+const at = (id: string) => slotWindow(score, id) ?? { from: 0, to: 10 }
+const MOTION = [
+  { uid: 'm-open', title: 'The opening', from: 0, to: 10, posterAt: 1.5, caption: 'Black, and CONMAN in paper-white. The title drops to the margin, the paper comes in round the plate and leaves it black: that is the wall. Then the first sections are pasted onto it, one every other beat.' },
+  { uid: 'm-paste', title: 'The paste-up, and in', from: 14, to: 24, posterAt: 19.5, caption: 'The last sections go up until the collage is whole, then fast into Jimmy Page\'s fly-posters, and the first rip lands on "conman".' },
+  { uid: 'm-break', title: 'The break', from: 144, to: 162, posterAt: 151, caption: 'Right out, and the camera does not move. Every sheet on the wall is torn down, roughly from the bottom up. The pieces fall into a pile along the bottom of the plate, and what is left is the black wall.' },
+  { uid: 'm-him', title: 'The last verse', from: 176, to: 190, posterAt: 186.9, caption: 'Pieces lift off the pile one or two at a time and lay down the outline of a musician with a guitar, made of everybody\'s scraps, while the camera creeps in on him.' },
+  { uid: 'm-red', title: 'The last chorus', from: 187.5, to: 202, posterAt: 197, caption: 'Out again, and the wall is pasted back up over him on the beat, every section reprinted in red with his face on it: everything is his now. Then a section per line, and out on the red wall.' },
+]
+const section = (id: string) => ({ ...at(id), film: wallFrame })
+const SECTIONS = [
+  { uid: 's-1a', ...section('1a'), posterAt: 27.2, title: '1a · Jimmy Page, fly-posting', ink: WALL_INKS.posters, inkName: 'Tangerine', caption: 'The opener. The same poster pasted edge to edge: TONIGHT, Page\'s long dark hair, ONE NIGHT ONLY. Small pieces rip off one at a time with a few seconds between, each showing the older poster underneath. The red is a snipe, AGAIN, slapped on the next poster to go.' },
+  { uid: 's-1b', ...section('1b'), posterAt: 38.2, title: '1b · Robert Plant, stamps', ink: WALL_INKS.stamps, inkName: 'Violet', caption: 'A sheet of the same stamp on a black stock page, with the big light mane printed in violet. A little faster and a little bigger than Page: corners, then strips. It holds through the guitar after the verse. The red is a postmark cancelling the stamps.' },
+  { uid: 's-2a', ...section('2a'), posterAt: 61.6, title: '2a · Jack White, the notice board', ink: WALL_INKS.board, inkName: 'Black', caption: 'Black GUITAR LESSONS flyers on a pale board, with the red string pinned from flyer to flyer. It starts by pulling off the tear-off tabs and escalates to corners, then halves.' },
+  { uid: 's-2b', ...section('2b'), posterAt: 70.6, title: '2b · Meg White, tickets', ink: WALL_INKS.tickets, inkName: 'Black', caption: 'ADMIT ONE, over and over, with a peppermint in the corner. Stubs come off along the perforation, then halves, then whole tickets, with more tickets underneath. On "Earth shook" the wall shakes and seven go at once. The red is a VOID stamp.' },
+  { uid: 's-tour', ...section('tour'), posterAt: 80.6, title: 'Chorus · the tour schedule', ink: WALL_INKS.tour, inkName: 'Chartreuse', caption: 'The first chorus line, "no matter where I go": the same dates and cities over and over, no band on it, with a red pencil ring round tonight\'s date.' },
+  { uid: 's-amps', ...section('amps'), posterAt: 91.6, title: 'Chorus · the equipment: amps', ink: WALL_INKS.amps, inkName: 'Tweed gold', caption: 'The second, "I always sound the same": a wall of amps, copied to get the sound. The tears show the speakers behind. The red is the pilot lamp lighting up.' },
+  { uid: 's-3a', ...section('3a'), posterAt: 106.3, title: '3a · John Mayer, banknotes', ink: WALL_INKS.notes, inkName: 'Emerald', caption: 'An uncut sheet of notes with medium curly hair in every oval and "This note is a copy of a copy" along the top. Torn in halves and taken off whole, and under the sheet is another sheet of the same notes. The red is a serial number.' },
+  { uid: 's-3b', ...section('3b'), posterAt: 117.6, title: '3b · Bob Dylan, the gallery', ink: WALL_INKS.gallery, inkName: 'Cobalt', caption: 'One frame over and over on the black wall, the bush of curls and the polka dots on cobalt. The pictures are ripped out to the black. The red is a gallery\'s "sold" dot.' },
+  { uid: 's-meg', ...section('meg-stickers'), posterAt: 125.2, title: 'Chorus · Meg White, a sticker sheet', ink: WALL_INKS.megStickers, inkName: 'Black', caption: 'Sheets of die-cut stickers (her face, a peppermint drum, a snare) peeled off one by one down to the waxy liner, and then the whole sheet goes. The red is a star sticker.' },
+  { uid: 's-gear', ...section('gear-stickers'), posterAt: 136.2, title: 'Chorus · the equipment as stickers', ink: WALL_INKS.gearStickers, inkName: 'Turquoise', caption: 'Sticker sheets of gear (an amp, a pedal, a cassette, a record), peeled faster and faster into the break.' },
+]
+
 /* What each section does, keyed by the score's section ids. */
 const BEATS = [
-  {
-    id: 'intro',
-    label: 'Intro',
-    note: 'The 1968 note is engraved under the title card: the border, the rosette\'s rings one after another, the portrait oval, and the tone brought down over a sitter with a lion\'s mane, burnished out of the plate. 2/10, the title, the band in red.',
-  },
-  {
-    id: 'verse-1',
-    label: '1968',
-    note: 'The red serial arrives on "conman", and the sitter shakes his head on "shake". On "1968" the numbering wheels roll from 0000 to 1968 and an airship sails into the vignette. The bottle is engraved on "Bottled" and the lightning cut into its glass; a stave runs into its neck and a note lands on it on each of "several steady notes". The clouds are pulled down into the sea, and the smoke is wiped out of the sky.',
-  },
-  {
-    id: 'verse-2',
-    label: 'A killing',
-    note: 'The reprints: the same note printed again and again, a new face each time — 1971, 1977, 1986, 1994 — and a bigger number, 5, 20, 100, 1000. The camera runs along them on "moving fast", the serial hopping to each and rolling to its year. The 2025 note has nobody in its oval. The sheet shakes on "Earth shook"; a loupe searches the rosette and on "realized" finds MCMLXVIII engraved in its microprint.',
-  },
-  {
-    id: 'chorus-1',
-    label: 'Chorus',
-    note: 'The press runs. The same note, printed as it comes in, one after another, with the same notes above and below it on the uncut sheet; the serial stamps every one; the rosettes spin; every word flicks the numbering wheels round and they land on the same number. Between the lines the camera slips half a row up the sheet and back.',
-  },
-  {
-    id: 'verse-3',
-    label: 'Shadows',
-    note: 'Three notes of the people he follows now: a three-dollar bill with a peppermint rosette; a note whose rosette is a watch dial, its second hand stepping on the beat, with a guitar for a vignette; a note with a small, very tall man standing on top of the world. The serial lands on the first on "steal", follows along the bottom border in the hatching\'s shadow, looks away when the sitter looks at it, and on "pray" the last note is held to the light: his silhouette is the watermark in its paper, and it is gone again by "unaware".',
-  },
-  {
-    id: 'chorus-2',
-    label: 'Chorus',
-    note: 'The press runs again, and every note on the sheet is his — the same note as last time.',
-  },
-  {
-    id: 'break',
-    label: 'Break',
-    note: 'A blank note on the press, and on each bar a piece of the notes before it flies in from the left, labelled with where it came from: the peppermint (III), the watch hands (XII), the 1968 mane for the left of the face (MCMLXVIII), the long dark hair for the right (III), the bottle, the globe (L). A seam runs down the middle of the portrait. On the last bar the serial lands on it.',
-  },
-  {
-    id: 'verse-4',
-    label: 'Groove',
-    note: 'He sways on "the way I move". "Watch me": the bottle is uncorked; the lightning splits the ground through the globe and pierces the sky through the top of the note; and the rosette finds a groove — it is a record, the peppermint for its label, the watch hands on it. The note stays cracked behind him on "damage in my wake", and on "all the eyes" the record on the next note is an eye, looking back at him.',
-  },
-  {
-    id: 'chorus-3',
-    label: 'Last chorus',
-    note: 'The press runs his note — and then other people\'s: new faces, his record for a rosette, his bottle and globe, and his serial stamped on every one, the years rolling on, 2036, 2045, 2054…',
-  },
-  {
-    id: 'outro',
-    label: 'Outro',
-    note: 'The camera settles on the last note: a new face, MMLXVIII, and the serial reading HG 2068 — a hundred years after the first. The cut to the end card is the last hit of the record.',
-  },
+  { id: 'intro', label: 'Intro', note: 'Black, and CONMAN in white. The title drops to the margin and the paper comes in round a black plate: the wall. The sections are pasted onto it one at a time, then fast into the fly-posters.' },
+  { id: 'verse-1', label: 'Page, Plant', note: 'Jimmy Page on the fly-posters: small pieces, one at a time, a few seconds apart. Then a quick pan to Robert Plant\'s stamps, a little faster and a little bigger, held through the guitar after the verse.' },
+  { id: 'verse-2', label: 'The Stripes', note: 'Jack White\'s notice board, the tabs first, and Meg White\'s tickets. On "Earth shook" the wall shakes and the section is torn up.' },
+  { id: 'chorus-1', label: 'Chorus', note: 'A section for each line: the tour schedule, then the amps.' },
+  { id: 'verse-3', label: 'Mayer, Dylan', note: 'John Mayer\'s banknotes, torn up and taken off whole to the notes beneath. Then Bob Dylan\'s gallery on the black wall.' },
+  { id: 'chorus-2', label: 'Chorus', note: 'Meg White\'s sticker sheets, then the gear stickers.' },
+  { id: 'break', label: 'Break', note: 'Right out, and still. The whole wall is torn down into a pile along the bottom, and the wall is left black.' },
+  { id: 'verse-4', label: 'Him', note: 'The camera creeps in while pieces lift off the pile and lay down the outline of a new musician, made of everyone.' },
+  { id: 'chorus-3', label: 'Last chorus', note: 'The wall is pasted back up over him in red, his face on every sheet. A section per line, then all the way out.' },
+  { id: 'outro', label: 'Outro', note: 'The red wall holds. The cut to the end card is the last hit of the record.' },
 ]
 
 const NOTES = [
-  'Every note on the sheet is printed from one layout — the rosette, the portrait oval, the vignette, the border — and what changes is the face in the oval, the number and the year. The rows above and below the one the camera follows are the same notes again, as on an uncut sheet.',
-  'Everything is line. Tone is line spacing and line crossing; the sitters are left in the paper, burnished out of the tone, and it is their hair that says who they are. The one thing that is not ink is the watermark, which is in the paper.',
-  'The camera is a forger\'s loupe: it zooms in the transform, so the engraving\'s lines get heavier as it looks closer, the way a magnified print does. Its travel is one speed curve integrated — a drift that never stops, plus eased moves and runs — so it never cuts and never stops.',
-  'Nothing about Led Zeppelin, Jack White, John Mayer or The Tallest Man on Earth is drawn from life: they are there as nods — an airship and 1968, a peppermint and a three, a watch and a guitar, a small tall man on top of the world.',
-  'The score was measured, not tapped in: the voice separated from the mix, the words placed by a speech model and then moved onto the vocal\'s own onsets. The band played to a click at 87.5 BPM, and every repeat is a whole number of beats after the first, so the six choruses were solved once. The notes are printed on the eighth notes of that click.',
-  'One function draws all of it: engravingFrame(t). The same file renders this page sixty times a second, draws the album still on /music-videos/album, and can be walked frame by frame under node to write an mp4.',
+  'Nobody tears anything. There is no hand: a piece rips from the edge of its sheet, folds back to show its unprinted side, tears free and tumbles out of the frame. The paper left behind shows its pale core along every rip.',
+  'One artist per section, the same stencil on every sheet: the hair one angular mass, the face bare paper with nothing but its outline. A haircut and a shirt, never a likeness, and no names anywhere.',
+  'Each section has its own ink. That is the album\'s one exception, since every other film has one second ink. Red is the conman: the snipe, the postmark, the string, the serial, the lamp. In the last chorus it is every section\'s ink, because everything belongs to whoever took it last.',
+  'The camera never cuts: it holds on a section and pans slowly, and between sections it moves fast, pulling back through a long move so a jump across the wall reads as one flight. In the break it does not move at all.',
+  'The score was measured, not tapped in: the voice separated from the mix, the words placed by a speech model and moved onto the vocal\'s own onsets. The band played to a click at 87.5 BPM, and the paste-ups land on its beats.',
+  'One function draws all of it: wallFrame(t). The same file renders this page sixty times a second and can be walked frame by frame under node to write an mp4.',
 ]
 </script>

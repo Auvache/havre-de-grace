@@ -45,15 +45,6 @@
           <NuxtLink to="/subscribe" class="nav-link muted-text hover:text-[var(--color-accent)]">
             mailing list
           </NuxtLink>
-          <!--
-            The tools at /resources. Deliberately here and not in the primary
-            nav: they are meant to be found by a musician searching for one,
-            not offered sideways to someone who came for the songs. The footer
-            link is what gives a crawler a path to them from every page.
-          -->
-          <NuxtLink to="/resources" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            tools for musicians
-          </NuxtLink>
         </nav>
 
         <p class="text-sm muted-text">

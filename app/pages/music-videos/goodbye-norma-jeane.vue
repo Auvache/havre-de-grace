@@ -168,7 +168,7 @@
           </li>
           <li>
             <NuxtLink to="/music-videos/conman" class="underline">/music-videos/conman</NuxtLink>
-            — track two, the line engraving.
+            — track two, the torn gallery.
           </li>
           <li>
             <NuxtLink to="/music-videos/ivory" class="underline">/music-videos/ivory</NuxtLink>

@@ -76,22 +76,14 @@ const INCLUDE_LYRICS = true
  * unlisted, and a markdown mirror plus an llms.txt entry would be the site
  * handing an agent the URL it was never meant to find.
  *
- * `/resources` and its tools are here for the opposite reason: they are
- * indexed and meant to be found, but they are interactive, and a markdown
- * mirror of a checklist you fill in would be a mirror of nothing. Keep this in
- * step with NO_MARKDOWN_MIRROR in app/composables/usePageSeo.ts.
+ * Keep this in step with NO_MARKDOWN_MIRROR in app/composables/usePageSeo.ts.
  */
 const EXCLUDED_ROUTES = new Set([
   '/links',
-  '/listen',
   '/logo',
   '/influences',
   '/tools',
   '/tools/demos',
-  '/resources',
-  '/resources/tools/royalty-checklist',
-  '/resources/tools/funding',
-  '/resources/tools/promo-checker',
 ])
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -199,6 +191,7 @@ export default defineNuxtModule({
             )
             .join('\n'),
           '## Listen',
+          `- [Free on the digital record player](${siteUrl}/listen)`,
           linkList(siteProfile.artistLinks),
           '## Booking',
           `Booking and press enquiries: ${siteProfile.bookingEmail}`,
@@ -208,6 +201,44 @@ export default defineNuxtModule({
             `- [Press kit](${siteUrl}/press)`,
             `- [Contact and booking](${siteUrl}/contact)`,
           ].join('\n'),
+        ))
+
+        // --- /listen --------------------------------------------------------
+        // The record player's shelf, as text. The same gate the page applies
+        // (isListenable in app/utils/listenAlbums.ts, which this module can't
+        // import through the `~~` alias): a full album, released, with audio.
+        const today = new Date().toISOString().slice(0, 10)
+        const onTheDeck = albums.filter((album) =>
+          !album.isSingle
+          && (!album.releaseDate || album.releaseDate <= today)
+          && (album.tracklist ?? []).some((track) => Boolean(track.audio)),
+        )
+
+        await emit('/listen', {
+          title: 'Listen free on digital vinyl',
+          description: 'Every Havre De Grace album, free to play in full on an online record player.',
+        }, blocks(
+          '# Listen to Havre De Grace free on digital vinyl',
+          `An online record player for every ${siteProfile.artistName} album: free, in full,`
+          + ' no sign-up. The latest release is on the deck when the page opens.'
+          + ' Move the needle to play the record, flip it to side B, and switch albums'
+          + ' from the bar along the bottom. Lyrics and liner notes open beside it.',
+          ...onTheDeck.map((album) => {
+            const songSlug = new Map(toSongRefs(album).map((ref) => [ref.track, ref.slug]))
+            return blocks(
+              `## ${album.title} (${album.year})`,
+              `[Play it on the record player](${siteUrl}/listen#${album.slug})`
+              + ` · [Album page](${siteUrl}/music/${album.slug})`,
+              (album.tracklist ?? [])
+                .filter((track) => Boolean(track.audio))
+                .map((track, i) => {
+                  const slug = songSlug.get(track)
+                  const title = slug ? `[${track.title}](${siteUrl}/music/${album.slug}/${slug})` : track.title
+                  return `${i + 1}. ${title}${track.duration ? ` (${track.duration})` : ''}`
+                })
+                .join('\n'),
+            ).trimEnd()
+          }),
         ))
 
         // --- /about ---------------------------------------------------------

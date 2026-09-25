@@ -65,7 +65,7 @@ export function compact<T extends Record<string, unknown>>(node: T): T {
 }
 
 /**
- * The JSON-LD node for a /resources tool page.
+ * The JSON-LD node for a free in-browser tool, such as the /listen record player.
  *
  * `WebApplication` rather than the broader `SoftwareApplication`: these run in
  * the browser, with nothing to download and nothing to install, which is
@@ -74,8 +74,7 @@ export function compact<T extends Record<string, unknown>>(node: T): T {
  * `isFree`, and leaving it out reads as "price unknown".
  *
  * The publisher is the site's one MusicGroup entity rather than a second
- * organisation of its own: the tools are part of Havre De Grace, and the whole
- * point of putting them here is that somebody who finds one can find the music.
+ * organisation of its own: the tool is part of Havre De Grace.
  */
 export const toolSchema = (options: {
   tool: { name: string, summary: string }

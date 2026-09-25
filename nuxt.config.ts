@@ -1,5 +1,3 @@
-import { resourcesRoutes } from './shared/data/resources'
-
 const SITE_URL = 'https://havredegracemusic.com'
 const SITE_DESCRIPTION = 'Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, based in Vancouver, Washington. Albums, lyrics, credits, and booking.'
 
@@ -255,6 +253,16 @@ export default defineNuxtConfig({
         statusCode: 301,
       },
     },
+    // The /resources tools for musicians have been taken down. They were
+    // indexed, in the sitemap and linked from every page's footer, so each URL
+    // redirects home rather than 404s. Spelled out rather than globbed for the
+    // reasons given at LEGACY_LISTEN_ROUTES.
+    ...Object.fromEntries([
+      '/resources',
+      '/resources/tools/royalty-checklist',
+      '/resources/tools/funding',
+      '/resources/tools/promo-checker',
+    ].map((path) => [path, { redirect: { to: '/', statusCode: 301 } }])),
     // --- Deliberately kept out of the index ---
     // Each of these renders too little server-side text to earn a place in
     // search, and each would compete with a stronger page for the same query.
@@ -267,13 +275,10 @@ export default defineNuxtConfig({
     '/links': {
       robots: 'noindex, follow',
     },
-    // The record player is a locked, full-viewport scene with no server-rendered
-    // copy (see record-player.css: height 100dvh / overflow hidden). The
-    // "digital vinyl" angle is targeted from the album pages instead, which have
-    // the body text to actually rank for it.
-    '/listen': {
-      robots: 'noindex, follow',
-    },
+    // /listen is indexed. It used to be listed here as a locked scene with no
+    // server-rendered copy; it now renders the whole catalogue as text (the
+    // sleeve in app/pages/listen.vue) and it is the one page that answers
+    // "listen to Havre De Grace free", so it earns its place in search.
     // The record player used to be one route per album (/listen/<album>) plus
     // one per track. It's now a single scene with the records on the page, but
     // those URLs were live and passed around, so they redirect rather than 404.
@@ -312,7 +317,7 @@ export default defineNuxtConfig({
     // llms.txt (EXCLUDED_ROUTES in modules/agent-discovery.ts), and linked from
     // nowhere. Typing the URL is the only way in.
     //
-    // `nofollow` as well as `noindex`, unlike /links and /listen: those two are
+    // `nofollow` as well as `noindex`, unlike /links and /influences: those are
     // kept crawlable so they pass signal on to the pages that should rank,
     // whereas nothing under here should hand a crawler anything at all.
     //
@@ -366,15 +371,12 @@ export default defineNuxtConfig({
         '/music-videos/ivory',
         '/music-videos/new-york',
         '/music-videos/ship-to-stockholm',
+        '/music-videos/meet-me-at-the-horizon',
+        '/music-videos/rocks-in-the-sea',
         '/music-videos/into-the-wild-styles',
         '/music-videos/album',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
-        // The /resources hub and its tools. Built from
-        // shared/data/resources.ts so a new tool cannot be added without its
-        // route existing — a static host serves keys, and a route that was
-        // never prerendered 404s however correct the page component is.
-        ...resourcesRoutes(),
       ],
     },
   },

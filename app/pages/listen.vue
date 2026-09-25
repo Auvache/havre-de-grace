@@ -1,5 +1,7 @@
 <template>
   <div class="night-page" :style="pageStyle">
+    <h1 class="sr-only">Listen to Havre De Grace free on digital vinyl</h1>
+
     <!-- the room reacts to the music -->
     <div class="room-glow" aria-hidden="true" :style="{ opacity: 0.18 + deck.level.value * 0.5, transform: `scale(${1 + deck.level.value * 0.12})` }" />
     <div class="dust" aria-hidden="true" />
@@ -11,7 +13,7 @@
         <span class="back-short" aria-hidden="true">Back</span>
       </NuxtLink>
       <div class="hud-mid">
-        <span class="hud-album">{{ deck.album.value?.title ?? 'No record' }}</span>
+        <span class="hud-album">{{ onDeck?.title }}</span>
         <span class="hud-side">Side {{ deck.side.value.toUpperCase() }}</span>
       </div>
       <!-- Tabs, not independent toggles: the panel they open is one drawer.
@@ -37,13 +39,13 @@
         :key="a.slug"
         type="button"
         class="rack-item"
-        :class="{ on: deck.album.value?.slug === a.slug }"
+        :class="{ on: onDeck?.slug === a.slug }"
         :aria-label="`Put on ${a.title}`"
-        :aria-current="deck.album.value?.slug === a.slug"
+        :aria-current="onDeck?.slug === a.slug"
+        :title="a.title"
         @click="putOn(a)"
       >
         <img :src="a.coverImage" :alt="a.coverAlt">
-        <span class="rack-name">{{ a.title }}</span>
         <span v-if="a.isFiller" class="rack-ph">ph</span>
       </button>
     </nav>
@@ -65,7 +67,6 @@
             <div class="disc-vinyl" />
             <div class="disc-bands" :style="{ backgroundImage: bandGradient }" />
             <div class="disc-label">
-              <span v-if="!deck.album.value" class="disc-empty">no record</span>
               <span class="disc-hole" />
             </div>
           </div>
@@ -77,9 +78,6 @@
           </p>
           <p v-else-if="scrubCue" class="drop-hint live">
             {{ scrubCue.track?.title }} · {{ formatDuration(scrubCue.offset) }} in
-          </p>
-          <p v-else-if="!deck.album.value" class="drop-hint">
-            Select a record
           </p>
           <p v-else-if="!deck.playing.value" class="drop-hint">
             Drag the needle, or click a groove
@@ -202,6 +200,46 @@
       </aside>
     </transition>
 
+    <!-- The sleeve: every record on the shelf with its tracklist, as text. The
+         rack is cover art and the tracks only surface once a record is playing,
+         so without this the page would be server-rendered as images and
+         controls — nothing for a screen reader to read out, and nothing for a
+         search engine to index. Visually hidden rather than shown: the scene
+         already presents all of this, just not as words. The links are kept out
+         of the tab order so a sighted keyboard user never lands on something
+         invisible; a screen reader still reaches them, and crawlers follow them
+         to the album and song pages. -->
+    <section class="sr-only" aria-labelledby="sleeve-title">
+      <h2 id="sleeve-title">Albums on the record player</h2>
+      <article v-for="a in albums" :key="a.slug">
+        <h3>
+          <NuxtLink :to="`/music/${a.slug}`" tabindex="-1">{{ a.title }}</NuxtLink> ({{ a.year }})
+        </h3>
+        <ol>
+          <li v-for="t in a.tracks" :key="t.number">
+            <NuxtLink v-if="t.songPath" :to="t.songPath" tabindex="-1">{{ t.title }}</NuxtLink>
+            <template v-else>{{ t.title }}</template>
+            · Side {{ t.side.toUpperCase() }} · {{ t.durationLabel }}
+          </li>
+        </ol>
+      </article>
+    </section>
+
+    <!-- How to work the deck, shown on arrival. It stays up until the visitor
+         takes it down — the button or a tap on the room behind it. -->
+    <transition name="fade">
+      <div v-if="introOpen" class="intro" @click.self="introOpen = false">
+        <div class="intro-card" role="dialog" aria-modal="true" aria-label="How to use the record player">
+          <ul>
+            <li>Listen to all of my music, right here, for free.</li>
+            <li>Move the needle to play the record.</li>
+            <li>Switch albums in the bottom bar.</li>
+          </ul>
+          <button ref="introBtn" type="button" class="intro-go" @click="introOpen = false">Listen now</button>
+        </div>
+      </div>
+    </transition>
+
   </div>
 </template>
 
@@ -209,6 +247,7 @@
 import type { Album } from '~~/shared/types'
 import type { ListenAlbum } from '~/utils/listenAlbums'
 import { buildListenAlbums, formatDuration, grooveBandGradient } from '~/utils/listenAlbums'
+import { compact, schemaId, toolSchema } from '~/utils/schema'
 
 definePageMeta({ layout: 'listen' })
 
@@ -224,8 +263,9 @@ definePageMeta({ layout: 'listen' })
  * across the whole side (see useVinylDeck) — the needle can be dropped
  * mid-song, and the songs are drawn as visible bands you can aim at.
  *
- * Nothing plays until the visitor drops the needle or presses play. Choosing a
- * record only loads it onto the platter.
+ * The latest release is on the platter when the page opens, but nothing plays
+ * until the visitor drops the needle or presses play. Choosing a record only
+ * loads it onto the platter.
  *
  * The VU needles and the glow behind the deck are driven by an AnalyserNode on
  * the real output, and the 33/45 switch genuinely repitches the record.
@@ -258,15 +298,26 @@ const panel = ref<PanelId | null>(null)
 function togglePanel(id: PanelId) { panel.value = panel.value === id ? null : id }
 
 /*
- * Nothing on the platter to start with: the deck sits empty until the visitor
- * picks a record off the rack, the way the room would actually be found.
+ * The how-to card, open on every arrival. Rendered open on the server too, so
+ * it is already there when the page paints rather than popping in after.
+ */
+const introOpen = ref(true)
+const introBtn = ref<HTMLButtonElement | null>(null)
+// Focused so Enter or Space dismisses it, without drawing a focus ring on a
+// page that has only just loaded.
+onMounted(() => introBtn.value?.focus({ focusVisible: false } as FocusOptions))
+
+/*
+ * There is always a record on the platter. The room is found with the latest
+ * release already on the deck, needle up, so the first thing the visitor meets
+ * is something to play rather than an empty turntable.
  *
- * Unless an album page sent them here — `/listen#<slug>` puts that record on,
- * so following "listen on digital vinyl" lands on the album they were reading
- * about rather than an empty deck. The needle still stays up: arriving is not
- * the same as pressing play. Loading has to wait for the client, since the
- * deck reaches for rAF and an audio element as soon as a record goes on.
- * An unknown or unlistenable slug just leaves the deck empty.
+ * An album page can send them to a different one — `/listen#<slug>` puts that
+ * record on instead, so following "listen on digital vinyl" lands on the album
+ * they were reading about. The needle still stays up: arriving is not the same
+ * as pressing play. Loading has to wait for the client, since the deck reaches
+ * for rAF and an audio element as soon as a record goes on. An unknown or
+ * unlistenable slug falls back to the latest release.
  *
  * `?album=<slug>` does the same thing and is kept working indefinitely: it is
  * the form this page shipped with, so it is out there in whatever has already
@@ -284,17 +335,31 @@ function requestedSlug(): string | null {
   return typeof route.query.album === 'string' ? route.query.album : null
 }
 
-function loadRequested() {
+/** Newest first (see buildListenAlbums), so the head of the list is the latest release. */
+const latest = computed(() => albums.value[0] ?? null)
+
+/*
+ * What the scene shows as on the deck. Until the client mounts and loads the
+ * real record, this is the one that is about to go on — so the server render
+ * already carries its title and tint instead of flashing a default first.
+ */
+const onDeck = computed(() => deck.album.value ?? requestedAlbum() ?? latest.value)
+
+function requestedAlbum(): ListenAlbum | null {
   const wanted = requestedSlug()
-  if (!wanted) return
-  const album = albums.value.find(a => a.slug === wanted)
+  return (wanted && albums.value.find(a => a.slug === wanted)) || null
+}
+
+function loadRequested() {
+  const album = requestedAlbum()
   // Changing records mid-play is the visitor's call, not a link's — a hash that
   // names what is already on the platter must not restart it.
   if (album && deck.album.value?.slug !== album.slug) deck.load(album)
 }
 
 onMounted(() => {
-  loadRequested()
+  const first = requestedAlbum() ?? latest.value
+  if (first) deck.load(first)
   window.addEventListener('hashchange', loadRequested)
 })
 
@@ -361,9 +426,7 @@ onMounted(() => {
   discEl.value?.addEventListener('pointerleave', () => { hoverInfo.value = null })
 })
 
-const discLabel = computed(() => (deck.album.value
-  ? `Record grooves for side ${deck.side.value.toUpperCase()}. Click a groove to drop the needle there.`
-  : 'No record loaded'))
+const discLabel = computed(() => `Record grooves for side ${deck.side.value.toUpperCase()}. Click a groove to drop the needle there.`)
 
 // --- arm readout ----------------------------------------------------------
 // Solved against the giant disc's centre and groove radii. The pivot sits just
@@ -396,9 +459,7 @@ const armDeg = computed(() => {
   return Math.min(ARM_INNER, Math.max(ARM_PARK, deg))
 })
 
-const armValueText = computed(() => (deck.album.value
-  ? `${deck.track.value?.title ?? 'off'}, ${formatDuration(deck.sidePosition.value)} into side ${deck.side.value.toUpperCase()}`
-  : 'No record loaded'))
+const armValueText = computed(() => `${deck.track.value?.title ?? 'off'}, ${formatDuration(deck.sidePosition.value)} into side ${deck.side.value.toUpperCase()}`)
 
 /** Dragged back off the record: releasing here sends the arm to its rest. */
 const scrubParking = computed(() => deck.scrubbing.value && deck.scrubProgress.value < PARK_RELEASE)
@@ -495,17 +556,84 @@ const bandGradient = computed(() => grooveBandGradient(
 const linerParas = computed(() => (deck.album.value?.linerNotes ?? '').split(/\n\s*\n/).filter(Boolean))
 
 const pageStyle = computed(() => ({
-  '--accent': deck.album.value?.accent ?? '#c9a15e',
+  '--accent': onDeck.value?.accent ?? '#c9a15e',
 }))
 
-// noindex (see routeRules): the scene is locked to the viewport and renders
-// almost no text server-side, so it can't earn a search listing. The "digital
-// vinyl" angle is targeted from the album pages, which have the body copy for it.
-usePageSeo({
-  title: 'Listen | Havre De Grace',
-  description: 'Play Havre De Grace albums on an interactive record player — drop the needle and hear the album the way a record plays.',
+// --- search ---------------------------------------------------------------
+// Indexed. What it has to rank with is the sleeve above (the whole catalogue
+// as text, linked through to every album and song page), the intro card, and
+// the structured data below. The queries it is for are the ones only this page
+// answers: listening to Havre De Grace free, in full, on a record player.
+const { toAbsoluteUrl, siteUrl } = useAbsoluteUrl()
+
+const { canonicalUrl } = usePageSeo({
+  title: 'Listen Free on Digital Vinyl | Havre De Grace',
+  description: computed(() => (latest.value
+    ? `Play every Havre De Grace album free on an online record player, starting with ${latest.value.title}. Drop the needle, flip to side B, read the lyrics as it plays.`
+    : 'Play every Havre De Grace album free on an online record player. Drop the needle, flip to side B, read the lyrics as it plays.')),
   path: '/listen',
 })
+
+/*
+ * The player is the page's main entity, described as a free web app. Each album on the shelf carries the same @id its
+ * own page uses, so it is the one MusicAlbum entity rather than a second copy
+ * — and what this page adds to it is a ListenAction: the album can be heard,
+ * free, at /listen#<slug>.
+ *
+ * The albums sit inside an ItemList rather than as top-level graph nodes.
+ * @unhead/schema-org keys top-level nodes by the fragment alone
+ * (resolveAsGraphKey keeps everything from the last "#"), so two albums both
+ * ending "#album" collapse into one. Nested nodes are left alone.
+ */
+useSchemaOrg([
+  defineWebPage({
+    mainEntity: { '@id': `${canonicalUrl.value}#tool` },
+    about: albums.value.map((a) => ({ '@id': schemaId.album(toAbsoluteUrl(`/music/${a.slug}`)) })),
+  }),
+  toolSchema({
+    tool: {
+      name: 'Havre De Grace record player',
+      summary: 'An online record player for every Havre De Grace album. Drop the needle anywhere on the side, flip the record, switch albums, and read the lyrics and liner notes as it plays. Free, no sign-up.',
+    },
+    canonicalUrl: canonicalUrl.value,
+    siteUrl,
+    category: 'MultimediaApplication',
+  }),
+  {
+    '@type': 'ItemList',
+    '@id': `${canonicalUrl.value}#shelf`,
+    name: 'Albums on the record player',
+    numberOfItems: albums.value.length,
+    itemListElement: albums.value.map((a, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: compact({
+        '@type': 'MusicAlbum',
+        '@id': schemaId.album(toAbsoluteUrl(`/music/${a.slug}`)),
+        name: a.title,
+        url: toAbsoluteUrl(`/music/${a.slug}`),
+        image: toAbsoluteUrl(a.coverImage),
+        datePublished: a.releaseDate,
+        byArtist: { '@id': schemaId.artist(siteUrl) },
+        numTracks: a.tracks.length,
+        potentialAction: {
+          '@type': 'ListenAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${canonicalUrl.value}#${a.slug}`,
+            actionPlatform: ['https://schema.org/DesktopWebPlatform', 'https://schema.org/MobileWebPlatform'],
+          },
+          expectsAcceptanceOf: {
+            '@type': 'Offer',
+            category: 'free',
+            price: '0',
+            priceCurrency: 'USD',
+          },
+        },
+      }),
+    })),
+  },
+])
 </script>
 
 <style scoped>
@@ -517,7 +645,7 @@ usePageSeo({
   /* An implicit `auto` column takes its widest child's max-content, which
      let the scene grow past a phone's viewport. */
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   color: #e9e4dc;
   font-family: Jost, ui-sans-serif, system-ui, sans-serif;
   background: radial-gradient(90% 70% at 50% 42%, #1a1a1e 0%, #101012 46%, #050506 100%);
@@ -594,11 +722,11 @@ usePageSeo({
    sidebar the rack stole horizontal space asymmetrically, which pushed the
    record — the one thing the page is about — off the centre axis. */
 .rack {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   z-index: 7;
+  /* It comes before the deck in the markup (screen-reader order: choose a
+     record, then play it) but sits in the last row, under the console. */
+  grid-row: 4;
   display: flex;
   flex-direction: row;
   /* Centred, but `safe center` so a strip that outgrows the viewport falls
@@ -607,19 +735,22 @@ usePageSeo({
      flex-start line is what an engine that doesn't parse `safe` keeps. */
   justify-content: flex-start;
   justify-content: safe center;
-  gap: 10px;
-  padding: 10px clamp(12px, 3vw, 28px);
+  gap: clamp(10px, 1.4vw, 16px);
+  padding: 20px clamp(12px, 3vw, 28px);
   overflow-x: auto;
   scrollbar-width: none;
-  background: rgba(255, 255, 255, .03);
-  border-top: 1px solid rgba(255, 255, 255, .07);
+  /* Tinted by the record on the deck, as faintly as its playing groove is, so
+     the bar reads as belonging to it — and changes with it. */
+  background: color-mix(in srgb, var(--accent) 9%, rgba(255, 255, 255, .02));
+  border-top: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  transition: background-color .5s ease, border-color .5s ease;
 }
 .rack::-webkit-scrollbar { display: none; }
 
 .rack-item {
   position: relative;
   flex: none;
-  width: clamp(44px, 4.5vw, 64px);
+  width: clamp(72px, 7.5vw, 108px);
   aspect-ratio: 1;
   padding: 0;
   border: 0;
@@ -632,22 +763,7 @@ usePageSeo({
 .rack-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
 .rack-item:hover { filter: brightness(.9); transform: translateY(-4px); }
 .rack-item.on { filter: none; box-shadow: 0 0 0 1px var(--accent), 0 0 14px color-mix(in srgb, var(--accent) 50%, transparent); }
-
-.rack-name {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 8px);
-  transform: translateX(-50%);
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(10, 10, 12, .92);
-  font-size: .62rem;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .18s ease;
-}
-.rack-item:hover .rack-name { opacity: 1; }
+.rack-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .rack-ph { position: absolute; top: 2px; right: 2px; padding: 0 3px; border-radius: 2px; background: #a4503f; font-size: .44rem; letter-spacing: .08em; text-transform: uppercase; }
 
 /* ---------- deck ---------- */
@@ -747,7 +863,6 @@ usePageSeo({
   background: radial-gradient(circle at 42% 36%, #ffffff 0%, #f7f6f3 62%, #eceae5 100%);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .18), 0 1px 5px rgba(0, 0, 0, .5);
 }
-.disc-empty { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: #a8a49c; }
 .disc-hole { position: absolute; width: 6%; aspect-ratio: 1; border-radius: 50%; background: #060607; box-shadow: 0 0 0 2px rgba(0, 0, 0, .16); }
 
 .drop-hint {
@@ -813,8 +928,6 @@ usePageSeo({
   align-items: center;
   gap: clamp(12px, 3vw, 36px);
   padding: 14px clamp(12px, 3vw, 28px) 18px;
-  /* Room for the rack, which is absolutely positioned over the bottom edge. */
-  margin-bottom: 88px;
   border-top: 1px solid rgba(255, 255, 255, .07);
   background: linear-gradient(180deg, rgba(10, 10, 12, .2), rgba(6, 6, 8, .85));
 }
@@ -905,6 +1018,49 @@ usePageSeo({
 .slide-enter-active, .slide-leave-active { transition: transform .35s cubic-bezier(.2, .9, .25, 1); }
 .slide-enter-from, .slide-leave-to { transform: translateX(100%); }
 
+/* ---------- intro card ---------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(3, 3, 4, .66);
+  backdrop-filter: blur(4px);
+}
+.intro-card {
+  width: min(100%, 380px);
+  padding: 26px 26px 22px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 14px;
+  background: rgba(12, 12, 14, .97);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .7);
+  text-align: center;
+}
+.intro-card ul { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; }
+.intro-card li { font-size: .9rem; line-height: 1.5; color: #c3bcb2; text-wrap: balance; }
+.intro-go {
+  display: block;
+  margin: 0 auto;
+  padding: 6px 2px;
+  border: 0;
+  background: none;
+  color: #e9e4dc;
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color .18s;
+}
+.intro-go:hover { color: var(--accent); }
+.intro-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+.fade-enter-active, .fade-leave-active { transition: opacity .25s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
 /* ---------- responsive ---------- */
 /* The layout above is the phone layout, grown up. What's left here is only
    what a phone actually needs differently: a smaller record, no hover-only
@@ -912,10 +1068,9 @@ usePageSeo({
 @media (max-width: 900px) {
   .deck-space { padding: 0 12px; }
   .deck-frame { height: min(46vh, 82vw, calc(100% - 34px)); }
-  .rack { gap: 8px; padding: 8px; }
-  /* Hover tooltip — no hover on a phone, and it would cover the record. */
-  .rack-name { display: none; }
-  .console { flex-wrap: wrap; gap: 10px; padding: 12px 12px 14px; margin-bottom: 74px; }
+  .rack { gap: 12px; padding: 16px 12px 18px; }
+  .rack-item { width: 76px; }
+  .console { flex-wrap: wrap; gap: 10px; padding: 12px 12px 14px; }
   .meters { display: none; }
   /* `flex: 1` in the base rule sets flex-basis to 0, which beats `width: 100%`;
      the basis has to be 100% for the now-playing line to take its own row. */
@@ -940,8 +1095,9 @@ usePageSeo({
 @media (max-width: 900px) and (max-height: 720px) {
   .hud { padding-top: 8px; padding-bottom: 0; }
   .hud-album { font-size: .78rem; }
-  .console { margin-bottom: 66px; padding-bottom: 10px; }
-  .rack-item { width: 38px; }
+  .console { padding-bottom: 10px; }
+  .rack { padding-top: 12px; padding-bottom: 12px; }
+  .rack-item { width: 60px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

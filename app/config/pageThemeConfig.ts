@@ -89,20 +89,12 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
+    // The link-in-bio page: white cards on the blackout, so the one button
+    // that matters is the brightest thing on a phone screen.
     match: /^\/links\/?$/,
     config: {
-      theme: 'light',
-      gradient: 'light-fjord',
-    },
-  },
-  {
-    // The tools at /resources. Working pages, so they take the same daylight
-    // palette as the rest of the prose on the site rather than a look of
-    // their own.
-    match: /^\/resources(?:\/|$)/,
-    config: {
-      theme: 'light',
-      gradient: 'light-fjord',
+      theme: 'dark',
+      gradient: 'blackout',
     },
   },
   {

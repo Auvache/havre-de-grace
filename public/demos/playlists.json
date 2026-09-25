@@ -32,6 +32,159 @@
         {
           "title": "live — 9/3/26",
           "file": "Insane, Okay - live - 9_3_26, 10.03\u202fAM.m4a"
+        },
+        {
+          "title": "reference track",
+          "file": "reference-track.wav",
+          "note": "local only \u2014 git-ignored, not deployed"
+        },
+        {
+          "title": "claude master 1",
+          "file": "insane-okay-claude-master-1.wav",
+          "note": "mastered to The Wild Hunt, \u221210.8 LUFS"
+        },
+        {
+          "title": "claude master 4 \u2014 forward + tight",
+          "file": "insane-okay-claude-master-4.wav",
+          "note": "untouched demo, vocal +4.9 dB with \u22123/+4 dB rides"
+        },
+        {
+          "title": "claude master 14 \u2014 A: 4 + body",
+          "file": "insane-okay-claude-master-14.wav",
+          "note": "master 1's guitar low end (below ~800 Hz) only; guitar +3.1 dB louder"
+        },
+        {
+          "title": "claude master 19 \u2014 level",
+          "file": "insane-okay-claude-master-19.wav",
+          "note": "master 14 with the vocal back up to the reference's +6.1 dB over the guitar"
+        },
+        {
+          "title": "claude master 20 \u2014 level + low-mid half",
+          "file": "insane-okay-claude-master-20.wav",
+          "note": "19, vocal 150\u2013300 Hz trimmed halfway to the reference (\u22124.6 dB at 200 Hz)"
+        },
+        {
+          "title": "claude master 21 \u2014 level + low-mid full",
+          "file": "insane-okay-claude-master-21.wav",
+          "note": "19, vocal 150\u2013300 Hz trimmed all the way (\u22129 dB at 200 Hz)"
+        },
+        {
+          "title": "claude master 22 \u2014 level + room half",
+          "file": "insane-okay-claude-master-22.wav",
+          "note": "19, vocal in a fitted room at half the reference's tail"
+        },
+        {
+          "title": "claude master 24 \u2014 level + low-mid half + room half",
+          "file": "insane-okay-claude-master-24.wav",
+          "note": "20 and 22 combined"
+        }
+      ]
+    },
+    {
+      "name": "The Hoax",
+      "tracks": [
+        {
+          "title": "live — 9/3/26",
+          "file": "The Hoax - live - 9_3_26, 10.12\u202fAM.m4a"
+        },
+        {
+          "title": "reference track",
+          "file": "reference-track.wav",
+          "note": "local only \u2014 git-ignored, not deployed"
+        },
+        {
+          "title": "claude master 1",
+          "file": "the-hoax-claude-master-1.wav",
+          "note": "full mix + master matched to the reference (EQ, compression, room, width)"
+        },
+        {
+          "title": "claude master 4 \u2014 forward + tight",
+          "file": "the-hoax-claude-master-4.wav",
+          "note": "untouched demo, vocal lifted to +7.1 dB over the guitar with fader rides"
+        },
+        {
+          "title": "claude master 14 \u2014 4 + body",
+          "file": "the-hoax-claude-master-14.wav",
+          "note": "master 4 plus master 1's guitar low end"
+        },
+        {
+          "title": "claude master 19 \u2014 level",
+          "file": "the-hoax-claude-master-19.wav",
+          "note": "master 14 with the vocal at the reference's +6.1 dB over the guitar"
+        },
+        {
+          "title": "claude master 20 \u2014 level + low-mid half",
+          "file": "the-hoax-claude-master-20.wav",
+          "note": "19, vocal low-mids trimmed halfway to the reference"
+        },
+        {
+          "title": "claude master 21 \u2014 level + low-mid full",
+          "file": "the-hoax-claude-master-21.wav",
+          "note": "19, vocal low-mids trimmed all the way to the reference"
+        },
+        {
+          "title": "claude master 22 \u2014 level + room half",
+          "file": "the-hoax-claude-master-22.wav",
+          "note": "19, vocal in a room fitted to half the reference's tail"
+        },
+        {
+          "title": "claude master 24 \u2014 level + low-mid half + room half",
+          "file": "the-hoax-claude-master-24.wav",
+          "note": "20 and 22 combined"
+        }
+      ]
+    },
+    {
+      "name": "Little Brother",
+      "tracks": [
+        {
+          "title": "demo",
+          "file": "Little Brother - Demo.m4a"
+        },
+        {
+          "title": "reference track",
+          "file": "reference-track.wav",
+          "note": "local only \u2014 git-ignored, not deployed"
+        },
+        {
+          "title": "claude master 1",
+          "file": "little-brother-claude-master-1.wav",
+          "note": "full mix + master matched to the reference (EQ, compression, room, width)"
+        },
+        {
+          "title": "claude master 4 \u2014 forward + tight",
+          "file": "little-brother-claude-master-4.wav",
+          "note": "untouched demo, vocal lifted to +7.1 dB over the guitar with fader rides"
+        },
+        {
+          "title": "claude master 14 \u2014 4 + body",
+          "file": "little-brother-claude-master-14.wav",
+          "note": "master 4 plus master 1's guitar low-end EQ \u2014 here it trims the boom (guitar \u22122.8 dB), since this guitar is already bassier than the reference"
+        },
+        {
+          "title": "claude master 19 \u2014 level",
+          "file": "little-brother-claude-master-19.wav",
+          "note": "master 14 with the vocal at the reference's +6.1 dB over the guitar"
+        },
+        {
+          "title": "claude master 20 \u2014 level + low-mid half",
+          "file": "little-brother-claude-master-20.wav",
+          "note": "19, vocal low-mids trimmed halfway to the reference"
+        },
+        {
+          "title": "claude master 21 \u2014 level + low-mid full",
+          "file": "little-brother-claude-master-21.wav",
+          "note": "19, vocal low-mids trimmed all the way to the reference"
+        },
+        {
+          "title": "claude master 22 \u2014 level + room half",
+          "file": "little-brother-claude-master-22.wav",
+          "note": "19, vocal in a room fitted to half the reference's tail"
+        },
+        {
+          "title": "claude master 24 \u2014 level + low-mid half + room half",
+          "file": "little-brother-claude-master-24.wav",
+          "note": "20 and 22 combined"
         }
       ]
     }

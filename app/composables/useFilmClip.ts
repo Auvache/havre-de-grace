@@ -18,6 +18,8 @@
  * spectrum should use useMusicVideoPlayer, which already routes it.
  */
 
+import { createMediaClock } from '~/utils/mediaClock'
+
 /**
  * Every clip on the page, so that starting one stops the others.
  *
@@ -50,6 +52,8 @@ export function useFilmClip({ src, from, to }: FilmClipOptions) {
 
   let audio: HTMLAudioElement | null = null
   let frame = 0
+  /* Smoothed: `currentTime` itself steps (app/utils/mediaClock.ts). */
+  const mediaClock = createMediaClock()
 
   const stopLoop = () => {
     if (frame) cancelAnimationFrame(frame)
@@ -76,7 +80,7 @@ export function useFilmClip({ src, from, to }: FilmClipOptions) {
     return audio
   }
 
-  const tick = () => {
+  const tick = (frameTime?: number) => {
     if (!audio) return
     /*
      * The stop is tested here rather than left to a `timeupdate` listener,
@@ -93,14 +97,17 @@ export function useFilmClip({ src, from, to }: FilmClipOptions) {
       seek(from)
       return
     }
-    time.value = audio.currentTime
+    time.value = mediaClock.read(audio, frameTime)
     frame = requestAnimationFrame(tick)
   }
 
   function seek(seconds: number) {
     const element = ensureAudio()
     const target = Math.min(Math.max(seconds, from), to - 0.02)
-    const apply = () => { element.currentTime = target }
+    const apply = () => {
+      element.currentTime = target
+      mediaClock.reset()
+    }
     if (element.readyState >= 1) apply()
     else element.addEventListener('loadedmetadata', apply, { once: true })
     time.value = target

@@ -13,6 +13,7 @@
 
 import { ANDALUSIA_SCORE } from '~/config/andalusiaScore'
 import { clamp01, lerp } from '~/utils/clipTiming'
+import { createMediaClock } from '~/utils/mediaClock'
 
 const LEVEL_GAIN = 1.5
 const SMOOTHING = 0.35
@@ -134,39 +135,16 @@ export function useMusicVideoPlayer(
   }
 
   /*
-   * `currentTime` is where the sound is, but browsers do not report it every
-   * frame: Firefox and Safari step it every quarter second or so, Chrome does
-   * for some files, and between steps it holds still. Read raw, the picture
-   * froze on a moment already past and then jumped — spot on just after an
-   * update, up to a quarter second late just before the next, which is the
-   * "sometimes in sync, sometimes lagging" that was heard.
-   *
-   * So the clock is anchored to the last reported value and runs on the wall
-   * clock from there, re-anchored whenever the element reports a new time.
-   * The extrapolation is capped at half a second, so a stall in the stream
-   * holds the picture rather than letting it run ahead of the sound.
+   * `currentTime` is not reported smoothly (every quarter second in Firefox
+   * and Safari, quantised to ~10 ms in Chrome), so the picture runs on a clock
+   * that follows it smoothly instead of reading it raw (app/utils/mediaClock.ts).
    */
-  let anchorMedia = -1
-  let anchorWall = 0
+  const mediaClock = createMediaClock()
+  const clock = (frameTime?: number): number => (audio ? mediaClock.read(audio, frameTime) : 0)
 
-  const clock = (): number => {
-    if (!audio) return 0
-    const media = audio.currentTime
-    const wall = performance.now()
-    if (media !== anchorMedia || audio.paused || audio.readyState < 3) {
-      anchorMedia = media
-      anchorWall = wall
-    }
-    // Nor while the element is still buffering: it is not playing yet, however
-    // `paused` reads.
-    const running = !audio.paused && audio.readyState >= 3
-    const ahead = !running ? 0 : Math.min(((wall - anchorWall) / 1000) * audio.playbackRate, 0.5)
-    return anchorMedia + ahead
-  }
-
-  const tick = () => {
+  const tick = (frameTime?: number) => {
     if (!audio) return
-    time.value = Math.max(0, clock() + offsetMs.value / 1000)
+    time.value = Math.max(0, clock(frameTime) + offsetMs.value / 1000)
     sample()
     frame = requestAnimationFrame(tick)
   }
@@ -217,7 +195,7 @@ export function useMusicVideoPlayer(
     ended.value = false
     const apply = () => {
       element.currentTime = target
-      anchorMedia = -1
+      mediaClock.reset()
     }
     if (element.readyState >= 1) apply()
     else element.addEventListener('loadedmetadata', apply, { once: true })

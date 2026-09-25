@@ -35,10 +35,7 @@ interface PageSeoOptions {
 /**
  * Routes with no markdown mirror.
  *
- * Mostly the `robots: 'noindex'` set in nuxt.config.ts. The /resources tools
- * are the exception: they are indexed and meant to be found, but they are
- * interactive — a markdown mirror of a checklist you fill in is a mirror of
- * nothing.
+ * Mostly the `robots: 'noindex'` set in nuxt.config.ts.
  *
  * Kept in step with EXCLUDED_ROUTES in modules/agent-discovery.ts, which is
  * what decides whether the file is actually written; advertising an alternate
@@ -46,15 +43,10 @@ interface PageSeoOptions {
  */
 const NO_MARKDOWN_MIRROR = new Set([
   '/links',
-  '/listen',
   '/logo',
   '/influences',
   '/tools',
   '/tools/demos',
-  '/resources',
-  '/resources/tools/royalty-checklist',
-  '/resources/tools/funding',
-  '/resources/tools/promo-checker',
 ])
 
 export const usePageSeo = (options: PageSeoOptions) => {
