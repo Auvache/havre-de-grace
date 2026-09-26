@@ -73,7 +73,7 @@
 import { r, clamp01, easeOut, easeInOut, ramp, lerp } from '../kit.mjs'
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, RED, SECOND_INK, SHEET, paper, marginLyric, titleCard, easeCamera } from '../album.mjs'
+import { PAPER, INK, RED, SECOND_INK, SHEET, paper, marginLyric, titleCard, easeCamera } from '../album.mjs'
 
 /** The fixed print's blue — the song's second ink. */
 export const BLUE = SECOND_INK['rocks-in-the-sea']
