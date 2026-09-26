@@ -69,7 +69,7 @@ import { rng, r, clamp01, easeOut, easeInOut, ramp, lerp } from '../kit.mjs'
 import { motifBody } from '../motifs.mjs'
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, INK, RED, SECOND_INK, SHEET, paper, plateClip, marginLyric, titleCard, land, easeCamera } from '../album.mjs'
+import { PAPER, INK, RED, SECOND_INK, SHEET, COVER_SHEET, paper, plateClip, marginLyric, opening, land, easeCamera } from '../album.mjs'
 
 export const PINK = SECOND_INK['goodbye-norma-jeane']
 
@@ -80,13 +80,24 @@ export const SCREENPRINT = {
   palette: { PAPER, INK, RED, PINK },
 }
 
-const PL = SHEET.plate
+/*
+ * The film is on the album's cover sheet (album.mjs): the cover's white border,
+ * the lyric on one row in a thin margin, and a plate 110 taller than the one the
+ * strip was drawn for. The world is drawn DROP lower, so the floor keeps its
+ * place over the bottom band and the new room is headroom; PIC_TOP and
+ * PIC_BOTTOM are in the world's units, so anything hung from the top of the
+ * picture (curtains, lamps, the ink zones) reaches the new top.
+ */
+const PL = COVER_SHEET.plate
 const TOP = PL.y
 const BOTTOM = PL.y + PL.h
-/** The film's edge: sprocket bands at the top and the foot of the plate. */
+const DROP = PL.h - SHEET.plate.h
+/** The film's edge: sprocket bands at the top and the foot of the plate, on screen. */
 const BAND = 34
-const PIC_TOP = TOP + BAND
-const PIC_BOTTOM = BOTTOM - BAND
+const EDGE_TOP = TOP + BAND
+const EDGE_BOTTOM = BOTTOM - BAND
+const PIC_TOP = EDGE_TOP - DROP
+const PIC_BOTTOM = EDGE_BOTTOM - DROP
 /** Where things stand. */
 const FLOOR = 606
 
@@ -1599,29 +1610,28 @@ export function screenprintFrame({ time, score, lockup = '', uid = 'nj' }) {
     holes += `M${pt(hx - v + 14, TOP + 10)}h26v15h-26Z`
     holes += `M${pt(hx - v + 14, BOTTOM - 25)}h26v15h-26Z`
   }
-  const edge = fillD(`M${pt(PL.x, TOP)}H${I(PL.x + PL.w)}V${I(PIC_TOP)}H${I(PL.x)}ZM${pt(PL.x, PIC_BOTTOM)}H${I(PL.x + PL.w)}V${I(BOTTOM)}H${I(PL.x)}Z`, INK) + fillD(holes, PAPER)
+  const edge = fillD(`M${pt(PL.x, TOP)}H${I(PL.x + PL.w)}V${I(EDGE_TOP)}H${I(PL.x)}ZM${pt(PL.x, EDGE_BOTTOM)}H${I(PL.x + PL.w)}V${I(BOTTOM)}H${I(PL.x)}Z`, INK) + fillD(holes, PAPER)
 
   /* ── The margin ───────────────────────────────────────────────────────── */
   let margin = ''
-  if (section.kind === 'intro') {
-    const o = Math.min(easeOut(ramp(now, 0.6, 1.8)), 1 - easeInOut(ramp(now, section.to - 1.0, section.to - 0.2)))
-    margin = titleCard({ title: score.title, track: 3, opacity: o })
-  }
-  else margin = marginLyric({ now, score, uid })
+  // The cover sheet's opening: the title big on black, dropped to the margin,
+  // the black drawn in to the plate and lifted off the cinema.
+  if (section.kind === 'intro') margin = opening({ now, title: score.title, track: 3, out: [section.to - 1.0, section.to - 0.2], lift: [5.6, 7.2], uid, sheet: COVER_SHEET })
+  else margin = marginLyric({ now, score, uid, sheet: COVER_SHEET })
 
   // The print fails at the end: the pink starves.
   const starve = 1 - 0.5 * easeInOut(ramp(now, P.choruses[2].lines[2].start, T.end))
 
-  const clip = plateClip(uid)
-  const world = `translate(${r(-v, 1)} 0)`
+  const clip = plateClip(uid, PL)
+  const world = `translate(${r(-v, 1)} ${DROP})`
   return {
     svg: [
-      paper(),
+      paper(COVER_SHEET),
       clip.def,
       `<g clip-path="${clip.url}">`,
       `<rect x="${PL.x}" y="${PL.y}" width="${PL.w}" height="${PL.h}" fill="${PAPER}"/>`,
       `<g transform="${world}">${back.join('')}</g>`,
-      `<g transform="translate(${r(-v + off.x, 1)} ${r(off.y, 1)})"${op(starve)}>${pink.join('')}</g>`,
+      `<g transform="translate(${r(-v + off.x, 1)} ${r(off.y + DROP, 1)})"${op(starve)}>${pink.join('')}</g>`,
       `<g transform="${world}">${key.join('')}</g>`,
       `<g transform="${world}">${red.join('')}</g>`,
       top.join(''),

@@ -21,9 +21,9 @@
           This is the
           <NuxtLink to="/music-videos/album" class="underline">album edition</NuxtLink>,
           track five of ten on Into the Wild. It is the same globe, route and
-          camera, printed on the album's sheet: paper, black and one red, the chart
-          inside a plate mark, and the lyric in the margin under it, where a
-          printmaker pencils a print's title.
+          camera, printed on the album's sheet: the chart in paper, black and one
+          red, inside the album cover's white frame, with the lyric on one line
+          in the margin under it.
         </p>
       </header>
 
@@ -219,13 +219,13 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame. The film opens on blank paper — the chart draws itself over
- * the first four seconds — so before anyone presses play the frame is held at
- * the moment the title card is full: the chart in the plate, the title, 5/10
- * and the band in the margin. A video that looks like
- * an empty rectangle until you play it does not get played.
+ * The poster frame. The film opens on black — the title, the band's anchor
+ * drawn on, and the dive through its ring onto the chart by eleven seconds —
+ * so before anyone presses play the frame is held on the finished mark, just
+ * before the dive. A video that looks like an empty rectangle until you play
+ * it does not get played.
  */
-const POSTER_AT = 6.4
+const POSTER_AT = 8.7
 
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
@@ -298,9 +298,9 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'Andalusia at province scale, pushing in slowly. The album\'s title '
-      + 'card sits in the margin — 5/10, the title, the band in red — and '
-      + 'fades as the intro ends. As it leaves, the dot appears.',
+    note: 'The title on black breathes out, the band\'s anchor is drawn on, '
+      + 'and the camera dives through its ring onto Andalusia at province '
+      + 'scale, pushing in slowly. As the intro ends, the dot appears.',
   },
   {
     id: 'verse-1',

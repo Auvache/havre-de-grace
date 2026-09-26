@@ -221,7 +221,7 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card under the first image — the town's lights
+ * The poster frame: the title in the margin under the first image — the town's lights
  * on the far shore, the ship a speck with its red lantern, and him walking in
  * along the quay with his sea bag — the album's opening format, and what the
  * film is at rest before anyone presses play.
@@ -291,7 +291,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The block is cut, a ragged edge sweeping across it: sky, the far shore, the sea, the ice along the quay. On the far shore to the left is the town, its windows lit; out on the water to the right is the ship, a speck with a red lantern. He walks in off the shingle with a sea bag on his shoulder. The album\'s title card underneath: 9/10, the title, the band in red.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in. Then the block is cut, a ragged edge sweeping across it: sky, the far shore, the sea, the ice along the quay. On the far shore to the left is the town, its windows lit; out on the water to the right is the ship, a speck with a red lantern. He walks in off the shingle with a sea bag on his shoulder. The title and 9/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

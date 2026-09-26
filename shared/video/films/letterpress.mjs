@@ -64,7 +64,7 @@
 import { t as text, r, clamp01, easeOut, easeInOut, ramp, lerp, advance } from '../kit.mjs'
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, PAPER_SHADE, INK, RED, SECOND_INK, SHEET, paper, plateClip, marginLyric, titleCard } from '../album.mjs'
+import { PAPER, PAPER_SHADE, INK, RED, SECOND_INK, COVER_SHEET, paper, plateClip, marginLyric, opening } from '../album.mjs'
 
 export const YELLOW = SECOND_INK['new-york']
 
@@ -75,9 +75,18 @@ export const LETTERPRESS = {
   palette: { PAPER, INK, RED, YELLOW },
 }
 
+/*
+ * The film is on the album's cover sheet (album.mjs): the cover's white border,
+ * the lyric on one row in a thin margin, and a plate 1532 × 776 about (800, 422).
+ * The wall was composed for the old 666-tall plate, whose centre was y 367: the
+ * camera still looks at that line of the world, and puts it at the new plate's
+ * centre, so the taller plate shows more of the wall above and below.
+ */
+const SHEET = COVER_SHEET
 const PL = SHEET.plate
 const CX = PL.x + PL.w / 2
 const CY = PL.y + PL.h / 2
+const WORLD_CY = 367
 /** Paper where it is torn: the fibre edge, a shade lighter than the stock. */
 const FIBRE = '#f7f0e0'
 /** The wall's old posters, printed over and pasted over until they are nearly paper. */
@@ -1662,7 +1671,7 @@ function cameraAt(plan, now) {
   const x = plan.camX(now)
   const v = plan.camV(now)
   const ex = plan.extras
-  let y = CY + (ex.camY ? ex.camY(now) : 0)
+  let y = WORLD_CY + (ex.camY ? ex.camY(now) : 0)
   let z = ex.zoom ? ex.zoom(now) : 1
   // The sheet jumps a little with the kick: a punch of zoom on every beat,
   // stronger on the one, left out of the title card's first bars and the hush.
@@ -1685,7 +1694,7 @@ export function letterpressFrame({ time, score, lockup = '', uid = 'ny' }) {
   const active = lineAt(score, now)
   const cam = cameraAt(plan, now)
   const halfW = 800 / cam.z + 120
-  const halfH = 360 / cam.z + 120
+  const halfH = (PL.h / 2 + 27) / cam.z + 120
   const view = { x0: cam.x - halfW, x1: cam.x + halfW, y0: cam.y - halfH, y1: cam.y + halfH, cam }
   const ctx = { uid, defs: [], now }
 
@@ -1704,18 +1713,17 @@ export function letterpressFrame({ time, score, lockup = '', uid = 'ny' }) {
   const wall = plan.extras.wall ? plan.extras.wall(ctx, now, view, wallSvg(view)) : wallSvg(view)
   const rule = ruleSvg(plan, now, view)
 
-  let margin = ''
-  if (section.kind === 'intro') {
-    const o = Math.min(easeOut(ramp(now, 0.6, 1.8)), 1 - easeInOut(ramp(now, section.to - 1.0, section.to - 0.2)))
-    margin = titleCard({ title: score.title, track: 6, opacity: o })
-  }
-  else margin = marginLyric({ now, score, uid })
+  // The cover sheet's opening: the title big on black, dropped to the margin,
+  // the black drawn in to the plate and lifted off the wall.
+  const margin = section.kind === 'intro'
+    ? opening({ now, title: score.title, track: 6, out: [section.to - 1.0, section.to - 0.2], lift: [5.6, 7.2], uid, sheet: SHEET })
+    : marginLyric({ now, score, uid, sheet: SHEET })
 
-  const clip = plateClip(uid)
+  const clip = plateClip(uid, PL)
   const transform = `translate(${r(CX + cam.sx, 2)} ${r(CY + cam.sy, 2)}) rotate(${r(cam.roll, 3)}) scale(${r(cam.z, 4)}) translate(${r(-cam.x, 2)} ${r(-cam.y, 2)})`
   return {
     svg: [
-      paper(),
+      paper(SHEET),
       `<defs>${clip.def}${ctx.defs.join('')}</defs>`,
       `<g clip-path="${clip.url}">`,
       `<rect x="${PL.x}" y="${PL.y}" width="${PL.w}" height="${PL.h}" fill="${PAPER}"/>`,

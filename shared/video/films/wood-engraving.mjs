@@ -89,7 +89,7 @@ import { t as text, r, clamp01, easeOut, easeInOut, ramp, lerp } from '../kit.mj
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
 import { joints, strokes, POSES } from '../figure.mjs'
-import { PAPER, INK, RED, SECOND_INK, SHEET, paper, marginLyric, titleCard, land, easeCamera } from '../album.mjs'
+import { PAPER, INK, RED, SECOND_INK, COVER_SHEET, paper, marginLyric, opening, land, easeCamera } from '../album.mjs'
 
 export const ICE = SECOND_INK['ship-to-stockholm']
 /** The white of the paper showing through a cut. */
@@ -102,6 +102,13 @@ export const WOOD_ENGRAVING = {
   palette: { PAPER, INK, RED, ICE },
 }
 
+/*
+ * The album's cover sheet (album.mjs). The world is drawn in frame units, 0–900
+ * top to bottom, because the instrumental opens the plate to the whole sheet;
+ * the plate is a window on it, 34–810, so the taller plate shows more of the
+ * quay in front of him and nothing needs to move.
+ */
+const SHEET = COVER_SHEET
 const PL = SHEET.plate
 /** The horizon, the far edge of the quay, and the line he walks on. */
 const HY = 408
@@ -1659,15 +1666,15 @@ export function woodEngravingFrame({ time, score, lockup = '', uid = 'st' }) {
   }
 
   /* ── Compose ───────────────────────────────────────────────────────── */
-  let margin = ''
-  if (section.kind === 'intro') {
-    const o = Math.min(easeOut(ramp(now, 0.6, 1.8)), 1 - easeInOut(ramp(now, section.to - 1.0, section.to - 0.2)))
-    margin = titleCard({ title: score.title, track: 9, opacity: o })
-  }
-  else margin = marginLyric({ now, score, uid })
+  // The cover sheet's opening: the title on black, dropped to the margin, the
+  // black drawn in to the plate. The plate is black already, so the black goes
+  // at once and the block being cut is what uncovers the picture.
+  const margin = section.kind === 'intro'
+    ? opening({ now, title: score.title, track: 9, out: [section.to - 1.0, section.to - 0.2], lift: [6.0, 6.2], uid, sheet: SHEET })
+    : marginLyric({ now, score, uid, sheet: SHEET })
 
-  // The block is cut in over the opening seconds: a ragged edge sweeping left to right.
-  const cutK = easeInOut(ramp(now, 0.2, 4.2))
+  // The block is cut in once the black has drawn in to the plate: a ragged edge sweeping left to right.
+  const cutK = easeInOut(ramp(now, 6.0, 10.0))
   let cutClip = ''
   let cutUse = ''
   if (cutK < 1) {
@@ -1680,7 +1687,7 @@ export function woodEngravingFrame({ time, score, lockup = '', uid = 'st' }) {
 
   const shipBehindQuay = s < 0.97
   const svg = [
-    paper(),
+    paper(SHEET),
     `<defs><clipPath id="${clipId}"><rect x="${r(plateR.x, 1)}" y="${r(plateR.y, 1)}" width="${r(plateR.w, 1)}" height="${r(plateR.h, 1)}"/></clipPath>${cutClip}</defs>`,
     `<g clip-path="url(#${clipId})">`,
     `<rect x="${r(plateR.x, 1)}" y="${r(plateR.y, 1)}" width="${r(plateR.w, 1)}" height="${r(plateR.h, 1)}" fill="${INK}"/>`,

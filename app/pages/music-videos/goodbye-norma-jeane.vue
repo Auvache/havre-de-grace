@@ -217,7 +217,7 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card over the picture house, the leader
+ * The poster frame: the title in the margin under the picture house, the leader
  * sweeping on the screen — the album's opening format, and what the film is at
  * rest before anyone presses play.
  */
@@ -287,7 +287,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'A picture house: pink curtains, pink seats, the projector\'s light. The leader counts down on the screen, one sweep a bar on the record\'s click, and runs out exactly as the voice comes in. The album\'s title card underneath — 3/10, the title, the band in red.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in and the black lifts off a picture house: pink curtains, pink seats, the projector\'s light. The leader counts down on the screen, one sweep a bar on the record\'s click, and runs out exactly as the voice comes in. The title and 3/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

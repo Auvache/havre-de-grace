@@ -220,11 +220,12 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card under the first scratch — the horizon and
- * the far sky laid in, the thread coming in from the left — the album's opening
- * format, and what the film is at rest before anyone presses play.
+ * The poster frame: the title in the margin under the first scratch — the
+ * horizon and the far sky laid in, the thread coming in from the left — after
+ * the black has lifted and before the title fades (7.9 s), and what the film is
+ * at rest before anyone presses play.
  */
-const POSTER_AT = 8.2
+const POSTER_AT = 7.6
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
 )
@@ -289,7 +290,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The plate is grounded: its border rules are scratched in, then the horizon, then the far sky, and the red thread comes in from the left on its needle. The album\'s title card underneath — 4/10, the title, the band in red.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in. The black lifts off the plate as the horizon and the far sky are scratched in, then the border rules, and the red thread comes in from the left on its needle. The title and 4/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

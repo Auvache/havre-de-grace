@@ -22,10 +22,10 @@
  * camera, every tear, the pile and the musician — is built once per score.
  * `makeWallFrame({ swap })` puts one section in another's slot.
  */
-import { t, r, clamp01, easeOut, ramp, lerp, advance } from '../kit.mjs'
+import { t, r, clamp01, easeOut, ramp, lerp } from '../kit.mjs'
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, PAPER_SHADE, INK, RED, SHEET, paper, plateClip, marginLyric, easeCamera, land } from '../album.mjs'
+import { PAPER, PAPER_SHADE, INK, RED, COVER_SHEET, OPENING, paper, plateClip, marginLyric, opening, easeCamera, land } from '../album.mjs'
 import { SCENES, makeKit, hash, GREEN, resample, inside, portraitDefs } from '../portraits.mjs'
 // Imported by name, not bare: the server build drops a side-effect-only import, and the scenes with it.
 import { WALL_OBJECTS } from '../still-lifes.mjs'
@@ -533,14 +533,21 @@ for (const [id, b] of Object.entries(WALL)) {
  */
 const RED_WALL = Object.fromEntries(Object.entries(WALL).map(([id, b]) => [id, { ...b, id: `r-${id}`, ink: RED, artist: 'newcomer', before: 'newcomer', red: true, redInk: b.ink === INK }]))
 
-/* The plate is 1532 × 666 about (800, 367). */
-const HW = 766
-const HH = 333
-const ZFAR = Math.min(1532 / (WALL_W + 300), 666 / (WALL_H + 300))
+/*
+ * The film is on the album's cover sheet (album.mjs): the cover's white border,
+ * the lyric on one row in a thin margin, and a plate 1532 × 776 about (800, 422).
+ */
+const SHEET = COVER_SHEET
+const PLATE = SHEET.plate
+const HW = PLATE.w / 2
+const HH = PLATE.h / 2
+const ZFAR = Math.min(PLATE.w / (WALL_W + 300), PLATE.h / (WALL_H + 300))
 /* The break's view: all of it, with room under it for the pile. */
 const FAR_VIEW = { x: WALL_W / 2, y: WALL_H / 2 + 150, z: ZFAR }
-/* The wall filling the plate top to bottom, for the paste-ups. */
-const FILL_VIEW = { x: WALL_W / 2, y: WALL_H / 2, z: 666 / WALL_H }
+/* The wall filling the plate, for the paste-ups: side to side on the cover sheet's taller plate. */
+const FILL_VIEW = { x: WALL_W / 2, y: WALL_H / 2, z: Math.min(PLATE.w / WALL_W, PLATE.h / WALL_H) }
+/* The floor the pile lies on in the break, under the wall: where the bottom of the far view was on the old sheet. */
+const PILE_FLOOR = WALL_H + 300
 
 function cellOf(B, col, row) {
   const F = FORMATS[B.format]
@@ -619,7 +626,7 @@ const RED_ORDER = ['3b', '2a', 'tour', '1b', 'gear-stickers', '1a', 'amps', '3a'
 export const SLOTS = HOLDS.map((h) => h[0])
 
 /* The intro's title: in, held, dropped to the margin, and the paper round it. */
-const TITLE = { in: [0.2, 1.0], drop: [3.4, 4.8], frame: [4.6, 6.0], marks: [5.8, 6.4], out: [20.2, 21.0] }
+const TITLE = { ...OPENING, out: [20.2, 21.0] }
 
 /*
  * The musician the pile becomes, as outlines in a box about 330 × 440: a head,
@@ -664,10 +671,10 @@ function planFor(score, swap = {}) {
   const hold = (B, t0, m, dur, k) => {
     const F = FORMATS[B.format]
     const z = F.zoom
-    const room = Math.max(0, B.w - 1532 / z + 200)
+    const room = Math.max(0, B.w - PLATE.w / z + 200)
     const dist = Math.min(room, dur * 40 / z)
     const dir = k % 2 ? -1 : 1
-    const vy = Math.max(0, B.h - 666 / z) * 0.5
+    const vy = Math.max(0, B.h - PLATE.h / z) * 0.5
     const oy = ((hash(k, 3, 17) - 0.5) * 2) * vy * 0.6
     shots.push({ t0, m, B, x0: B.cx - dir * dist / 2, x1: B.cx + dir * dist / 2, y0: B.cy + oy, y1: B.cy - oy * 0.5, z0: z, z1: z * 1.02, kind: 'hold' })
   }
@@ -691,7 +698,7 @@ function planFor(score, swap = {}) {
   const v4 = sec('verse-4')
   // His feet (the bottom of the box, 480) sink into the pile; the push ends on all of him.
   // His lowest line sits on the pile's crest; the push ends with all of him and the pile's top in view.
-  const musTop = FAR_VIEW.y + HH / ZFAR - 700 - (MUS.cut - MUS.top) * MUS.s
+  const musTop = PILE_FLOOR - 700 - (MUS.cut - MUS.top) * MUS.s
   const musView = { x: MUS.x, y: musTop + 1200 }
   shots.push({ t0: v4.from - 0.4, m: 0, B: null, x0: FAR_VIEW.x, x1: musView.x, y0: FAR_VIEW.y, y1: musView.y, z0: ZFAR, z1: ZMUS, kind: 'push', ease: true })
   // The last chorus: out, the red wall pasted up, a section per line, out.
@@ -705,7 +712,7 @@ function planFor(score, swap = {}) {
   for (const s of shots) {
     if (s.kind !== 'hold' || !s.B.red) continue
     const z = s.z0
-    const dist = Math.min(Math.max(0, s.B.w - 1532 / z + 200), (s.t1 - s.t0) * 40 / z)
+    const dist = Math.min(Math.max(0, s.B.w - PLATE.w / z + 200), (s.t1 - s.t0) * 40 / z)
     s.x0 = s.B.cx - dist / 2
     s.x1 = s.B.cx + dist / 2
   }
@@ -818,7 +825,7 @@ function planFor(score, swap = {}) {
   /* ── The break: everything comes down, onto the pile ─────────────── */
   const B0 = brk.from + 0.8
   const B1 = brk.to - 9.8
-  const pileBase = FAR_VIEW.y + HH / ZFAR - 30
+  const pileBase = PILE_FLOOR - 30
   const pileX0 = FAR_VIEW.x - HW / ZFAR + 160
   const pileX1 = FAR_VIEW.x + HW / ZFAR - 160
   const BIN = 60
@@ -1094,7 +1101,7 @@ function camera(shots, tt) {
   const a = shotAt(shots[i - 1], tt)
   const u = easeCamera((tt - s.t0) / s.m)
   const dist = Math.hypot(b.x - a.x, b.y - a.y)
-  const inv = Math.exp(lerp(Math.log(1 / a.z), Math.log(1 / b.z), u)) + Math.sin(Math.PI * u) * dist * 0.5 / 1532 * clamp01(Math.min(a.z, b.z) / ZFAR - 1)
+  const inv = Math.exp(lerp(Math.log(1 / a.z), Math.log(1 / b.z), u)) + Math.sin(Math.PI * u) * dist * 0.5 / PLATE.w * clamp01(Math.min(a.z, b.z) / ZFAR - 1)
   return { x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), z: 1 / inv }
 }
 function shakeAt(plan, tt) {
@@ -1111,7 +1118,6 @@ function shakeAt(plan, tt) {
 }
 
 /* ══ THE FRAME ═════════════════════════════════════════════════════════ */
-const PLATE = { x: 34, y: 34, w: 1532, h: 666 }
 const SX = PLATE.x + PLATE.w / 2
 const SY = PLATE.y + PLATE.h / 2
 /* Below this the untouched sheets of a section are one pattern fill, not a hundred elements. */
@@ -1381,33 +1387,6 @@ function pileSvg(plan, now, box) {
   return s + flying
 }
 
-/* The intro: black, CONMAN, the title to the margin, the paper in round the plate. */
-function introSvg(now, score, uid) {
-  const signature = advance('Havre De Grace', 26, 6)
-  const room = 2 * (1530 - signature - 800) - 80
-  const size1 = Math.min(96, Math.min(1000, room) / Math.max(advance(score.title), 0.001))
-  const size0 = 230
-  const d = easeCamera(ramp(now, TITLE.drop[0], TITLE.drop[1]))
-  const size = Math.exp(lerp(Math.log(size0), Math.log(size1), d))
-  const y = lerp(450 + size0 * 0.36, SHEET.lyricY + size1 * 0.36, d)
-  const fade = Math.min(easeOut(ramp(now, TITLE.in[0], TITLE.in[1])), 1 - ramp(now, TITLE.out[0], TITLE.out[1]))
-  const f = easeCamera(ramp(now, TITLE.frame[0], TITLE.frame[1]))
-  // The black, shrinking from the whole sheet to the plate: what it leaves is the paper.
-  const bx = lerp(0, PLATE.x, f)
-  const by = lerp(0, PLATE.y, f)
-  const bw = lerp(1600, PLATE.w, f)
-  const bh = lerp(900, PLATE.h, f)
-  const title = (fill) => t({ x: 800, y, size, text: score.title, fill, anchor: 'middle', weight: 700, tracking: lerp(18, 0, easeOut(ramp(now, TITLE.in[0], TITLE.drop[1]))) })
-  const pencil = '#6f675b'
-  const m = Math.min(easeOut(ramp(now, TITLE.marks[0], TITLE.marks[1])), 1 - ramp(now, TITLE.out[0], TITLE.out[1]))
-  const clip = `<clipPath id="${uid}-blk"><rect x="${r(bx, 2)}" y="${r(by, 2)}" width="${r(bw, 2)}" height="${r(bh, 2)}"/></clipPath>`
-  return {
-    under: `<rect x="${r(bx, 2)}" y="${r(by, 2)}" width="${r(bw, 2)}" height="${r(bh, 2)}" fill="${INK}"/>`,
-    over: `<defs>${clip}</defs><g opacity="${r(fade, 3)}">${f > 0 ? title(INK) : ''}<g clip-path="url(#${uid}-blk)">${title(PAPER)}</g></g>` +
-      `<g opacity="${r(m, 3)}">${t({ x: 70, y: SHEET.lyricY + 12, size: 30, text: '2/10', fill: pencil, weight: 400, upper: false })}${t({ x: 1530, y: SHEET.lyricY + 12, size: 26, text: 'Havre De Grace', fill: RED, anchor: 'end', weight: 600, tracking: 6 })}</g>`,
-  }
-}
-
 export function makeWallFrame({ swap = {} } = {}) {
   return function wallFrame({ time, score, lockup = '', uid = 'cw' }) {
     const now = time
@@ -1445,18 +1424,16 @@ export function makeWallFrame({ swap = {} } = {}) {
         if (now >= plan.redAt.get(B.id)) red += sectionSvg(ctx, plan, B, now, cam, box, [], [])
       }
     }
-    const intro = now < TITLE.out[1] ? introSvg(now, score, uid) : null
-    const margin = intro ? '' : marginLyric({ now, score, uid })
-    const clip = plateClip(uid)
+    const margin = now < TITLE.out[1] ? opening({ now, title: score.title, track: 2, out: TITLE.out, uid, sheet: SHEET }) : marginLyric({ now, score, uid, sheet: SHEET })
+    const clip = plateClip(uid, PLATE)
     const view = `translate(${r(SX + qx, 2)} ${r(SY + qy, 2)}) scale(${r(cam.z, 5)}) translate(${r(-cam.x, 2)} ${r(-cam.y, 2)})`
     const svg = [
-      paper(),
-      intro ? intro.under : '',
+      paper(SHEET),
       `<defs>${clip.def}${portraitDefs(uid)}${inks}${[...defs.values()].join('')}</defs>`,
       `<g clip-path="${clip.url}"><rect x="${PLATE.x}" y="${PLATE.y}" width="${PLATE.w}" height="${PLATE.h}" fill="${INK}"/>`,
       `<g transform="${view}">${world}${flaps.join('')}${flights.join('')}${pile}${red}</g>`,
       '</g>',
-      intro ? intro.over : margin,
+      margin,
     ].join('\n')
     return { svg, label: active?.text ?? section.label }
   }

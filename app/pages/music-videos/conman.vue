@@ -368,7 +368,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
  */
 const at = (id: string) => slotWindow(score, id) ?? { from: 0, to: 10 }
 const MOTION = [
-  { uid: 'm-open', title: 'The opening', from: 0, to: 10, posterAt: 1.5, caption: 'Black, and CONMAN in paper-white. The title drops to the margin, the paper comes in round the plate and leaves it black: that is the wall. Then the first sections are pasted onto it, one every other beat.' },
+  { uid: 'm-open', title: 'The opening', from: 0, to: 10, posterAt: 1.5, caption: 'Black, and CONMAN in white. The title drops to the margin, the white border comes in round the plate and leaves it black: that is the wall. Then the first sections are pasted onto it, one every other beat.' },
   { uid: 'm-paste', title: 'The paste-up, and in', from: 14, to: 24, posterAt: 19.5, caption: 'The last sections go up until the collage is whole, then fast into Jimmy Page\'s fly-posters, and the first rip lands on "conman".' },
   { uid: 'm-break', title: 'The break', from: 144, to: 162, posterAt: 151, caption: 'Right out, and the camera does not move. Every sheet on the wall is torn down, roughly from the bottom up. The pieces fall into a pile along the bottom of the plate, and what is left is the black wall.' },
   { uid: 'm-him', title: 'The last verse', from: 176, to: 190, posterAt: 186.9, caption: 'Pieces lift off the pile one or two at a time and lay down the outline of a musician with a guitar, made of everybody\'s scraps, while the camera creeps in on him.' },
@@ -390,7 +390,7 @@ const SECTIONS = [
 
 /* What each section does, keyed by the score's section ids. */
 const BEATS = [
-  { id: 'intro', label: 'Intro', note: 'Black, and CONMAN in white. The title drops to the margin and the paper comes in round a black plate: the wall. The sections are pasted onto it one at a time, then fast into the fly-posters.' },
+  { id: 'intro', label: 'Intro', note: 'Black, and CONMAN in white. The title drops to the margin and the white border comes in round a black plate: the wall. The sections are pasted onto it one at a time, then fast into the fly-posters.' },
   { id: 'verse-1', label: 'Page, Plant', note: 'Jimmy Page on the fly-posters: small pieces, one at a time, a few seconds apart. Then a quick pan to Robert Plant\'s stamps, a little faster and a little bigger, held through the guitar after the verse.' },
   { id: 'verse-2', label: 'The Stripes', note: 'Jack White\'s notice board, the tabs first, and Meg White\'s tickets. On "Earth shook" the wall shakes and the section is torn up.' },
   { id: 'chorus-1', label: 'Chorus', note: 'A section for each line: the tour schedule, then the amps.' },

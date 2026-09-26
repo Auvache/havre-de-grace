@@ -92,7 +92,7 @@
 import { t as text, r, clamp01, easeOut, easeInOut, ramp, lerp } from '../kit.mjs'
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, INK, RED, SECOND_INK, SHEET, paper, marginLyric, titleCard, land, easeCamera } from '../album.mjs'
+import { PAPER, INK, RED, SECOND_INK, COVER_SHEET, paper, marginLyric, opening, land, easeCamera } from '../album.mjs'
 
 export const GOLD = SECOND_INK['meet-me-at-the-horizon']
 
@@ -103,6 +103,8 @@ export const MEZZOTINT = {
   palette: { PAPER, INK, RED, GOLD },
 }
 
+/* On the album's cover sheet (album.mjs): the cover's white border, a plate 1532 × 776, the lyric on one row. */
+const SHEET = COVER_SHEET
 const PL = SHEET.plate
 /** The plate's centre: the projection's principal point. */
 const CX = PL.x + PL.w / 2
@@ -1328,16 +1330,16 @@ export function mezzotintFrame({ time, score, lockup = '', uid = 'mz' }) {
   const clipId = `${uid}-plate`
   const clipDef = `<clipPath id="${clipId}"><rect x="${r(clipBox.x, 2)}" y="${r(clipBox.y, 2)}" width="${r(clipBox.w, 2)}" height="${r(clipBox.h, 2)}"/></clipPath>`
 
-  let margin = ''
-  if (section.kind === 'intro') {
-    const o = Math.min(easeOut(ramp(now, 0.6, 1.8)), 1 - easeInOut(ramp(now, section.to - 1.0, section.to - 0.2)))
-    margin = titleCard({ title: score.title, track: 7, opacity: o })
-  }
-  else margin = marginLyric({ now, score, uid })
+  // The cover sheet's opening: the title big on black, dropped to the margin, the
+  // black drawn in to the plate. The plate is the same black under it, so the
+  // lift hands straight over to the room being burnished out of the dark.
+  const margin = section.kind === 'intro'
+    ? opening({ now, title: score.title, track: 7, out: [section.to - 1.0, section.to - 0.2], lift: [6.0, 7.0], uid, sheet: SHEET })
+    : marginLyric({ now, score, uid, sheet: SHEET })
 
   return {
     svg: [
-      paper(),
+      paper(SHEET),
       `<defs>${clipDef}${defs(ctx)}</defs>`,
       `<g clip-path="url(#${clipId})">`,
       `<rect x="0" y="0" width="1600" height="900" fill="${INK}"/>`,

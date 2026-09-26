@@ -73,7 +73,7 @@
 import { r, clamp01, easeOut, easeInOut, ramp, lerp } from '../kit.mjs'
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, INK, RED, SECOND_INK, SHEET, paper, marginLyric, titleCard, easeCamera } from '../album.mjs'
+import { PAPER, INK, RED, SECOND_INK, COVER_SHEET, paper, marginLyric, opening, easeCamera } from '../album.mjs'
 
 /** The fixed print's blue — the song's second ink. */
 export const BLUE = SECOND_INK['rocks-in-the-sea']
@@ -93,6 +93,17 @@ export const CYANOTYPE = {
 }
 
 const HZ = 292
+/*
+ * The film is on the album's cover sheet (album.mjs): a plate 1532 × 776, where
+ * the shore was composed for the old sheet's 1532 × 666 (y 34 to 700). The
+ * picture keeps its drawing coordinates and is set down in the taller plate:
+ * sky, sea and shore moved by the difference in the plates' centres, so the
+ * horizon sits as far down the frame as it did, and the foreground by the
+ * difference in their feet, so the ferns still rise from below the plate edge.
+ */
+const PLATE = COVER_SHEET.plate
+const DY = PLATE.y + PLATE.h / 2 - 367
+const FG_DY = PLATE.y + PLATE.h - 700
 const DRIFT = 24
 /** How soft an unwashed print's whites stay once laid. */
 const RESIDUE = 0.42
@@ -551,11 +562,11 @@ function buildPlan(score) {
 
 /* ══ THE PAPER: coat, mottle, and the full sheet ═══════════════════════ */
 
-/** The plate: SHEET.plate, opening to the whole sheet for the second guitar break. */
+/** The plate: the cover sheet's, opening to the whole sheet for the second guitar break. */
 function boxAt(plan, now) {
   const { break2 } = plan.S
   const k = easeCamera(ramp(now, break2.from + 0.4, break2.from + 2.2)) * (1 - easeCamera(ramp(now, break2.to - 2.3, break2.to - 0.5)))
-  const B = SHEET.plate
+  const B = PLATE
   return { x: lerp(B.x, 0, k), y: lerp(B.y, 0, k), w: lerp(B.w, 1600, k), h: lerp(B.h, 900, k), k }
 }
 
@@ -1223,11 +1234,13 @@ export function cyanotypeFrame({ time, score, lockup = '', uid = 'cy' }) {
   for (const at of [T.sea1, T.seaB, T.sea2, T.seaC, T.seaD]) over.push(waveIn(ctx, at, now))
   over.push(cloud(ctx, now))
   over.push(rain(ctx, now))
+  // The wash is the plate's, not the picture's: drawn across the box, unmoved.
+  let washOver = ''
   if (edge) {
     // The water's leading edge: a bright line, and behind it a sheen that
     // thins back into the deepened blue, with a few ripples carried along.
     const back = (dx, wob = 0) => polyD(edge.map(([x, y]) => [x - dx + wob * Math.sin(y / 31 + now * 3 + dx), y]))
-    over.push([[150, 200, 0.07], [90, 120, 0.1], [44, 60, 0.14]].map(([dx, w, o]) => `<path d="${back(dx)}" fill="none" stroke="${PALE}" stroke-width="${w}"${op(o)}/>`).join('')
+    washOver = ([[150, 200, 0.07], [90, 120, 0.1], [44, 60, 0.14]].map(([dx, w, o]) => `<path d="${back(dx)}" fill="none" stroke="${PALE}" stroke-width="${w}"${op(o)}/>`).join('')
       + [[40, 1.2, 0.34, 6], [96, 1, 0.24, 10], [170, 0.9, 0.14, 14]].map(([dx, w, o, wob]) => `<path d="${back(dx, wob)}" fill="none" stroke="${WHITE}" stroke-width="${w}"${op(o)}/>`).join('')
       + `<path d="${back(8)}" fill="none" stroke="${WHITE}" stroke-width="7"${op(0.16)}/>`
       + `<path d="${polyD(edge)}" fill="none" stroke="${WHITE}" stroke-width="2.6"${op(0.75)}/>`)
@@ -1235,27 +1248,29 @@ export function cyanotypeFrame({ time, score, lockup = '', uid = 'cy' }) {
 
   /* ── The margin ── */
   let margin = ''
-  if (section.kind === 'intro') {
-    const o = Math.min(easeOut(ramp(now, 0.6, 1.8)), 1 - easeInOut(ramp(now, section.to - 1.0, section.to - 0.2)))
-    margin = titleCard({ title: score.title, track: 8, opacity: o })
-  }
-  else margin = marginLyric({ now, score, uid })
+  // The cover sheet's opening: the title big on black, dropped to the margin,
+  // and the black lifted off the plate while the sensitiser is still going on.
+  if (section.kind === 'intro') margin = opening({ now, title: score.title, track: 8, out: [section.to - 1.0, section.to - 0.2], lift: [5.6, 7.2], uid, sheet: COVER_SHEET })
+  else margin = marginLyric({ now, score, uid, sheet: COVER_SHEET })
 
-  const tr = (p) => `translate(${r(-p * v, 1)} 0)`
+  const tr = (p, dy = 0) => `translate(${r(-p * v, 1)} ${r(dy, 1)})`
   const plateInner = [
     base,
+    `<g transform="translate(0 ${r(DY, 1)})">`,
     sky.join(''),
     `<g transform="${tr(0.5)}">${far.join('')}</g>`,
     sea(ctx, now),
     coast(ctx, now),
     `<g transform="${tr(1)}">${world.join('')}</g>`,
-    `<g transform="${tr(1.3)}">${fg.join('')}</g>`,
     over.join(''),
+    '</g>',
+    `<g transform="${tr(1.3, FG_DY)}">${fg.join('')}</g>`,
+    washOver,
   ].join('\n')
 
   return {
     svg: [
-      paper(),
+      paper(COVER_SHEET),
       `<defs>${defs}</defs>`,
       `<g clip-path="url(#${uid}-box)">`,
       `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" fill="${PAPER}"/>`,

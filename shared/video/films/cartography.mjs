@@ -207,9 +207,11 @@ function slerp(a, b, u) {
  * shorter, so its radius is scaled by the plate's height over the frame's —
  * in the projection, never as a transform, so the pen does not change.
  */
+/* The album edition's sheet: the cover sheet (album.mjs), the cover's white border and the lyric on one row in a thin margin. */
+const ALBUM_SHEET = A.COVER_SHEET
 const ORIGINAL_VIEW = { cx: 800, cy: 450, k: 1, half: HALF_DIAGONAL }
 const ALBUM_VIEW = (() => {
-  const { x, y, w, h } = A.SHEET.plate
+  const { x, y, w, h } = ALBUM_SHEET.plate
   return { cx: x + w / 2, cy: y + h / 2, k: h / 900, half: Math.hypot(w / 2, h / 2) }
 })()
 
@@ -1112,7 +1114,7 @@ export function cartographyFrame(o) {
   }
 }
 
-function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'original' }) {
+function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'original', intro = null }) {
   const album = edition === 'album'
   const now = time
   const plan = planFor(score)
@@ -1138,7 +1140,7 @@ function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'origina
 
   /* ── The lyric, decided first: it sets how loud the names may be ──── */
   let lyric = ''
-  if (album) lyric = marginLyric({ now, score, section, uid })
+  if (album) lyric = marginLyric({ now, score, section, uid, intro })
   else if (kind === 'intro') lyric = cartouche(now, section, score)
   else if (shownLine && shownLine.section === section.id && kind !== 'ohs') {
     lyric = straightLyric({ now, line: shownLine, from: cutIn(score, shownLine), scope: section.id, uid, low: kind !== 'chorus' })
@@ -1264,7 +1266,7 @@ function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'origina
 
   /* ── Furniture that does not move with the chart ─────────────────── */
   const furniture = []
-  const rose = album ? { x: A.SHEET.plate.x + 150, y: A.SHEET.plate.y + A.SHEET.plate.h - 140, size: 170 } : { x: 200, y: 706, size: 190 }
+  const rose = album ? { x: ALBUM_SHEET.plate.x + 150, y: ALBUM_SHEET.plate.y + ALBUM_SHEET.plate.h - 140, size: 170 } : { x: 200, y: 706, size: 190 }
   /*
    * The album edition has no lyric on the chart to stand the rose down, so it
    * stands down for the route instead: as a port or the head of the line
@@ -1286,7 +1288,7 @@ function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'origina
   if (album) {
     // The neatline becomes the plate's own edge: a heavy rule on the plate and
     // a hairline inside it, drawn in as the chart is, as before.
-    const { x, y, w, h } = A.SHEET.plate
+    const { x, y, w, h } = ALBUM_SHEET.plate
     furniture.push(rect(x, y, w, h, 'none', { stroke: P.INK, sw: 3, opacity: ramp(now, 1.1, 2.4) }))
     furniture.push(rect(x + 12, y + 12, w - 24, h - 24, 'none', { stroke: P.INK, sw: 1.2, opacity: 0.8 * ramp(now, 1.6, 2.9) }))
   }
@@ -1297,10 +1299,10 @@ function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'origina
 
   const groundSvg = ground.join('\n')
   if (album) {
-    const clip = A.plateClip(uid)
+    const clip = A.plateClip(uid, ALBUM_SHEET.plate)
     return {
       svg: [
-        A.paper(),
+        A.paper(ALBUM_SHEET),
         clip.def,
         `<g clip-path="${clip.url}">`,
         rect(0, 0, 1600, 900, P.CHART),
@@ -1423,17 +1425,18 @@ function straightLyric({ now, line: lyric, from = lyric.start, scope, uid, low =
  * first word, held a beat past its last, handed over inside the next line's
  * lead, and gone with its section. The same rule as every other album film.
  */
-function marginLyric({ now, score, section, uid }) {
+function marginLyric({ now, score, section, uid, intro }) {
   if (section.kind === 'intro') {
-    const intro = score.sections[0]
-    const on = easeOut(ramp(now, 1.0, 2.3))
-    const off = 1 - easeInOut(ramp(now, intro.to - 1.8, intro.to - 0.4))
-    return A.titleCard({ title: score.title, track: score.track ?? 5, opacity: Math.min(on, off) })
+    // The cover sheet's opening: the title big on black, dropped to the margin,
+    // the black drawn in to the plate and lifted off the chart — or, with
+    // `intro`, a porthole opening, the mark and a dive through its ring.
+    const first = score.sections[0]
+    return A.opening({ now, title: score.title, track: score.track ?? 5, out: [first.to - 1.8, first.to - 0.4], lift: [5.6, 7.2], uid, sheet: ALBUM_SHEET, intro })
   }
   // The album's one timing rule for the margin (lineSpan in album.mjs). The
   // oh-ohs have no words to set, and the margin stays empty for them.
   const ohs = new Set(score.sections.filter((x) => x.kind === 'ohs').map((x) => x.id))
-  const out = A.marginLyric({ now, score, uid: `${uid}-m`, skip: (line) => ohs.has(line.section) })
+  const out = A.marginLyric({ now, score, uid: `${uid}-m`, sheet: ALBUM_SHEET, skip: (line) => ohs.has(line.section) })
   return out
 }
 
@@ -1566,4 +1569,11 @@ export const CARTOGRAPHY = {
  * card (app/config/albumStyle.ts). /music-videos/andalusia runs it; the
  * original edition is kept for the still sheet on /music-videos/styles.
  */
-export const cartographyAlbumFrame = (o) => cartographyFrame({ ...o, edition: 'album' })
+export const cartographyAlbumFrame = (o) => cartographyFrame({ ...o, edition: 'album', intro: 'draw' })
+
+/*
+ * The hard porthole opening ('stamp', opening() in album.mjs), kept for
+ * Conman, Goodbye, Norma Jeane and New York; on Andalusia only for the review
+ * it was chosen in.
+ */
+export const cartographyStampFrame = (o) => cartographyFrame({ ...o, edition: 'album', intro: 'stamp' })

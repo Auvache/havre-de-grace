@@ -62,6 +62,7 @@ const root = resolve(here, '../..')
 const FILMS = {
   cartography: ['cartography.mjs', 'cartographyFrame'],
   'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
+  'open-stamp': ['cartography.mjs', 'cartographyStampFrame'],
   trailhead: ['trailhead.mjs', 'trailheadFrame'],
   contour: ['contour.mjs', 'contourFrame'],
   woodcut: ['woodcut.mjs', 'woodcutFrame'],

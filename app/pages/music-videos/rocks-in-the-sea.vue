@@ -220,7 +220,7 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card under the first things the sun printed —
+ * The poster frame: the title in the margin under the first things the sun printed —
  * the coat exposed to blue, the horizon, the sun and the sea laid on it — the
  * album's opening format, and what the film is at rest before anyone presses
  * play.
@@ -290,7 +290,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The sensitiser is brushed on in four wide strokes and exposes, slowly, from pale to blue. The horizon thread is laid, then the sun, then the sea a thread at a time, the coast and the sand. The album\'s title card underneath — 8/10, the title, the band in red.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in and the black lifts off the print. The sensitiser is brushed on in wide strokes and exposes, slowly, from pale to blue. The horizon thread is laid, then the sun, then the sea a thread at a time, the coast and the sand. The title and 8/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

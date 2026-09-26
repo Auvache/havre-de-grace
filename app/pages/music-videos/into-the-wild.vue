@@ -219,7 +219,7 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card with the sun up over the empty sea — the
+ * The poster frame: the title in the margin with the sun up over the empty sea — the
  * album's opening format, and what the film is at rest before anyone presses play.
  */
 const POSTER_AT = 11
@@ -288,7 +288,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'An empty sea at first light. The red sun rises out of the horizon under the album\'s title card — 1/10, the title, the band in red.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in, and the black lifts off an empty sea at first light. The red sun rises out of the horizon over the title and 1/10 in the margin.',
   },
   {
     id: 'verse-1',

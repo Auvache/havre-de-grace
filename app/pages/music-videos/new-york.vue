@@ -225,7 +225,7 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card under the first image — THE FORMULA
+ * The poster frame: the title in the margin under the first image — THE FORMULA
  * broadside, pulled and nearly finished, the departures listed — the album's
  * opening format, and what the film is at rest before anyone presses play.
  */
@@ -294,7 +294,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The broadside is pulled block by block on the beat: a brass rule, THE ONE SURE WAY TO MAKE IT, the yellow forme, THE FORMULA in wood type, the departures — Memphis, Nashville, Austin, L.A., Detroit, New York — and a row of lights along a shore. The red rule comes in along the foot of the wall and underlines it. The album\'s title card underneath: 6/10, the title, the band in red.',
+    note: 'The broadside is pulled block by block on the beat: a brass rule, THE ONE SURE WAY TO MAKE IT, the yellow forme, THE FORMULA in wood type, the departures — Memphis, Nashville, Austin, L.A., Detroit, New York — and a row of lights along a shore. The red rule comes in along the foot of the wall and underlines it. The album\'s opening over it: the title big on black, dropped to the margin as the white border comes in, then the title and 6/10 in the margin.',
   },
   {
     id: 'verse-1',

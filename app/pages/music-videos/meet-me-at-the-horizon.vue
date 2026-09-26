@@ -213,7 +213,7 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame: the title card under the first image — the bedroom
+ * The poster frame: the title in the margin under the first image — the bedroom
  * burnished out of the black round the bedside lamp, two pillows and one head,
  * the clock at 3:07 — the album's opening format, and what the film is at rest
  * before anyone presses play.
@@ -283,7 +283,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The plate is solid black, and the bedroom is burnished out of it round the bedside lamp: the window, the clock at 3:07, the bed with two pillows and one head on them. The album\'s title card underneath: 7/10, the title, the band in red.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in. The plate stays black, and the bedroom is burnished out of it round the bedside lamp: the window, the clock at 3:07, the bed with two pillows and one head on them. The title and 7/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

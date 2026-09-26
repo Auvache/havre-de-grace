@@ -6,25 +6,22 @@
     :style="{ '--exit-duration': `${OVERLAY_FADE_OUT_MS}ms` }"
     aria-hidden="true"
   >
-    <BrandMark
-      variant="lockup"
-      decorative
-      class="splash-logo"
-      :class="{ 'is-revealed': isLogoVisible }"
-      :style="{ '--reveal-duration': `${LOGO_REVEAL_MS}ms` }"
-    />
+    <!-- eslint-disable-next-line vue/no-v-html -- the markup is ours: shared/video/album.mjs draws the lockup from constants -->
+    <svg class="splash-logo" viewBox="-34 -34 918 619.07" v-html="mark" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { MARK_DRAW, markDrawnAt } from '~~/shared/video/album.mjs'
+
 const SESSION_KEY = 'hdg-splash-seen'
-// Half a second of empty ink before anything happens, then the mark is
-// uncovered from the bottom edge up — the waterline entrance from /logo. The
-// duration is handed to the stylesheet as a custom property rather than
-// written twice, so the hold below cannot drift out of step with the reveal.
+// Half a second of empty ink before anything happens, then the mark is drawn
+// on: the anchor traced in line and filled, the letters coming up beneath it —
+// the same drawing, by the same function, as the opening of the Andalusia
+// film. Then half a second on the finished mark before the overlay fades.
 const BLANK_DELAY_MS = 500
-const LOGO_REVEAL_MS = 1100
-const LOGO_HOLD_AFTER_IN_MS = 750
+const LOGO_DRAW_MS = MARK_DRAW.done * 1000
+const LOGO_HOLD_AFTER_IN_MS = 500
 const OVERLAY_FADE_OUT_MS = 1250
 
 const splashSeen = useCookie<string | null>(SESSION_KEY, {
@@ -34,8 +31,22 @@ const splashSeen = useCookie<string | null>(SESSION_KEY, {
 
 const isVisible = ref(splashSeen.value !== '1')
 const isExiting = ref(false)
-const isLogoVisible = ref(false)
+const drawnFor = ref(0)
+const mark = computed(() => markDrawnAt(drawnFor.value, 'splash'))
 const timers: ReturnType<typeof setTimeout>[] = []
+let frame = 0
+
+/* Seconds into the drawing, from the clock, one frame at a time until it is done. */
+const draw = () => {
+  const start = performance.now()
+  const step = (now: number) => {
+    drawnFor.value = Math.min((now - start) / 1000, MARK_DRAW.done)
+    if (drawnFor.value < MARK_DRAW.done) {
+      frame = requestAnimationFrame(step)
+    }
+  }
+  frame = requestAnimationFrame(step)
+}
 
 const clearTimers = () => {
   while (timers.length > 0) {
@@ -44,6 +55,7 @@ const clearTimers = () => {
       clearTimeout(timer)
     }
   }
+  cancelAnimationFrame(frame)
 }
 
 onMounted(() => {
@@ -60,22 +72,18 @@ onMounted(() => {
 
   splashSeen.value = '1'
 
-  timers.push(
-    setTimeout(() => {
-      isLogoVisible.value = true
-    }, BLANK_DELAY_MS),
-  )
+  timers.push(setTimeout(draw, BLANK_DELAY_MS))
 
   timers.push(
     setTimeout(() => {
       isExiting.value = true
-    }, BLANK_DELAY_MS + LOGO_REVEAL_MS + LOGO_HOLD_AFTER_IN_MS),
+    }, BLANK_DELAY_MS + LOGO_DRAW_MS + LOGO_HOLD_AFTER_IN_MS),
   )
 
   timers.push(
     setTimeout(() => {
       isVisible.value = false
-    }, BLANK_DELAY_MS + LOGO_REVEAL_MS + LOGO_HOLD_AFTER_IN_MS + OVERLAY_FADE_OUT_MS),
+    }, BLANK_DELAY_MS + LOGO_DRAW_MS + LOGO_HOLD_AFTER_IN_MS + OVERLAY_FADE_OUT_MS),
   )
 })
 
@@ -112,18 +120,6 @@ onBeforeUnmount(() => {
   max-width: min(80vw, 24rem);
   height: auto;
   color: #f4f6f7;
-  /* A top inset of 100% collapses the box onto its own bottom edge, so easing
-     it back to zero uncovers the mark from the waterline up. */
-  clip-path: inset(100% 0 0 0);
-}
-
-.splash-logo.is-revealed {
-  animation: splash-waterline var(--reveal-duration) var(--ease-standard) both;
-}
-
-@keyframes splash-waterline {
-  from { clip-path: inset(100% 0 0 0); }
-  to { clip-path: inset(0 0 0 0); }
 }
 
 </style>

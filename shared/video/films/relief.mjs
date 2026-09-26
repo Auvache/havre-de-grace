@@ -55,7 +55,7 @@ import { motifBody } from '../motifs.mjs'
 import { sectionAt, lineAt, cutIn } from '../score.mjs'
 import { RUN, POSES, joints, strokes } from '../figure.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, INK, RED, SECOND_INK, SHEET, paper, plateClip, marginLyric, titleCard, land, easeCamera } from '../album.mjs'
+import { PAPER, INK, RED, SECOND_INK, COVER_SHEET, paper, plateClip, marginLyric, opening, land, easeCamera } from '../album.mjs'
 
 const SLATE = SECOND_INK['into-the-wild']
 
@@ -66,9 +66,19 @@ export const RELIEF = {
   palette: { PAPER, INK, RED, SLATE },
 }
 
+/*
+ * The film is on the album's cover sheet (album.mjs): a plate 1532 × 776, the
+ * lyric on one row under it. The world was drawn for the old plate, 666 tall
+ * from y 34, and is set down the middle of the taller one: translated by DY,
+ * so the horizon keeps roughly its place in the frame, and TOP and BOTTOM are
+ * where the plate's edges fall in world units. Everything that ran to the
+ * plate's foot runs to BOTTOM; the sky reaches up to TOP.
+ */
+const SHEET = COVER_SHEET
 const PL = SHEET.plate
-const TOP = PL.y
-const BOTTOM = PL.y + PL.h
+const DY = (PL.h - 666) / 2
+const TOP = PL.y - DY
+const BOTTOM = PL.y + PL.h - DY
 
 /* ── Layers: how fast each moves against the camera ─────────────────── */
 const FAR = 0.22
@@ -230,7 +240,7 @@ const STAGE_TOP = 372
 const SEA_TOP = 440
 /** How far the waterline runs out along the foot of the plate: the beach. */
 const BEACH = 200
-const waterline = (y) => W.shore - 40 + ((y - SEA_TOP) / (710 - SEA_TOP)) * (BEACH + 40)
+const waterline = (y) => W.shore - 40 + ((y - SEA_TOP) / (BOTTOM + 10 - SEA_TOP)) * (BEACH + 40)
 const BAND_TOP = (x) => (x < W.shore - 320 ? 402 : x < W.shore + 200 ? lerp(402, SEA_TOP + 4, clamp01((x - W.shore + 320) / 280)) : x < 2040 ? lerp(560, 444, clamp01((x - 1840) / 200)) : x < 2950 ? 444 : x > 3350 ? 402 : lerp(444, 402, (x - 2950) / 400))
 const BAND_BOT = (x) => (x < W.shore + 200 || x >= 2950 ? 596 : 580)
 
@@ -250,7 +260,7 @@ function tilesIn(a, b) {
 
 /* ── The harbour: sea, headland, lighthouse — built once ──────────────── */
 const HARBOUR = (() => {
-  const rockTop = [[W.rockFrom, 700], [W.rockFrom + 40, 470], [1260, 420], [1380, 396], [1450, 386], [1520, 388], [1640, 400], [1760, 430], [1860, 470], [1960, 540], [2010, 700]]
+  const rockTop = [[W.rockFrom, BOTTOM], [W.rockFrom + 40, 470], [1260, 420], [1380, 396], [1450, 386], [1520, 388], [1640, 400], [1760, 430], [1860, 470], [1960, 540], [2010, BOTTOM]]
   const rock = rough(rockTop, 4, 21, 22)
   const rim = 'M' + rockTop.slice(1, -1).map(([x, y]) => pt(x, y - 3)).join('L')
   const rand = rng(24)
@@ -266,11 +276,11 @@ const HARBOUR = (() => {
   const lantern = `M${pt(lx - 20, 214)}H${I(lx + 20)}V248H${I(lx - 20)}Z`
   const roof = `M${pt(lx - 28, 216)}L${pt(lx, 186)}L${pt(lx + 28, 216)}Z`
   return {
-    sea: fillD(rough([[W.shore - 40, SEA_TOP], [2060, SEA_TOP - 4], [2060, 710], [W.shore + BEACH, 710]], 3, 22, 40), SLATE),
+    sea: fillD(rough([[W.shore - 40, SEA_TOP], [2060, SEA_TOP - 4], [2060, BOTTOM + 10], [W.shore + BEACH, BOTTOM + 10]], 3, 22, 40), SLATE),
     rock: fillD(rock, INK) + penD(rim, PAPER, 4) + fillD(face, PAPER, ' opacity="0.8"'),
     lighthouse: fillD(tower, PAPER) + fillD(bands + roof, INK) + fillD(lantern, PAPER),
     scallopsA: scallopPath(waterline, 1180, 470, 530, 42),
-    scallopsB: scallopPath(waterline, 1200, 556, 700, 43, { gap: 30 }),
+    scallopsB: scallopPath(waterline, 1200, 556, BOTTOM, 43, { gap: 30 }),
   }
 })()
 
@@ -547,10 +557,10 @@ function buildWorld(plan) {
   const world = {}
 
   /* The sea of the first verse: calm rows, and the rows "water" cuts. */
-  world.sea = fillD(rough([[P.seaFrom, SEA_TOP], [P.platEnd + 60, SEA_TOP - 3], [P.platEnd + 60, 710], [P.seaFrom, 710]], 3, 81, 40), SLATE)
+  world.sea = fillD(rough([[P.seaFrom, SEA_TOP], [P.platEnd + 60, SEA_TOP - 3], [P.platEnd + 60, BOTTOM + 10], [P.seaFrom, BOTTOM + 10]], 3, 81, 40), SLATE)
     + scallopPath(P.seaFrom, P.platEnd, 470, 520, 82, { gap: 44, width: 60, rise: 10 }).map((d) => penD(d, PAPER, 2.4, ' opacity="0.7"')).join('')
   const cutFrom = plan.camRaw(T.water) - 880
-  world.waves = scallopPath(cutFrom, P.land + 200, 548, 700, 83, { gap: 28 })
+  world.waves = scallopPath(cutFrom, P.land + 200, 548, BOTTOM, 83, { gap: 28 })
   world.waveFrom = cutFrom
 
   /* Gems glinting in the water, one on each word of "splendorous things the gods hid". */
@@ -558,12 +568,12 @@ function buildWorld(plan) {
   const rand = rng(84)
   for (let i = 0; i < 18; i++) {
     const w = WORDS.splendid[i % WORDS.splendid.length]
-    world.glints.push({ x: plan.camRaw(w.t) - 650 + rand() * 1250, y: 468 + rand() * 220, s: 9 + rand() * 11, t: w.t + (i >> 3) * 0.06, ph: rand() * 6 })
+    world.glints.push({ x: plan.camRaw(w.t) - 650 + rand() * 1250, y: 468 + rand() * (BOTTOM - 480), s: 9 + rand() * 11, t: w.t + (i >> 3) * 0.06, ph: rand() * 6 })
   }
 
   /* Strata in the cliff: rows cut along, left to right, on "Ebony" and "ivory". */
   world.strata = []
-  for (let y = 452, row = 0; y < 700; y += 22, row++) {
+  for (let y = 452, row = 0; y < BOTTOM; y += 22, row++) {
     const r2 = rng(90 + row)
     let d = `M${pt(P.land + 30 + r2() * 40, y)}`
     for (let x = P.land + 90; x < P.platEnd - 40; x += 120) d += `Q${pt(x - 60, y + (r2() - 0.5) * 10)} ${pt(x, y + (r2() - 0.5) * 6)}`
@@ -688,7 +698,7 @@ function skyTile(i) {
     const rand = rng(1000 + i)
     let d = ''
     const x0 = i * TILE
-    for (let y = 70; y < 360; y += 26 + rand() * 10) {
+    for (let y = TOP + 36; y < 360; y += 26 + rand() * 10) {
       let x = x0 + rand() * 60
       while (x < x0 + TILE) {
         const len = 50 + rand() * 160
@@ -697,7 +707,7 @@ function skyTile(i) {
       }
     }
     const stars = []
-    for (let k = 0; k < 30; k++) stars.push({ x: x0 + rand() * TILE, y: 60 + rand() * 300, s: 3 + rand() * 5, h: rand() })
+    for (let k = 0; k < 30; k++) stars.push({ x: x0 + rand() * TILE, y: TOP + 26 + rand() * (334 - TOP), s: 3 + rand() * 5, h: rand() })
     return { svg: fillD(d, PAPER, ' opacity="0.85"'), stars }
   })
 }
@@ -1054,6 +1064,7 @@ export function reliefFrame({ time, score, lockup = '', uid = 'relief' }) {
   /* ── Sky, on screen: the red sun and its rays, the first moon, the compasses, the crown, birds ── */
   const sky = []
   const sun = sunAt(plan, now)
+  // A sun set below 700 is behind the land; not drawing it keeps a red fringe off the plate's foot.
   if (sun.y < 700) {
     // "The gods hid about": rays on every word; then each chorus's words, the way the last chorus does it.
     let rays = ''
@@ -1079,7 +1090,7 @@ export function reliefFrame({ time, score, lockup = '', uid = 'relief' }) {
     sky.push(circle(sun.x, sun.y, 88, { fill: RED }) + fillD(bands, INK, ' opacity="0.55"'))
   }
   // The first night's moon: up on "sleeping", down at dawn.
-  const moon1 = lerp(700, 196, easeOut(ramp(now, T.sleeping, T.sleeping + 3.2))) + 520 * easeInOut(ramp(now, T.so1, T.so1 + 2.4))
+  const moon1 = lerp(BOTTOM, 196, easeOut(ramp(now, T.sleeping, T.sleeping + 3.2))) + 520 * easeInOut(ramp(now, T.so1, T.so1 + 2.4))
   if (now > T.sleeping && moon1 < 690) {
     sky.push(circle(560, moon1, 56, { fill: PAPER }))
     sky.push(fillD(lens(540, moon1 - 14, 556, moon1 - 7, 3) + lens(570, moon1 + 12, 584, moon1 + 20, 2.4), INK))
@@ -1401,22 +1412,21 @@ export function reliefFrame({ time, score, lockup = '', uid = 'relief' }) {
   }
 
   /* ── The margin ───────────────────────────────────────────────────── */
-  let margin = ''
-  if (section.kind === 'intro') {
-    const o = Math.min(easeOut(ramp(now, 0.6, 1.8)), 1 - easeInOut(ramp(now, section.to - 1.0, section.to - 0.2)))
-    margin = titleCard({ title: score.title, track: 1, opacity: o })
-  }
-  // The album's one timing rule for the margin (lineSpan in album.mjs).
-  else margin = marginLyric({ now, score, uid })
+  // The cover sheet's opening over the intro (drawn last, over everything);
+  // after it, the album's one timing rule for the margin (lineSpan in album.mjs).
+  const margin = section.kind === 'intro'
+    ? opening({ now, title: score.title, track: 1, out: [section.to - 1.0, section.to - 0.2], lift: [5.6, 7.2], uid, sheet: SHEET })
+    : marginLyric({ now, score, uid, sheet: SHEET })
 
-  const clip = plateClip(uid)
+  const clip = plateClip(uid, PL)
   const nearT = `translate(${shift(NEAR)} 0)`
   return {
     svg: [
-      paper(),
+      paper(SHEET),
       clip.def,
       `<g clip-path="${clip.url}">`,
       `<rect x="${PL.x}" y="${PL.y}" width="${PL.w}" height="${PL.h}" fill="${INK}"/>`,
+      `<g transform="translate(0 ${r(DY, 2)})">`,
       flood,
       `<g transform="translate(${shift(FAR)} 0)">${far.join('')}</g>`,
       sky.join(''),
@@ -1424,6 +1434,7 @@ export function reliefFrame({ time, score, lockup = '', uid = 'relief' }) {
       `<g transform="${nearT}">${bandL.join('')}${sea1.join('')}</g>`,
       `<g transform="${nearT}${riseNear > 0.05 ? ` translate(0 ${r(riseNear, 1)})` : ''}">${near.join('')}</g>`,
       overlay.join(''),
+      '</g>',
       '</g>',
       margin,
     ].join('\n'),

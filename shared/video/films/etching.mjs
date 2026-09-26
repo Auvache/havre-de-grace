@@ -88,7 +88,7 @@
 import { t as text, r, clamp01, easeOut, easeInOut, ramp, lerp } from '../kit.mjs'
 import { sectionAt, lineAt } from '../score.mjs'
 import { endCard } from '../ending.mjs'
-import { PAPER, INK, RED, SECOND_INK, SHEET, paper, plateClip, marginLyric, titleCard, land, easeCamera } from '../album.mjs'
+import { PAPER, INK, RED, SECOND_INK, COVER_SHEET, paper, plateClip, marginLyric, opening, land, easeCamera } from '../album.mjs'
 
 export const BLUE = SECOND_INK.ivory
 /** Plate tone: the film of ink an etcher leaves wiped across the plate. */
@@ -102,9 +102,28 @@ export const ETCHING = {
   palette: { PAPER, INK, RED, BLUE, PLATE_TONE },
 }
 
+/*
+ * The plate on the album's cover sheet (album.mjs): 1532 × 776, the cover's
+ * white round it and the lyric on one row in a thin margin.
+ */
+const SHEET = COVER_SHEET
 const PL = SHEET.plate
-const TOP = PL.y
-const BOTTOM = PL.y + PL.h
+/*
+ * The world was composed for the old sheet's plate, 1532 × 666, and every
+ * figure in it is placed in those units: horizons, grounds, her feet, the
+ * bottom of the plate at 700. On the taller plate it is drawn a little closer
+ * (WORLD_SCALE) with that bottom kept on the plate's bottom, so everything
+ * standing on the ground still stands on it, and the rest of the height is
+ * more sky: TOP is the top of the plate in world units, about 53 above the old
+ * one, and every field that ran to the top of the plate runs to it. At 1.08
+ * about 57 of each side goes; the full 1.165 that would fill the height with
+ * no new sky cropped the bird off fig. 6 and the case in fig. 19.
+ */
+const WORLD_SCALE = 1.08
+const BOTTOM = 700
+const TOP = BOTTOM - PL.h / WORLD_SCALE
+/** The old plate's top, for the few things placed from it. */
+const OLD_TOP = 34
 /** The drift, units a second. */
 const DRIFT = 24
 
@@ -435,7 +454,7 @@ function shoreScene(ctx, now) {
   out += drawn(`M${P(cx - 950, H)}H${r(cx + 830)}`, 1.6, easeInOut(ramp(now, 2.2, 6.4)))
   // The far sky, laid in the intro.
   const high = ctx.P.shore.from
-  out += `${sweepClip(`${ctx.uid}-sky0`, high, lerp(high, cx + 1000, easeInOut(ramp(now, 3.6, 8.8))), 5, TOP, TOP + 200)}${pen(scape.sky[1], 1.05, { extra: ` clip-path="url(#${ctx.uid}-sky0)"` })}`
+  out += `${sweepClip(`${ctx.uid}-sky0`, high, lerp(high, cx + 1000, easeInOut(ramp(now, 3.6, 8.8))), 5, TOP, OLD_TOP + 200)}${pen(scape.sky[1], 1.05, { extra: ` clip-path="url(#${ctx.uid}-sky0)"` })}`
   // Verse 1: everything else sweeps on, left to right, and leaves her.
   const sw = smooth(ramp(now, T.that - 0.6, T.sure + 0.3))
   const edge = lerp(cx - 1000, cx + 1000, sw)
@@ -1766,7 +1785,8 @@ function snowfall(ctx, now) {
   for (let i = 0; i < N; i++) {
     if (hash(i, 1, 51) > k) continue
     const sp = 40 + hash(i, 2, 51) * 50
-    const y = TOP + (((hash(i, 3, 51) * 660 + now * sp) % 680) + 680) % 680
+    const span = BOTTOM - TOP + 14
+    const y = TOP + (((hash(i, 3, 51) * (span - 20) + now * sp) % span) + span) % span
     const x = ctx.view + ((hash(i, 4, 51) * 1700 - now * 6 + Math.sin(now * 0.8 + i) * 18) % 1700 + 1700) % 1700 - 40
     if (x < from - 200 || x > to + 200) continue
     d += circ(x, y, 1.6 + hash(i, 5, 51) * 2.4)
@@ -2207,7 +2227,7 @@ export function etchingFrame({ time, score, lockup = '', uid = 'iv' }) {
   const wipes = memo('wipes', () => {
     const lines = []
     for (let i = 0; i < 40; i++) {
-      const y = TOP + hash(i, 1, 61) * PL.h
+      const y = PL.y + hash(i, 1, 61) * PL.h
       const x = hash(i, 2, 61) * 3200
       lines.push([[x, y], [x + 1400 + hash(i, 3, 61) * 1800, y + (hash(i, 4, 61) - 0.5) * 40]])
     }
@@ -2215,23 +2235,23 @@ export function etchingFrame({ time, score, lockup = '', uid = 'iv' }) {
   })
   const wx = -(v % 3200)
   const tone = `<rect x="${PL.x}" y="${PL.y}" width="${PL.w}" height="${PL.h}" fill="${PLATE_TONE}"/><g transform="translate(${r(wx, 1)} 0)"><path d="${wipes}" fill="none" stroke="${WIPE}" stroke-width="14" stroke-linecap="round" opacity="0.28"/><g transform="translate(3200 0)"><path d="${wipes}" fill="none" stroke="${WIPE}" stroke-width="14" stroke-linecap="round" opacity="0.28"/></g></g>`
-  const rules = easeInOut(ramp(now, 0.3, 2.4))
+  // Scratched in as the opening's black lifts off the plate (OPEN_LIFT).
+  const rules = easeInOut(ramp(now, 5.8, 7.8))
   const border = drawn(rectD(PL.x + 22, PL.y + 22, PL.w - 44, PL.h - 44), 1.2, rules) + drawn(rectD(PL.x + 28, PL.y + 28, PL.w - 56, PL.h - 56), 0.6, rules)
-  const plateTitle = text({ x: 800, y: PL.y + 62, size: 17, text: 'Plate IV', fill: INK, anchor: 'middle', weight: 500, tracking: 8, opacity: 0.75 * easeOut(ramp(now, 1.0, 2.2)) })
+  const plateTitle = text({ x: 800, y: PL.y + 62, size: 17, text: 'Plate IV', fill: INK, anchor: 'middle', weight: 500, tracking: 8, opacity: 0.75 * easeOut(ramp(now, 6.6, 7.6)) })
 
   /* ── The margin ───────────────────────────────────────────────────────── */
-  let margin = ''
-  if (section.kind === 'intro') {
-    const o = Math.min(easeOut(ramp(now, 0.6, 1.8)), 1 - easeInOut(ramp(now, section.to - 1.0, section.to - 0.2)))
-    margin = titleCard({ title: score.title, track: 4, opacity: o })
-  }
-  else margin = marginLyric({ now, score, uid })
+  // The cover sheet's opening: the title big on black, dropped to the margin,
+  // the black drawn in to the plate and lifted off the shore as it is etched.
+  const margin = section.kind === 'intro'
+    ? opening({ now, title: score.title, track: 4, out: [section.to - 1.0, section.to - 0.2], lift: OPEN_LIFT, uid, sheet: SHEET })
+    : marginLyric({ now, score, uid, sheet: SHEET })
 
-  const clip = plateClip(uid)
-  const world = `translate(${r(-v, 1)} 0)`
+  const clip = plateClip(uid, PL)
+  const world = `translate(800 ${PL.y}) scale(${WORLD_SCALE}) translate(${r(-800 - v, 1)} ${r(-TOP, 2)})`
   return {
     svg: [
-      paper(),
+      paper(SHEET),
       `<defs>${clip.def}${washDefs(uid)}</defs>`,
       `<g clip-path="${clip.url}">`,
       tone,
@@ -2246,6 +2266,9 @@ export function etchingFrame({ time, score, lockup = '', uid = 'iv' }) {
     label: active?.text ?? section.label,
   }
 }
+
+/* When the opening's black lifts off the plate. */
+const OPEN_LIFT = [5.6, 7.2]
 
 /* For tools: the camera, so a script can measure it for smoothness. */
 export const etchingCamera = (score, now) => planFor(score, 'tool').cam(now)
