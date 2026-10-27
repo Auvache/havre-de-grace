@@ -47,7 +47,9 @@ Insane, Okay, 27 Oct 2026 (5 clips); see "The first inbox run" below.
      --start 18.82 --end 59.53 --fade-out 0.3 --top 760 --scrim \
      --out "$HOME/stefan/videos/ready/<Song> - verse 1.mp4"
    ```
-   About 30 s per clip.
+   About 30 s per clip. In a shell loop, give `node` `</dev/null`, or it
+   swallows the rest of a heredoc-fed `while read` and only the first clips
+   get made.
 4. **Check stills** of every clip (the first and last frames and 6 in between,
    tiled): the caption under the chin and not on the face, readable over
    what's behind it, the clip ends with no caption on screen, and the words
@@ -84,6 +86,16 @@ Then:
   inherit the fragment's time (`align` folds unlyric'd words into the next
   word; set its start by hand from words.json).
 
+- **A live venue take (a wide shot from the audience):** when Whisper
+  mishears whole lines (Hey, Player: "Hey babe, what you doing?" for "Hey,
+  Player. Whatcha doing?"), `align` can squash a line into a fraction of a
+  second or start it in the gap before. Read `align`'s output for any line
+  shorter than about a second, match each lyric line to the heard phrase it
+  replaces in words.json, set those spans by hand in `timed-whisper.json`,
+  then run `refine` again. If a word ends in a gap, `refine` can move it a
+  whole bar later ("tone" went from 85.8 to 88.3), so end it inside the
+  sung note. clean-warm was fine on orange stage light.
+
 Sources go to `originals/` when their Shorts are in `ready/`.
 
 ### Captions: the Hairline style (chosen 27 Oct 2026)
@@ -109,6 +121,7 @@ is for a busy or light background:
 | Little Brother (navy sweater) | 960 (880 touched the chin when the head dipped) | no |
 | Andalusia (navy sweater) | 860 | no |
 | Little Red Moon (pale plaid, bookshelf behind) | 820 (600 sat on the bookshelf and the face) | yes |
+| Hey, Player (live, wide shot, orange wood wall) | 1180, on the dark legs and stool (1250 put the second row on an audience head) | yes |
 
 - **Whole short takes (35–45 s):** one clip each, starting where the voice
   starts. Trim a long outro to a second or so after the last sung note (Little
