@@ -5,7 +5,8 @@
  *   node tools/captions/short.mjs --video take.MOV --timed work/timed.json --start 18.82 --end 59.53 \
  *     --out "ready/Insane, Okay - verse 1.mp4" [--fade-out 0.3] [--top 860] [--scrim] [--look clean-warm]
  *
- * `--timed` is what `lyrics.py align` (then `refine`) writes; each lyrics.txt line is one caption. `--start` and
+ * `--timed` is what `lyrics.py align` (then `refine`) writes; each lyrics.txt line is one caption. Leave it
+ * out for a video whose captions are already burned in: it then gets the cut, look and audio only. `--start` and
  * `--end` are seconds in the take, snapped to the 30 fps frame grid like cut.py; pick them with
  * onsets.py (on a strum a bar or so before the voice, and just before the next strum).
  *
@@ -65,9 +66,11 @@ const { values: opt } = parseArgs({
     'fade-out': { type: 'string', default: '0.3' },
     top: { type: 'string', default: '860' },
     scrim: { type: 'boolean', default: false },
+    reframe: { type: 'string' }, // crop | blur, for a take that isn't 9:16
+    'crop-x': { type: 'string', default: '0.5' }, // where the 9:16 window sits across a wider frame, 0 left to 1 right
   },
 })
-for (const k of ['video', 'timed', 'out', 'start', 'end']) if (!opt[k]) throw new Error(`--${k} is required`)
+for (const k of ['video', 'out', 'start', 'end']) if (!opt[k]) throw new Error(`--${k} is required`)
 if (!(opt.look in LOOKS)) throw new Error(`--look must be one of ${Object.keys(LOOKS).join(', ')}`)
 
 const FPS = 30
@@ -83,7 +86,7 @@ const fadeOut = Number(opt['fade-out'])
 
 // the lines that start inside the clip, in clip time
 const lines = []
-for (const w of JSON.parse(readFileSync(opt.timed, 'utf8'))) {
+for (const w of opt.timed ? JSON.parse(readFileSync(opt.timed, 'utf8')) : []) {
   ;(lines[w.line] ??= []).push({ text: w.w.replace(/[^\p{L}\p{N}'’-]/gu, '').toUpperCase(), s: w.s - start, e: w.e - start })
 }
 const shown = lines.filter((l) => l && l[0].s >= -0.05 && l[0].s < dur)
@@ -104,6 +107,7 @@ for (const [i, l] of shown.entries()) {
 for (const l of shown) console.log(`${l.in.toFixed(2)}-${l.out.toFixed(2)}  ${l.map((w) => w.text).join(' ')}`)
 
 const tmp = mkdtempSync(join(tmpdir(), 'short-'))
+if (shown.length) {
 const browser = await chromium.launch({ channel: 'chrome', args: ['--hide-scrollbars'] })
 const page = await browser.newPage({ viewport: { width: W, height: H } })
 await page.setContent(`<!doctype html><html><head>
@@ -146,6 +150,7 @@ for (let f = 0; f < Math.round(dur * FPS); f++) {
   prevKey = key, prevPath = path
 }
 await browser.close()
+}
 
 // two-pass loudness: measure the EQ'd clip, then normalise it linearly to -14 LUFS
 const trim = ['-ss', start.toFixed(6), '-t', dur.toFixed(6), '-i', opt.video]
@@ -154,11 +159,24 @@ const m = JSON.parse(probe.stderr.slice(probe.stderr.lastIndexOf('{'), probe.std
 const norm = `loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}`
 const af = `${EQ},${norm},aresample=48000,afade=t=in:d=0.05,afade=t=out:st=${(dur - fadeOut).toFixed(3)}:d=${fadeOut}`
 
-// the take is full-range bt709 HEVC; format=yuv420p after the overlay converts to the limited range players expect
+// to a 1080 x 1920 frame: a 9:16 take is scaled (the phone's own 1080p, or a 720p download); anything
+// else needs --reframe: crop takes a 9:16 window (at --crop-x), blur keeps the whole frame across the
+// width and fills above and below with a blurred, darkened copy of it
+const vs = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height:stream_side_data=rotation', '-of', 'json', opt.video], { encoding: 'utf8' })).streams[0]
+let [iw, ih] = [vs.width, vs.height]
+if (Math.abs(vs.side_data_list?.find((d) => 'rotation' in d)?.rotation ?? 0) === 90) [iw, ih] = [ih, iw] // ffmpeg rotates on decode
+const vertical = Math.abs(iw / ih - 9 / 16) < 0.02
+if (!vertical && !['crop', 'blur'].includes(opt.reframe)) throw new Error(`the take is ${iw}x${ih}, not 9:16: pass --reframe crop or --reframe blur`)
+const frame = vertical ? `scale=${W}:${H}:flags=lanczos`
+  : opt.reframe === 'crop' ? `crop=ih*9/16:ih:(iw-ih*9/16)*${Number(opt['crop-x'])}:0,scale=${W}:${H}:flags=lanczos`
+  : `split[ra][rb];[ra]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},gblur=sigma=40,eq=brightness=-0.12[rbg];[rb]scale=${W}:-2:flags=lanczos[rfg];[rbg][rfg]overlay=(W-w)/2:(H-h)/2`
+const video = `[0:v]${frame}[f];[f]${LOOKS[opt.look]}` + (shown.length ? '[g];[g][1:v]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v]' : ',format=yuv420p[v]')
+
+// phone takes are full-range bt709; format=yuv420p converts to the limited range players expect
 execFileSync('ffmpeg', [
   '-v', 'error', '-stats', '-y', ...trim,
-  '-framerate', String(FPS), '-i', join(tmp, '%05d.png'),
-  '-filter_complex', `[0:v]${LOOKS[opt.look]}[g];[g][1:v]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v];[0:a]${af}[a]`,
+  ...(shown.length ? ['-framerate', String(FPS), '-i', join(tmp, '%05d.png')] : []),
+  '-filter_complex', `${video};[0:a]${af}[a]`,
   '-map', '[v]', '-map', '[a]',
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-profile:v', 'high',
   '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
@@ -166,4 +184,4 @@ execFileSync('ffmpeg', [
   opt.out,
 ], { stdio: 'inherit' })
 rmSync(tmp, { recursive: true, force: true })
-console.log(`wrote ${opt.out}  (${start.toFixed(3)}-${end.toFixed(3)}, ${dur.toFixed(2)} s, look ${opt.look}, ${m.input_i} -> -14 LUFS)`)
+console.log(`wrote ${opt.out}  (${start.toFixed(3)}-${end.toFixed(3)}, ${dur.toFixed(2)} s, ${iw}x${ih}${vertical ? '' : ` ${opt.reframe}`}, look ${opt.look}, ${shown.length ? `${shown.length} caption lines` : 'no captions'}, ${m.input_i} -> -14 LUFS)`)

@@ -55,9 +55,36 @@ Insane, Okay, 27 Oct 2026 (5 clips); see "The first inbox run" below.
 5. Move the raw take to `originals/` and tell the user what each clip covers,
    its look, and what was left out.
 
-If a take arrives with captions already burned in (check with
-`caption_band.py`), cut it with `cut.py` instead and ask about the look and
-audio. short.mjs would draw a second set of captions over the first.
+### What arrives in the inbox, and what each gets (settled 27 Oct 2026)
+
+Look at every file first: duration, size, a frame strip (8 frames across it),
+and `md5` to catch exact duplicates (trash a duplicate when the user agrees).
+Then:
+
+- **A raw take with singing, no captions:** the full process above.
+- **Burned-in captions (an edited, already-posted Short, often a 720p
+  re-download):** old captions **can't be removed cleanly**. Painting over
+  them smears the shirt in every frame. So ask whether the original phone
+  file still exists (it gets the full process). If not, run `short.mjs`
+  **without `--timed`**: look, audio and 1080×1920 only, old captions kept.
+  Name it `<Song> - snippet` (the song is in the old captions or the title).
+- **Promo end cards with a date ("OUT JULY 17"):** trim them off. End the
+  clip a frame before the card (find it by the jump in white pixels where
+  the card sits), with `--fade-out 0.5`. If what's left is under about 20 s,
+  say so.
+- **Guitar only (Whisper hears nothing, or invents "Thank you for
+  watching"):** no captions, look and audio only. Name it `Riff - <title>`.
+- **Not 9:16 (e.g. the square Norma Jeane live video):** `--reframe crop`
+  (the user's choice), with `--crop-x` set so the performer stays in the
+  window as they move (Norma Jeane: about 0.3). `--reframe blur` keeps the
+  whole frame, with a blurred fill.
+- **A sung take on the site with a half line at the start** (Scarecrow
+  opened on "…something more"): start where the take starts, leave the
+  fragment uncaptioned, and check that the first caption word doesn't
+  inherit the fragment's time (`align` folds unlyric'd words into the next
+  word; set its start by hand from words.json).
+
+Sources go to `originals/` when their Shorts are in `ready/`.
 
 ### Captions: the Hairline style (chosen 27 Oct 2026)
 
