@@ -30,7 +30,9 @@ Insane, Okay, 27 Oct 2026 (5 clips); see "The first inbox run" below.
    on Insane, Okay, and the user saw the text come in "seconds before the
    words". `refine` separates the voice with Demucs and moves those starts
    to where the singing comes in. Whisper run on the separated voice has
-   the same bias, so don't use that instead. If a move looks doubtful, a
+   the same timing bias, so don't use it for timing. It's much better for
+   the words, though: see "Checking the words against what's sung" below.
+   If a move looks doubtful, a
    spectrogram of `$W/vocals.wav` (ffmpeg `showspectrumpic`) shows the
    consonant and vowel of the word.
 2. **Pick 4–6 clips** from a ~3 min take (fewer from a short one): every
@@ -97,6 +99,55 @@ Then:
   sung note. clean-warm was fine on orange stage light.
 
 Sources go to `originals/` when their Shorts are in `ready/`.
+
+### Checking the words against what's sung (live takes especially)
+
+**The written lyrics aren't always what's sung.** This applies to the
+user's lyrics and to the site's. Live, the user changes lines. On Hey,
+Player the final verse they sent read "I'm happy you're happy, *but* just
+let me be / *If you're doing well*, you can always tell me / But do me a
+favor, don't lie to yourself". They sang "I'm happy you're happy, just let
+me be / *When things look up*, you can always tell me / But do me a favor
+*and* don't lie to yourself". The user spotted it in the finished clip
+(27 Oct 2026). Catch it before rendering:
+
+1. **Transcribe each sung section again from the vocal stem.** That's
+   `$W/vocals.wav`, which `refine` made. The full mix heard "I'm happy to
+   have you just look at me… always tell me to be a better man". The stem
+   heard the real line structure at 0.97–1.0 confidence on most words.
+   ```sh
+   ffmpeg -v error -y -ss 126 -t 30 -i $W/vocals.wav -ac 1 -ar 16000 $W/sec.wav
+   $SCRATCH/venv/bin/python -I - <<'EOF'
+   from faster_whisper import WhisperModel
+   m = WhisperModel("large-v3", device="cpu", compute_type="int8")
+   segs, _ = m.transcribe("<W>/sec.wav", language="en", word_timestamps=True, beam_size=5,
+                          condition_on_previous_text=False)
+   for s in segs:
+       print(" ".join(f"{w.word.strip()}@{126 + w.start:.2f}({w.probability:.2f})" for w in s.words))
+   EOF
+   ```
+   - Use windows of about 30 s around the singing. A 6 s window heard
+     only "Thank you for watching".
+   - **No `initial_prompt`.** With one, Whisper wrote the prompt back
+     ("Live acoustic song lyrics.") and nothing else.
+   - The stem's word *timings* are still early after a gap. Take only the
+     words from it, and keep the timing from `refine`.
+2. **Compare the stem's words with `lyrics.txt`, line by line.** Where they
+   differ, write the sung version into `lyrics.txt`. A word the stem got
+   with low confidence (under about 0.6) and that doesn't match the written
+   lyric is a guess ("look as" was probably "look up"). Show it to the user
+   in bold before or with the clip.
+3. **Get the changed lines' timing.** Either run `align` and `refine` again,
+   which loses any hand fixes in `timed-whisper.json`, or edit just those
+   lines in `timed-whisper.json`. Give each word the stem's start, but keep
+   a line's first word at the take's own entry if `refine` found it later.
+   Then run `refine` again.
+4. Re-render only the clips that contain those lines, and tell the user what
+   changed from their lyrics and which words are still guesses.
+
+Do this for every live take, and for any take where `align` flagged many
+lines. The user's own lyrics are the starting point, not proof of what was
+sung.
 
 ### Captions: the Hairline style (chosen 27 Oct 2026)
 

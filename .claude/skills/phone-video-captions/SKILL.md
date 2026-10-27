@@ -64,6 +64,10 @@ node tools/captions/captions.mjs --video <take>.mov --timed $W/timed.json \
 - If it doesn't, **ask the user for the title** (the file name needs it) and
   show them the transcript with your guesses at the misheard words in bold.
   They confirm or correct the lines; they don't usually retype the song.
+- **Written lyrics, the user's or the site's, can differ from what's sung,
+  especially live.** Hey, Player's final verse did. Check them by
+  transcribing the Demucs vocal stem section by section. The steps are in
+  phone-video-clips, under "Checking the words against what's sung".
 - Whisper may invent a sign-off over the guitar outro ("Thanks for watching!").
   Leave it out of `lyrics.txt`; `align` drops heard words that aren't in the
   lyrics and don't touch a lyric word, and says so.
