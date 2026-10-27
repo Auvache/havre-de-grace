@@ -15,8 +15,8 @@
  *
  * One lyric line at a time, centred: small (34 px) thin Inter capitals, widely spaced (0.38 em), white
  * with a soft shadow, no punctuation but apostrophes and hyphens. A line fades in just before its first
- * word with every word dim, each word turns white as it's sung, and the line fades out after its last
- * word; lines that run back to back hand off quickly just before the new line's first word. Every line
+ * word with every word dim, each word turns white as it's sung, and the line stays up 1.6 s after its
+ * last word, then fades; when the next line comes sooner, a quick handoff just before its first word. Every line
  * is gone before the clip ends (Shorts loop). A long line wraps into two balanced rows. A line that
  * started before `--start` is left out, so a clip never opens mid-line.
  *
@@ -77,7 +77,9 @@ const FPS = 30
 const W = 1080, H = 1920
 const LEFT = 90, RIGHT = 150, TOP = Number(opt.top)
 const DIM = opt.scrim ? 0.45 : 0.3 // opacity of the words not yet sung
-const LEAD = 0.35, TAIL = 0.6, FADE = 0.3, HANDOFF = 0.12, WORD_IN = 0.14
+// TAIL: a line stays up 1.6 s after its last word, so there's time to finish reading it (0.6 was too quick
+// to read, 27 Oct 2026); a line that's followed straight away still hands off to the next
+const LEAD = 0.35, TAIL = 1.6, FADE = 0.3, HANDOFF = 0.12, WORD_IN = 0.14
 
 const start = Math.round(Number(opt.start) * FPS) / FPS
 const end = Math.round(Number(opt.end) * FPS) / FPS

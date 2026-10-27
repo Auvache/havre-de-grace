@@ -101,8 +101,10 @@ Sources go to `originals/` when their Shorts are in `ready/`.
 ### Captions: the Hairline style (chosen 27 Oct 2026)
 
 One line at a time, centred: small (34 px) thin Inter capitals, widely
-spaced, white with a soft shadow. Words are dim until sung, and the line fades
-out after its last word. Everything in `ready/` was re-rendered in it on
+spaced, white with a soft shadow. Words are dim until sung. The line stays up
+1.6 s after its last word, then fades, unless the next line comes in sooner and
+takes over. The user found 0.6 s "too difficult to read all of the text before it
+disappears". Everything in `ready/` was re-rendered in it on
 27 Oct. The user picked it from ten mock-ups running from minimal to maximal
 (hairline, serif whisper, typewriter, cinema bar, karaoke, highlighter tabs,
 poster stack, giant outline, ransom collage, maximal). **Don't re-open the
