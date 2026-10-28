@@ -18,6 +18,46 @@ live.mjs). Everything was re-rendered in it. Song 1 and 2 was also rendered with
 --match Andalusia.wav` like the others.
 
 
+## The full set (2026-10-28): `live-set.mjs`
+
+`Live at Artichoke Music.mp4` (same folder) is all six songs in set order as
+one video, rendered by `tools/video-styles/live-set.mjs` straight from the
+trimmed set file and the 9-bite masters, in one encode. Its header has the
+details; the song table (`SET`) holds each song's `at`, first note, last note,
+`--room` and the camera's own move at its end.
+
+- **Joins.** Each song plays to its last note with its applause at its `--room`
+  level; the next song's first note comes 3 s later, and the applause and the
+  mix's tail fade over those 3 s and one more. The picture dissolves over 1 s,
+  ending before the camera's own move: Into the Wild dissolves to a wide shot
+  at stop + 2.9, and Conman pulls out to a dark wide shot at mix 220.52, 0.4 s
+  *before* its last note ends (so that dissolve starts under the last chord).
+- **Opening**: the mark, then "Live at Artichoke Music" drawn on, the stage at
+  11.5–12.9 s onto Insane, Okay's close-up (the camera holds still from mix 23
+  to its cut to wide at 29.69).
+- **End card**: I Want to Be Yours' wide shot (he waves at stop + 2.1; the
+  camera goes dark at stop + 5.6) held 3.5 s after the last note, a dissolve
+  to the mark (3.4 s), then two credit screens of 4.5 s each. The credits are
+  the script's defaults, as the user approved them.
+- **Previews**: `--preview` (the five joins, 19 s each), `--opening`, `--ending`.
+  The user approved all three before the full render.
+- The shared parts of `live.mjs` (grade, slate, Hairline lines, mark, drawing,
+  encode) moved to `live-cards.mjs`; `live.mjs` renders bit-identical frames
+  after the move.
+
+Traps found building it:
+
+- **ffmpeg 9's `amix` drops inputs at random** when a dozen `adelay`ed inputs
+  end at different times: a different join came out silent from the next
+  song's first note on each run, with no error. The script mixes the sound
+  itself (each piece decoded to raw samples, faded, added at its sample).
+- **Concatenating pieces with the concat demuxer**, even with the audio
+  re-encoded, keeps each piece's AAC priming (1024 samples), so the sound runs
+  21.33 ms late. Use the concat filter.
+- `xfade` refuses stills on a 1/30 timebase against the camera's 1/15360.
+- `LIMIT` in `live.mjs` shorter than `--stop` gives the room input a negative
+  `-t` and fails; test with a short fake `--stop` instead.
+
 ## Slate and Hairline type (2026-10-27, all five songs)
 
 - **Ground**: the opening and both end screens are "faded slate" `#1c2939`
