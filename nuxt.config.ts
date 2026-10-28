@@ -325,6 +325,13 @@ export default defineNuxtConfig({
     '/music-videos/**': {
       robots: 'noindex, nofollow',
     },
+    // The mailing list's welcome gift (pages/seven-inch.vue). Reached from Kit's
+    // confirmation redirect and the first welcome email, and nothing else.
+    // Unlisted, so `nofollow` too; its audio is covered by the X-Robots-Tag on
+    // /seven-inch/** in public/customHttp.json.
+    '/seven-inch': {
+      robots: 'noindex, nofollow',
+    },
     // --- Unlisted ---
     // The private workbench. Not in the navigation, not in the sitemap (a
     // noindex rule drops the URL from it), not in the markdown mirrors or
@@ -373,6 +380,8 @@ export default defineNuxtConfig({
         '/tools',
         '/tools/demos',
         '/listen',
+        // Unlisted: the list's welcome gift, linked only from Kit.
+        '/seven-inch',
         // Unlisted and noindexed by the route rule above, but a static host
         // serves keys — a route that was never prerendered 404s however
         // private it is, and nothing links to these, so nothing crawls to them

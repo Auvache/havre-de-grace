@@ -100,7 +100,7 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
   {
     // The record player is a dark, full-bleed scene that paints its own
     // background; the site theme only needs to stop fighting it.
-    match: /^\/listen(?:\/|$)/,
+    match: /^\/(?:listen|seven-inch)(?:\/|$)/,
     config: {
       theme: 'dark',
       gradient: 'blackout',

@@ -50,6 +50,19 @@
       ]
     },
     {
+      "pattern": "/seven-inch/**",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive, nosnippet"
+        }
+      ]
+    },
+    {
       "pattern": "/tools/**",
       "headers": [
         {

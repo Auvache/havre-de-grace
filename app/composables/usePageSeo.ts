@@ -43,6 +43,7 @@ interface PageSeoOptions {
  */
 const NO_MARKDOWN_MIRROR = new Set([
   '/links',
+  '/seven-inch',
   '/logo',
   '/influences',
   '/tools',

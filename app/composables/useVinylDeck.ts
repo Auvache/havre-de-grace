@@ -33,6 +33,9 @@ export interface VinylDeckOptions {
   analyser?: boolean
   /** Skip the arm-travel + lead-in ceremony (used by the reading-first variant). */
   instantCue?: boolean
+  /** The speed the record was cut at: 33⅓ for an LP, 45 for a 7-inch. */
+  nominalRpm?: number
+  /** The speed the platter starts at; the record's own speed unless set. */
   rpm?: number
   /** Fired when the needle reaches the run-out groove. Used to advance a queue. */
   onSideEnd?: () => void
@@ -50,7 +53,7 @@ const SCRUB_MIN = -1
 export function useVinylDeck(options: VinylDeckOptions = {}) {
   const album = ref<ListenAlbum | null>(null)
   const side = ref<'a' | 'b'>('a')
-  const rpm = ref(options.rpm ?? 100 / 3)
+  const rpm = ref(options.rpm ?? options.nominalRpm ?? 100 / 3)
 
   /** Index into the CURRENT SIDE's track list. */
   const index = ref(0)
@@ -171,7 +174,7 @@ export function useVinylDeck(options: VinylDeckOptions = {}) {
   watch(volume, applyVolume)
 
   /** Nominal speed. Playing a 33 at 45 genuinely repitches it, as it would. */
-  const NOMINAL_RPM = 100 / 3
+  const NOMINAL_RPM = options.nominalRpm ?? 100 / 3
   function applyRate() {
     if (audio) audio.playbackRate = rpm.value / NOMINAL_RPM
   }
