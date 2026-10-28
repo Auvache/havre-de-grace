@@ -291,7 +291,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in. Then the block is cut, a ragged edge sweeping across it: sky, the far shore, the sea, the ice along the quay. On the far shore to the left is the town, its windows lit; out on the water to the right is the ship, a speck with a red lantern. He walks in off the shingle with a sea bag on his shoulder. The title and 9/10 in the margin underneath.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the paper border comes in. Then the block is cut, a ragged edge sweeping across it: sky, the far shore, the sea, the ice along the quay. On the far shore to the left is the town, its windows lit; out on the water to the right is the ship, a speck with a red lantern. He walks in off the shingle with a sea bag on his shoulder. The title and 9/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

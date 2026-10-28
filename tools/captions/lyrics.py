@@ -4,6 +4,7 @@ The words and their timings for a phone take, for tools/captions/captions.mjs.
     python lyrics.py transcribe <video> <workdir>
     python lyrics.py align <workdir>
     python lyrics.py refine <workdir> <video>     (in the venv, after `pip install demucs soundfile`)
+    python lyrics.py setline <workdir> <line>:<start>-<end> ...   (a line's span by hand; then refine)
 
 `transcribe` runs Whisper (large-v3, English, word timestamps) on the take and
 writes, into <workdir>:
@@ -233,6 +234,32 @@ def refine(work, video=None):
     print(f"wrote {timed_path} (Whisper's timing kept in {whisper_path})")
 
 
+def setline(work, *spans):
+    """Put caption lines where they're really sung: `setline <workdir> 12:60.8-64.4 23:150.5-151.9 ...`.
+
+    For a line align got wrong (stretched into a gap, squashed, or guessed in a noisy room), spread its
+    words over the span by length, in timed-whisper.json (made from timed.json if refine hasn't run yet).
+    Line numbers are timed.json's `line`. Then run refine to snap the starts to the voice.
+    """
+    whisper_path = os.path.join(work, "timed-whisper.json")
+    if not os.path.exists(whisper_path):
+        os.replace(os.path.join(work, "timed.json"), whisper_path)
+    timed = json.load(open(whisper_path))
+    for spec in spans:
+        n, span = spec.split(":")
+        s, e = map(float, span.split("-"))
+        words = [w for w in timed if w["line"] == int(n)]
+        total = sum(len(w["w"]) + 2 for w in words)
+        at = s
+        for w in words:
+            d = (e - s) * (len(w["w"]) + 2) / total
+            w["s"], w["e"] = round(at, 2), round(at + d - 0.02, 2)
+            at += d
+        print(f"{n:>4}  {s:7.2f}-{e:7.2f}  {' '.join(w['w'] for w in words)}")
+    with open(whisper_path, "w") as f:
+        json.dump(timed, f, indent=1)
+
+
 if __name__ == "__main__":
     cmd, *rest = sys.argv[1:]
-    {"transcribe": transcribe, "align": align, "refine": refine}[cmd](*rest)
+    {"transcribe": transcribe, "align": align, "refine": refine, "setline": setline}[cmd](*rest)

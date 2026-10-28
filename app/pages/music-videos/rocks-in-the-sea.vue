@@ -290,7 +290,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in and the black lifts off the print. The sensitiser is brushed on in wide strokes and exposes, slowly, from pale to blue. The horizon thread is laid, then the sun, then the sea a thread at a time, the coast and the sand. The title and 8/10 in the margin underneath.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the paper border comes in and the black lifts off the print. The sensitiser is brushed on in wide strokes and exposes, slowly, from pale to blue. The horizon thread is laid, then the sun, then the sea a thread at a time, the coast and the sand. The title and 8/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

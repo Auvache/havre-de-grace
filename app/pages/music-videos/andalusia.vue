@@ -22,7 +22,7 @@
           <NuxtLink to="/music-videos/album" class="underline">album edition</NuxtLink>,
           track five of ten on Into the Wild. It is the same globe, route and
           camera, printed on the album's sheet: the chart in paper, black and one
-          red, inside the album cover's white frame, with the lyric on one line
+          red, inside the album's paper frame, with the lyric on one line
           in the margin under it.
         </p>
       </header>

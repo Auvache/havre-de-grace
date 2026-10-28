@@ -290,7 +290,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in. The black lifts off the plate as the horizon and the far sky are scratched in, then the border rules, and the red thread comes in from the left on its needle. The title and 4/10 in the margin underneath.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the paper border comes in. The black lifts off the plate as the horizon and the far sky are scratched in, then the border rules, and the red thread comes in from the left on its needle. The title and 4/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

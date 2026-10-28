@@ -29,6 +29,7 @@ export interface NewsletterSignupOptions {
 
 export const useNewsletterSignup = (options: NewsletterSignupOptions = {}) => {
   const { markSubscribed } = useMailingListBanner()
+  const source = useSignupSource()
 
   const email = ref('')
   const website = ref('') // honeypot: humans never see or fill this
@@ -42,11 +43,20 @@ export const useNewsletterSignup = (options: NewsletterSignupOptions = {}) => {
 
     status.value = 'loading'
 
+    const body = new URLSearchParams({ email_address: email.value.trim() })
+
+    // Which profile link brought them here (see useSignupSource). Kit only
+    // stores it if the account has a custom field keyed `source`, and ignores
+    // it otherwise, so sending it before that field exists is harmless.
+    if (source.value) {
+      body.set('fields[source]', source.value)
+    }
+
     try {
       const res = await fetch(KIT_FORM_URL, {
         method: 'POST',
         headers: { Accept: 'application/json' },
-        body: new URLSearchParams({ email_address: email.value.trim() }),
+        body,
       })
 
       if (res.ok) {

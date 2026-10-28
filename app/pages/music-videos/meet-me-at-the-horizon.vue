@@ -283,7 +283,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in. The plate stays black, and the bedroom is burnished out of it round the bedside lamp: the window, the clock at 3:07, the bed with two pillows and one head on them. The title and 7/10 in the margin underneath.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the paper border comes in. The plate stays black, and the bedroom is burnished out of it round the bedside lamp: the window, the clock at 3:07, the bed with two pillows and one head on them. The title and 7/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

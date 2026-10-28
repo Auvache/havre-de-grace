@@ -103,7 +103,7 @@ export const MEZZOTINT = {
   palette: { PAPER, INK, RED, GOLD },
 }
 
-/* On the album's cover sheet (album.mjs): the cover's white border, a plate 1532 × 776, the lyric on one row. */
+/* On the album's cover sheet (album.mjs): the paper border, a plate 1532 × 776, the lyric on one row. */
 const SHEET = COVER_SHEET
 const PL = SHEET.plate
 /** The plate's centre: the projection's principal point. */

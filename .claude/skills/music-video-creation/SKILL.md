@@ -40,6 +40,16 @@ Four things depend on this and all four break if it is bent:
    half-transitioned when a clip is scrubbed, and frame 4000 costs what frame 1
    costs.
 
+**Optionally, `lib`.** A film whose defs are heavy and do not change from frame
+to frame (prints, portraits, collages, patterns) may return them separately as
+`lib: string[]` — `<defs>` chunks for that `uid` that only ever grow, one chunk
+per frame that needed something new. `MusicVideoSvgFilm` mounts each chunk once
+in its own keyed `v-html`, so only `svg` is re-parsed sixty times a second;
+`frames.mjs` and `mp4.mjs` put `lib` in front of `svg`. Every def id must then
+say everything its content depends on (a near and a far drawing of one print are
+two ids). `conman-board-film.mjs` is the example: it took the board from 12
+frames a second to 60.
+
 Inside a style module, never:
 
 - import a score, or any Vue/Nuxt runtime (`ref`, `computed`, `useX`)
@@ -66,13 +76,14 @@ Inside a style module, never:
 | `app/config/newYorkScore.ts` | Track six's cut, the same method, 98.5 BPM on a click. Every "No" measured on its own; the last three "No, no, no, no" lines are the first plus 112/120/128 beats, and "York" is held ten seconds to the voice letting go at 206.44 (the end card). |
 | `app/config/meetMeAtTheHorizonScore.ts` | Track seven's cut, the same method, 55 BPM (felt at 110) on a click. Choruses 2 and 3 are the first at +50/+98 beats, the last verse the first at +114, the second hook the first at +48 — pooled and shifted. The voice runs almost unbroken from 17.3 to 194.9, so there is no break section; the end card is the last strike at 211.86, seventeen seconds after the voice. |
 | `app/config/albumStyle.ts` | **The album decision.** Every Into the Wild song gets its own film; all ten are printmaking on one paper, ink and red, on one sheet layout, moving like Cartography. Constants, motion rules, per-song technique. **Read this before starting any song on the album.** |
-| `shared/video/album.mjs` | The album's inks, **`COVER_SHEET`** (the sheet every film is on: the cover's white border, a 1532 × 776 plate, the lyric in navy on one row in a 90-unit margin — pass it to `paper()`, `plateClip()`, `marginLyric()`), **`opening()`** (the shared title-on-black opening), the old paper `SHEET` and `titleCard()`, and the smoothness helpers `glide()` / `easeCamera` / `land()` / `presence()`. |
+| `shared/video/album.mjs` | The album's inks, **`COVER_SHEET`** (the sheet every film is on: a paper border with a plate mark, a 1532 × 776 plate, the lyric in the album's black on one row in a 90-unit margin — pass it to `paper()`, `plateClip()`, `marginLyric()`), **`opening()`** (the shared title-on-black opening), the old paper `SHEET` and `titleCard()`, and the smoothness helpers `glide()` / `easeCamera` / `land()` / `presence()`. |
 | `shared/video/films/relief.mjs` | The album's woodcut for Into the Wild, whole song — the smooth rework of `woodcut.mjs`. The reference for a film with a **followed figure**: the runner as an integrated velocity schedule, and every cue placed from where the camera is on its word (`planFor`). |
 | `shared/video/films/screenprint.mjs` | Goodbye, Norma Jeane, whole song — the album's screenprint. The reference for **printing in screens**: every prop returns `{ back, pink, key, red }` and the frame pulls them in that order, the pink shifted off register by `registerAt(t)`. Also the reference for a film that goes to **night** (ink zones with drawn halftone seams, pools of light) and for a red line that is not a function of x (the signature, a prolate cycloid). |
 | `shared/video/films/etching.mjs` | Ivory, whole song — the album's hand-coloured etching. The reference for **tone by hatching** (`hatchD`: layers of lines on a world-fixed lattice, each laid past a threshold), for **a figure in reserve** (her, in the paper, built from parts, seen only where tone surrounds her), for **a camera hush** (an integrated drift speed that slows without stopping), and for a red line that **reaches and does not arrive** (the thread: pins on nouns, and reaches that stop short). |
 | `shared/video/films/engraving.mjs` | Conman, whole song — the album's line engraving. The reference for **a world of repeated things** (an uncut sheet of notes from one layout, rows as `<use>`s), for **a zoom in the transform** (a loupe), for **a camera from one speed curve** (moves and runs integrated, `runSlot` picking where a run ends), for **printing on arrival** (each note swept on as it enters, on the eighths), for **assembly** (a note built from flying pieces of earlier ones), and for **a red journey that hops and stamps** (an odometer serial that leaves a copy on every note). |
 | `shared/video/films/wood-engraving.mjs` | Ship to Stockholm, whole song — the album's wood engraving, white line on black. The reference for **a story told by one walking figure** (a signed speed schedule, so he can stop and walk back; a camera that follows the actual gap with a floor at the drift), for **a destination in perspective** (the ship drawn at s = A/(d + A), growing all song), for **exact glows** (`glowRows`), for **baked fields in pieces** (`baked` / `inView`), for **a figure cut in parts** (`person`), and for **a red journey held back** until the last sixteen seconds. |
 | `shared/video/films/letterpress.mjs` | New York, whole song — the album's letterpress, a flyposted wall wrecked. The reference for **destroying things** (six pure functions of time since the word: `burn`, `tearStrips`, `shatter`, `meltWarp`/`bendWarp` on polygon artifacts, `squash`, `pied` type), for **a film that shakes without cutting** (`shakeAt`, a bank into whips, a punch on every beat), for **wood type** (`woodType`, `specks`), for **scenes pasted in layers** (one burns or tears away to show the next), and for **a red line set square** (`plan.head`: rail, up, across, down). No figure. |
+| `shared/video/films/conman-board-film.mjs` | Conman, whole song — two boards: theirs walked section by section and torn off in the break, mine pasted up out of the scraps and torn in turn. The furniture (formats, board, how a cell draws) is `conman-board.mjs`; the stills the plan was decided on are `conman-board-stills.mjs`. The reference for **a board of repeated sheets at 60 fps** (a `<pattern>` per section, only touched sheets drawn singly, flat holes from far off), for **`lib`** (defs mounted once), and for **pasting up** (scraps flying in, the print pulled over them). Measure a film like it with a real rAF loop in a visible page: a background tab reports nothing true. |
 | `shared/video/films/mezzotint.mjs` | Meet Me at the Horizon, whole song — the album's mezzotint, one night from black to dawn. The reference for **a world of planes at depth** (`scaleAt` = F / (d + D), `layerT`, and a lens shift `sy`: the camera passes through a window, rises through a ceiling and travels to the horizon with no cut), for **people placed by depth relative to the camera** (`outsidePeople`), for **a horizon kept on the eye line** (`crest`, `laneLift`, `ridgeTop`: figures stand on it against the sky however near it comes), for **tone on one burnished ramp** (`toneOf`, and `ctx.c(v, kb)` burnishing out of black at the start and towards paper at the end), for **re-rocking** (a band of burr sweeping the plate back to black, `rockSweep`; ink flooding down, `inkFlood`), for **a camera as a monotone cubic through keys** (`pchipAt`: velocity continuous, no overshoot) and for **tapered-limb figures** (`figureParts`, `limb`). |
 | `tools/video-styles/album.mjs` | Builds `public/video-styles/album/<slug>.svg` from `tools/video-styles/album/<slug>.mjs`, and the ten-up `album-sheet.svg`. `node tools/video-styles/album.mjs [slug …]`. |
 | `app/config/videoStyles.ts` | **The written spec** for all seven styles — premise, palette, type rules, what each driver does, what each section does, and `avoid`. This is the file to hand an agent, not the styles page. |
@@ -85,6 +96,7 @@ Inside a style module, never:
 | `shared/video/films/cartography.mjs` | **The worked example.** Style B2, all ten sections. Read this before writing a second style. Two editions of one function: `cartographyFrame` (the original, kept byte-identical for its still sheet) and `cartographyAlbumFrame` (the album sheet — approved, and what `/music-videos/andalusia` runs). |
 | `tools/video-styles/frames.mjs` | **The review loop.** Contact sheet of N frames. |
 | `tools/video-styles/mp4.mjs` | **The export.** A whole film (or `--from`/`--to`) as a 4K60 and a 1080p60 mp4 with the record under it, into `exports/` (gitignored). `FILM`/`SONG` as for `frames.mjs`. |
+| `tools/video-styles/live.mjs`, `live-align.py`, **`LIVE.md`** | **Live videos**: real camera footage cut to a mixed WAV, with the album opening and Andalusia's end card laid over it. Not SVG films. Read `LIVE.md` first: its status, file locations, per-song offsets, verification steps and the traps (one put the picture 9 s off with no error). |
 | `tools/video-styles/build.mjs` | Renders every still sheet to `public/video-styles/*.svg`. |
 | `tools/video-styles/kit.mjs` | Re-exports the shared kit, plus the Node-only helpers that read the lockup off disk (`mark`, `logoScreen`, `creditsScreen`). |
 | `tools/video-styles/styles/*.mjs` | One still reference sheet per style: a hero frame plus five thumbnails. |
@@ -293,7 +305,7 @@ review is running at once, or they overwrite each other.
 them to describe it. Rasterise the sheet and read the PNG:
 
 ```sh
-node tools/video-styles/frames.mjs 73 88 6
+NO_OPEN=1 node tools/video-styles/frames.mjs 73 88 6
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
   --headless --disable-gpu --hide-scrollbars --virtual-time-budget=4000 \
   --screenshot="$SCRATCH/frames.png" --window-size=1200,1140 \
@@ -303,6 +315,10 @@ node tools/video-styles/frames.mjs 73 88 6
 Then `Read` the PNG. That is the entire loop, and it closes with no user, no dev
 server, no audio and no clock — two commands and one image read per six moments.
 
+- **Always pass `NO_OPEN=1` when rasterising.** Without it `frames.mjs` hands
+  the sheet to macOS `open`, which lands a tab in the user's default browser
+  (Brave, the one they work in) on every run. Leave it off only when they have
+  asked to look at the sheet themselves.
 - **Size the window to the frame count.** The sheet is a two-column grid at
   about 380 px a row, so `--window-size=1200,<380 * ceil(n/2) + 20>`. Six frames
   at 1200×1140 is comfortably legible: port labels, the caption strip and the

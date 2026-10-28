@@ -287,7 +287,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in and the black lifts off a picture house: pink curtains, pink seats, the projector\'s light. The leader counts down on the screen, one sweep a bar on the record\'s click, and runs out exactly as the voice comes in. The title and 3/10 in the margin underneath.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the paper border comes in and the black lifts off a picture house: pink curtains, pink seats, the projector\'s light. The leader counts down on the screen, one sweep a bar on the record\'s click, and runs out exactly as the voice comes in. The title and 3/10 in the margin underneath.',
   },
   {
     id: 'verse-1',

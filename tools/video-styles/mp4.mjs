@@ -57,6 +57,12 @@ const FILMS = {
   engraving: ['engraving.mjs', 'engravingFrame'],
   gallery: ['gallery.mjs', 'galleryFrame'],
   wall: ['conman-wall.mjs', 'wallFrame'],
+  board: ['conman-board-film.mjs', 'boardFrame'],
+  'board-pan-1': ['conman-board-film.mjs', 'boardPan1'],
+  'board-pan-2': ['conman-board-film.mjs', 'boardPan2'],
+  'board-pan-3': ['conman-board-film.mjs', 'boardPan3'],
+  'board-pan-4': ['conman-board-film.mjs', 'boardPan4'],
+  'board-pan-5': ['conman-board-film.mjs', 'boardPan5'],
   'wood-engraving': ['wood-engraving.mjs', 'woodEngravingFrame'],
   letterpress: ['letterpress.mjs', 'letterpressFrame'],
   mezzotint: ['mezzotint.mjs', 'mezzotintFrame'],
@@ -136,7 +142,7 @@ const PAGE = `<!doctype html><meta charset="utf-8">
         font-family: "Jost", system-ui, sans-serif;
         font-variant-ligatures: none; isolation: isolate; }
 </style>
-<svg id="film" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"></svg>`
+<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><g id="lib"></g><g id="film"></g></svg>`
 
 async function openPage(browser) {
   const context = await browser.newContext({ viewport: { width: 3840, height: 2160 }, deviceScaleFactor: 1 })
@@ -177,9 +183,16 @@ async function runWorker(browser, index, start, end, onFrame) {
   ], { stdio: ['pipe', 'inherit', 'inherit'] })
   const done = new Promise((ok, fail) => ff.on('close', (code) => (code === 0 ? ok() : fail(new Error(`ffmpeg exited ${code}`)))))
 
+  let mounted = 0
   for (let n = start; n < end; n++) {
-    const { svg } = film({ time: n / fps, score, lockup, uid: 'film' })
-    await page.evaluate((markup) => { document.getElementById('film').innerHTML = markup }, svg)
+    const { svg, lib = [] } = film({ time: n / fps, score, lockup, uid: 'film' })
+    // A film's `lib` only grows: mount the chunks this page has not had yet, then the frame.
+    const fresh = lib.slice(mounted)
+    mounted = lib.length
+    await page.evaluate(([markup, chunks]) => {
+      for (const c of chunks) document.getElementById('lib').insertAdjacentHTML('beforeend', `<g>${c}</g>`)
+      document.getElementById('film').innerHTML = markup
+    }, [svg, fresh])
     const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', fromSurface: true, optimizeForSpeed: true })
     const png = Buffer.from(data, 'base64')
     if (!ff.stdin.write(png)) await new Promise((ok) => ff.stdin.once('drain', ok))

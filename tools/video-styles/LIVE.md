@@ -116,7 +116,8 @@ committed yet.
 | --- | --- |
 | Original camera file, 2 h 18 m, 1080p30, 6 GB | `~/Movies/iMovie Library.imovielibrary/My Movie/Original Media/Portlamd Songwriter's Association _8_13_26 01.mp4` ("Portlamd" is really misspelled). **Leave it there**: it's inside the iMovie library, and moving it breaks the iMovie project. |
 | Your set, trimmed (stream copy, 0:07:00–1:08:30 of the original, 61.5 min, 2.8 GB) | `~/stefan/videos/artichoke-parker-mixes/artichoke-set-full.mp4` |
-| The six mixes (Parker's, 48 kHz 24-bit stereo) | same folder: `Song 1 and 2.wav`, `New York.wav`, `Andalusia.wav`, `Into the Wild.wav`, `Conman.wav`, `I Want to be Yours.wav` |
+| The six mixes (Parker's, 48 kHz 24-bit stereo) | `Parker originals/` in the same folder: `Song 1 and 2.wav`, `New York.wav`, `Andalusia.wav`, `Into the Wild.wav`, `Conman.wav`, `I Want to be Yours.wav`. **Master and render from these.** |
+| The 9-bite masters (what the videos play, 24-bit) | same folder, same names, replacing the mixes there (2026-10-27) |
 | Output | same folder, `<Song>.mp4` |
 | An older, separate edit of Insane, Okay (not part of this) | `~/stefan/videos/artichoke-insane-okay.mp4` (DaVinci Resolve) |
 

@@ -81,7 +81,7 @@ export const SCREENPRINT = {
 }
 
 /*
- * The film is on the album's cover sheet (album.mjs): the cover's white border,
+ * The film is on the album's cover sheet (album.mjs): the paper border,
  * the lyric on one row in a thin margin, and a plate 110 taller than the one the
  * strip was drawn for. The world is drawn DROP lower, so the floor keeps its
  * place over the bottom band and the new room is headroom; PIC_TOP and

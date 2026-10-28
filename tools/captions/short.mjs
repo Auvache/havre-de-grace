@@ -67,15 +67,23 @@ const { values: opt } = parseArgs({
     top: { type: 'string', default: '860' },
     scrim: { type: 'boolean', default: false },
     reframe: { type: 'string' }, // crop | blur, for a take that isn't 9:16
-    'crop-x': { type: 'string', default: '0.5' }, // where the 9:16 window sits across a wider frame, 0 left to 1 right
+    // where the 9:16 window sits across a wider frame, 0 left to 1 right: one number, or keyframes in take
+    // seconds, "t:x,t:x,...", eased between, for a camera that reframes or a performer who moves
+    'crop-x': { type: 'string', default: '0.5' },
+    audio: { type: 'string', default: 'polish' }, // polish | as-is (a mixed and mastered soundtrack: fades only)
   },
 })
 for (const k of ['video', 'out', 'start', 'end']) if (!opt[k]) throw new Error(`--${k} is required`)
 if (!(opt.look in LOOKS)) throw new Error(`--look must be one of ${Object.keys(LOOKS).join(', ')}`)
+if (!['polish', 'as-is'].includes(opt.audio)) throw new Error('--audio must be polish or as-is')
 
 const FPS = 30
 const W = 1080, H = 1920
-const LEFT = 90, RIGHT = 150, TOP = Number(opt.top)
+// --top is one number, or "t:top,..." in take seconds for a filmed set that cuts between wide and close shots:
+// the caption jumps with the cut, to the next plain dark band under the chin
+const TOPS = opt.top.split(',').map((k) => (k.includes(':') ? k.split(':').map(Number) : [-Infinity, Number(k)]))
+const LEFT = 90, RIGHT = 150, TOP = TOPS[0][1]
+const topAt = (t) => TOPS.findLast(([at]) => at <= t + Number(opt.start))?.[1] ?? TOP
 const DIM = opt.scrim ? 0.45 : 0.3 // opacity of the words not yet sung
 // TAIL: a line stays up 1.6 s after its last word, so there's time to finish reading it (0.6 was too quick
 // to read, 27 Oct 2026); a line that's followed straight away still hands off to the next
@@ -136,9 +144,9 @@ for (let f = 0; f < Math.round(dur * FPS); f++) {
   if (l) {
     const opacity = Math.min(ease((t - l.in) / l.fi), 1 - ease((t - l.out) / l.fo))
     const words = l.map((w) => DIM + (1 - DIM) * ease((t - w.s + 0.04) / WORD_IN))
-    state = { html: l !== current ? l.map((w) => `<span class="w">${w.text}</span>`).join(' ') : null, opacity, words }
+    state = { html: l !== current ? l.map((w) => `<span class="w">${w.text}</span>`).join(' ') : null, opacity, words, top: topAt(t) }
     current = l
-    key = `${shown.indexOf(l)}|${opacity.toFixed(3)}|${words.map((x) => x.toFixed(3)).join(',')}`
+    key = `${shown.indexOf(l)}|${state.top}|${opacity.toFixed(3)}|${words.map((x) => x.toFixed(3)).join(',')}`
   }
   const path = join(tmp, `${String(f).padStart(5, '0')}.png`)
   if (key === prevKey) { linkSync(prevPath, path); continue } // most frames repeat the one before
@@ -146,6 +154,7 @@ for (let f = 0; f < Math.round(dur * FPS); f++) {
     const cap = document.getElementById('cap')
     if (s && s.html !== null) cap.innerHTML = s.html
     cap.style.opacity = s ? s.opacity : 0
+    if (s) cap.style.top = `${s.top}px`
     if (s) cap.querySelectorAll('.w').forEach((w, i) => (w.style.opacity = s.words[i]))
   }, state)
   await page.screenshot({ path, omitBackground: true })
@@ -154,12 +163,24 @@ for (let f = 0; f < Math.round(dur * FPS); f++) {
 await browser.close()
 }
 
-// two-pass loudness: measure the EQ'd clip, then normalise it linearly to -14 LUFS
+// two-pass loudness: measure the EQ'd clip, then normalise it linearly to -14 LUFS (--audio as-is skips both)
 const trim = ['-ss', start.toFixed(6), '-t', dur.toFixed(6), '-i', opt.video]
-const probe = spawnSync('ffmpeg', ['-hide_banner', '-nostats', ...trim, '-vn', '-af', `${EQ},loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json`, '-f', 'null', '-'], { encoding: 'utf8' })
+const polish = opt.audio === 'polish'
+const probe = spawnSync('ffmpeg', ['-hide_banner', '-nostats', ...trim, '-vn', '-af', `${polish ? `${EQ},` : ''}loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json`, '-f', 'null', '-'], { encoding: 'utf8' })
 const m = JSON.parse(probe.stderr.slice(probe.stderr.lastIndexOf('{'), probe.stderr.lastIndexOf('}') + 1))
 const norm = `loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}`
-const af = `${EQ},${norm},aresample=48000,afade=t=in:d=0.05,afade=t=out:st=${(dur - fadeOut).toFixed(3)}:d=${fadeOut}`
+const af = `${polish ? `${EQ},${norm},` : ''}aresample=48000,afade=t=in:d=0.05,afade=t=out:st=${(dur - fadeOut).toFixed(3)}:d=${fadeOut}`
+
+// --crop-x keyframes, as an ffmpeg expression in clip time (the trim starts the clip's clock at 0); between two
+// keyframes the window eases (smoothstep), like an operator panning; two keyframes 0.01 s apart make a jump cut
+const keys = opt['crop-x'].split(',').map((k) => (k.includes(':') ? k.split(':').map(Number) : [start, Number(k)]))
+  .map(([t, x]) => [t - start, x]).sort((a, b) => a[0] - b[0])
+let cropX = String(keys.at(-1)[1])
+for (let i = keys.length - 2; i >= 0; i--) {
+  const [[t0, x0], [t1, x1]] = [keys[i], keys[i + 1]]
+  const u = `clip((t-${t0.toFixed(3)})/${(t1 - t0).toFixed(3)},0,1)`
+  cropX = `if(lt(t,${t1.toFixed(3)}),${x0}+${(x1 - x0).toFixed(4)}*${u}*${u}*(3-2*${u}),${cropX})`
+}
 
 // to a 1080 x 1920 frame: a 9:16 take is scaled (the phone's own 1080p, or a 720p download); anything
 // else needs --reframe: crop takes a 9:16 window (at --crop-x), blur keeps the whole frame across the
@@ -170,7 +191,7 @@ if (Math.abs(vs.side_data_list?.find((d) => 'rotation' in d)?.rotation ?? 0) ===
 const vertical = Math.abs(iw / ih - 9 / 16) < 0.02
 if (!vertical && !['crop', 'blur'].includes(opt.reframe)) throw new Error(`the take is ${iw}x${ih}, not 9:16: pass --reframe crop or --reframe blur`)
 const frame = vertical ? `scale=${W}:${H}:flags=lanczos`
-  : opt.reframe === 'crop' ? `crop=ih*9/16:ih:(iw-ih*9/16)*${Number(opt['crop-x'])}:0,scale=${W}:${H}:flags=lanczos`
+  : opt.reframe === 'crop' ? `crop=ih*9/16:ih:'(iw-ih*9/16)*(${cropX})':0,scale=${W}:${H}:flags=lanczos`
   : `split[ra][rb];[ra]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},gblur=sigma=40,eq=brightness=-0.12[rbg];[rb]scale=${W}:-2:flags=lanczos[rfg];[rbg][rfg]overlay=(W-w)/2:(H-h)/2`
 const video = `[0:v]${frame}[f];[f]${LOOKS[opt.look]}` + (shown.length ? '[g];[g][1:v]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v]' : ',format=yuv420p[v]')
 
@@ -186,4 +207,4 @@ execFileSync('ffmpeg', [
   opt.out,
 ], { stdio: 'inherit' })
 rmSync(tmp, { recursive: true, force: true })
-console.log(`wrote ${opt.out}  (${start.toFixed(3)}-${end.toFixed(3)}, ${dur.toFixed(2)} s, ${iw}x${ih}${vertical ? '' : ` ${opt.reframe}`}, look ${opt.look}, ${shown.length ? `${shown.length} caption lines` : 'no captions'}, ${m.input_i} -> -14 LUFS)`)
+console.log(`wrote ${opt.out}  (${start.toFixed(3)}-${end.toFixed(3)}, ${dur.toFixed(2)} s, ${iw}x${ih}${vertical ? '' : ` ${opt.reframe}`}, look ${opt.look}, ${shown.length ? `${shown.length} caption lines` : 'no captions'}, ${polish ? `${m.input_i} -> -14 LUFS` : `audio as-is at ${m.input_i} LUFS`})`)

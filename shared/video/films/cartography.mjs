@@ -207,7 +207,7 @@ function slerp(a, b, u) {
  * shorter, so its radius is scaled by the plate's height over the frame's —
  * in the projection, never as a transform, so the pen does not change.
  */
-/* The album edition's sheet: the cover sheet (album.mjs), the cover's white border and the lyric on one row in a thin margin. */
+/* The album edition's sheet: the cover sheet (album.mjs), the paper border and the lyric on one row in a thin margin. */
 const ALBUM_SHEET = A.COVER_SHEET
 const ORIGINAL_VIEW = { cx: 800, cy: 450, k: 1, half: HALF_DIAGONAL }
 const ALBUM_VIEW = (() => {

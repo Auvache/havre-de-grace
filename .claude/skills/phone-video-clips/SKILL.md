@@ -1,6 +1,6 @@
 ---
 name: phone-video-clips
-description: Turn raw performance videos in ~/stefan/videos/inbox into ready-to-post 30–55 s Shorts — split at the song's own seams (overlapping clips allowed), captioned, each with its own colour look and light audio polish — and keep the inbox/ready/posted folders in order. Load this when asked to "process the inbox", "make Shorts from" a video, "break up", "split" or "cut into parts" a take. The captioning itself is phone-video-captions.
+description: Turn raw performance videos in ~/stefan/videos/inbox into ready-to-post 15–30 s Shorts — split at the song's own seams (overlapping clips allowed), captioned, each with its own colour look and light audio polish — and keep the inbox/ready/posted folders in order. Load this when asked to "process the inbox", "make Shorts from" a video, "break up", "split" or "cut into parts" a take. The captioning itself is phone-video-captions.
 ---
 
 ## The videos folder (agreed 27 Oct 2026; the user wants it simple)
@@ -9,12 +9,24 @@ description: Turn raw performance videos in ~/stefan/videos/inbox into ready-to-
 ~/stefan/videos/
   inbox/      the user drops raw takes here, any length
   ready/      finished clips, ready to post
-  posted/     the user moves a clip here once it's up (Claude never does)
+  posted/     clips that are up or scheduled (moved only when the user asks)
   originals/  raw takes Claude has processed (move them here from inbox/ when done)
 ```
 
+**Checking Buffer before moving clips to posted/** (done 28 Oct 2026): Buffer
+doesn't show filenames, and one upload is shared by a song's YouTube and
+Instagram posts. Match on duration instead. Each post's thumbnail is
+`buffer-media-uploads.s3.amazonaws.com/<org>/<id>/thumbnail`, and the video is
+`<org>/<id>_transcoded.mp4`. Load that in a `<video preload=metadata>` on the
+Buffer page, read `.duration`, and compare it with `ffprobe` on `ready/`. Check
+the Queue, Sent and Drafts tabs (a drafted clip counts as posted).
+Transcoding can shift a length by about 0.03 s. Two clips can have the same length (Andalusia
+snippet and Insane, Okay chorus are both 30.53 s), so use the caption too.
+
 The folder is the status: no log file. The other things at the top level
-(CacheClip, Resolve Project Backups, artichoke-*) are the user's; leave them.
+(artichoke-*) are the user's; leave them. DaVinci Resolve may add a
+CacheClip or Resolve Project Backups folder here when a project points at this
+folder. Those were trashed on 28 Oct 2026; leave any new ones to the user.
 
 "Process the inbox" means, for each file in `inbox/`. First done on
 Insane, Okay, 27 Oct 2026 (5 clips); see "The first inbox run" below.
@@ -35,8 +47,8 @@ Insane, Okay, 27 Oct 2026 (5 clips); see "The first inbox run" below.
    If a move looks doubtful, a
    spectrogram of `$W/vocals.wav` (ffmpeg `showspectrumpic`) shows the
    consonant and vowel of the word.
-2. **Pick 4–6 clips** from a ~3 min take (fewer from a short one): every
-   sensible window, overlaps allowed (see below). Find each start and end with
+2. **Pick 5–8 clips of 15–30 s** from a ~3 min take (fewer from a short
+   one): every sensible window, overlaps allowed (see below). Find each start and end with
    `onsets.py` as in "What makes a good cut", and check Whisper's word ends
    so a start doesn't clip the last word of the line before (39.25 cut
    "right" on Insane, Okay, so that clip starts at 40.41). If a take was cut
@@ -79,9 +91,9 @@ Then:
 - **Guitar only (Whisper hears nothing, or invents "Thank you for
   watching"):** no captions, look and audio only. Name it `Riff - <title>`.
 - **Not 9:16 (e.g. the square Norma Jeane live video):** `--reframe crop`
-  (the user's choice), with `--crop-x` set so the performer stays in the
-  window as they move (Norma Jeane: about 0.3). `--reframe blur` keeps the
-  whole frame, with a blurred fill.
+  (the user's choice), with `--crop-x` keyframes from the face tracker so
+  the performer stays in the window as they move (see "Landscape live sets"
+  below). `--reframe blur` keeps the whole frame, with a blurred fill.
 - **A sung take on the site with a half line at the start** (Scarecrow
   opened on "…something more"): start where the take starts, leave the
   fragment uncaptioned, and check that the first caption word doesn't
@@ -99,6 +111,60 @@ Then:
   sung note. clean-warm was fine on orange stage light.
 
 Sources go to `originals/` when their Shorts are in `ready/`.
+
+### Landscape live sets: the Artichoke videos (28 Oct 2026)
+
+The six Artichoke songs arrived as their finished 16:9 renders (teal-and-bone
+grade, 9-bite master, slate title opening and end card; see
+`tools/video-styles/LIVE.md`). Song 1 and 2 is Insane, Okay then The Hoax
+(unreleased). The user's rules for them:
+
+- **Crop to the performer, every song.** On Andalusia, keep Jed out of the
+  frame, and leave out most of his harmonica solo (120–153 s, after "Jed,
+  take it away"). The camera there never moves, so one fixed `--crop-x`
+  (0.135) holds Stefan and leaves Jed out.
+- **`--look natural --audio as-is`**: they're already graded and mastered.
+  A raw phone take keeps the default look and polish.
+- **Start after the opening** (the stage is revealed at 11.5–13.6 s) and end
+  before the end card. Conman's first word (13.71) is sung under the slate's
+  fade (13.2–14.2), so its verse 1 is cut from a `live.mjs --bare` render
+  (`LIMIT=40`, same `--at` and WAV), which has the same timeline frame for frame.
+
+How the crop follows him: `tools/captions/faces.py` finds faces 4 times a
+second (OpenCV Haar, `pip install "opencv-python-headless<5"`; 5.x dropped
+the cascades). `tools/captions/follow.py` turns them into `--crop-x`
+keyframes, like a lazy operator: it holds inside a dead zone, pans when he
+drifts, and jumps on a camera cut (the face changes size or position
+suddenly). `follow.py clip` gives one clip's `--crop-x` and `--top`. Check a
+contact sheet of the crop before rendering. Trackers lose him when he looks
+down or leans out of a close-up (Song 1 and 2 at 87–89 s), and pick up false
+faces in a very wide shot (New York from 191 s); end clips before those
+moments.
+
+**Captions jump with the cut.** The camera cuts between wide shots (chin about
+y 500, shirt below) and close-ups (chin about y 1000), so `--top` takes
+keyframes too. `follow.py clip` puts the top about one face-height under the
+face's centre in each shot; on a seated, still shot set it by eye (Andalusia:
+640, between the chin and the guitar). Always `--scrim`: the mic stand crosses
+the caption in close-ups.
+
+**Noisy rooms defeat Whisper.** On Norma Jeane (Smead's Pub), even the vocal
+stem came back as guesses, and `align` guessed 37 of 38 lines. The fix was the
+song's own shape: the few lines Whisper did place, plus the gaps between
+sections repeating, gave every line's span, set by hand with `lyrics.py setline <workdir>
+<line>:<start>-<end> ...` (it writes `timed-whisper.json`; then `refine`).
+Noise reduction (afftdn) made no measurable difference, and a stems remix took
+only ~2 dB off the room.
+
+**When `align` collapses a whole section into a second** (Andalusia, after
+deleting the unsung "Oh-oh" lines), align against the site's exact words
+instead, then patch the sung changes (a dropped "Oh,", "Could not" →
+"Cannot") straight into `timed-whisper.json` and run `refine`.
+
+**The site's lyrics can miss a whole verse.** New York's third verse ("They
+said boil it down and string it out…", 123–138 s) isn't on the site; the
+vocal stem found it where the alignment showed a 27 s "break". Read the stem
+transcript for every gap over about 10 s.
 
 ### Checking the words against what's sung (live takes especially)
 
@@ -212,6 +278,28 @@ bar at one end; each should feel like its own moment. (The user was told,
 honestly, that fingerprinting will still see shared footage; the variety is
 for viewers, not to evade detection.)
 
+The user's goal (28 Oct 2026): every clip should feel unique and original.
+Fans shouldn't feel they're seeing a repost, and the platforms shouldn't flag
+it as reposted content. Clips that share footage are fine, as long as they're
+not posted close together.
+
+**No two clips of the same chorus on its own** (28 Oct 2026). When a song
+has the same chorus words more than once, keep one chorus-only clip: the one
+that sounds better. "Verse end + chorus" clips are fine alongside it, and so
+are choruses with different words (Insane, Okay's final chorus, I Want to Be
+Yours' ending).
+
+**Leave out large, obvious pitch problems; the user checks the small ones.**
+Andalusia's final chorus opens with "king" about 1.4 semitones flat, so it
+was dropped. To find candidates, run CREPE (`torchcrepe`, full model, viterbi,
+10 ms hop) on `$W/vocals.wav`. Score each held note by how far it sits from
+the nearest semitone, after the song's own tuning offset, and compare each
+chorus with the song's other renditions of it. Treat the result as a
+listening guide, not a verdict. Scored blind, the Andalusia line came 9th of
+40: a wrong note that lands on a semitone scores as clean, and the score can't
+hear tone or strain. Give the user the worst few moments with clip times, and
+let them approve or delete.
+
 ### The first inbox run: Insane, Okay, 27 Oct 2026
 
 | Clip | Span | Length | Look | Left out |
@@ -240,16 +328,25 @@ phone-video-captions.
 
 ## What makes a good cut (the judgement the user delegated)
 
-- **Each clip is one or two sections: a verse, a verse and pre-chorus, a
-  chorus.** Aim for 30–55 s. Don't cut mid-section just to even up the
-  lengths.
+- **15–30 s, capped at 30** (the user's rule from 28 Oct 2026; it replaced
+  30–55 s). Up to 40 s is allowed as a rare exception, when a moment can't be
+  split cleanly (Norma Jeane's pre-chorus runs straight into the chorus with a
+  0.3 s gap, so that clip is 32.6 s). So a clip is usually one section: a
+  verse, a chorus, or the second half of a verse into the chorus. A verse
+  over about 27 s is split at a couplet ("I Want to Be Yours - verse 1
+  (singer)" and "(sailor)"). Split at a line break with a real gap (about
+  1 s or more), never mid-phrase.
+- **Where sections run straight on** (gaps under 1 s, as on Andalusia), end
+  on the strum just after the last word; the last line still shows for a
+  moment and is gone at the cut.
 - **Cut only where no caption is on screen and no one is singing.** The
   editor's captions stay up longer than the singing, so use
   `caption_band.py`, not Whisper's line ends. Whisper also stretches a line's
   first word back into the gap before it ("When" ran 61.88–62.70 on Insane,
   Okay), so the real entry is later than it says.
-- **Start on a strum, a bar or two (about 1–4 s) before the voice comes in;
-  end just before the next strum.** Pick the strongest onset in the gap.
+- **Start on a strum about 0.5–2 s before the voice comes in** (at least
+  0.35 s after the previous word ends, so the clip doesn't open on its tail);
+  **end just before the next strum.** Pick the strongest onset in the gap.
   Evenly spaced strong onsets are the bar lines, and those are the best
   places to cut.
 - **Drop long instrumental stretches.** On Shorts the first seconds decide

@@ -534,7 +534,7 @@ for (const [id, b] of Object.entries(WALL)) {
 const RED_WALL = Object.fromEntries(Object.entries(WALL).map(([id, b]) => [id, { ...b, id: `r-${id}`, ink: RED, artist: 'newcomer', before: 'newcomer', red: true, redInk: b.ink === INK }]))
 
 /*
- * The film is on the album's cover sheet (album.mjs): the cover's white border,
+ * The film is on the album's cover sheet (album.mjs): the paper border,
  * the lyric on one row in a thin margin, and a plate 1532 × 776 about (800, 422).
  */
 const SHEET = COVER_SHEET

@@ -291,7 +291,7 @@ function regionPath(ctx, key, pts) {
  * all in sheet units; the caller places them. `sheet` is the print as it stands,
  * holes and all, for a caller that flies the whole sheet itself (`own`).
  */
-export function tornSheet(ctx, { w, h, layoutKey, layout, out, print, under, core = CORE, back = BACK, fallTo }) {
+export function tornSheet(ctx, { w, h, layoutKey, layout, out, print, under, core = CORE, back = BACK, fallTo, flat = null }) {
   const began = out.filter((o) => o.tau >= 0)
   const gone = began.filter((o) => !layout[o.i].whole).map((o) => o.i).sort((a, b) => a - b)
   const whole = began.some((o) => layout[o.i].whole)
@@ -320,7 +320,8 @@ export function tornSheet(ctx, { w, h, layoutKey, layout, out, print, under, cor
     if (!f || f.alpha <= 0.01) continue
     const pid = regionPath(ctx, `tr-${layoutKey}-${o.i}`, pc.region)
     // A whole sheet comes away with whatever holes it already had.
-    const front = pc.whole ? sheet : `<g clip-path="${regionClip(ctx, `tc-${layoutKey}-${o.i}`, pc.region)}">${print}</g>`
+    // `flat`: from far off, a piece's front is its outline in one colour, not a clip of the print.
+    const front = flat ? `<use href="#${pid}" fill="${flat}"/>` : pc.whole ? sheet : `<g clip-path="${regionClip(ctx, `tc-${layoutKey}-${o.i}`, pc.region)}">${print}</g>`
     const face = f.front ? front : `<use href="#${pid}" fill="${back}"/>`
     // Turning edge-on it darkens: the light goes across it.
     const dim = f.shade > 0.02 ? `<use href="#${pid}" fill="${INK}" opacity="${r(0.28 * f.shade, 3)}"/>` : ''

@@ -263,6 +263,12 @@ export default defineNuxtConfig({
       '/resources/tools/funding',
       '/resources/tools/promo-checker',
     ].map((path) => [path, { redirect: { to: '/', statusCode: 301 } }])),
+    // Short links for each platform's profile and descriptions. They all land on
+    // the /links hub, and `from` tells a signup there where the visitor came
+    // from (see useSignupSource).
+    '/yt': { redirect: { to: '/links?from=youtube', statusCode: 301 } },
+    '/tt': { redirect: { to: '/links?from=tiktok', statusCode: 301 } },
+    '/ig': { redirect: { to: '/links?from=instagram', statusCode: 301 } },
     // --- Deliberately kept out of the index ---
     // Each of these renders too little server-side text to earn a place in
     // search, and each would compete with a stronger page for the same query.
@@ -362,6 +368,7 @@ export default defineNuxtConfig({
         // private it is, and nothing links to these, so nothing crawls to them
         // either. Every page added under app/pages/music-videos/ needs a line
         // here.
+        '/music-videos',
         '/music-videos/styles',
         '/music-videos/andalusia',
         '/music-videos/kinetic',

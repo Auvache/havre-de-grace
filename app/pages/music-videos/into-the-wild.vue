@@ -288,7 +288,7 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The album\'s opening: the title big on black, dropped to the margin as the white border comes in, and the black lifts off an empty sea at first light. The red sun rises out of the horizon over the title and 1/10 in the margin.',
+    note: 'The album\'s opening: the title big on black, dropped to the margin as the paper border comes in, and the black lifts off an empty sea at first light. The red sun rises out of the horizon over the title and 1/10 in the margin.',
   },
   {
     id: 'verse-1',

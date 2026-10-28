@@ -58,26 +58,36 @@ export const SHEET = {
 }
 
 /*
- * The cover sheet — on test in Conman and Andalusia (2026-09-26) before it goes
- * to the other eight. The border is the album cover's own white frame instead
- * of paper, the margin is 90 tall instead of 200, and the lyric is one row in
- * the cover's sea darkened to near-navy, with no signature. The plate takes the
- * height the margin gave up, so a film on this sheet reads its plate from here,
- * never from SHEET. It opens on black (`opening`, below).
+ * The cover sheet — every album film's frame. The border is the shape of the
+ * album cover's own white frame, the margin is 90 tall instead of 200, and the
+ * lyric is one row, with no signature. The plate takes the height the margin
+ * gave up, so a film on this sheet reads its plate from here, never from
+ * SHEET. It opens on black (`opening`, below).
  *
- * Chosen over black, the cover's slate sea, a near-navy and a sky-to-sea
- * gradient, each tried as a border on both films.
+ * The shape was chosen over black, the cover's slate sea, a near-navy and a
+ * sky-to-sea gradient (2026-09-26). Its colour was first the cover's
+ * blue-white with a near-navy lyric, which was the one cool thing on the
+ * frame against Andalusia's parchment chart; on 2026-09-28 the person watching
+ * chose the album's paper (PAPER) with its black for the lyric, over ivory,
+ * kraft, a deep sage and ink, each tried on Andalusia. The chart's land was
+ * mixed a shade under that paper, so the plate reads as printed onto it. The
+ * chart was not re-inked: six re-inkings to suit the old white were tried and
+ * the chart as it is won.
+ *
+ * `mark` is what the opening draws on black — the anchor, the title — and it
+ * stays the cover's white, as it was before the border changed. Diving through
+ * the ring, the mark becomes the border's colour (portholeOpening).
  */
 export const COVER_WHITE = '#f4f5f9'
-export const COVER_NAVY = '#2a343f'
 export const COVER_SHEET = {
   plate: { x: 34, y: 34, w: 1532, h: 776 },
   margin: { x: 34, y: 810, w: 1532, h: 90 },
   lyricY: 855,
   cover: true,
-  border: COVER_WHITE,
+  border: PAPER,
+  mark: COVER_WHITE,
   /** The lyric's ink, and its largest and smallest size for one row. */
-  lyric: COVER_NAVY,
+  lyric: INK,
   cap: 33,
   floor: 22.5,
   /** The size of two rows, when a line has to break, and of the edition number. */
@@ -86,11 +96,15 @@ export const COVER_SHEET = {
   measure: 1440,
 }
 
-/** The paper and the plate mark. Draw first; the film's plate goes on top, clipped to `plateClip`. */
+/*
+ * The paper and the plate mark. Draw first; the film's plate goes on top,
+ * clipped to `plateClip`. On the cover sheet the border is the paper itself
+ * (from 2026-09-28), and several films print on that same paper — New York's
+ * wall, Ivory's plates — so the plate mark is what keeps the image's edge.
+ */
 export function paper(sheet = SHEET) {
-  if (sheet.cover) return rect(0, 0, 1600, 900, sheet.border)
   const { x, y, w, h } = sheet.plate
-  return `${rect(0, 0, 1600, 900, PAPER)}
+  return `${rect(0, 0, 1600, 900, sheet.cover ? sheet.border : PAPER)}
     <rect x="${x - 10}" y="${y - 10}" width="${w + 20}" height="${h + 20}" rx="5" fill="none" stroke="${PAPER_SHADE}" stroke-width="3"/>
     <rect x="${x - 8}" y="${y - 8}" width="${w + 16}" height="${h + 16}" rx="4" fill="none" stroke="#fff8ea" stroke-width="1.5" opacity="0.7"/>`
 }
@@ -261,8 +275,8 @@ function edition({ track, of = 10, sheet = COVER_SHEET, opacity = 1 }) {
  * black and the title comes up big in the middle in the cover's white,
  * letter-spaced. It drops into the margin at the lyric's size, where the first
  * line will take over from it; then the black draws in from the edges to the
- * plate, uncovering the white border, and the title turns navy where the black
- * has left it. Then the edition number is pencilled in, and the black lifts off
+ * plate, uncovering the paper border, and the title turns the lyric's black
+ * where the black has left it. Then the edition number is pencilled in, and the black lifts off
  * the plate over `lift` to show the film already moving.
  *
  * Drawn last, over the plate and the margin. `out` is when the title leaves.
@@ -296,7 +310,7 @@ export function opening({ now, title, track, of = 10, out, lift = [6.0, 6.2], ui
   if (fade > 0.001) {
     const id = `${uid}-open`
     svg += `<clipPath id="${id}"><rect x="${box[0]}" y="${box[1]}" width="${box[2]}" height="${box[3]}"/></clipPath>` +
-      `<g opacity="${r(fade, 3)}">${f > 0 ? word(sheet.lyric) : ''}<g clip-path="url(#${id})">${word(sheet.border)}</g></g>`
+      `<g opacity="${r(fade, 3)}">${f > 0 ? word(sheet.lyric) : ''}<g clip-path="url(#${id})">${word(sheet.mark ?? sheet.border)}</g></g>`
   }
   if (marks > 0.001) svg += edition({ track, of, sheet, opacity: marks })
   return svg
@@ -550,11 +564,23 @@ function titleExit(intro, now, title, size, colour, C) {
   return svg
 }
 
+/* Two #rrggbb colours mixed, u from a to b. */
+function mixHex(a, b, u) {
+  const ch = (hex, i) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16)
+  return `#${[0, 1, 2].map((i) => Math.round(lerp(ch(a, i), ch(b, i), u)).toString(16).padStart(2, '0')).join('')}`
+}
+
 function portholeOpening({ now, title, uid, sheet, intro }) {
   const C = clockFor(intro)
-  const colour = sheet.border
+  // The mark and title on black. The border's colour by default, so the dive
+  // lands in the colour it was drawn in; a dark border needs its own (`mark`).
+  const colour = sheet.mark ?? sheet.border
   const words = titleExit(intro, now, title, titleSize0(title), colour, C)
-  const turn = portholeTurn(intro, now, colour, uid, C)
+  // Through the ring its band floods the border, then is gone: if the mark is
+  // not the border's colour, it becomes it on the way in, or the border flashes
+  // the mark's colour for a frame and cuts.
+  const into = sheet.mark ? easeInOut(ramp(ramp(now, C.dive[0], C.dive[1]), 0.6, 0.95)) : 0
+  const turn = portholeTurn(intro, now, into > 0 ? mixHex(colour, sheet.border, into) : colour, uid, C)
   let svg = ''
   if (turn.black) svg += `<path d="${turn.black}" fill="${INK}" fill-rule="evenodd"/>`
   // Letters knocked off by the stamp fly over it; otherwise the title is gone first.

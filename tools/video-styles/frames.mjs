@@ -72,6 +72,12 @@ const FILMS = {
   engraving: ['engraving.mjs', 'engravingFrame'],
   gallery: ['gallery.mjs', 'galleryFrame'],
   wall: ['conman-wall.mjs', 'wallFrame'],
+  board: ['conman-board-film.mjs', 'boardFrame'],
+  'board-pan-1': ['conman-board-film.mjs', 'boardPan1'],
+  'board-pan-2': ['conman-board-film.mjs', 'boardPan2'],
+  'board-pan-3': ['conman-board-film.mjs', 'boardPan3'],
+  'board-pan-4': ['conman-board-film.mjs', 'boardPan4'],
+  'board-pan-5': ['conman-board-film.mjs', 'boardPan5'],
   'wood-engraving': ['wood-engraving.mjs', 'woodEngravingFrame'],
   letterpress: ['letterpress.mjs', 'letterpressFrame'],
   cyanotype: ['cyanotype.mjs', 'cyanotypeFrame'],
@@ -132,7 +138,7 @@ if (!times.length) {
 
 const cells = times.map((time, index) => {
   const frame = film({ time, score, lockup, uid: `f${index}` })
-  return `<figure><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">${frame.svg}</svg>
+  return `<figure><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">${(frame.lib ?? []).join('')}${frame.svg}</svg>
 <figcaption>${time.toFixed(2)}s &middot; ${frame.label.replace(/[<&]/g, '')}</figcaption></figure>`
 }).join('\n')
 

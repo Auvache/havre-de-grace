@@ -76,7 +76,7 @@ export const LETTERPRESS = {
 }
 
 /*
- * The film is on the album's cover sheet (album.mjs): the cover's white border,
+ * The film is on the album's cover sheet (album.mjs): the paper border,
  * the lyric on one row in a thin margin, and a plate 1532 × 776 about (800, 422).
  * The wall was composed for the old 666-tall plate, whose centre was y 367: the
  * camera still looks at that line of the world, and puts it at the new plate's
