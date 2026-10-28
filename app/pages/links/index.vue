@@ -16,8 +16,12 @@
   on screen and the button is a fixed height, so the swap changes words and an
   icon but never moves anything.
 
-  The page paints no background of its own: the blackout gradient comes from
-  the route's theme (app/config/pageThemeConfig.ts).
+  The colours are Deep Water: the homepage hero's sea at full saturation, the
+  name in the hero's thin wide caps, and the signup in buoy orange so it is the
+  brightest thing on a phone screen. They belong to this page only; the rest
+  of the site keeps its own palette. The page paints its own background, and
+  the route's blackout theme (app/config/pageThemeConfig.ts) covers anything
+  past its edge.
 -->
 
 <template>
@@ -36,7 +40,7 @@
             class="links-avatar__img h-full w-full object-cover"
           />
         </div>
-        <h1 class="mt-3 text-[1.45rem] font-bold leading-tight tracking-[0.005em] text-[var(--links-foam)]">
+        <h1 class="links-name mt-3 leading-tight">
           {{ siteProfile.artistName }}
         </h1>
       </header>
@@ -73,7 +77,7 @@
             <button
               type="submit"
               :disabled="status === 'loading'"
-              class="h-full shrink-0 rounded-full bg-[var(--color-accent)] px-5 text-[0.9rem] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+              class="links-join h-full shrink-0 rounded-full px-5 text-[0.9rem] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
             >
               {{ status === 'loading' ? 'Joining…' : 'Join' }}
             </button>
@@ -258,16 +262,39 @@ usePageSeo({
 
 <style scoped>
 .links-page {
+  /* Buoy orange: the signup, the chosen app, focus rings. */
+  --color-accent: #e2622d;
   /* Inside the cards. */
-  --links-paper: #f4f2ec;
-  --links-ink: #16191d;
-  --links-muted: #68727b;
-  --links-line: rgba(22, 25, 29, 0.08);
-  /* On the blackout around them. */
+  --links-paper: #e3eef1;
+  --links-ink: #0b2433;
+  --links-muted: #567080;
+  --links-line: rgba(11, 36, 51, 0.08);
+  /* On the water around them. */
   --links-foam: #f4f6f7;
 
   color: var(--links-ink);
   font-family: var(--font-family-base);
+  background:
+    radial-gradient(90% 22rem at 50% 0%, rgb(61 160 180 / 0.5), transparent 70%),
+    radial-gradient(70% 50% at 100% 100%, rgb(226 98 45 / 0.16), transparent 70%),
+    repeating-linear-gradient(180deg, transparent 0 9px, rgb(255 255 255 / 0.025) 9px 10px),
+    linear-gradient(180deg, #13506a 0%, #0b2f42 42%, #061823 100%);
+}
+
+/* The hero's name: thin, widely tracked caps, as on the cover. */
+.links-name {
+  color: var(--links-foam);
+  font-family: "Barlow Condensed", var(--font-family-base);
+  font-size: 1.75rem;
+  font-weight: 200;
+  letter-spacing: 0.3em;
+  /* Tracking hangs off the last letter; pull it back so the name centres. */
+  text-indent: 0.3em;
+  text-transform: uppercase;
+}
+
+.links-join {
+  background: var(--color-accent);
 }
 
 .links-avatar {
@@ -284,7 +311,7 @@ usePageSeo({
 }
 
 .links-card {
-  background: #fff;
+  background: #f3f8f9;
   border: 1px solid var(--links-line);
   border-radius: 1.4rem;
   box-shadow:
