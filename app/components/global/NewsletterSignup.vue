@@ -7,9 +7,14 @@
 
 <template>
   <section aria-label="Mailing list signup" :class="compact ? 'w-full max-w-sm' : ''">
-    <p v-if="compact" class="label-text">
-      mailing list
-    </p>
+    <template v-if="compact">
+      <p class="label-text">
+        mailing list
+      </p>
+      <p class="mt-2 text-sm muted-text">
+        {{ letter.offerShort }}
+      </p>
+    </template>
 
     <p v-if="status === 'success'" :class="messageClass" role="status">
       Almost there — check your inbox and click the link to confirm.
@@ -63,6 +68,8 @@
 </template>
 
 <script setup lang="ts">
+import { letter } from '~~/shared/data/letter'
+
 const props = withDefaults(defineProps<{
   // The footer bar: a small label of its own, and no centring — the footer
   // stack handles that. The subscribe page brings its own heading instead.

@@ -23,7 +23,7 @@
 
       <template v-else>
         <p class="hidden truncate text-sm sm:block" :class="status === 'error' ? 'text-[var(--color-accent)]' : 'muted-text'">
-          {{ status === 'error' ? "That didn't go through — check the address." : 'New songs first, straight to your inbox.' }}
+          {{ status === 'error' ? "That didn't go through — check the address." : letter.offerShort }}
         </p>
 
         <form
@@ -61,7 +61,7 @@
         </form>
 
         <NuxtLink to="/subscribe" class="nav-link truncate text-sm sm:hidden">
-          new songs first — join the mailing list
+          {{ letter.offer.toLowerCase() }} — join the list
         </NuxtLink>
       </template>
     </div>
@@ -80,9 +80,12 @@
 </template>
 
 <script setup lang="ts">
-// Pages that have no business advertising the mailing list: the two pages that
-// are *about* the mailing list, and the unlisted workbench.
-const BANNER_OFF_ROUTES = /^\/(?:subscribe|unsubscribe|tools)(?:\/|$)/
+import { letter } from '~~/shared/data/letter'
+
+// Pages that have no business advertising the mailing list: the pages that are
+// *about* the mailing list, the letters (which carry their own signup), and the
+// unlisted workbench.
+const BANNER_OFF_ROUTES = /^\/(?:subscribe|unsubscribe|letters|tools)(?:\/|$)/
 
 const route = useRoute()
 const showsBanner = computed(() => !BANNER_OFF_ROUTES.test(route.path))

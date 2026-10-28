@@ -1,7 +1,37 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import { isPublished, readLetterFiles } from './shared/utils/letterSchedule'
+
+// Letters that aren't out yet stay out of the build entirely; see
+// shared/utils/letterSchedule.ts for why hiding them in the page isn't enough.
+// `nuxt dev` keeps every letter, so the bank can be read back before it ships.
+const unpublishedLetters = process.env.NODE_ENV === 'production'
+  ? readLetterFiles('content/letters')
+      .filter((letter) => !isPublished(letter))
+      .map((letter) => `letters/${letter.file}`)
+  : []
 
 export default defineContentConfig({
   collections: {
+    // The Productive Creative: the weekly letter, archived at /letters. The
+    // filename is the slug.
+    letters: defineCollection({
+      type: 'page',
+      source: {
+        include: 'letters/*.md',
+        exclude: unpublishedLetters,
+      },
+      schema: z.object({
+        // The day it was emailed. Leave it off and the letter is a draft.
+        date: z.string().optional(),
+        // The day it goes up here, when that isn't a week after `date`.
+        published: z.string().optional(),
+        // Which core idea it serves: small-hours, finish-over-perfect,
+        // presence-over-persuasion, capture-everything, life-feeds-the-art.
+        idea: z.string().optional(),
+        // A story-behind-a-song letter: the raw material for the book.
+        song: z.string().optional(),
+      }),
+    }),
     music: defineCollection({
       type: 'data',
       source: 'music/*.yml',

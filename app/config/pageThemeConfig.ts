@@ -82,7 +82,7 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     },
   },
   {
-    match: /^\/(?:subscribe|unsubscribe)\/?$/,
+    match: /^\/(?:subscribe|unsubscribe|letters(?:\/[^/]+)?)\/?$/,
     config: {
       theme: 'light',
       gradient: 'light-fjord',

@@ -11,8 +11,8 @@
         root-margin="0px 0px -6% 0px"
       >
         <SectionHeading
-          title="mailing list"
-          description="New songs, the stories behind them, and early word on the next record — sent straight to your inbox."
+          :title="letter.offer"
+          :description="letter.offerDetail"
           heading-tag="h1"
           align="center"
         />
@@ -22,8 +22,8 @@
         </div>
 
         <p class="mt-6 text-sm muted-text">
-          One click to confirm, one click to leave. No more than a handful of
-          emails a year, and your address goes nowhere else.
+          One click to confirm, one click to leave. One letter a week, and your
+          address goes nowhere else.
         </p>
       </ScrollReveal>
 
@@ -59,6 +59,12 @@
         root-margin="0px 0px -8% 0px"
       >
         <p class="text-sm muted-text">
+          See what you'd be getting:
+          <NuxtLink to="/letters" class="nav-link hover:text-[var(--color-accent)]">
+            read the letters
+          </NuxtLink>
+        </p>
+        <p class="mt-3 text-sm muted-text">
           Already on the list and want off it?
           <NuxtLink to="/unsubscribe" class="nav-link hover:text-[var(--color-accent)]">
             unsubscribe
@@ -70,22 +76,24 @@
 </template>
 
 <script setup lang="ts">
+import { letter } from '~~/shared/data/letter'
+
 const expectations = [
   {
-    title: 'new songs',
-    body: 'Release dates before they go out anywhere else, and the occasional demo or rough mix that never makes the records.',
+    title: 'a campfire song',
+    body: 'Once a month, a song that isn\'t out anywhere: one guitar, one take. The list hears it first.',
   },
   {
-    title: 'the stories',
-    body: 'Where a song came from, what it was originally about, and what changed on the way to the take that shipped.',
+    title: 'the letter',
+    body: `${letter.name}: every week, a few hundred words on writing and recording around a day job and a young family, and one small thing to try yourself.`,
   },
   {
-    title: 'shows & merch',
-    body: 'Dates near you when there are any, and a heads-up when there is something new to buy. Never more than that.',
+    title: 'shows & records',
+    body: 'Dates near you when there are any, and new records here before anywhere else. Never more than that.',
   },
 ]
 
-const pageDescription = `Join the Havre De Grace mailing list for new songs, the stories behind them, and early word on the next record from Stefan Auvache Bradley.`
+const pageDescription = `Join the Havre De Grace mailing list: an unreleased campfire song every month and ${letter.name}, a weekly letter from Stefan Auvache Bradley.`
 
 usePageSeo({
   title: `Mailing List | Havre De Grace`,

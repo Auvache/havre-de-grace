@@ -6,6 +6,9 @@ import type { Album, StreamingLinks } from '../shared/types'
 import { toSongRefs } from '../shared/utils/songSlug'
 import { siteProfile } from '../shared/data/site'
 import { bioParagraphs } from '../shared/data/bio'
+import { letter as letterOffer } from '../shared/data/letter'
+import { formatLetterDate, toDay } from '../shared/utils/letterDates'
+import { isPublished, readLetterFiles } from '../shared/utils/letterSchedule'
 import { pressBios } from '../shared/data/press'
 
 /**
@@ -371,6 +374,49 @@ export default defineNuxtModule({
               creditList(track.credits),
             ))
           }
+        }
+
+        // --- /letters and /letters/<slug> ----------------------------------
+        // The letters are markdown already, so each mirror is its source with
+        // the front matter turned into a byline. Only the ones that are out,
+        // by the same rule the content collection uses.
+        const letters = readLetterFiles(join(nuxt.options.rootDir, 'content/letters'))
+          .filter((item) => isPublished(item))
+          .map((item) => {
+            const leadingTitle = item.body.match(/^\s*#\s+(.+)\n/)
+            return {
+              ...item,
+              sentOn: toDay(item.frontmatter.date),
+              title: String(item.frontmatter.title ?? leadingTitle?.[1] ?? item.slug),
+              body: leadingTitle ? item.body.slice(leadingTitle[0].length) : item.body,
+            }
+          })
+          .sort((a, b) => (b.sentOn ?? '').localeCompare(a.sentOn ?? ''))
+
+        await emit('/letters', {
+          title: letterOffer.name,
+          description: 'The archive of a weekly letter on making songs around a full life.',
+        }, blocks(
+          `# ${letterOffer.name}`,
+          `_A weekly letter from Stefan Auvache Bradley of ${siteProfile.artistName}. Subscribe at ${siteUrl}/subscribe._`,
+          letters.length
+            ? letters
+                .map((item) => `- [${item.title}](${siteUrl}/letters/${item.slug})`
+                  + `${item.sentOn ? ` — ${formatLetterDate(item.sentOn)}` : ''}`)
+                .join('\n')
+            : '_The first letter is on its way._',
+        ))
+
+        for (const item of letters) {
+          await emit(`/letters/${item.slug}`, {
+            title: `${item.title} — ${letterOffer.name}`,
+            description: String(item.frontmatter.description ?? `A letter from ${letterOffer.name}.`),
+          }, blocks(
+            `# ${item.title}`,
+            `_[${letterOffer.name}](${siteUrl}/letters), by Stefan Auvache Bradley`
+            + `${item.sentOn ? `, ${formatLetterDate(item.sentOn)}` : ''}._`,
+            item.body.trim(),
+          ))
         }
 
         // --- /llms.txt --------------------------------------------------------

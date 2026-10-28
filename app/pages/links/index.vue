@@ -4,8 +4,12 @@
   streaming app they use, and want to be listening in one tap. So there is one
   big button, and a picker under it for anyone whose app isn't the one shown.
   The choice is remembered on the device, so a returning visitor's button is
-  already theirs. After that: the mailing list, then four doors to everything
-  else.
+  already theirs.
+
+  Above it sits the mailing list, because its offer (a campfire song a month,
+  shared/data/letter.ts) is the stronger next step for someone who just heard a
+  clip, and the album is still one tap away for anyone who won't sign up. Then
+  four doors to everything else.
 
   The server always renders Spotify. The saved choice (or Apple Music on iOS
   when nothing is saved) is applied after hydration. All six chips are always
@@ -37,84 +41,15 @@
         </h1>
       </header>
 
-      <!-- Listen: the one thing this page is for. -->
-      <section class="links-card mt-6 p-3" aria-labelledby="links-listen-heading">
-        <div class="flex items-center gap-3 px-1 pb-3 pt-1">
-          <img
-            v-if="latestAlbum"
-            :src="latestAlbum.ogImage || latestAlbum.coverImage"
-            :alt="latestAlbum.coverAlt"
-            width="56"
-            height="56"
-            class="h-14 w-14 shrink-0 rounded-[0.6rem] object-cover shadow-[0_4px_14px_rgba(22,25,29,0.18)]"
-          >
-          <div class="min-w-0">
-            <p class="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
-              New album
-            </p>
-            <h2 id="links-listen-heading" class="truncate text-[1.15rem] font-bold leading-snug text-[var(--links-ink)]">
-              {{ albumTitle }}
-            </h2>
-            <p class="text-[0.85rem] text-[var(--links-muted)]">
-              {{ trackCount }} songs · out now
-            </p>
-          </div>
-        </div>
-
-        <a
-          :href="selected.href"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="links-play group flex h-[4.25rem] w-full items-center gap-3.5 rounded-[1.05rem] px-3.5 text-left"
-          :aria-label="`Play ${albumTitle} on ${selected.label}`"
-        >
-          <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.8rem] bg-white">
-            <img :src="selected.iconSrc" alt="" width="32" height="32" class="h-8 w-8 object-contain">
-          </span>
-          <span class="min-w-0 flex-1 leading-tight">
-            <span class="block truncate text-[1.12rem] font-bold text-white">Play {{ albumTitle }}</span>
-            <span class="block truncate text-[0.86rem] text-white/70">on {{ selected.label }}</span>
-          </span>
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.12] transition-transform duration-200 group-hover:scale-105 group-active:scale-95">
-            <svg viewBox="0 0 24 24" class="ml-0.5 h-5 w-5 fill-white" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z" /></svg>
-          </span>
-        </a>
-
-        <fieldset class="mt-3.5 px-1 pb-1">
-          <legend class="mb-2 text-[0.8rem] text-[var(--links-muted)]">
-            Not your app? Pick yours — we'll remember it.
-          </legend>
-          <div class="grid grid-cols-3 gap-2">
-            <button
-              v-for="service in albumServices"
-              :key="service.key"
-              type="button"
-              class="links-chip flex h-11 items-center justify-center gap-1.5 rounded-full px-1.5 text-[0.8rem] font-medium"
-              :class="service.key === selected.key ? 'links-chip--on' : ''"
-              :aria-pressed="service.key === selected.key"
-              @click="choose(service.key)"
-            >
-              <img :src="service.iconSrc" alt="" width="18" height="18" class="h-[1.1rem] w-[1.1rem] shrink-0 object-contain">
-              <span class="whitespace-nowrap">{{ SHORT_LABELS[service.key] }}</span>
-            </button>
-          </div>
-        </fieldset>
-      </section>
-
-      <!-- Mailing list -->
-      <section class="links-card mt-3 p-4" aria-labelledby="links-list-heading">
-        <div class="flex items-start gap-3">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-accent)_14%,white)] text-[var(--color-accent)]">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m4 7.5 8 5.5 8-5.5" /></svg>
-          </span>
-          <div class="min-w-0">
-            <h2 id="links-list-heading" class="text-[1.02rem] font-bold leading-snug text-[var(--links-ink)]">
-              Get new songs &amp; show dates
-            </h2>
-            <p class="text-[0.86rem] text-[var(--links-muted)]">
-              Straight to your inbox. A few emails a year.
-            </p>
-          </div>
+      <!-- The offer: the strongest reason to stay in touch, so it comes first. -->
+      <section class="links-card mt-6 p-4" aria-labelledby="links-list-heading">
+        <div class="px-1">
+          <h2 id="links-list-heading" class="text-[1.15rem] font-bold leading-snug text-[var(--links-ink)]">
+            {{ letter.offer }}
+          </h2>
+          <p class="mt-1 text-[0.86rem] leading-snug text-[var(--links-muted)]">
+            {{ letter.offerDetail }}
+          </p>
         </div>
 
         <p v-if="status === 'success'" class="mt-3.5 rounded-[0.9rem] bg-[color-mix(in_srgb,var(--color-accent)_10%,white)] px-4 py-3 text-[0.9rem] text-[var(--links-ink)]" role="status">
@@ -154,6 +89,48 @@
             That didn't go through. Check the address and try again.
           </p>
         </form>
+      </section>
+
+      <!-- Listen: the next step for anyone who won't sign up. -->
+      <section class="links-card mt-3 p-3" :aria-label="`Play ${albumTitle}`">
+        <a
+          :href="selected.href"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="links-play group flex h-[4.25rem] w-full items-center gap-3.5 rounded-[1.05rem] px-3.5 text-left"
+          :aria-label="`Play ${albumTitle} on ${selected.label}`"
+        >
+          <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.8rem] bg-white">
+            <img :src="selected.iconSrc" alt="" width="32" height="32" class="h-8 w-8 object-contain">
+          </span>
+          <span class="min-w-0 flex-1 leading-tight">
+            <span class="block truncate text-[1.12rem] font-bold text-white">Play {{ albumTitle }}</span>
+            <span class="block truncate text-[0.86rem] text-white/70">on {{ selected.label }}</span>
+          </span>
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.12] transition-transform duration-200 group-hover:scale-105 group-active:scale-95">
+            <svg viewBox="0 0 24 24" class="ml-0.5 h-5 w-5 fill-white" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z" /></svg>
+          </span>
+        </a>
+
+        <fieldset class="mt-3.5 px-1 pb-1">
+          <legend class="mb-2 text-[0.8rem] text-[var(--links-muted)]">
+            Not your app? Pick yours — we'll remember it.
+          </legend>
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              v-for="service in albumServices"
+              :key="service.key"
+              type="button"
+              class="links-chip flex h-11 items-center justify-center gap-1.5 rounded-full px-1.5 text-[0.8rem] font-medium"
+              :class="service.key === selected.key ? 'links-chip--on' : ''"
+              :aria-pressed="service.key === selected.key"
+              @click="choose(service.key)"
+            >
+              <img :src="service.iconSrc" alt="" width="18" height="18" class="h-[1.1rem] w-[1.1rem] shrink-0 object-contain">
+              <span class="whitespace-nowrap">{{ SHORT_LABELS[service.key] }}</span>
+            </button>
+          </div>
+        </fieldset>
       </section>
 
       <!-- Everything else, as four doors. -->
@@ -196,6 +173,7 @@ import bandsintownIcon from '~~/assets/images/bandsintown.png'
 import instagramIcon from '~~/assets/images/instagram.png'
 import youtubeIcon from '~~/assets/images/youtube.png'
 import type { ServiceKey } from '~/composables/useLinkHub'
+import { letter } from '~~/shared/data/letter'
 
 definePageMeta({
   layout: 'links',
@@ -217,7 +195,6 @@ const SHORT_LABELS: Record<ServiceKey, string> = {
 }
 
 const albumTitle = computed(() => latestAlbum.value?.title ?? 'the new album')
-const trackCount = computed(() => latestAlbum.value?.tracklist.length ?? 0)
 
 const selectedKey = ref<ServiceKey>('spotify')
 const selected = computed(() =>

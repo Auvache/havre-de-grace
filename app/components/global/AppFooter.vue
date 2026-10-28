@@ -42,6 +42,9 @@
           <NuxtLink to="/contact" class="nav-link muted-text hover:text-[var(--color-accent)]">
             contact
           </NuxtLink>
+          <NuxtLink to="/letters" class="nav-link muted-text hover:text-[var(--color-accent)]">
+            letters
+          </NuxtLink>
           <NuxtLink to="/subscribe" class="nav-link muted-text hover:text-[var(--color-accent)]">
             mailing list
           </NuxtLink>
