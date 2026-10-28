@@ -1,5 +1,5 @@
 /*
- * Records `?from=<platform>` from the short profile links (/yt, /tt, /ig) on
+ * Records `?from=<platform>` from the source links (/youtube, /tiktok, /instagram, /shows) on
  * the visitor's first page. See useSignupSource.
  *
  * Client-only, because every page is prerendered to one shared HTML file and

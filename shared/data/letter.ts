@@ -3,16 +3,17 @@
  * makes the same promise: /links, /subscribe, /letters, the banner and the
  * footer.
  *
- * The song is the offer, because it's what someone who just heard a clip came
- * for. The letter is what arrives every week. Both have to stay true: say a
- * week here only while a letter really does go out every week.
+ * The recordings are the offer, because they're what someone who just heard a
+ * clip came for. The letter is what arrives every week. Both have to stay true,
+ * so nothing here names a cadence for the recordings: they go out when there's
+ * one ready. Say a week only while a letter really does go out every week.
  */
 export const letter = {
   name: 'The Productive Creative',
   /** The promise, as a heading. */
-  offer: 'A campfire song every month',
+  offer: 'Unreleased songs and demos',
   /** The line under it. */
-  offerDetail: 'Unreleased, one take, sent to the list before anywhere else. Plus a short letter from me every week on making songs around a full life.',
+  offerDetail: 'Recordings that aren\'t out anywhere else, sent to the list first. Plus a short letter from me every week on making songs around a full life.',
   /** For the one-line spaces: the banner, the footer label. */
-  offerShort: 'A campfire song every month, and a short letter every week.',
+  offerShort: 'Unreleased songs and demos, and a short letter every week.',
 } as const

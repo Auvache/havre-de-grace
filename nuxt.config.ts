@@ -263,12 +263,20 @@ export default defineNuxtConfig({
       '/resources/tools/funding',
       '/resources/tools/promo-checker',
     ].map((path) => [path, { redirect: { to: '/', statusCode: 301 } }])),
-    // Short links for each platform's profile and descriptions. They all land on
-    // the /links hub, and `from` tells a signup there where the visitor came
-    // from (see useSignupSource).
-    '/yt': { redirect: { to: '/links?from=youtube', statusCode: 301 } },
-    '/tt': { redirect: { to: '/links?from=tiktok', statusCode: 301 } },
-    '/ig': { redirect: { to: '/links?from=instagram', statusCode: 301 } },
+    // A link for each place people find the music: the platform profiles and
+    // descriptions, and the QR code at shows. They all land on the /links hub,
+    // and `from` tells a signup there where the visitor came from (see
+    // useSignupSource). Spelled out in full because they're read in bios and
+    // on a sign by the stage; the short forms were the first version and stay
+    // working in case one is already out there.
+    ...Object.fromEntries([
+      ['youtube', 'yt'],
+      ['tiktok', 'tt'],
+      ['instagram', 'ig'],
+      ['shows', null],
+    ].flatMap(([source, short]) => [source, short]
+      .filter(Boolean)
+      .map((path) => [`/${path}`, { redirect: { to: `/links?from=${source}`, statusCode: 301 } }]))),
     // --- Deliberately kept out of the index ---
     // Each of these renders too little server-side text to earn a place in
     // search, and each would compete with a stronger page for the same query.

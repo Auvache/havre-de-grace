@@ -6,7 +6,7 @@
   The choice is remembered on the device, so a returning visitor's button is
   already theirs.
 
-  Above it sits the mailing list, because its offer (a campfire song a month,
+  Above it sits the mailing list, because its offer (unreleased songs and demos,
   shared/data/letter.ts) is the stronger next step for someone who just heard a
   clip, and the album is still one tap away for anyone who won't sign up. Then
   four doors to everything else.

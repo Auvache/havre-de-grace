@@ -80,8 +80,8 @@ import { letter } from '~~/shared/data/letter'
 
 const expectations = [
   {
-    title: 'a campfire song',
-    body: 'Once a month, a song that isn\'t out anywhere: one guitar, one take. The list hears it first.',
+    title: 'unreleased recordings',
+    body: 'Demos, live takes and songs that aren\'t out anywhere else. The list hears them first.',
   },
   {
     title: 'the letter',
@@ -93,7 +93,7 @@ const expectations = [
   },
 ]
 
-const pageDescription = `Join the Havre De Grace mailing list: an unreleased campfire song every month and ${letter.name}, a weekly letter from Stefan Auvache Bradley.`
+const pageDescription = `Join the Havre De Grace mailing list: unreleased songs and demos, and ${letter.name}, a weekly letter from Stefan Auvache Bradley.`
 
 usePageSeo({
   title: `Mailing List | Havre De Grace`,
