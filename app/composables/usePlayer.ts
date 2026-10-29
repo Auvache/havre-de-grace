@@ -103,6 +103,8 @@ export function usePlayer() {
       playing.value = false
     })
     audio = el
+    // For checking by hand in dev that only one thing ever plays.
+    if (import.meta.dev) (window as unknown as { __hdgAudio?: HTMLAudioElement }).__hdgAudio = el
     return el
   }
 
@@ -212,6 +214,18 @@ export function usePlayer() {
     if (at != null) seek(at)
   }
 
+  /**
+   * Load a track without playing it: a shared link to /music/<album>#<song>
+   * opens on that song, silent, until someone presses play.
+   */
+  function cueAlbum(album: Album, trackIndex = 0) {
+    if (record.value?.slug !== album.slug) {
+      record.value = toQueuedRecord(album)
+      index.value = null
+    }
+    select(trackIndex, false)
+  }
+
   /** Is this record (and this track, if given) the one loaded? */
   const isCurrent = (slug: string, trackIndex?: number) =>
     record.value?.slug === slug && (trackIndex === undefined || index.value === trackIndex)
@@ -296,8 +310,9 @@ export function usePlayer() {
     const start = performance.now()
     return new Promise((resolve) => {
       const step = (now: number) => {
-        const k = Math.min(1, (now - start) / ms)
-        el.volume = Math.max(0, from * (1 - k))
+        // A frame stamp can be a moment older than `start`; clamp it.
+        const k = Math.max(0, Math.min(1, (now - start) / ms))
+        el.volume = Math.min(1, Math.max(0, from * (1 - k)))
         if (k < 1) {
           fadeFrame = requestAnimationFrame(step)
           return
@@ -320,7 +335,7 @@ export function usePlayer() {
   return {
     record, index, track, playing, loading, currentTime, closed,
     duration: effectiveDuration, progress, hasNext, hasPrev,
-    playAlbum, toggleAlbum, isCurrent, isPlaying,
+    playAlbum, cueAlbum, toggleAlbum, isCurrent, isPlaying,
     play, pause, toggle, next, prev, seek, seekProgress, select,
     fadeOutAndStop, close, element,
   }

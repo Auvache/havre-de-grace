@@ -177,7 +177,7 @@ function onSeek(event: MouseEvent) {
 
 .player-bar__ctl {
   display: flex;
-  gap: 24px;
+  gap: 12px;
   align-items: center;
 }
 
@@ -188,6 +188,12 @@ function onSeek(event: MouseEvent) {
   border: 0;
   color: inherit;
   cursor: pointer;
+}
+
+.player-bar .sk,
+.player-bar .x {
+  width: 36px;
+  height: 36px;
 }
 
 .player-bar button:disabled {
@@ -211,7 +217,7 @@ function onSeek(event: MouseEvent) {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 26px;
+  gap: 20px;
   font-size: 12px;
   color: var(--soft);
   letter-spacing: 0.06em;
