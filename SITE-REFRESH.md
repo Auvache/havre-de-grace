@@ -64,11 +64,11 @@ for where you are, because you tick it and commit it as you go. Then run
 Tick each box (`- [x]`) in this file and commit it with the work it describes.
 
 **Phase 0: Setup**
-- [ ] Commit anything uncommitted, as its own commit
-- [ ] Read section 3 and `docs/redesign/README.md`, and open the mockups in
+- [x] Commit anything uncommitted, as its own commit
+- [x] Read section 3 and `docs/redesign/README.md`, and open the mockups in
       `docs/redesign/mockups/` in Chrome
-- [ ] Start the dev server on port 3100 (see section 6) and confirm Chrome works
-- [ ] Start lyric timing for *Ghost* and *I Want to Be Yours* in the background
+- [x] Start the dev server on port 3100 (see section 6) and confirm Chrome works
+- [x] Start lyric timing for *Ghost* and *I Want to Be Yours* in the background
       (phase 3); it runs while you do phases 1 and 2
 
 **Phase 1: Foundation and light pages** (`docs/redesign/briefs/1-foundation.md`)
