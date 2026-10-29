@@ -85,7 +85,7 @@ import { letter } from '~~/shared/data/letter'
 // Pages that have no business advertising the mailing list: the pages that are
 // *about* the mailing list, the letters (which carry their own signup), and the
 // unlisted workbench.
-const BANNER_OFF_ROUTES = /^\/(?:subscribe|unsubscribe|letters|tools)(?:\/|$)/
+const BANNER_OFF_ROUTES = /^\/(?:subscribe|thank-you|unsubscribe|letters|tools)(?:\/|$)/
 
 const route = useRoute()
 const showsBanner = computed(() => !BANNER_OFF_ROUTES.test(route.path))

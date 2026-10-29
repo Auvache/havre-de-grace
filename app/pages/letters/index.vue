@@ -1,5 +1,5 @@
 <!--
-  The archive of The Productive Creative. Each letter goes up here a week after
+  The archive of the monthly letters. Each letter goes up here a week after
   it's emailed (shared/utils/letterDates.ts), so the list is the letters a
   subscriber already has, and the signup is for the ones they don't.
 
@@ -22,7 +22,7 @@
       >
         <SectionHeading
           :title="letter.name"
-          description="A short letter every week on making songs around a day job and a young family: what I tried, what I made, and one small thing to try yourself."
+          description="Once a month, something new to listen to and the story behind it: a demo, an idea I'm working on, or a song that isn't out yet."
           heading-tag="h1"
           align="center"
         />
@@ -32,7 +32,7 @@
         </div>
 
         <p class="mt-6 text-sm muted-text">
-          {{ letter.offer }}, too. Letters go up here a week after they're sent.
+          Letters go up here a week after they're sent.
         </p>
       </ScrollReveal>
 
@@ -102,7 +102,7 @@ const letters = computed(() => {
 
 usePageSeo({
   title: `${letter.name} | Havre De Grace`,
-  description: 'A weekly letter from Stefan Auvache Bradley of Havre De Grace on writing and recording songs around a full life.',
+  description: 'The monthly letter from Stefan Auvache Bradley of Havre De Grace: new demos and songs, and the stories behind them.',
 })
 </script>
 

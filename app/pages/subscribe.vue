@@ -22,7 +22,7 @@
         </div>
 
         <p class="mt-6 text-sm muted-text">
-          One click to confirm, one click to leave. One letter a week, and your
+          One click to confirm, one click to leave. One letter a month, and your
           address goes nowhere else.
         </p>
       </ScrollReveal>
@@ -81,11 +81,11 @@ import { letter } from '~~/shared/data/letter'
 const expectations = [
   {
     title: 'unreleased recordings',
-    body: 'Demos, live takes and songs that aren\'t out anywhere else. The list hears them first.',
+    body: 'Something new every month: a demo, an idea I\'m working on, or a song that isn\'t out yet. The list hears it first.',
   },
   {
     title: 'the letter',
-    body: `${letter.name}: every week, a few hundred words on writing and recording around a day job and a young family, and one small thing to try yourself.`,
+    body: 'The story behind each one, music that\'s been moving me, and a few thoughts on making songs around a day job and a young family.',
   },
   {
     title: 'shows & records',
@@ -93,7 +93,7 @@ const expectations = [
   },
 ]
 
-const pageDescription = `Join the Havre De Grace mailing list: unreleased songs and demos, and ${letter.name}, a weekly letter from Stefan Auvache Bradley.`
+const pageDescription = 'Join the Havre De Grace mailing list: unreleased songs and demos from Stefan Auvache Bradley, something new every month.'
 
 usePageSeo({
   title: `Mailing List | Havre De Grace`,

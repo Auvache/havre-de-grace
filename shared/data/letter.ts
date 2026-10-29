@@ -4,16 +4,18 @@
  * footer.
  *
  * The recordings are the offer, because they're what someone who just heard a
- * clip came for. The letter is what arrives every week. Both have to stay true,
- * so nothing here names a cadence for the recordings: they go out when there's
- * one ready. Say a week only while a letter really does go out every week.
+ * clip came for. Once a month there's something new to listen to, and a demo or
+ * an idea in progress counts, so the promise holds even in a month without a
+ * finished song. Never promise a finished song a month. (Until 29 Oct 2026 this
+ * was The Productive Creative, a weekly letter on making songs around a full
+ * life. It's shelved: people who came for the music got essays.)
  */
 export const letter = {
-  name: 'The Productive Creative',
+  name: 'Letters',
   /** The promise, as a heading. */
   offer: 'Unreleased songs and demos',
   /** The line under it. */
-  offerDetail: 'Recordings that aren\'t out anywhere else, sent to the list first. Plus a short letter from me every week on making songs around a full life.',
+  offerDetail: 'Every month, something new to listen to: a demo, an idea I\'m working on, or a song that isn\'t out yet, and the story behind it.',
   /** For the one-line spaces: the banner, the footer label. */
-  offerShort: 'Unreleased songs and demos, and a short letter every week.',
+  offerShort: 'Unreleased songs and demos, something new every month.',
 } as const

@@ -1,5 +1,5 @@
 <!--
-  One letter from The Productive Creative, as it was sent, followed by the
+  One monthly letter, as it was sent, followed by the
   signup for the next one. A letter that isn't out yet doesn't exist in a
   production build (content.config.ts), so its URL 404s like any other.
 -->
@@ -95,8 +95,8 @@ const scheduledFor = computed(() => {
 })
 
 usePageSeo({
-  title: () => `${page.value?.title} | ${letter.name}`,
-  description: () => page.value?.description || `A letter from ${letter.name}, by Stefan Auvache Bradley of Havre De Grace.`,
+  title: () => `${page.value?.title} | Havre De Grace`,
+  description: () => page.value?.description || 'A letter from Stefan Auvache Bradley of Havre De Grace.',
   type: 'article',
 })
 </script>

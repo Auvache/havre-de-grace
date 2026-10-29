@@ -12,8 +12,7 @@ const unpublishedLetters = process.env.NODE_ENV === 'production'
 
 export default defineContentConfig({
   collections: {
-    // The Productive Creative: the weekly letter, archived at /letters. The
-    // filename is the slug.
+    // The monthly letter, archived at /letters. The filename is the slug.
     letters: defineCollection({
       type: 'page',
       source: {

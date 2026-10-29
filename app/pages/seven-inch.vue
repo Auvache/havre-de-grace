@@ -13,10 +13,11 @@
     :albums="[single]"
     format="seven"
     heading="A 7-inch for the Havre De Grace mailing list"
-    intro-title="You're in. This one's just for the list."
+    intro-title="You're in. Here's your first 7-inch."
     :intro-lines="[
       'Two demos that aren\'t out anywhere else.',
       'Side A is All I Need. Flip it over for Skin and Bones.',
+      'Every month there\'s something new.',
     ]"
     intro-action="Play it"
   />

@@ -311,6 +311,12 @@ export default defineNuxtConfig({
     '/unsubscribe': {
       robots: 'noindex, follow',
     },
+    // Where Kit sends a signup before it's confirmed (pages/thank-you.vue):
+    // "check your inbox", for someone already signing up. Same reasoning as
+    // /unsubscribe.
+    '/thank-you': {
+      robots: 'noindex, follow',
+    },
     // Work in progress: a review page of candidate logo marks, shared by link
     // rather than navigated to. Nothing here should compete in search.
     '/logo': {
@@ -369,6 +375,7 @@ export default defineNuxtConfig({
         '/contact',
         '/subscribe',
         '/unsubscribe',
+        '/thank-you',
         // Each letter is crawled from the archive, so only the archive is listed.
         '/letters',
         '/links',
