@@ -6,6 +6,9 @@
       "Bash(npx nuxi:*)",
       "Bash(xargs -I {} basename {})",
       "WebFetch(domain:www.apple.com)"
+    ],
+    "additionalDirectories": [
+      "/Users/sbradley/stefan/videos"
     ]
   }
 }

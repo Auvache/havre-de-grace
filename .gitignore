@@ -50,3 +50,6 @@ public/press/havre-de-grace-press-kit.zip
 
 # Rendered music videos — tools/video-styles/mp4.mjs
 /exports
+
+# Playwright MCP screenshots and snapshots. Scratch, always.
+/.playwright-mcp
