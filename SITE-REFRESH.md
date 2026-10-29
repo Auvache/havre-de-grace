@@ -117,7 +117,7 @@ Tick each box (`- [x]`) in this file and commit it with the work it describes.
 - [x] Fix what the passes found, then re-check those pages
 
 **Phase 7: Report**
-- [ ] `SITE-REFRESH-REPORT.md` written (section 7), screenshots in
+- [x] `SITE-REFRESH-REPORT.md` written (section 7), screenshots in
       `docs/redesign/after/`, all committed
 
 ---
