@@ -1,92 +1,81 @@
+<!--
+  One line: the name and the place, then text links to where the music lives
+  and to the letters. No coloured platform icons, no signup (a page has one at
+  most, and it's the page's own).
+
+  `tone="dark"` for the album pages.
+-->
+
 <template>
-  <footer class="border-t border-theme" :style="{ backgroundColor: 'var(--theme-bg)' }">
-    <div class="page-container py-12">
-      <div class="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
-        <!--
-          The stacked lockup stands in for the name here. It keeps its
-          role="img" and aria-label, so the footer still announces the artist
-          name where the text used to be.
-        -->
-        <BrandMark variant="lockup" class="w-[min(11rem,52vw)]" />
-
-        <StreamingLinks :links="siteProfile.artistLinks" compact />
-
-        <NewsletterSignup compact />
-
-        <!--
-          The footer previously carried no internal links at all. On a site this
-          small that's the cheapest crawl path and internal-link surface there
-          is, and it puts a real link to each album on every page.
-        -->
-        <nav aria-label="Footer" class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
-          <NuxtLink to="/" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            home
-          </NuxtLink>
-          <NuxtLink
-            v-for="album in albums"
-            :key="album.slug"
-            :to="`/music/${album.slug}`"
-            class="nav-link muted-text hover:text-[var(--color-accent)]"
-          >
-            {{ album.title }}
-          </NuxtLink>
-          <NuxtLink to="/listen" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            record player
-          </NuxtLink>
-          <NuxtLink to="/about" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            about
-          </NuxtLink>
-          <NuxtLink to="/press" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            press kit
-          </NuxtLink>
-          <NuxtLink to="/contact" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            contact
-          </NuxtLink>
-          <NuxtLink to="/letters" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            letters
-          </NuxtLink>
-          <NuxtLink to="/subscribe" class="nav-link muted-text hover:text-[var(--color-accent)]">
-            mailing list
-          </NuxtLink>
-        </nav>
-
-        <p class="text-sm muted-text">
-          Email:
-          <a :href="`mailto:${siteProfile.bookingEmail}`" class="hover:text-[var(--color-accent)]">
-            {{ siteProfile.bookingEmail }}
-          </a>
-        </p>
-
-        <p class="text-xs muted-text">
-          &copy; {{ currentYear }} {{ siteProfile.artistName }} Music. All rights reserved.
-        </p>
-      </div>
-    </div>
+  <footer :class="['site-footer', { 'is-dark': tone === 'dark' }]">
+    <span>{{ siteProfile.artistName }} · {{ siteProfile.location }}</span>
+    <nav aria-label="Elsewhere" class="site-footer__links">
+      <a v-for="link in links" :key="link.label" :href="link.href" rel="noopener">{{ link.label }}</a>
+      <NuxtLink to="/letters">letters</NuxtLink>
+    </nav>
   </footer>
 </template>
 
 <script setup lang="ts">
-import type { Album } from '~~/shared/types'
+withDefaults(defineProps<{
+  tone?: 'light' | 'dark'
+}>(), {
+  tone: 'light',
+})
 
 const siteProfile = useSiteProfile()
-const currentYear = new Date().getFullYear()
+const { spotify, appleMusic, bandcamp, youtube, instagram } = siteProfile.artistLinks
 
-// Released, visible albums, newest first. Unreleased albums are left out so the
-// footer never links to a "coming soon" placeholder from every page on the site.
-const { data: albums } = await useAsyncData('footer-albums', async () => {
-  const items = await queryCollection('music').all() as Album[]
-
-  const isReleased = (album: Album) => {
-    const match = album.releaseDate?.match(/^(\d{4})-(\d{2})-(\d{2})$/)
-    if (!match) {
-      return true
-    }
-    const [, year, month, day] = match
-    return new Date(Number(year), Number(month) - 1, Number(day)).getTime() <= Date.now()
-  }
-
-  return items
-    .filter((album) => album.isVisible !== false && !album.isSingle && isReleased(album))
-    .sort((a, b) => (b.releaseDate ?? String(b.year)).localeCompare(a.releaseDate ?? String(a.year)))
-})
+const links = [
+  { label: 'spotify', href: spotify },
+  { label: 'apple music', href: appleMusic },
+  { label: 'bandcamp', href: bandcamp },
+  { label: 'youtube', href: youtube },
+  { label: 'instagram', href: instagram },
+].filter((link): link is { label: string; href: string } => Boolean(link.href))
 </script>
+
+<style scoped>
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 60px 56px 56px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: lowercase;
+  color: #7a838c;
+  background: var(--theme-bg);
+}
+
+.site-footer.is-dark {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  background: transparent;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+}
+
+.site-footer__links a {
+  text-decoration: none;
+}
+
+.site-footer__links a:hover {
+  color: var(--theme-text);
+}
+
+@media (max-width: 640px) {
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px 20px 30px;
+  }
+}
+</style>

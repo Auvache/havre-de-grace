@@ -1,10 +1,15 @@
+<!--
+  The album pages (Cinema): dark, graded per record, the nav over the screen.
+  The page paints its own floor; its dock replaces the player bar.
+-->
+
 <template>
-  <div class="banner-offset min-h-screen text-[var(--theme-text)]">
-    <AppNavbar />
-    <main class="min-h-[calc(100vh-var(--chrome-height))]">
+  <div class="site-shell player-room min-h-screen text-[var(--theme-text)]">
+    <AppNavbar over-picture />
+    <main>
       <slot />
     </main>
-    <AppFooter />
+    <AppFooter tone="dark" />
   </div>
 </template>
 

@@ -19,16 +19,32 @@
   --space-7: 5rem;
   --space-8: 7rem;
 
-  --color-bg: #faf9f5;
-  --color-text: #16191d;
-  --color-muted: #6a7681;
-  --color-border: #dfe4e8;
+  /* The current record's palette (--ink, --bone, --sea, --deep, --mist) is
+     written onto :root by app.vue from app/config/records.ts; these are the
+     fallbacks, and everything older reads them through the --color-* names. */
+  --ink: #1d232a;
+  --bone: #f3f1ec;
+  --sea: #6f8299;
+  --deep: #3f5670;
+  --mist: #e3e8ec;
+  --rule: color-mix(in srgb, var(--ink) 14%, transparent);
+  --soft: #59626c;
+  --faint: #97a2ad;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  /* The persistent player's height; pages leave this much room at the bottom. */
+  --player-height: 68px;
+
+  --color-bg: var(--bone);
+  --color-text: var(--ink);
+  --color-muted: var(--soft);
+  --color-border: var(--rule);
 
   --color-bg-dark: #1b1f24;
   --color-text-dark: #f6f8f9;
   --color-muted-dark: #94a1ac;
 
-  --color-accent: #3d7a8a;
+  --color-accent: var(--sea);
   --color-splash-bg: #141414;
 
   --theme-bg: var(--color-bg);
@@ -53,7 +69,9 @@
      alone. Everything that used to offset by --nav-height now offsets by
      --chrome-height, which collapses back to the nav height on its own once
      --banner-height goes to zero. */
-  --banner-height: 2.75rem;
+  /* The strip is gone (one signup per page at most); kept at zero so the
+     offsets built on it still resolve. */
+  --banner-height: 0rem;
   --chrome-height: calc(var(--nav-height) + var(--banner-height));
 
   --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -78,6 +96,7 @@ body {
   color: var(--theme-text);
   font-family: var(--font-family-base);
   font-size: var(--font-size-body);
+  font-weight: 300;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
   transition:
@@ -112,31 +131,6 @@ a {
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-}
-
-/*
-  Whether the mailing-list banner shows is a per-visitor fact, and every page
-  here is prerendered to one shared HTML file — so the markup always ships and
-  the state is carried on <html> instead.
-
-  `data-banner="hidden"` is the visitor's cookie, set before first paint by the
-  inline script in nuxt.config. Without it, anyone who had already subscribed or
-  dismissed the thing would watch it flash in and shove the page down on every
-  single load. `data-banner-route="off"` is the route opting out (the subscribe
-  pages themselves, the unlisted workbench), baked into those pages at build
-  time by NewsletterBanner.
-
-  Either one zeroes --banner-height, which is what removes the offset; the
-  display rule is only needed for the cookie case, because an opted-out route
-  never renders the element in the first place.
-*/
-html[data-banner="hidden"],
-html[data-banner-route="off"] {
-  --banner-height: 0rem;
-}
-
-html[data-banner="hidden"] .mailing-banner {
-  display: none;
 }
 
 .banner-offset {
@@ -254,4 +248,133 @@ html[data-banner="hidden"] .mailing-banner {
   :root {
     --nav-height: 4rem;
   }
+}
+
+
+/* ---------------------------------------------------------------------------
+   The 2026 refresh: Still Water (home), Shoreline (inner pages), shared bits.
+   The mockups these come from are in docs/redesign/mockups/.
+   --------------------------------------------------------------------------- */
+
+.serif {
+  font-family: var(--font-serif);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 300;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--sea);
+}
+
+/* A title, a lyric, a pull quote. */
+.italic-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.05;
+}
+
+/* An action in words: small spaced capitals over a hairline. */
+.u-link {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 4px;
+  text-decoration: none;
+}
+
+.u-link:hover {
+  color: var(--deep);
+}
+
+/* The outlined round play button. */
+.pp {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
+}
+
+.pp:hover {
+  background: var(--ink);
+  color: var(--bone);
+}
+
+.pp svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* One calm reading column under a Shoreline band. */
+.reading {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 110px 24px 120px;
+}
+
+.reading.wide {
+  max-width: 1080px;
+}
+
+.lede {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(26px, 2.2vw + 12px, 34px);
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ink) 88%, var(--bone));
+}
+
+.prose-body p {
+  font-size: 18px;
+  line-height: 1.85;
+  color: color-mix(in srgb, var(--ink) 82%, var(--bone));
+  margin-top: 24px;
+}
+
+.prose-body a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.hairline-list {
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.hairline-list > li {
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (max-width: 640px) {
+  .reading {
+    padding: 64px 20px 80px;
+  }
+
+  .prose-body p {
+    font-size: 17px;
+  }
+}
+
+/* Room at the bottom for the persistent player bar (or an album page's dock). */
+.player-room {
+  padding-bottom: var(--player-height);
 }

@@ -5,9 +5,7 @@ html[data-theme="light"] {
   --theme-border: var(--color-border);
   --theme-bg-soft: color-mix(in srgb, var(--color-bg) 88%, var(--color-accent) 12%);
   --theme-surface: color-mix(in srgb, var(--color-bg) 96%, var(--color-text) 4%);
-  --theme-page-gradient:
-    radial-gradient(125% 82% at 0% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 58%),
-    linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 96%, #eaf5fa 4%) 0%, var(--color-bg) 100%);
+  --theme-page-gradient: var(--bone);
 }
 
 html[data-theme="dark"] {
@@ -40,7 +38,8 @@ html[data-page-gradient="teal-depth"] {
 
 html[data-page-gradient="light-fjord"],
 html[data-page-gradient="fjord-light"] {
-  --theme-page-gradient: var(--color-bg);
+  /* Flat bone: the light pages carry no gradient since the 2026 refresh. */
+  --theme-page-gradient: var(--bone);
 }
 
 html[data-page-gradient="blackout"] {

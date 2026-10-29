@@ -2,12 +2,19 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <!-- Once, outside every layout, so the music survives navigation. -->
+  <PlayerBar />
   <AppSplashScreen />
 </template>
 
 <script setup lang="ts">
 import AppSplashScreen from '~/components/global/AppSplashScreen.vue'
+import PlayerBar from '~/components/global/PlayerBar.vue'
+import { paletteCss } from '~/config/records'
 import { compact, schemaId } from '~/utils/schema'
+
+// The current record's palette, on every page (see app/config/records.ts).
+useHead({ style: [{ key: 'record-palette', innerHTML: paletteCss() }] })
 
 const siteProfile = useSiteProfile()
 const { toAbsoluteUrl, siteUrl } = useAbsoluteUrl()

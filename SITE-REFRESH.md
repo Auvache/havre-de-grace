@@ -72,11 +72,11 @@ Tick each box (`- [x]`) in this file and commit it with the work it describes.
       (phase 3); it runs while you do phases 1 and 2
 
 **Phase 1: Foundation and light pages** (`docs/redesign/briefs/1-foundation.md`)
-- [ ] Tokens and per-record config (palette, hero art) in one place
-- [ ] Nav: records / about / contact
-- [ ] Footer: one line of text links
-- [ ] Homepage in Still Water (`mockups/home.html`)
-- [ ] Records page (`mockups/records.html`)
+- [x] Tokens and per-record config (palette, hero art) in one place
+- [x] Nav: records / about / contact
+- [x] Footer: one line of text links
+- [x] Homepage in Still Water (`mockups/home.html`)
+- [x] Records page (`mockups/records.html`)
 - [ ] About (`mockups/about.html`)
 - [ ] Contact (Thank-you's layout)
 - [ ] Letters index and letter page (`mockups/letters.html`)

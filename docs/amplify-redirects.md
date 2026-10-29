@@ -19,14 +19,18 @@ fallback.
 
 ## Redirects — paste into the Amplify console
 
+**2026 refresh:** `/music` is a page again (Records). If the console still has
+the old `/music` → `/#music` rule, delete it before pushing, or the Records
+page will never be reached.
+
 **Amplify Console → your app → Hosting → Rewrites and redirects → Manage
 redirects → Open text editor**, then paste:
 
 ```json
 [
   {
-    "source": "/music",
-    "target": "/#music",
+    "source": "/records",
+    "target": "/music",
     "status": "301",
     "condition": null
   },

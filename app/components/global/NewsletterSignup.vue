@@ -1,30 +1,21 @@
 <!--
-  Kit (ConvertKit) mailing-list signup: a centred block on /subscribe, a
-  compact bar in the footer. The thin strip under the navbar is a different
-  shape entirely and lives in NewsletterBanner; all three share the request
-  itself via useNewsletterSignup.
+  Kit (ConvertKit) mailing-list signup, as one underlined field with the action
+  in small capitals at its end (the 2026 refresh). Used on the homepage, Letters,
+  a letter page and /subscribe; a page has one signup at most. The request itself
+  is useNewsletterSignup, shared with /links.
 -->
 
 <template>
-  <section aria-label="Mailing list signup" :class="compact ? 'w-full max-w-sm' : ''">
-    <template v-if="compact">
-      <p class="label-text">
-        mailing list
-      </p>
-      <p class="mt-2 text-sm muted-text">
-        {{ letter.offerShort }}
-      </p>
-    </template>
-
-    <p v-if="status === 'success'" :class="messageClass" role="status">
-      Almost there — check your inbox and click the link to confirm.
+  <section aria-label="Mailing list signup" :class="['signup', { 'is-centred': centred }]">
+    <p v-if="status === 'success'" class="signup__msg" role="status">
+      Almost there. Check your inbox and click the link to confirm.
     </p>
 
     <form
       v-else
       :action="KIT_FORM_URL"
       method="post"
-      :class="['flex flex-wrap gap-3', compact ? 'mt-4' : 'mx-auto max-w-md justify-center']"
+      class="signup__field"
       @submit.prevent="subscribe"
     >
       <label :for="emailId" class="sr-only">Email address</label>
@@ -34,10 +25,9 @@
         type="email"
         name="email_address"
         autocomplete="email"
-        placeholder="you@example.com"
+        placeholder="your email"
         required
         :disabled="status === 'loading'"
-        class="min-w-0 flex-1 basis-48 rounded-full border border-theme bg-[var(--theme-surface)] px-5 py-3 text-sm placeholder:text-[var(--theme-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-60"
       >
 
       <!-- Honeypot: off-screen and skipped by the keyboard, so only bots fill it. -->
@@ -48,46 +38,107 @@
 
       <!--
         No `novalidate`: the browser's own `required` + `type="email"` check is
-        the guard, so the button stays at full strength instead of sitting
-        greyed out until the field has something in it. @submit only fires once
-        that check passes, and it's what makes the no-JS post safe too.
+        the guard. @submit only fires once that check passes, and it's what
+        makes the no-JS post safe too.
       -->
-      <button
-        type="submit"
-        :disabled="status === 'loading'"
-        class="cta-solo inline-flex shrink-0 rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-50"
-      >
-        {{ status === 'loading' ? 'subscribing…' : 'subscribe' }}
+      <button type="submit" :disabled="status === 'loading'">
+        {{ status === 'loading' ? 'Sending' : label }}
       </button>
-
-      <p v-if="status === 'error'" :class="['basis-full', messageClass]" role="alert">
-        That didn't go through. Check the email address and try again.
-      </p>
     </form>
+
+    <p v-if="status === 'error'" class="signup__msg" role="alert">
+      That didn't go through. Check the email address and try again.
+    </p>
   </section>
 </template>
 
 <script setup lang="ts">
-import { letter } from '~~/shared/data/letter'
-
-const props = withDefaults(defineProps<{
-  // The footer bar: a small label of its own, and no centring — the footer
-  // stack handles that. The subscribe page brings its own heading instead.
-  compact?: boolean
+withDefaults(defineProps<{
+  /** The action at the end of the field. */
+  label?: string
+  centred?: boolean
 }>(), {
-  compact: false,
+  label: 'Subscribe',
+  centred: false,
 })
 
-// Both instances render on most pages, so the label/input pairs need ids that
-// are unique per instance and identical across SSR and hydration.
+// Ids unique per instance and identical across SSR and hydration.
 const uid = useId()
 const emailId = `signup-email-${uid}`
 const websiteId = `signup-website-${uid}`
 
 const { email, website, status, subscribe } = useNewsletterSignup()
-
-const messageClass = computed(() => [
-  'text-sm muted-text',
-  props.compact ? 'mt-4' : 'mt-8 text-center',
-])
 </script>
+
+<style scoped>
+.signup {
+  max-width: 460px;
+}
+
+.signup.is-centred {
+  margin-inline: auto;
+}
+
+.signup__field {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 12px;
+}
+
+.signup__field input[type="email"] {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 300;
+  color: inherit;
+  padding: 0;
+}
+
+.signup__field input[type="email"]::placeholder {
+  color: var(--faint);
+}
+
+.signup__field input[type="email"]:focus {
+  outline: none;
+}
+
+.signup__field:focus-within {
+  border-bottom-color: var(--sea);
+}
+
+.signup__field button {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.signup__field button:hover {
+  color: var(--deep);
+}
+
+.signup__field button:disabled {
+  opacity: 0.5;
+}
+
+.signup__msg {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--soft);
+}
+
+.is-centred .signup__msg {
+  text-align: center;
+}
+</style>

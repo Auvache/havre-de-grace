@@ -132,7 +132,18 @@ export default defineNuxtConfig({
       // when nothing at 500 exists. Declaring 400 as well keeps 350, 450 and
       // 500 resolving to the 400 file exactly as they do today, so this adds a
       // bold for one page and changes nothing anywhere else.
-      { name: 'Jost', provider: 'google', weights: [400, 700] },
+      //
+      // The 2026 refresh (SITE-REFRESH.md) sets its structure in Jost 200–400,
+      // so 200 and 300 join them. That moves the old 350 headings to 300.
+      { name: 'Jost', provider: 'google', weights: [200, 300, 400, 700] },
+      // Titles, lyrics and pull quotes: italic, light.
+      { name: 'Cormorant Garamond', provider: 'google', weights: [300, 400], styles: ['normal', 'italic'] },
+      // Times only.
+      { name: 'IBM Plex Mono', provider: 'google', weights: [300] },
+      // The album screens' lettering: Into the Wild's narrow hairline, and
+      // I Want to Be Yours's typed subtitle.
+      { name: 'Sofia Sans Extra Condensed', provider: 'google', weights: [200] },
+      { name: 'Courier Prime', provider: 'google', weights: [400] },
       { name: 'Patrick Hand', provider: 'google' },
       // The homepage hero's title: the cover's thin, widely-tracked caps.
       { name: 'Barlow Condensed', provider: 'google', weights: [200] },
@@ -165,23 +176,6 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en',
       },
-      // Whether the mailing-list banner shows is a per-visitor fact, and every
-      // page here is prerendered to one shared HTML file — so the banner ships
-      // in the markup for everybody and this takes it back out again for the
-      // people who have already subscribed or closed it.
-      //
-      // It has to be an inline script in <head> rather than anything Vue does:
-      // hydration runs long after first paint, so a Vue-side check would show
-      // the banner to everyone for a beat and then yank it, shoving the page up
-      // by its height. See the `data-banner` rules in main.css, and
-      // useMailingListBanner for the writer.
-      script: [
-        {
-          key: 'mailing-list-banner',
-          tagPosition: 'head',
-          innerHTML: `try{if(/(?:^|;\\s*)hdg-mailing-list=/.test(document.cookie))document.documentElement.setAttribute('data-banner','hidden')}catch(e){}`,
-        },
-      ],
       meta: [
         { name: 'description', content: SITE_DESCRIPTION },
         { property: 'og:site_name', content: 'Havre De Grace Music' },
@@ -236,10 +230,11 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    // The discography now lives as a section on the homepage.
-    '/music': {
+    // /music is the Records page again (app/pages/music/index.vue); from 2024
+    // until the 2026 refresh it redirected to the homepage's discography.
+    '/records': {
       redirect: {
-        to: '/#music',
+        to: '/music',
         statusCode: 301,
       },
     },
@@ -370,6 +365,7 @@ export default defineNuxtConfig({
       // album tracklists, so they don't need listing here.
       routes: [
         '/',
+        '/music',
         '/about',
         '/press',
         '/contact',

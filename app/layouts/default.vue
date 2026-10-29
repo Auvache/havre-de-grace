@@ -1,10 +1,17 @@
+<!--
+  The light pages (Shoreline): the nav, the page, the footer. A page that opens
+  with a photographic band sets `navOver` in its page meta and the nav lies on
+  the picture. The persistent player is mounted once in app.vue, not here, so
+  it survives a change of layout; `player-room` keeps the footer clear of it.
+-->
+
 <template>
-  <div class="banner-offset min-h-screen text-[var(--theme-text)]">
+  <div class="site-shell player-room min-h-screen text-[var(--theme-text)]">
     <AppNavbar />
-    <main class="min-h-[calc(100vh-var(--chrome-height))]">
+    <main>
       <slot />
     </main>
-    <AppFooter />
+    <AppFooter :tone="isDark ? 'dark' : 'light'" />
   </div>
 </template>
 
@@ -12,5 +19,5 @@
 import AppFooter from '~/components/global/AppFooter.vue'
 import AppNavbar from '~/components/global/AppNavbar.vue'
 
-usePageTheme()
+const { isDark } = usePageTheme()
 </script>
