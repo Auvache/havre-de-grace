@@ -147,13 +147,17 @@ a {
   padding-block: clamp(var(--space-6), 11vw, var(--space-8));
 }
 
+/* Since the 2026 refresh a section heading is a title, not a shout: light
+   italic serif, sentence case, the way the mockups set them. */
 .section-heading {
+  font-family: var(--font-serif);
   font-size: var(--font-size-heading);
-  font-weight: 450;
-  /* Caps at this size need a touch more air than lowercase did, but nowhere
-     near the 0.21em of .label-text — that tracking is for small type. */
-  letter-spacing: 0.04em;
+  font-style: italic;
+  font-weight: 300;
   line-height: 1.1;
+}
+
+.section-heading::first-letter {
   text-transform: uppercase;
 }
 
@@ -164,9 +168,9 @@ a {
 }
 
 .label-text {
-  font-size: var(--font-size-label);
-  font-weight: 500;
-  letter-spacing: 0.21em;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
 }
 
@@ -178,10 +182,11 @@ a {
   border-color: var(--theme-border);
 }
 
+/* A quiet panel: hairlines, square corners, no fill (the 2026 refresh). */
 .surface-card {
   border: 1px solid var(--theme-border);
-  border-radius: var(--radius-md);
-  background: var(--theme-surface);
+  border-radius: 0;
+  background: transparent;
 }
 
 /*
@@ -203,6 +208,24 @@ a {
   width: 100%;
 }
 
+/* The old rounded, filled pills, wherever they're left, read as the
+   refresh's square outlined buttons. */
+html[data-theme="light"] .cta-solo.rounded-full {
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+html[data-theme="light"] .cta-solo.rounded-full:hover {
+  background: var(--ink);
+  color: var(--bone);
+}
+
 @media (min-width: 640px) {
   .cta-solo {
     width: auto;
@@ -217,8 +240,7 @@ a {
 }
 
 .interactive-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 30px color-mix(in srgb, var(--theme-text) 18%, transparent);
+  transform: none;
 }
 
 .nav-link {
@@ -377,4 +399,49 @@ a {
 /* Room at the bottom for the persistent player bar (or an album page's dock). */
 .player-room {
   padding-bottom: var(--player-height);
+}
+
+/* Numbered hairline rows (Thank-you, Contact). */
+.steps {
+  list-style: none;
+  margin: 56px 0;
+  counter-reset: step;
+}
+
+.steps > li {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  padding: 22px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.steps > li::before {
+  counter-increment: step;
+  content: "0" counter(step);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--sea);
+  padding-top: 5px;
+}
+
+.steps small {
+  display: block;
+  font-size: 15px;
+  color: var(--soft);
+  margin-top: 4px;
+}
+
+.steps a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .steps > li {
+    grid-template-columns: 44px 1fr;
+    font-size: 17px;
+  }
 }

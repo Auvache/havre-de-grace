@@ -1,5 +1,7 @@
 <template>
-  <div class="page-container section-space">
+  <div>
+    <ShorelineBand title="Press" sub="Bios, photos and release details" image="/images/site/woods-wide-2400.jpg" image-position="50% 40%" />
+    <div class="page-container section-space">
     <div class="mx-auto max-w-3xl space-y-16">
       <ScrollReveal
         as="header"
@@ -9,11 +11,9 @@
         :threshold="0.16"
         root-margin="0px 0px -6% 0px"
       >
-        <SectionHeading
-          title="press"
-          description="Bios, photos, and release details for media use. Everything on this page is cleared for publication."
-          heading-tag="h1"
-        />
+        <p class="lede">
+          Bios, photos, and release details for media use. Everything on this page is cleared for publication.
+        </p>
 
         <!--
           The whole kit as one file, above everything else: an editor on a
@@ -140,11 +140,14 @@
       </ScrollReveal>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { Album } from '~~/shared/types'
 import { schemaId } from '~/utils/schema'
+
+definePageMeta({ navOver: true })
 
 const siteProfile = useSiteProfile()
 

@@ -14,96 +14,46 @@
 -->
 
 <template>
-  <div class="page-container section-space">
-    <div class="mx-auto max-w-2xl space-y-12">
-      <ScrollReveal
-        as="header"
-        class-name="text-center"
-        variant="section-up"
-        :duration-ms="880"
-        :distance-px="56"
-        :threshold="0.16"
-        root-margin="0px 0px -6% 0px"
-      >
-        <SectionHeading
-          title="unsubscribe"
-          description="No hard feelings, and no hoops. There are two ways off the list and both of them are one click."
-          heading-tag="h1"
-          align="center"
-        />
-      </ScrollReveal>
+  <div>
+    <ShorelineBand title="Unsubscribe" image-position="center 40%" />
 
-      <ScrollReveal
-        as="section"
-        class-name="surface-card space-y-4 p-8 text-center"
-        variant="section-up"
-        :delay-ms="80"
-        :distance-px="52"
-        :threshold="0.12"
-        root-margin="0px 0px -8% 0px"
-      >
-        <p class="label-text">the fastest way</p>
-        <p class="text-sm leading-relaxed muted-text">
-          Open any email from me and click <em>Unsubscribe</em> at the bottom.
-          It takes effect immediately, there's nothing to log into, and it also
-          lets you keep some emails and drop others if you'd rather do that than
-          leave entirely.
-        </p>
-      </ScrollReveal>
+    <div class="reading">
+      <p class="lede">No hard feelings, and no hoops. There are two ways off the list and both of them are one click.</p>
 
-      <ScrollReveal
-        as="section"
-        class-name="space-y-5 text-center"
-        variant="section-up"
-        :delay-ms="160"
-        :distance-px="52"
-        :threshold="0.12"
-        root-margin="0px 0px -8% 0px"
-      >
-        <p class="label-text">or just ask me</p>
-        <p class="mx-auto max-w-lg text-sm leading-relaxed muted-text">
-          Can't find an email, or the link isn't working? Send me a note and
-          I'll take you off the list myself. It's a small list and I read
-          everything that comes in.
-        </p>
+      <ol class="steps">
+        <li>
+          <div>
+            The fastest way
+            <small>
+              Open any email from me and click <em>Unsubscribe</em> at the bottom.
+              It takes effect immediately, there's nothing to log into, and it also
+              lets you keep some emails and drop others if you'd rather do that than
+              leave entirely.
+            </small>
+          </div>
+        </li>
+        <li>
+          <div>
+            Or just ask me
+            <small>
+              Can't find an email, or the link isn't working? <a :href="unsubscribeMailto">Send me a note</a>
+              and I'll take you off the list myself. Write to {{ siteProfile.bookingEmail }} from the
+              address you signed up with. It's a small list and I read everything that comes in.
+            </small>
+          </div>
+        </li>
+      </ol>
 
-        <a
-          :href="unsubscribeMailto"
-          class="cta-solo interactive-lift inline-flex rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white"
-        >
-          email me to unsubscribe
-        </a>
-
-        <p class="text-sm muted-text">
-          Or write to
-          <a :href="`mailto:${siteProfile.bookingEmail}`" class="hover:text-[var(--color-accent)]">
-            {{ siteProfile.bookingEmail }}
-          </a>
-          from the address you signed up with.
-        </p>
-      </ScrollReveal>
-
-      <ScrollReveal
-        as="section"
-        class-name="border-t border-theme pt-10 text-center"
-        variant="section-up"
-        :delay-ms="80"
-        :distance-px="44"
-        :threshold="0.12"
-        root-margin="0px 0px -8% 0px"
-      >
-        <p class="text-sm muted-text">
-          Here by mistake?
-          <NuxtLink to="/subscribe" class="nav-link hover:text-[var(--color-accent)]">
-            back to the mailing list
-          </NuxtLink>
-        </p>
-      </ScrollReveal>
+      <p class="fine">
+        Here by mistake? <NuxtLink to="/subscribe">Back to the mailing list</NuxtLink>.
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+definePageMeta({ navOver: true })
+
 const siteProfile = useSiteProfile()
 
 // Prefilled so the reply is a send rather than a writing task — and so the
@@ -111,7 +61,7 @@ const siteProfile = useSiteProfile()
 const unsubscribeMailto = computed(() => {
   const subject = encodeURIComponent('Unsubscribe')
   const body = encodeURIComponent(
-    'Please take this address off the Havre De Grace mailing list. Thanks!',
+    'Please take this address off the Havre De Grace mailing list. Thanks.',
   )
 
   return `mailto:${siteProfile.bookingEmail}?subject=${subject}&body=${body}`
@@ -124,3 +74,15 @@ usePageSeo({
   description: pageDescription,
 })
 </script>
+
+<style scoped>
+.fine {
+  font-size: 15px;
+  color: var(--soft);
+}
+
+.fine a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+</style>

@@ -48,66 +48,15 @@
   opacity: 0;
 }
 
+/*
+  ScrollReveal used to start everything hidden (opacity 0, shifted, blurred)
+  and wait for an IntersectionObserver. In a headless browser, or with
+  JavaScript slow or off, /thank-you and the album pages showed blank until it
+  fired (2026-10-29). Pages are readable at rest now: the wrapper stays, and
+  draws its content as it is.
+*/
 .reveal-base {
-  --reveal-duration: var(--dur-slow);
-  --reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --reveal-distance: 20px;
-  --reveal-blur: 0px;
-  --reveal-scale: 0.985;
-  --reveal-x: 0px;
-  --reveal-y: var(--reveal-distance);
-  opacity: 0;
-  filter: blur(var(--reveal-blur));
-  transform: translate3d(var(--reveal-x), var(--reveal-y), 0) scale(var(--reveal-scale));
-  transition:
-    opacity var(--reveal-duration) var(--reveal-ease),
-    transform var(--reveal-duration) var(--reveal-ease),
-    filter var(--reveal-duration) var(--reveal-ease);
-  will-change: opacity, transform, filter;
-}
-
-.reveal-base.is-visible {
   opacity: 1;
-  filter: blur(0);
-  transform: translate3d(0, 0, 0) scale(1);
-}
-
-.reveal-base[data-reveal="fade-up"] {
-  --reveal-y: var(--reveal-distance);
-}
-
-.reveal-base[data-reveal="section-left"] {
-  --reveal-duration: 820ms;
-  --reveal-distance: 72px;
-  --reveal-blur: 7px;
-  --reveal-scale: 0.97;
-  --reveal-x: calc(var(--reveal-distance) * -1);
-  --reveal-y: 18px;
-}
-
-.reveal-base[data-reveal="section-right"] {
-  --reveal-duration: 820ms;
-  --reveal-distance: 72px;
-  --reveal-blur: 7px;
-  --reveal-scale: 0.97;
-  --reveal-x: var(--reveal-distance);
-  --reveal-y: 18px;
-}
-
-.reveal-base[data-reveal="section-up"] {
-  --reveal-duration: 780ms;
-  --reveal-distance: 56px;
-  --reveal-blur: 5px;
-  --reveal-scale: 0.975;
-  --reveal-y: var(--reveal-distance);
-}
-
-@media (max-width: 767px) {
-  .reveal-base[data-reveal="section-left"],
-  .reveal-base[data-reveal="section-right"] {
-    --reveal-x: 0px;
-    --reveal-y: var(--reveal-distance);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -118,16 +67,14 @@
   .overlay-enter-active,
   .overlay-leave-active,
   .overlay-panel-enter-active,
-  .overlay-panel-leave-active,
-  .reveal-base {
+  .overlay-panel-leave-active {
     transition-duration: 1ms !important;
   }
 
   .page-enter-from,
   .page-leave-to,
   .overlay-panel-enter-from,
-  .overlay-panel-leave-to,
-  .reveal-base {
+  .overlay-panel-leave-to {
     filter: none !important;
     transform: none !important;
   }

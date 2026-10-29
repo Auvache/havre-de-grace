@@ -1,29 +1,16 @@
-<template>
-  <div class="page-container section-space">
-    <div class="mx-auto max-w-3xl space-y-14">
-      <ScrollReveal
-        as="header"
-        class-name="text-center"
-        variant="section-up"
-        :duration-ms="880"
-        :distance-px="56"
-        :threshold="0.16"
-        root-margin="0px 0px -6% 0px"
-      >
-        <SectionHeading
-          title="contact"
-          description="Email is the fastest way to reach me — it goes straight to my inbox, and I answer everything."
-          heading-tag="h1"
-          align="center"
-        />
+<!--
+  Contact, in Thank-you's layout (docs/redesign/mockups/thanks.html): one
+  address, then what to put in the email, one numbered row per reason.
+-->
 
-        <a
-          :href="`mailto:${siteProfile.bookingEmail}`"
-          class="cta-solo interactive-lift mt-8 inline-flex rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white"
-        >
-          {{ siteProfile.bookingEmail }}
-        </a>
-      </ScrollReveal>
+<template>
+  <div>
+    <ShorelineBand title="Contact" sub="Booking, press and licensing" image-position="center 70%" />
+
+    <div class="reading">
+      <p class="lede">Email is the fastest way to reach me. It goes straight to my inbox, and I answer everything.</p>
+
+      <a :href="`mailto:${siteProfile.bookingEmail}`" class="address">{{ siteProfile.bookingEmail }}</a>
 
       <!--
         One inbox, three reasons for writing to it. Spelling out what to include
@@ -31,55 +18,27 @@
         vague "hi, are you available?" into a bookable enquiry on the first
         email rather than the third.
       -->
-      <section class="grid gap-6 sm:grid-cols-3">
-        <ScrollReveal
-          v-for="(reason, index) in reasons"
-          :key="reason.title"
-          as="article"
-          class-name="surface-card space-y-3 p-6"
-          variant="section-up"
-          :delay-ms="80 + index * 90"
-          :distance-px="52"
-          :blur-px="5"
-          :threshold="0.12"
-          root-margin="0px 0px -8% 0px"
-        >
-          <p class="label-text">{{ reason.title }}</p>
-          <p class="text-sm leading-relaxed muted-text">{{ reason.body }}</p>
-          <NuxtLink
-            v-if="reason.to"
-            :to="reason.to"
-            class="nav-link inline-block text-sm hover:text-[var(--color-accent)]"
-          >
-            {{ reason.linkLabel }}
-          </NuxtLink>
-        </ScrollReveal>
-      </section>
+      <ol class="steps">
+        <li v-for="reason in reasons" :key="reason.title">
+          <div>
+            {{ reason.title }}
+            <small>
+              {{ reason.body }}
+              <NuxtLink v-if="reason.to" :to="reason.to">{{ reason.linkLabel }}</NuxtLink>
+            </small>
+          </div>
+        </li>
+      </ol>
 
-      <ScrollReveal
-        as="section"
-        class-name="border-t border-theme pt-12 text-center"
-        variant="section-up"
-        :delay-ms="80"
-        :distance-px="44"
-        :threshold="0.12"
-        root-margin="0px 0px -8% 0px"
-      >
-        <SectionHeading
-          title="elsewhere"
-          description="Messages here reach me too, just more slowly than email."
-          heading-tag="h2"
-          align="center"
-        />
-
-        <div class="mt-8 flex justify-center">
-          <StreamingLinks :links="siteProfile.artistLinks" compact />
-        </div>
-
-        <p class="mt-8 text-sm muted-text">
-          Based in {{ siteProfile.location }}.
-        </p>
-      </ScrollReveal>
+      <div class="elsewhere">
+        <p class="eyebrow">Elsewhere</p>
+        <p>Messages here reach me too, just more slowly than email. Based in {{ siteProfile.location }}.</p>
+        <nav aria-label="Elsewhere" class="elsewhere__links">
+          <a :href="siteProfile.artistLinks.instagram" rel="noopener">instagram</a>
+          <a :href="siteProfile.artistLinks.youtube" rel="noopener">youtube</a>
+          <a :href="siteProfile.artistLinks.bandcamp" rel="noopener">bandcamp</a>
+        </nav>
+      </div>
     </div>
   </div>
 </template>
@@ -87,21 +46,23 @@
 <script setup lang="ts">
 import { schemaId } from '~/utils/schema'
 
+definePageMeta({ navOver: true })
+
 const siteProfile = useSiteProfile()
 
 const reasons = [
   {
-    title: 'booking',
+    title: 'Booking',
     body: 'Include the date, the city, the venue, and the kind of night it is. Solo acoustic, and happy to travel from the Portland–Vancouver area.',
   },
   {
-    title: 'press',
-    body: 'Bios, high-resolution photos, and release details are ready to download — no need to ask first. Interview requests are welcome by email.',
+    title: 'Press',
+    body: 'Bios, high-resolution photos, and release details are ready to download, no need to ask first. Interview requests are welcome by email.',
     to: '/press',
-    linkLabel: 'press kit',
+    linkLabel: 'The press kit.',
   },
   {
-    title: 'licensing & collaboration',
+    title: 'Licensing and collaboration',
     body: 'Sync, film, and other licensing enquiries, or anything else. Say what you have in mind and which song it is for.',
   },
 ]
@@ -122,3 +83,40 @@ usePageSeo({
   description: pageDescription,
 })
 </script>
+
+<style scoped>
+.address {
+  display: inline-block;
+  margin-top: 40px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(24px, 2.4vw, 30px);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.address:hover {
+  border-bottom-color: currentColor;
+}
+
+.elsewhere {
+  padding-top: 30px;
+  border-top: 1px solid var(--rule);
+}
+
+.elsewhere p:not(.eyebrow) {
+  margin-top: 12px;
+  font-size: 16px;
+  color: var(--soft);
+}
+
+.elsewhere__links {
+  display: flex;
+  gap: 26px;
+  margin-top: 18px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+</style>

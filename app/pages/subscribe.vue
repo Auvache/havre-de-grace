@@ -1,76 +1,34 @@
+<!--
+  The mailing list's own landing page: what comes, the field, what it costs you
+  (nothing, and one click to leave).
+-->
+
 <template>
-  <div class="page-container section-space">
-    <div class="mx-auto max-w-2xl space-y-12">
-      <ScrollReveal
-        as="header"
-        class-name="text-center"
-        variant="section-up"
-        :duration-ms="880"
-        :distance-px="56"
-        :threshold="0.16"
-        root-margin="0px 0px -6% 0px"
-      >
-        <SectionHeading
-          :title="letter.offer"
-          :description="letter.offerDetail"
-          heading-tag="h1"
-          align="center"
-        />
+  <div>
+    <ShorelineBand title="Letters" sub="Once a month" image-position="center 30%" />
 
-        <div class="mt-10">
-          <NewsletterSignup />
-        </div>
+    <div class="reading">
+      <h1 class="lede">{{ letter.offerDetail }}</h1>
 
-        <p class="mt-6 text-sm muted-text">
-          One click to confirm, one click to leave. One letter a month, and your
-          address goes nowhere else.
-        </p>
-      </ScrollReveal>
+      <NewsletterSignup class="field" />
+      <p class="fine">
+        One click to confirm, one click to leave. One letter a month, and your
+        address goes nowhere else.
+      </p>
 
-      <!--
-        Three reasons to hand over an address, in the same three-card shape the
-        contact page uses for its three reasons to write to one.
-      -->
-      <section class="grid gap-6 sm:grid-cols-3">
-        <ScrollReveal
-          v-for="(item, index) in expectations"
-          :key="item.title"
-          as="article"
-          class-name="surface-card space-y-3 p-6"
-          variant="section-up"
-          :delay-ms="80 + index * 90"
-          :distance-px="52"
-          :blur-px="5"
-          :threshold="0.12"
-          root-margin="0px 0px -8% 0px"
-        >
-          <p class="label-text">{{ item.title }}</p>
-          <p class="text-sm leading-relaxed muted-text">{{ item.body }}</p>
-        </ScrollReveal>
-      </section>
+      <ol class="steps">
+        <li v-for="item in expectations" :key="item.title">
+          <div>
+            {{ item.title }}
+            <small>{{ item.body }}</small>
+          </div>
+        </li>
+      </ol>
 
-      <ScrollReveal
-        as="section"
-        class-name="border-t border-theme pt-10 text-center"
-        variant="section-up"
-        :delay-ms="80"
-        :distance-px="44"
-        :threshold="0.12"
-        root-margin="0px 0px -8% 0px"
-      >
-        <p class="text-sm muted-text">
-          See what you'd be getting:
-          <NuxtLink to="/letters" class="nav-link hover:text-[var(--color-accent)]">
-            read the letters
-          </NuxtLink>
-        </p>
-        <p class="mt-3 text-sm muted-text">
-          Already on the list and want off it?
-          <NuxtLink to="/unsubscribe" class="nav-link hover:text-[var(--color-accent)]">
-            unsubscribe
-          </NuxtLink>
-        </p>
-      </ScrollReveal>
+      <p class="fine">
+        See what you'd be getting: <NuxtLink to="/letters">read the letters</NuxtLink>.
+        Already on the list and want off it? <NuxtLink to="/unsubscribe">Unsubscribe</NuxtLink>.
+      </p>
     </div>
   </div>
 </template>
@@ -78,17 +36,19 @@
 <script setup lang="ts">
 import { letter } from '~~/shared/data/letter'
 
+definePageMeta({ navOver: true })
+
 const expectations = [
   {
-    title: 'unreleased recordings',
+    title: 'Unreleased recordings',
     body: 'Something new every month: a demo, an idea I\'m working on, or a song that isn\'t out yet. The list hears it first.',
   },
   {
-    title: 'the letter',
-    body: 'The story behind each one, music that\'s been moving me, and a few thoughts on making songs around a day job and a young family.',
+    title: 'The story behind each one',
+    body: 'Where the song came from and how it got made.',
   },
   {
-    title: 'shows & records',
+    title: 'Shows and records',
     body: 'Dates near you when there are any, and new records here before anywhere else. Never more than that.',
   },
 ]
@@ -100,3 +60,20 @@ usePageSeo({
   description: pageDescription,
 })
 </script>
+
+<style scoped>
+.field {
+  margin-top: 44px;
+}
+
+.fine {
+  margin-top: 18px;
+  font-size: 15px;
+  color: var(--soft);
+}
+
+.fine a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+</style>

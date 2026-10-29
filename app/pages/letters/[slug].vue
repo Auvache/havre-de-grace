@@ -5,46 +5,38 @@
 -->
 
 <template>
-  <div class="page-container section-space">
-    <article v-if="page" class="mx-auto max-w-[38rem]">
-      <p v-if="scheduledFor" class="mb-8 rounded-[var(--radius-md)] border border-dashed border-[var(--color-accent)] px-4 py-3 text-sm text-[var(--color-accent)]">
+  <div class="reading">
+    <article v-if="page">
+      <p v-if="scheduledFor" class="dev-note">
         Dev only: {{ scheduledFor }}
       </p>
 
-      <header class="space-y-3 text-center">
-        <p class="label-text muted-text">
-          <NuxtLink to="/letters" class="hover:text-[var(--color-accent)]">{{ letter.name }}</NuxtLink>
+      <header class="letter-head">
+        <p class="eyebrow">
+          <NuxtLink to="/letters">{{ letter.name }}</NuxtLink>
           <template v-if="number">
             · No. {{ number }}
           </template>
         </p>
-        <h1 class="text-[clamp(1.9rem,1.5rem+1.6vw,2.6rem)] font-[450] leading-[1.15]">
-          {{ page.title }}
-        </h1>
-        <p v-if="sentOn" class="text-sm muted-text">
+        <h1 class="italic-title letter-title">{{ page.title }}</h1>
+        <p v-if="sentOn" class="letter-date">
           <time :datetime="sentOn">{{ formatLetterDate(sentOn) }}</time>
         </p>
       </header>
 
-      <ContentRenderer :value="page" class="letter-body mt-12" />
+      <ContentRenderer :value="page" class="letter-body" />
 
-      <section class="surface-card mt-16 p-6 text-center sm:p-8" aria-labelledby="letter-signup-heading">
-        <h2 id="letter-signup-heading" class="text-[var(--font-size-subheading)] leading-snug">
-          {{ letter.offer }}
-        </h2>
-        <p class="mx-auto mt-2 max-w-md text-sm muted-text">
-          {{ letter.offerDetail }}
-        </p>
-        <div class="mt-6">
-          <NewsletterSignup />
-        </div>
+      <section class="letter-next" aria-labelledby="letter-signup-heading">
+        <p id="letter-signup-heading" class="eyebrow">The next one</p>
+        <p class="letter-next__p">{{ letter.offerDetail }}</p>
+        <NewsletterSignup />
       </section>
 
-      <p class="mt-10 text-center text-sm">
-        <NuxtLink to="/letters" class="nav-link muted-text hover:text-[var(--color-accent)]">
-          all letters
-        </NuxtLink>
+      <p class="letter-all">
+        <NuxtLink to="/letters">all letters</NuxtLink>
       </p>
+
+      <WhileYouWait eyebrow="The record" />
     </article>
   </div>
 </template>
@@ -107,9 +99,53 @@ usePageSeo({
   the one place it's read as running text, so it's set here: a comfortable
   measure, real paragraph spacing, and links that look like links.
 */
+.dev-note {
+  margin-bottom: 32px;
+  padding: 12px 16px;
+  border: 1px dashed var(--sea);
+  font-size: 14px;
+  color: var(--sea);
+}
+
+.letter-head {
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.letter-title {
+  font-size: clamp(36px, 3.6vw, 52px);
+  margin: 16px 0 14px;
+}
+
+.letter-date {
+  font-size: 14px;
+  color: var(--faint);
+}
+
+.letter-next {
+  margin-top: 72px;
+  padding-top: 36px;
+  border-top: 1px solid var(--rule);
+}
+
+.letter-next__p {
+  margin: 12px 0 32px;
+  font-size: 16px;
+  color: var(--soft);
+}
+
+.letter-all {
+  margin: 40px 0;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--soft);
+}
+
 .letter-body {
-  font-size: calc(var(--font-size-body) * 1.06);
-  line-height: 1.75;
+  margin-top: 40px;
+  font-size: 18px;
+  line-height: 1.85;
+  color: color-mix(in srgb, var(--ink) 85%, var(--bone));
 }
 
 .letter-body :deep(p),
@@ -174,7 +210,6 @@ usePageSeo({
 }
 
 .letter-body :deep(img) {
-  border-radius: var(--radius-md);
   width: 100%;
   height: auto;
 }

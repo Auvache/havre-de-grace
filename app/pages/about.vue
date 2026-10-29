@@ -1,66 +1,65 @@
-<template>
-  <section class="page-container section-space">
-    <BioSection :latest-album="latestAlbum" />
+<!--
+  About (docs/redesign/mockups/about.html): the woods band, Stefan's own line as
+  the lede, the bio from shared/data/bio.ts (which /about.md mirrors), a live
+  photograph, the live performance, and the doors that left the nav.
+-->
 
-    <!--
-      The press kit used to live here as an #press section. It is its own page
-      now (/press), so this is the hand-off rather than a second copy.
-    -->
-    <ScrollReveal
-      as="div"
-      class-name="mx-auto mt-16 max-w-3xl border-t border-theme pt-10 text-center"
-      variant="section-up"
-      :delay-ms="80"
-      :distance-px="44"
-      :threshold="0.12"
-      root-margin="0px 0px -8% 0px"
-    >
-      <p class="muted-text">
-        Writing about the record? Bios, photos, and release details are ready to download.
-      </p>
-      <NuxtLink
-        to="/press"
-        class="nav-link mt-3 inline-block hover:text-[var(--color-accent)]"
-      >
-        press kit
-      </NuxtLink>
-    </ScrollReveal>
-  </section>
+<template>
+  <div>
+    <ShorelineBand
+      title="About"
+      :sub="siteProfile.legalName"
+      image="/images/site/woods-wide-2400.jpg"
+      image-position="50% 22%"
+    />
+
+    <div class="reading">
+      <p class="lede">“{{ lede }}”</p>
+
+      <div class="prose-body">
+        <p v-for="(paragraph, index) in body" :key="index">{{ paragraph.text }}</p>
+      </div>
+
+      <figure class="fig">
+        <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan Auvache Bradley playing an acoustic guitar on stage" width="1400" height="1400" loading="lazy">
+        <figcaption>Artichoke Music, August 2026</figcaption>
+      </figure>
+
+      <div class="prose-body">
+        <p>A new record comes out every year on his birthday, June 6. There is no AI anywhere in the music: every song is written, played and sung by a person.</p>
+      </div>
+
+      <div class="video">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/0JF4Pm_-mPs"
+          title="Havre De Grace - Live Performance"
+          loading="lazy"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+
+      <nav class="doors" aria-label="More">
+        <NuxtLink to="/influences">Influences</NuxtLink>
+        <NuxtLink to="/press">Press kit</NuxtLink>
+        <NuxtLink to="/contact">Contact</NuxtLink>
+      </nav>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { Album } from '~~/shared/types'
+import { bioParagraphs } from '~~/shared/data/bio'
 import { compact, schemaId } from '~/utils/schema'
+
+definePageMeta({ navOver: true })
 
 const siteProfile = useSiteProfile()
 
-const sortAlbums = (items: Album[]) => [...items]
-  .filter((album) => album.isVisible !== false)
-  .sort((a, b) => {
-    if (a.releaseDate && b.releaseDate) {
-      return b.releaseDate.localeCompare(a.releaseDate)
-    }
-
-    if (a.releaseDate) {
-      return -1
-    }
-
-    if (b.releaseDate) {
-      return 1
-    }
-
-    return b.year - a.year
-  })
-
-const { data } = await useAsyncData('about-albums', async () => {
-  const items = await queryCollection('music').all() as Album[]
-  return sortAlbums(items)
-})
-
-const latestAlbum = computed(() => {
-  const items = data.value ?? []
-  return items.find((album) => album.isLatest) ?? items[0] ?? null
-})
+// Stefan's own line leads, without its quotation marks; the rest is the body.
+const lede = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"|"$/g, '')
+const body = bioParagraphs.filter((p) => !p.emphasis)
 
 const pageDescription = computed(() => `Havre De Grace is singer-songwriter Stefan Auvache Bradley, writing and recording acoustic folk music in Vancouver, Washington. Bio, influences, press photos, and booking.`)
 
@@ -108,3 +107,61 @@ useSchemaOrg([
   }),
 ])
 </script>
+
+<style scoped>
+.fig {
+  margin: 70px -160px;
+}
+
+.fig img {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+  object-position: 50% 35%;
+  filter: grayscale(1);
+}
+
+.fig figcaption {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--faint);
+  text-align: right;
+}
+
+.video {
+  margin-top: 56px;
+  aspect-ratio: 16 / 9;
+  background: var(--mist);
+}
+
+.video iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.doors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  margin-top: 60px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.doors a {
+  text-decoration: none;
+}
+
+.doors a:hover {
+  color: var(--deep);
+}
+
+@media (max-width: 1100px) {
+  .fig {
+    margin: 56px 0;
+  }
+}
+</style>

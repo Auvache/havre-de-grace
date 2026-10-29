@@ -77,11 +77,11 @@ Tick each box (`- [x]`) in this file and commit it with the work it describes.
 - [x] Footer: one line of text links
 - [x] Homepage in Still Water (`mockups/home.html`)
 - [x] Records page (`mockups/records.html`)
-- [ ] About (`mockups/about.html`)
-- [ ] Contact (Thank-you's layout)
-- [ ] Letters index and letter page (`mockups/letters.html`)
-- [ ] Thank-you (`mockups/thanks.html`)
-- [ ] Every other light page gets the new nav, footer and tokens: press,
+- [x] About (`mockups/about.html`)
+- [x] Contact (Thank-you's layout)
+- [x] Letters index and letter page (`mockups/letters.html`)
+- [x] Thank-you (`mockups/thanks.html`)
+- [x] Every other light page gets the new nav, footer and tokens: press,
       subscribe, unsubscribe, the song pages if they stay light, anything else
       on `layouts/default.vue`
 
