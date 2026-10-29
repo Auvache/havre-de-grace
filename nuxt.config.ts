@@ -382,6 +382,7 @@ export default defineNuxtConfig({
         // is. Every page added under app/pages/tools/ needs a line here.
         '/tools',
         '/tools/demos',
+        '/tools/lyric-timing',
         '/listen',
         // Unlisted: the list's welcome gift, linked only from Kit.
         '/seven-inch',

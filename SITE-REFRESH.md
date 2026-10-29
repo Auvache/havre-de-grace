@@ -86,29 +86,29 @@ Tick each box (`- [x]`) in this file and commit it with the work it describes.
       on `layouts/default.vue`
 
 **Phase 2: Persistent player** (`docs/redesign/briefs/2-player.md`)
-- [ ] One global audio engine, built from or around `useAlbumPlayer`
-- [ ] The bar, mounted once, surviving navigation; phone layout
-- [ ] Record player pages fade it out and stop it
-- [ ] Album pages: different record → fade and stop; same record → hand off
-- [ ] Media Session metadata and controls
+- [x] One global audio engine, built from or around `useAlbumPlayer`
+- [x] The bar, mounted once, surviving navigation; phone layout
+- [x] Record player pages fade it out and stop it
+- [x] Album pages: different record → fade and stop; same record → hand off
+- [x] Media Session metadata and controls
 
 **Phase 3: Lyric timing** (`docs/redesign/briefs/4-timing.md`)
-- [ ] *Ghost*
-- [ ] All nine tracks of *I Want to Be Yours and Other Songs*
-- [ ] A review page or captioned previews for Stefan to check by ear, plus
+- [x] *Ghost*
+- [x] All nine tracks of *I Want to Be Yours and Other Songs*
+- [x] A review page or captioned previews for Stefan to check by ear, plus
       the list of least-certain lines in the report
 
 **Phase 4: Album pages and the screen** (`docs/redesign/briefs/3-album-screen.md`)
-- [ ] Cinema page shell for both albums, replacing today's album pages
-- [ ] The screen: per-album picture loop, silent before play
-- [ ] Line-by-line lyrics in sync, small, centred, always one line
-- [ ] The page's own dock and the hand-off from the global bar
-- [ ] Song pages (`/music/<album>/<song>`) restyled to match their album
+- [x] Cinema page shell for both albums, replacing today's album pages
+- [x] The screen: per-album picture loop, silent before play
+- [x] Line-by-line lyrics in sync, small, centred, always one line
+- [x] The page's own dock and the hand-off from the global bar
+- [x] Song pages (`/music/<album>/<song>`) restyled to match their album
 
 **Phase 5: Song journey** (`docs/redesign/briefs/5-journey.md`)
-- [ ] Content model and drafted snippets for both albums
-- [ ] Scroll-driven parallax scenes, with stills and motifs where they exist
-- [ ] Quiet rows for songs with little content
+- [x] Content model and drafted snippets for both albums
+- [x] Scroll-driven parallax scenes, with stills and motifs where they exist
+- [x] Quiet rows for songs with little content
 
 **Phase 6: Test everything** (section 5)
 - [ ] `npm run generate` passes

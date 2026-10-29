@@ -48,6 +48,7 @@ const NO_MARKDOWN_MIRROR = new Set([
   '/influences',
   '/tools',
   '/tools/demos',
+  '/tools/lyric-timing',
 ])
 
 export const usePageSeo = (options: PageSeoOptions) => {

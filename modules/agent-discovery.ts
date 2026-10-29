@@ -88,6 +88,7 @@ const EXCLUDED_ROUTES = new Set([
   '/influences',
   '/tools',
   '/tools/demos',
+  '/tools/lyric-timing',
 ])
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -205,6 +206,22 @@ export default defineNuxtModule({
             `- [Press kit](${siteUrl}/press)`,
             `- [Contact and booking](${siteUrl}/contact)`,
           ].join('\n'),
+        ))
+
+        // --- /music ---------------------------------------------------------
+        // The Records page: every record, newest first, with its own words.
+        await emit('/music', {
+          title: 'Records',
+          description: 'Every Havre De Grace record, newest first. A new one every year on June 6.',
+        }, blocks(
+          '# Records',
+          '_One every year, on June 6._',
+          ...albums
+            .filter((album) => !album.isSingle)
+            .map((album) => blocks(
+              `## [${album.title}](${siteUrl}/music/${album.slug}) (${album.year})`,
+              album.description?.replace(/\*([^*]+)\*/g, '_$1_'),
+            ).trim()),
         ))
 
         // --- /listen --------------------------------------------------------
