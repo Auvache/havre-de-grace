@@ -1,7 +1,7 @@
 # Brief 3: Album page shell and the screen
 
 Read `docs/redesign/README.md` first. Start after brief 2. Needs Stefan's
-choice of lyric style (README, "Lyric style").
+final pick of lettering (README, "Lettering per album").
 
 ## Goal
 
@@ -28,12 +28,15 @@ scrolling. Keep song pages (`/music/<album>/<song>`) and the hash links
 - Before play: the picture loops silently, no lyrics. After play: the whole
   album runs on the screen, track by track, following the player.
 - *I Want to Be Yours*: `public/press/media-pic-wide.jpg` as old film: sepia
-  and fade, grain, slight flicker, gate weave, a slow push-in, vignette. Build
-  it as a slideshow with one slide so more photos are a data change.
+  and fade, slow grain, drifting dust, a breathing fade, a slow push-in and a
+  sub-pixel drift, vignette. **Gentle**: no jittery gate weave or hard flicker
+  (Stefan found it unsettling); match the demo's "gentle" setting. Build it as
+  a slideshow with one slide so more photos are a data change.
 - *Into the Wild*: the cover (`public/albums/into-the-wild/images/…png`),
   calm, slow push, no grain, scaled past the cover's white border.
-- `mockups/lyric-styles.html` has a working version of all three lettering
-  styles and the film treatments; lift from it.
+- `mockups/lyric-styles.html` has working versions of the four lettering
+  candidates, the one-line fit, and the film treatments; lift from it. Use
+  whichever two Stefan picked (README, "Lettering per album").
 - **Timing data:** `app/config/*Score.ts` hold word-timed lines for nine Into
   the Wild songs; use each line's start/end. *Ghost* and all of *I Want to Be
   Yours* come from brief 4 as line timings in the same shape. Until a song has
@@ -42,8 +45,8 @@ scrolling. Keep song pages (`/music/<album>/<song>`) and the hash links
   line or 1.6 s after its end, fade over 0.6 s.
 - Pause the picture's animation when the screen is off-screen or the tab is
   hidden. Reduced motion: no grain/weave/push, lyrics fade in whole.
-- Phone: the screen is full width, 16:9; lyric size steps down so the longest
-  line fits on one row (or wrap to two rows with the reveal running row by row).
+- Lyrics are small, centred, and always one line: size from the screen's
+  width, and shrink a line that would overflow. Never wrap. Phone included.
 
 ## Don't touch
 

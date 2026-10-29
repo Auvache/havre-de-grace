@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lyric styles</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lyric styles</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300&family=Sofia+Sans+Extra+Condensed:wght@200;300&family=Courier+Prime&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"><style>
 /* Layout: a contact sheet up top, then one row per direction — notes pinned left, full-length screenshot right. */
 :root{
   --bg:#eceef0; --panel:#f7f8f9; --fg:#1b2026; --mute:#5f6873; --rule:#d3d8dd; --accent:#3f6896;
@@ -93,54 +93,95 @@ details.r1 summary:focus-visible{outline:2px solid var(--accent);outline-offset:
 @keyframes grain{20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-2%)}60%{transform:translate(-2%,-4%)}80%{transform:translate(4%,2%)}}
 @keyframes flick{0%,100%{opacity:.04}12%{opacity:.09}14%{opacity:.03}47%{opacity:.06}49%{opacity:.11}52%{opacity:.04}}
 @media (prefers-reduced-motion:reduce){.film img,.film .grain,.film .flick{animation:none}}
+
+/* lyric demo v2 */
+.lyr-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+.lyr-ctl span{color:var(--mute);margin-right:6px}
+.lyr-ctl label{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--rule);border-radius:999px;cursor:pointer}
+.lyr-ctl input{accent-color:var(--accent)}
+.lyr-ctl label:has(input:checked){border-color:var(--fg)}
+.lyr-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.lyr-group{display:grid;gap:14px}
+.lyr-group h3{margin:0;font-weight:300;font-size:22px}
+@media (max-width:900px){.lyr-pair{grid-template-columns:minmax(0,1fr)}}
+.film .one{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;white-space:nowrap;color:#f4f1e8;text-shadow:0 1px 10px rgba(0,0,0,.6);pointer-events:none;transition:opacity .25s linear}
+.film .one .t{display:inline-block}
+.film .one.wipe .t{-webkit-mask-image:linear-gradient(90deg,#000 calc(var(--p,0)*110% - 10%),transparent calc(var(--p,0)*110%));mask-image:linear-gradient(90deg,#000 calc(var(--p,0)*110% - 10%),transparent calc(var(--p,0)*110%))}
+.film .one .ghost{color:transparent;text-shadow:none}
+.f-hair{font-family:Inter,system-ui,sans-serif;font-weight:200;text-transform:uppercase;letter-spacing:.38em}
+.f-narrow{font-family:"Sofia Sans Extra Condensed","Arial Narrow",sans-serif;font-weight:200;letter-spacing:.08em;text-transform:uppercase}
+.f-courier{font-family:"Courier Prime","Courier New",monospace;letter-spacing:.02em}
+.f-fell{font-family:"IM Fell English",Georgia,serif;letter-spacing:.02em}
+.film canvas.dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+/* movement levels for the old-film look */
+.lyr-grid .film.old img{animation:push 40s ease-in-out infinite alternate}
+.lyr-grid .film.old .grain{animation:none;opacity:.16}
+.lyr-grid .film.old .flick{animation:none;opacity:.05}
+.lyr-grid[data-move="gentle"] .film.old img{animation:push 40s ease-in-out infinite alternate,drift 7s ease-in-out infinite alternate}
+.lyr-grid[data-move="gentle"] .film.old .flick{animation:breathe 6s ease-in-out infinite}
+.lyr-grid[data-move="gentle"] .film.old .grain{animation:grainSlow 9s linear infinite;opacity:.18}
+.lyr-grid[data-move="original"] .film.old img{animation:push 40s ease-in-out infinite alternate,weave .18s steps(2) infinite}
+.lyr-grid[data-move="original"] .film.old .flick{animation:flick 3.1s infinite}
+.lyr-grid[data-move="original"] .film.old .grain{animation:grain .5s steps(5) infinite;opacity:.28}
+@keyframes drift{from{translate:0 0}to{translate:.6px .4px}}
+@keyframes breathe{0%,100%{opacity:.03}50%{opacity:.08}}
+@keyframes grainSlow{from{transform:translate(0,0)}to{transform:translate(-6%,4%)}}
+@media (prefers-reduced-motion:reduce){.lyr-grid .film img,.lyr-grid .film .grain,.lyr-grid .film .flick{animation:none!important}}
 @media (max-width:900px){.sheet{grid-template-columns:repeat(2,minmax(0,1fr))}.dir{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:44px}.notes{position:static}}
 @media (prefers-reduced-motion:reduce){.sheet img{transition:none}}
 </style></head><body><div class="wrap"><section class="lyr-demo" id="lyrics">
-<div class="eyebrow">Question 1 · how the lyrics are written</div>
-<h2 style="font-weight:200;font-size:clamp(28px,4vw,44px);margin:0">Three lyric styles on the album screen</h2>
-<p style="margin:0;max-width:70ch;color:var(--mute)">All three run off Ivory’s real timings, line by line: each line writes itself across the time it is sung, holds, then fades. Muted, the film keeps looping and the words follow a stand-in clock; press play and the words lock to the audio. The loop and the words are independent, so the loop can be any length.</p>
+<div class="eyebrow">Lyric lettering · round two</div>
+<h2 style="font-weight:200;font-size:clamp(28px,4vw,44px);margin:0">Small, centred, always one line</h2>
+<p style="margin:0;max-width:70ch;color:var(--mute)">Two options per album, running on Ivory’s real line timings. Each line sizes itself to fit on one row (it only shrinks for the longest lines), writes across the time it’s sung, holds, then fades. Muted, the words follow a stand-in clock; press play and they lock to the audio.</p>
 <div class="bar"><button id="lyr-play" type="button">Play with sound</button><span class="state" id="lyr-state">muted preview · Ivory 0:08–0:38</span></div>
 <audio id="lyr-audio" src="demo/ivory-clip.mp3" preload="auto"></audio>
-<div class="lyr-grid">
-<figure><div class="film old"><img src="demo/woods.jpg" alt="Stefan walking in the woods with a guitar, treated as old film"><div class="flick"></div><div class="grain"></div><div class="vig"></div><div class="line script" id="lyr-a"></div></div>
-<figcaption><b>A</b>Handwritten script, revealed like a pen moving across <span>· shown with I Want to Be Yours’ old-film look</span></figcaption></figure>
-<figure><div class="film sea"><img src="demo/itw.jpg" alt="The Into the Wild cover, sea and sky"><div class="vig"></div><div class="line serif" id="lyr-b"></div></div>
-<figcaption><b>B</b>Thin serif italic, each word settling in as the line is sung <span>· shown with Into the Wild’s cover</span></figcaption></figure>
-<figure><div class="film old"><img src="demo/woods.jpg" alt="The same woods photo, as old film"><div class="flick"></div><div class="grain"></div><div class="vig"></div><div class="line" id="lyr-c"></div></div>
-<figcaption><b>C</b>The logo’s own monoline capitals, drawn stroke by stroke <span>· P and F drawn to match, the rest are the wordmark’s letters</span></figcaption></figure>
+<div class="lyr-grid" data-move="gentle">
+<div class="lyr-group"><h3>Into the Wild · straight and narrow</h3><div class="lyr-pair">
+<figure><div class="film sea"><img src="demo/itw.jpg" alt="The Into the Wild cover, sea and sky"><div class="vig"></div><div class="one" id="w1"></div></div><figcaption><b>1</b>Hairline <span>· Inter ExtraLight capitals, widely spaced, as in your Shorts captions</span></figcaption></figure>
+<figure><div class="film sea"><img src="demo/itw.jpg" alt="The Into the Wild cover, sea and sky"><div class="vig"></div><div class="one" id="w2"></div></div><figcaption><b>2</b>Narrow hairline <span>· Sofia Sans Extra Condensed, thin capitals</span></figcaption></figure>
+</div></div>
+<div class="lyr-group"><h3>I Want to Be Yours · old film</h3>
+<div class="lyr-ctl" role="radiogroup" aria-label="Film movement"><span>Film movement</span>
+<label><input type="radio" name="move" value="still">still</label>
+<label><input type="radio" name="move" value="gentle" checked>gentle</label>
+<label><input type="radio" name="move" value="original">original</label></div>
+<div class="lyr-pair">
+<figure><div class="film old"><img src="demo/woods.jpg" alt="Stefan in the woods with a guitar, as old film"><div class="flick"></div><div class="grain"></div><canvas class="dust"></canvas><div class="vig"></div><div class="one" id="t1"></div></div><figcaption><b>3</b>Courier Prime <span>· typed letter by letter, like an old film’s subtitle</span></figcaption></figure>
+<figure><div class="film old"><img src="demo/woods.jpg" alt="The same woods photo, as old film"><div class="flick"></div><div class="grain"></div><canvas class="dust"></canvas><div class="vig"></div><div class="one" id="t2"></div></div><figcaption><b>4</b>IM Fell English <span>· a title-card face from old film</span></figcaption></figure>
+</div></div>
 </div></section>
 </div><script>
 (()=>{
 const LINES=[[1.36,5.36,"That there's a woman, of that you can be sure"],[6.22,10.36,"Eyes that hit a sunrise like waves that hit a shore, oh"],[19.30,23.36,"Her eyes are open ocean and blue butterfly wings"],[23.94,28.80,"She's got some way about her when she gets on stage and sings, oh"]];
-const CLIP=30, HOLD=1.6, FADE=.6;
-const G={"A": {"d": "M2 100L32.5 4.5L39.5 4.5L70 100M9.665 76H62.335", "w": 72}, "B": {"d": "M6.5 0V100M6.5 6.5H35a21 21 0 0 1 0 42H6.5M6.5 48.5H38a22.5 22.5 0 0 1 0 45H6.5", "w": 67}, "C": {"d": "M70.097 33.705A33 43.5 0 1 0 70.097 66.295", "w": 75}, "D": {"d": "M6.5 0V100M6.5 6.5H29.5A34 34 0 0 1 63.5 40.5V59.5A34 34 0 0 1 29.5 93.5H6.5", "w": 70}, "E": {"d": "M6.5 0V100M6.5 6.5H51.5M6.5 50H48M6.5 93.5H51.5", "w": 51.5}, "G": {"d": "M69.408 31.616A33 43.5 0 1 0 68.079 71.75V50H43.5", "w": 75}, "H": {"d": "M6.5 0V100M61.5 0V100M6.5 50H61.5", "w": 68}, "I": {"d": "M6.5 0V100", "w": 13}, "K": {"d": "M6.5 0V100M58 0L6.5 58M24 39L60 100", "w": 62, "clip": true}, "L": {"d": "M6.5 0V93.5H51.5", "w": 51.5}, "M": {"d": "M6.5 100V0L42 70L77.5 0V100", "w": 84, "clip": true}, "N": {"d": "M6.5 100V0L61.5 100V0", "w": 68, "clip": true}, "O": {"d": "M6.5 50A33 43.5 0 1 0 72.5 50A33 43.5 0 1 0 6.5 50Z", "w": 79}, "R": {"d": "M6.5 0V100M6.5 6.5H37.5a22 22 0 0 1 0 44H6.5M28 50.5L59.5 100", "w": 66}, "S": {"d": "M53.625 16.607A25.5 21.5 0 1 0 32 49.5A26.5 22 0 1 1 9.527 83.158", "w": 65}, "T": {"d": "M0 6.5H62M31 0V100", "w": 62}, "U": {"d": "M6.5 0V60A27.5 33.5 0 0 0 61.5 60V0", "w": 68}, "V": {"d": "M2 0L32.5 96.5L39.5 96.5L70 0", "w": 72}, "W": {"d": "M2 0L25.5 96.5L31.5 96.5L51 4.5L57 4.5L76.5 96.5L82.5 96.5L106 0", "w": 108}, "Y": {"d": "M2 0L31 50.5L60 0M31 50.5V100", "w": 62}, "P": {"d": "M6.5 0V100M6.5 6.5H35a21 21 0 0 1 0 42H6.5", "w": 62}, "F": {"d": "M6.5 0V100M6.5 6.5H51.5M6.5 50H44", "w": 51.5}};
-const clamp=x=>Math.max(0,Math.min(1,x));
+const CLIP=30,HOLD=1.6,FADE=.6,clamp=x=>Math.max(0,Math.min(1,x));
+const PANELS=[{id:'w1',font:'f-hair',mode:'wipe',size:.0175},{id:'w2',font:'f-narrow',mode:'wipe',size:.024},{id:'t1',font:'f-courier',mode:'type',size:.021},{id:'t2',font:'f-fell',mode:'wipe',size:.024}].map(p=>{const el=document.getElementById(p.id);el.classList.add(p.font,p.mode);return{...p,el,cur:-2}});
 const audio=document.getElementById('lyr-audio'),btn=document.getElementById('lyr-play'),state=document.getElementById('lyr-state');
-const A=document.getElementById('lyr-a'),B=document.getElementById('lyr-b'),C=document.getElementById('lyr-c');
-// B: words with a start time each, spread by character count across the line
-const bLines=LINES.map(([s,e,txt])=>{const w=txt.split(' ');const tot=txt.length;let acc=0;return w.map(word=>{const t=s+(acc/tot)*(e-s);acc+=word.length+1;return{word,t}})});
-// C: one svg per line, glyph paths with their own start times
-const NS='http://www.w3.org/2000/svg';
-const cLines=LINES.map(([s,e,txt])=>{const words=txt.toUpperCase().replace(/[^A-Z ]/g,'').split(' ').filter(Boolean);const rows=[[]];let len=0;for(const w of words){if(len+w.length>22&&rows[rows.length-1].length){rows.push([]);len=0}rows[rows.length-1].push(w);len+=w.length+1}
- const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','mono');const paths=[];let maxW=0;const rowH=150;
- const rowsLaid=rows.map((r,ri)=>{let x=0;const items=[];r.forEach((w,wi)=>{if(wi)x+=56;for(const ch of w){const gl=G[ch];if(!gl)continue;items.push({gl,x});x+=gl.w+26}});x-=26;maxW=Math.max(maxW,x);return{items,w:x,y:ri*rowH}});
- let n=0;rowsLaid.forEach(r=>{const off=(maxW-r.w)/2;r.items.forEach(({gl,x})=>{const pth=document.createElementNS(NS,'path');pth.setAttribute('d',gl.d);pth.setAttribute('transform',`translate(${x+off} ${r.y})`);pth.setAttribute('fill','none');pth.setAttribute('stroke','#f6f3ea');pth.setAttribute('stroke-width','11');pth.setAttribute('stroke-linecap','butt');pth.setAttribute('stroke-linejoin','miter');pth.setAttribute('pathLength','1');pth.style.strokeDasharray='1';pth.style.strokeDashoffset='1';svg.appendChild(pth);paths.push(pth);n++})});
- svg.setAttribute('viewBox',`-20 -20 ${maxW+40} ${rows.length*rowH-10}`);
- const per=(e-s)/Math.max(n,1);paths.forEach((p,i)=>{p._t=s+i*per;p._d=Math.max(per*2.2,.25)});return{svg,paths}});
-let cur=-1;
-function lineAt(t){for(let i=LINES.length-1;i>=0;i--){if(t>=LINES[i][0])return i}return -1}
-function alpha(i,t){if(i<0)return 0;const[s,e]=LINES[i];const next=LINES[i+1]?LINES[i+1][0]:Infinity;const out=Math.min(next,e+HOLD);if(t<out)return 1;return clamp(1-(t-out)/FADE)}
-function setLine(i){cur=i;if(i<0){A.textContent='';B.innerHTML='';C.innerHTML='';return}
- A.textContent=LINES[i][2];B.innerHTML='';bLines[i].forEach(({word},k)=>{if(k)B.appendChild(document.createTextNode(' '));const el=document.createElement('i');el.textContent=word;B.appendChild(el)});C.innerHTML='';C.appendChild(cLines[i].svg)}
-function render(t){const i=lineAt(t);if(i!==cur)setLine(i);if(i<0)return;const[s,e]=LINES[i];const a=alpha(i,t);
- A.style.setProperty('--p',clamp((t-s)/(e-s)));A.style.opacity=a;
- [...B.querySelectorAll('i')].forEach((el,k)=>el.classList.toggle('on',t>=bLines[i][k].t));B.style.opacity=a;
- cLines[i].paths.forEach(p=>{p.style.strokeDashoffset=String(1-clamp((t-p._t)/p._d))});C.style.opacity=a}
+function lineAt(t){for(let i=LINES.length-1;i>=0;i--)if(t>=LINES[i][0])return i;return -1}
+function alpha(i,t){const e=LINES[i][1],next=LINES[i+1]?LINES[i+1][0]:Infinity,out=Math.min(next,e+HOLD);return t<out?1:clamp(1-(t-out)/FADE)}
+function fit(p){const box=p.el.parentElement.clientWidth;const base=Math.max(12,Math.min(21,box*p.size));p.el.style.fontSize=base+'px';const w=p.el.firstChild?p.el.firstChild.scrollWidth:0;const max=box*.86;if(w>max)p.el.style.fontSize=(base*max/w)+'px'}
+function setLine(p,i){p.cur=i;p.el.innerHTML='';if(i<0)return;const txt=LINES[i][2];
+ if(p.mode==='type'){const t=document.createElement('span');t.className='t';const a=document.createElement('span');const b=document.createElement('span');b.className='ghost';b.textContent=txt;t.append(a,b);p.el.appendChild(t);p.a=a;p.b=b}
+ else{const t=document.createElement('span');t.className='t';t.textContent=txt;p.el.appendChild(t)}
+ fit(p)}
+function render(t){const i=lineAt(t);for(const p of PANELS){if(i!==p.cur)setLine(p,i);if(i<0)continue;const[s,e,txt]=LINES[i];const prog=clamp((t-s)/(e-s));p.el.style.opacity=alpha(i,t);
+ if(p.mode==='type'){const n=Math.round(prog*txt.length);p.a.textContent=txt.slice(0,n);p.b.textContent=txt.slice(n)}else p.el.style.setProperty('--p',prog)}}
+addEventListener('resize',()=>PANELS.forEach(p=>{if(p.cur>=0)fit(p)}));
+// dust: a few soft specks drifting, appearing and fading
+document.querySelectorAll('canvas.dust').forEach(cv=>{const ctx=cv.getContext('2d');let W=0,H=0;const specks=Array.from({length:26},()=>({x:Math.random(),y:Math.random(),r:.4+Math.random()*1.4,v:.002+Math.random()*.006,life:Math.random()*6,dur:3+Math.random()*5}));
+ function size(){W=cv.width=cv.clientWidth*devicePixelRatio;H=cv.height=cv.clientHeight*devicePixelRatio}size();addEventListener('resize',size);
+ let last=performance.now();function draw(now){const dt=Math.min(.05,(now-last)/1000);last=now;ctx.clearRect(0,0,W,H);
+  for(const d of specks){d.life+=dt;if(d.life>d.dur){d.life=0;d.x=Math.random();d.y=Math.random();d.dur=3+Math.random()*5}d.y-=d.v*dt*3;d.x+=Math.sin((now/1000+d.dur)*.4)*.0004;
+   const a=Math.sin(Math.PI*d.life/d.dur)*.55;ctx.fillStyle=`rgba(240,232,214,${a})`;ctx.beginPath();ctx.arc(d.x*W,d.y*H,d.r*devicePixelRatio,0,7);ctx.fill()}
+  requestAnimationFrame(draw)}
+ if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(draw)});
+document.querySelectorAll('input[name=move]').forEach(r=>r.addEventListener('change',()=>{document.querySelector('.lyr-grid').dataset.move=r.value}));
 let t0=performance.now();
-function tick(now){let t;if(!audio.paused){t=audio.currentTime}else{t=((now-t0)/1000)%CLIP}render(t);requestAnimationFrame(tick)}
+function tick(now){const t=audio.paused?((now-t0)/1000)%CLIP:audio.currentTime;render(t);requestAnimationFrame(tick)}
 requestAnimationFrame(tick);
-btn.addEventListener('click',()=>{if(audio.paused){audio.currentTime=0;audio.play().then(()=>{btn.textContent='Pause';state.textContent='playing · synced to the audio'}).catch(()=>{state.textContent='audio could not start here'})}else{audio.pause();t0=performance.now();btn.textContent='Play with sound';state.textContent='muted preview · Ivory 0:08–0:38'}});
-audio.addEventListener('ended',()=>{t0=performance.now();btn.textContent='Play with sound';state.textContent='muted preview · Ivory 0:08–0:38'});
+const idle=()=>{t0=performance.now();btn.textContent='Play with sound';state.textContent='muted preview · Ivory 0:08–0:38'};
+btn.addEventListener('click',()=>{if(audio.paused){audio.currentTime=0;audio.play().then(()=>{btn.textContent='Pause';state.textContent='playing · synced to the audio'}).catch(()=>{state.textContent='audio could not start here'})}else{audio.pause();idle()}});
+audio.addEventListener('ended',idle);
+document.fonts&&document.fonts.ready.then(()=>PANELS.forEach(p=>{if(p.cur>=0)fit(p)}));
 })();
 </script>
 </body></html>

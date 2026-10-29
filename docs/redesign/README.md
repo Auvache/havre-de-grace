@@ -61,9 +61,19 @@ navigation.
   - Lyrics are timed **line by line** for every song. Each line writes itself
     across the time it's sung, holds, fades. The lettering may differ between
     albums; each album page is its own cohesive thing.
-  - **Lyric style: waiting on Stefan.** Three are demoed in
-    `mockups/lyric-styles.html` (A script pen-reveal, B thin serif word by word,
-    C the logo's monoline capitals drawn stroke by stroke, P and F added).
+  - **Lettering rules (Stefan, 2026-10-29):** no cursive. Lyrics are small but
+    readable, centred in the middle of the screen, and **always one line**:
+    a line shrinks to fit rather than wrapping.
+  - **Lettering per album, two candidates each, demoed in
+    `mockups/lyric-styles.html`; Stefan's final pick pending:**
+    Into the Wild, straight and narrow: (1) *Hairline*, Inter ExtraLight
+    capitals tracked wide, as in the Shorts captions, wiped on; or (2) Sofia
+    Sans Extra Condensed thin capitals, wiped on. I Want to Be Yours, small
+    cinema face: (3) Courier Prime typed letter by letter like an old film
+    subtitle; or (4) IM Fell English, wiped on.
+  - **Old-film movement is gentle:** slow push and drift (well under a pixel),
+    breathing fade, slow grain, a few drifting dust specks. No jittery gate
+    weave or hard flicker; the original shake was too much.
 - **Below the screen**, a parallax journey through the songs, *not* synced to
   playback: free scrolling and exploration. Per song: lyric snippets, stories
   (only where Stefan has written one), pictures, small animations (reuse motifs
