@@ -85,19 +85,11 @@ navigation.
 
 ## How to work
 
-Each brief runs in its own session, in its own git worktree (Stefan's call;
-an exception to the usual commit-straight-to-main rule):
-
-```sh
-git worktree add ../hdg-<brief> -b redesign/<brief> main
-cd ../hdg-<brief> && npm ci
-npx nuxi dev --port <3001..3005>
-```
-
-Commit in the worktree as you go. When the brief is done, tell Stefan the
-branch is ready; he fast-forwards or merges it into main. Rebase on main before
-handing back if main has moved. Don't edit files another brief owns (listed in
-each brief) without saying so in your summary.
+**Superseded:** the build now runs as one unattended session from
+`SITE-REFRESH.md` in the repo root, working on `main` and committing without
+pushing. That file's decisions win where they differ from this one (lettering
+is decided: narrow hairline for Into the Wild, Courier Prime typed for I Want
+to Be Yours). The briefs below are its phases.
 
 ## The briefs
 
