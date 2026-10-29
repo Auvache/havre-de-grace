@@ -7,18 +7,29 @@ description: Turn raw performance videos in ~/stefan/videos/inbox into ready-to-
 
 ```
 ~/stefan/videos/
-  inbox/      the user drops raw takes here, any length
-  ready/      finished clips, ready to post
-  posted/     clips that are up or scheduled (moved only when the user asks)
-  originals/  raw takes Claude has processed (move them here from inbox/ when done)
+  inbox/        the user drops raw takes here, any length
+  ready/        finished clips, ready to post, one folder per platform:
+    youtube/      the full-quality clip (short.mjs writes here); the user drags it into Studio
+    tiktok/       the same clip at 9.5 MB (versions.mjs), so Claude can upload it to Buffer
+    instagram/    the user's: only they decide what goes in (never fill or empty it)
+  posted/       youtube/, tiktok/, instagram/: versions that are up or scheduled
+                (moved only when the user asks)
+  originals/    raw takes Claude has processed (move them here from inbox/ when done)
 ```
+
+**Each clip has one file per platform, with the same name** (the TikTok one
+always `.mp4`). Set up 29 Oct 2026. After rendering into `ready/youtube/`, run
+`node tools/captions/versions.mjs` to make the TikTok versions it's missing.
+A version moves on its own: when a Short is scheduled in Studio, only its
+`youtube/` file goes to `posted/youtube/`. A file over ~10 MB can't go
+through Chrome's file upload, which is why TikTok gets the small copy.
 
 **Checking Buffer before moving clips to posted/** (done 28 Oct 2026): Buffer
 doesn't show filenames, and one upload is shared by a song's YouTube and
 Instagram posts. Match on duration instead. Each post's thumbnail is
 `buffer-media-uploads.s3.amazonaws.com/<org>/<id>/thumbnail`, and the video is
 `<org>/<id>_transcoded.mp4`. Load that in a `<video preload=metadata>` on the
-Buffer page, read `.duration`, and compare it with `ffprobe` on `ready/`. Check
+Buffer page, read `.duration`, and compare it with `ffprobe` on `ready/tiktok/`. Check
 the Queue, Sent and Drafts tabs (a drafted clip counts as posted).
 Transcoding can shift a length by about 0.03 s. Two clips can have the same length (Andalusia
 snippet and Insane, Okay chorus are both 30.53 s), so use the caption too.
@@ -59,7 +70,7 @@ Insane, Okay, 27 Oct 2026 (5 clips); see "The first inbox run" below.
    ```sh
    node tools/captions/short.mjs --video inbox/<take> --timed $W/timed.json \
      --start 18.82 --end 59.53 --fade-out 0.3 --top 760 --scrim \
-     --out "$HOME/stefan/videos/ready/<Song> - verse 1.mp4"
+     --out "$HOME/stefan/videos/ready/youtube/<Song> - verse 1.mp4"
    ```
    About 30 s per clip. In a shell loop, give `node` `</dev/null`, or it
    swallows the rest of a heredoc-fed `while read` and only the first clips
@@ -110,7 +121,8 @@ Then:
   whole bar later ("tone" went from 85.8 to 88.3), so end it inside the
   sung note. clean-warm was fine on orange stage light.
 
-Sources go to `originals/` when their Shorts are in `ready/`.
+Sources go to `originals/` when their Shorts are in `ready/youtube/` and
+`ready/tiktok/`.
 
 ### Landscape live sets: the Artichoke videos (28 Oct 2026)
 
@@ -165,6 +177,38 @@ instead, then patch the sung changes (a dropped "Oh,", "Could not" →
 said boil it down and string it out…", 123–138 s) isn't on the site; the
 vocal stem found it where the alignment showed a 27 s "break". Read the stem
 transcript for every gap over about 10 s.
+
+### Haymaker: finished videos from the channel (29 Oct 2026)
+
+Andalusia, Goodbye, Norma Jeane and Hey, Player (Live at the Haymaker) were
+downloaded from the user's own channel with `yt-dlp` (`brew install yt-dlp`,
+`-f "bv*+ba/b" --merge-output-format mkv`), which gives the 4K VP9 master. Each
+opens on about 6 s of venue shots and ends on an EFM logo card, and the stage
+is one locked-off camera (Norma Jeane handheld, but he stays near centre).
+Named `<Song> (live at the Haymaker) - <section>`.
+
+- **Crop by hand.** faces.py locks onto the lit "STEFAN AUVACHE" screen, the
+  mic and an amp, so `follow.py` jumps. The real face is the one with cy
+  0.25-0.52; it sat at cx 0.48-0.50 all through. `--crop-x 0.47` on all
+  three. `--top 840 --scrim` (seated, light shirt: under the chin, clear of
+  the mic head), `900` on Norma Jeane (standing, dark t-shirt).
+- **`--audio level`**: EFM's mix is good but quiet (-21.5 LUFS on Andalusia).
+  It's loudness to -14 with no EQ; `polish`'s EQ is for iPhone audio.
+- **Align against the stem's words.** On Norma Jeane the full-mix transcript
+  made `align` collapse a verse and a chorus into a second. Transcribing the
+  vocal stem in 30 s windows and using that as words.json fixed it.
+- **He holds the last note far past Whisper's word end** (Norma Jeane's
+  pre-chorus "oh" runs 2.5 s, straight into "Goodbye"). Before choosing an
+  end, find where the vocal stem drops below about -45 dB (the floor in a
+  break is -83). Then cut on the strum after that. Where it never drops,
+  end in the breath before the next line.
+- Hey, Player opens with a verse that's sung only there (12-26 s, "Well,
+  I'm happy you're happy… Sometimes things work for people other than me /
+  I'm all good with that unless you start blowing smoke…", words from the
+  user). It was cut as "opening verse", 19 clips in all.
+- Python 3.15 has no wheels for PyAV, so the venv is
+  `/opt/homebrew/bin/python3.13 -m venv`, with `pip install "av<16"`
+  (faster-whisper 1.2 breaks on av 19).
 
 ### Checking the words against what's sung (live takes especially)
 
@@ -397,7 +441,8 @@ They show what "best judgement" meant here, as a pattern to follow:
 
 ## Files
 
-- Output: `~/stefan/videos/ready/<Song Title> - <section>.mp4`, named by what's
+- Output: `~/stefan/videos/ready/youtube/<Song Title> - <section>.mp4`, then
+  its TikTok version by `versions.mjs`; named by what's
   in the clip ("St George - verse 1", "Insane, Okay - verse 2 + final
   chorus", "St George - verse 3 to end"), not "N of M", because clips can overlap.
   Write the title the way the site writes it (`public/demos/playlists.json`

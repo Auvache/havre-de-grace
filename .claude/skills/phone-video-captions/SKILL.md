@@ -14,7 +14,7 @@ decisions behind it.
 
 Done this way, approved as "perfect": Little Brother (IMG_4247), Andalusia
 (IMG_4249) and Little Red Moon (IMG_4345), 26 Oct 2026. The outputs are in
-`~/stefan/videos/ready/` as `<Song> - captioned.mp4`.
+`~/stefan/videos/ready/youtube/` as `<Song> - captioned.mp4`.
 
 Shorts cut from a take in `~/stefan/videos/inbox` get the **Hairline** style
 from `tools/captions/short.mjs` instead (see phone-video-clips). Breath is for
@@ -48,7 +48,7 @@ python3 -I tools/captions/lyrics.py align $W
 
 # 4. render (~1 min)
 node tools/captions/captions.mjs --video <take>.mov --timed $W/timed.json \
-  --out "$HOME/stefan/videos/ready/<Song> - captioned.mp4" [--top N] [--scrim]
+  --out "$HOME/stefan/videos/ready/youtube/<Song> - captioned.mp4" [--top N] [--scrim]
 
 # 5. check frames, then open the video for the user
 ```
@@ -107,8 +107,9 @@ user. Say that you checked stills, not real-time playback.
 
 ### Files
 
-- Output: `~/stefan/videos/ready/<Song Title> - captioned.mp4` (or, when it will be split, a scratchpad file that phone-video-clips cuts), with the title written
-  the way the site writes it.
+- Output: `~/stefan/videos/ready/youtube/<Song Title> - captioned.mp4` (or, when it will be split, a scratchpad file that phone-video-clips cuts), with the title written
+  the way the site writes it. Then `node tools/captions/versions.mjs` makes its
+  TikTok copy in `ready/tiktok/` (see phone-video-clips).
 - Originals: when the user says to delete them, use `trash <file>` (recoverable
   from the Trash), never `rm`, and only after the output has been checked.
 - Work files (audio, words.json, lyrics.txt, timed.json) stay in the scratchpad.

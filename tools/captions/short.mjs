@@ -70,12 +70,13 @@ const { values: opt } = parseArgs({
     // where the 9:16 window sits across a wider frame, 0 left to 1 right: one number, or keyframes in take
     // seconds, "t:x,t:x,...", eased between, for a camera that reframes or a performer who moves
     'crop-x': { type: 'string', default: '0.5' },
-    audio: { type: 'string', default: 'polish' }, // polish | as-is (a mixed and mastered soundtrack: fades only)
+    // polish | level (a mixed soundtrack that's quiet: loudness only, no EQ) | as-is (mixed and mastered: fades only)
+    audio: { type: 'string', default: 'polish' },
   },
 })
 for (const k of ['video', 'out', 'start', 'end']) if (!opt[k]) throw new Error(`--${k} is required`)
 if (!(opt.look in LOOKS)) throw new Error(`--look must be one of ${Object.keys(LOOKS).join(', ')}`)
-if (!['polish', 'as-is'].includes(opt.audio)) throw new Error('--audio must be polish or as-is')
+if (!['polish', 'level', 'as-is'].includes(opt.audio)) throw new Error('--audio must be polish, level or as-is')
 
 const FPS = 30
 const W = 1080, H = 1920
@@ -163,13 +164,15 @@ for (let f = 0; f < Math.round(dur * FPS); f++) {
 await browser.close()
 }
 
-// two-pass loudness: measure the EQ'd clip, then normalise it linearly to -14 LUFS (--audio as-is skips both)
+// two-pass loudness: measure the EQ'd clip, then normalise it linearly to -14 LUFS (--audio level skips the EQ,
+// as-is skips both)
 const trim = ['-ss', start.toFixed(6), '-t', dur.toFixed(6), '-i', opt.video]
 const polish = opt.audio === 'polish'
+const level = opt.audio !== 'as-is'
 const probe = spawnSync('ffmpeg', ['-hide_banner', '-nostats', ...trim, '-vn', '-af', `${polish ? `${EQ},` : ''}loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json`, '-f', 'null', '-'], { encoding: 'utf8' })
 const m = JSON.parse(probe.stderr.slice(probe.stderr.lastIndexOf('{'), probe.stderr.lastIndexOf('}') + 1))
 const norm = `loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}`
-const af = `${polish ? `${EQ},${norm},` : ''}aresample=48000,afade=t=in:d=0.05,afade=t=out:st=${(dur - fadeOut).toFixed(3)}:d=${fadeOut}`
+const af = `${polish ? `${EQ},` : ''}${level ? `${norm},` : ''}aresample=48000,afade=t=in:d=0.05,afade=t=out:st=${(dur - fadeOut).toFixed(3)}:d=${fadeOut}`
 
 // --crop-x keyframes, as an ffmpeg expression in clip time (the trim starts the clip's clock at 0); between two
 // keyframes the window eases (smoothstep), like an operator panning; two keyframes 0.01 s apart make a jump cut
@@ -207,4 +210,4 @@ execFileSync('ffmpeg', [
   opt.out,
 ], { stdio: 'inherit' })
 rmSync(tmp, { recursive: true, force: true })
-console.log(`wrote ${opt.out}  (${start.toFixed(3)}-${end.toFixed(3)}, ${dur.toFixed(2)} s, ${iw}x${ih}${vertical ? '' : ` ${opt.reframe}`}, look ${opt.look}, ${shown.length ? `${shown.length} caption lines` : 'no captions'}, ${polish ? `${m.input_i} -> -14 LUFS` : `audio as-is at ${m.input_i} LUFS`})`)
+console.log(`wrote ${opt.out}  (${start.toFixed(3)}-${end.toFixed(3)}, ${dur.toFixed(2)} s, ${iw}x${ih}${vertical ? '' : ` ${opt.reframe}`}, look ${opt.look}, ${shown.length ? `${shown.length} caption lines` : 'no captions'}, ${level ? `${m.input_i} -> -14 LUFS${polish ? '' : ', no EQ'}` : `audio as-is at ${m.input_i} LUFS`})`)
