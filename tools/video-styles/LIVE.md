@@ -55,6 +55,13 @@ Traps found building it:
   re-encoded, keeps each piece's AAC priming (1024 samples), so the sound runs
   21.33 ms late. Use the concat filter.
 - `xfade` refuses stills on a 1/30 timebase against the camera's 1/15360.
+- **An `xfade` offset rounded up starts the next clip a frame late.** Written
+  to 4 decimals, 590.96666… became 590.9667, just after its frame, and three of
+  the six songs came out with the picture 33 ms behind the sound (the sound,
+  mixed separately, was exact). Offsets are now given half a frame early. The
+  first full render had this; a check that computed frame indices showed it
+  only as a puzzling −1, and reading the camera's real timestamps (`-copyts`,
+  `showinfo`, `-frames:v` rather than `-t`, which `-copyts` breaks) proved it.
 - `LIMIT` in `live.mjs` shorter than `--stop` gives the room input a negative
   `-t` and fails; test with a short fake `--stop` instead.
 

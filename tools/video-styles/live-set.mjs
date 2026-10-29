@@ -97,6 +97,13 @@ const CREDITS_HOLD = 4.5
 const GRADE = GRADES['teal-bone']
 const video = join(opt.dir, 'artichoke-set-full.mp4')
 const grid = (t) => Math.round(t * FPS) / FPS
+/*
+ * An xfade offset for the frame at `t` (on the grid): half a frame early. Written
+ * to 4 decimals, 590.96666… became 590.9667, just after its frame, and xfade
+ * started the next song a frame late: its picture 33 ms behind its sound, on
+ * three of the six songs.
+ */
+const offset = (t) => r(t - 0.5 / FPS, 4)
 
 /*
  * Lays `songs` out on the output's clock. `start` is the first song's mix time
@@ -211,7 +218,7 @@ function render({ songs, cardAt }, file, { opening, card }) {
   }
   let chain = opening ? '[c0o]' : '[c0]'
   songs.slice(1).forEach((s, i) => {
-    filter.push(`${chain}[c${i + 1}]xfade=transition=fade:duration=${DISSOLVE}:offset=${r(s.v, 4)}[x${i + 1}]`)
+    filter.push(`${chain}[c${i + 1}]xfade=transition=fade:duration=${DISSOLVE}:offset=${offset(s.v)}[x${i + 1}]`)
     chain = `[x${i + 1}]`
   })
   if (card) {
@@ -221,7 +228,7 @@ function render({ songs, cardAt }, file, { opening, card }) {
     filter.push(...screens.map((n, k) => `[${n}:v]format=yuv420p,setsar=1,setpts=PTS-STARTPTS[s${k}]`))
     // On the camera's timebase (1/15360), or xfade refuses the pair.
     filter.push(`${screens.map((_, k) => `[s${k}]`).join('')}concat=n=${screens.length}:v=1:a=0,settb=1/15360[card]`)
-    filter.push(`${chain}[card]xfade=transition=fade:duration=${DISSOLVE}:offset=${r(cardAt, 4)}[vend]`)
+    filter.push(`${chain}[card]xfade=transition=fade:duration=${DISSOLVE}:offset=${offset(cardAt)}[vend]`)
     chain = '[vend]'
   }
   filter.push(`${chain}format=yuv420p[v]`)
