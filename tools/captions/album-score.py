@@ -47,6 +47,12 @@ HAND = {
         8: (58.43, 60.00, "squeezed into 0.3 s by the alignment; the first 'Music comes in movements' is the stretch at 58.43"),
         9: (60.08, 62.20, "squeezed with the line above; spaced as the last chorus sings it (+1.65 s)"),
     },
+    "iwtby-9": {
+        10: (71.33, 73.80, "run on from 'Be featured in the times'; the voice comes back in at 71.33, four seconds on, as in the studio take"),
+        14: (86.45, 88.90, "run on from 'Dive the ocean deep'; sung at the next stretch, 86.45"),
+        15: (89.20, 92.30, "follows 'rock you gently' by the studio take's spacing (+2.9 s), inside one sung stretch"),
+        18: (116.60, 119.60, "run on from 'That'd sure be a chore'; placed by the studio take's spacing (+3.8 s), inside one sung stretch"),
+    },
     "iwtby-7": {
         0: (29.52, 31.90, "stretched back over 24 s of guitar; the voice comes in at 29.52"),
         8: (116.93, 119.50, "the chorus was squeezed into 1.6 s; these are its four sung stretches"),

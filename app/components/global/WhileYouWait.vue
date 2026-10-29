@@ -5,7 +5,7 @@
 
 <template>
   <div v-if="record" class="wait">
-    <NuxtLink :to="`/music/${record.slug}`">
+    <NuxtLink :to="`/music/${record.slug}`" :aria-label="record.title">
       <img :src="look.thumb" alt="" width="84" height="84">
     </NuxtLink>
     <div>

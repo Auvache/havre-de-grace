@@ -59,9 +59,7 @@
     <figure v-if="look.pullQuote" class="quote">
       <blockquote>
         <p>
-          <template v-for="(line, i) in look.pullQuote.lines" :key="i">
-            {{ line }}<br v-if="i < look.pullQuote.lines.length - 1">
-          </template>
+          <span v-for="(line, i) in look.pullQuote.lines" :key="i" class="quote__line">{{ line }} </span>
         </p>
       </blockquote>
       <figcaption>{{ look.pullQuote.song }}</figcaption>
@@ -377,6 +375,10 @@ usePageSeo({
   color: color-mix(in srgb, var(--ink) 90%, var(--bone));
 }
 
+.quote__line {
+  display: block;
+}
+
 .quote figcaption {
   margin-top: 30px;
   font-size: 11px;
@@ -506,6 +508,11 @@ usePageSeo({
 
   .quote {
     padding: 90px 24px;
+  }
+
+  /* On a phone the sung lines don't fit a line each: let them run on. */
+  .quote__line {
+    display: inline;
   }
 
   .hero img {

@@ -38,7 +38,12 @@ const SPLASH_OFF_ROUTES = /^\/(?:links|thank-you|seven-inch|listen|subscribe|uns
 const route = useRoute()
 const skipsSplash = SPLASH_OFF_ROUTES.test(route.path)
 
-const isVisible = ref(splashSeen.value !== '1' && !skipsSplash)
+// The same on the server and in the browser, so hydration agrees: the HTML is
+// prerendered once for everybody and can't know who has seen the splash. A
+// returning visitor never sees it anyway: the inline script in nuxt.config
+// marks <html data-splash="seen"> before first paint and the rule below hides
+// it, and onMounted takes it out.
+const isVisible = ref(!skipsSplash)
 const isExiting = ref(false)
 const drawnFor = ref(0)
 const mark = computed(() => markDrawnAt(drawnFor.value, 'splash'))
@@ -68,6 +73,11 @@ const clearTimers = () => {
 }
 
 onMounted(() => {
+  if (String(splashSeen.value) === '1') {
+    isVisible.value = false
+    return
+  }
+
   // Counts as seen, so going on from /links to /listen or the home page doesn't
   // stop them mid-visit either.
   if (skipsSplash) {
@@ -138,4 +148,10 @@ onBeforeUnmount(() => {
   color: #f4f6f7;
 }
 
+</style>
+
+<style>
+html[data-splash="seen"] .splash-screen {
+  display: none;
+}
 </style>

@@ -110,7 +110,8 @@ function fit() {
   const base = Math.max(12, Math.min(26, box * size))
   el.style.fontSize = `${base}px`
   const width = shown.inner.scrollWidth
-  const max = box * 0.86
+  // A phone's screen is narrow enough that the margins matter more than the air.
+  const max = box * (box < 600 ? 0.93 : 0.86)
   if (width > max) el.style.fontSize = `${(base * max) / width}px`
 }
 

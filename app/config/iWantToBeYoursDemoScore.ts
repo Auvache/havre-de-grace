@@ -27,13 +27,13 @@
  *     36.60  'Or I could be a sailor' (the alignment guessed it; start snapped to the voice)
  *     46.73  'Horizon every morning' (the alignment guessed it; start snapped to the voice)
  *     67.51  'Be featured in the times' (the alignment guessed it; start snapped to the voice)
- *     68.64  'Or I could be a heistman' (the alignment guessed it; start snapped to the voice)
+ *     71.33  'Or I could be a heistman' (set by hand: run on from 'Be featured in the times'; the voice comes back in at 71.33, four seconds on, as in the studio take)
  *     73.90  'Infamous for my crimes' (the alignment guessed it; start snapped to the voice)
  *     82.63  'Dive the ocean deep' (the alignment guessed it; start snapped to the voice)
- *     83.99  'Or I could rock you gently' (the alignment guessed it; start snapped to the voice)
- *     88.28  'As you drift away to sleep' (the alignment guessed it; start snapped to the voice)
+ *     86.45  'Or I could rock you gently' (set by hand: run on from 'Dive the ocean deep'; sung at the next stretch, 86.45)
+ *     89.20  'As you drift away to sleep' (set by hand: follows 'rock you gently' by the studio take's spacing (+2.9 s), inside one sung stretch)
  *     113.11  'That'd sure be a chore' (the alignment guessed it; start snapped to the voice)
- *     114.50  'I could belong to everybody, but' (the alignment guessed it; start snapped to the voice)
+ *     116.60  'I could belong to everybody, but' (set by hand: run on from 'That'd sure be a chore'; placed by the studio take's spacing (+3.8 s), inside one sung stretch)
  *     120.30  'I want to be yours' (the alignment guessed it; start snapped to the voice)
  *     139.30  'I could make the A-list' (the alignment guessed it; start snapped to the voice)
  *     150.72  'For a year or two' (the alignment guessed it; start snapped to the voice)
@@ -68,16 +68,16 @@ const RAW_LINES = [
 
   line('block-2', 63.88, 65.44, [[63.88, 'I'], [63.96, 'could'], [64.30, 'be'], [64.68, 'a'], [64.94, 'writer']]),
   line('block-2', 67.51, 68.64, [[67.51, 'Be'], [67.59, 'featured'], [67.98, 'in'], [68.26, 'the'], [68.38, 'times']]),  // check
-  line('block-2', 68.64, 73.90, [[68.64, 'Or'], [71.33, 'I'], [71.41, 'could'], [71.86, 'be'], [72.16, 'a'], [72.42, 'heistman']]),  // check
+  line('block-2', 71.33, 73.80, [[71.33, 'Or'], [71.65, 'I'], [71.89, 'could'], [72.45, 'be'], [72.76, 'a'], [73.00, 'heistman']]),  // check
   line('block-2', 73.90, 76.66, [[73.90, 'Infamous'], [75.38, 'for'], [75.94, 'my'], [76.26, 'crimes']]),  // check
   line('block-2', 78.90, 80.58, [[78.90, 'I'], [78.98, 'could'], [79.38, 'climb'], [79.78, 'a'], [80.04, 'mountain']]),
   line('block-2', 82.63, 83.99, [[82.63, 'Dive'], [82.98, 'the'], [83.20, 'ocean'], [83.76, 'deep']]),  // check
-  line('block-2', 83.99, 88.16, [[83.99, 'Or'], [86.45, 'I'], [86.53, 'could'], [86.98, 'rock'], [87.34, 'you'], [87.58, 'gently']]),  // check
-  line('block-2', 88.28, 91.78, [[88.28, 'As'], [90.00, 'you'], [90.28, 'drift'], [90.66, 'away'], [91.08, 'to'], [91.40, 'sleep']]),  // check
+  line('block-2', 86.45, 88.90, [[86.45, 'Or'], [86.75, 'I'], [86.97, 'could'], [87.49, 'rock'], [87.93, 'you'], [88.31, 'gently']]),  // check
+  line('block-2', 89.20, 92.30, [[89.20, 'As'], [89.58, 'you'], [90.05, 'drift'], [90.70, 'away'], [91.27, 'to'], [91.64, 'sleep']]),  // check
 
   line('block-3', 109.39, 110.98, [[109.39, 'Yes,'], [109.52, 'I'], [109.72, 'could'], [110.00, 'be'], [110.24, 'famous']]),
   line('block-3', 113.11, 114.50, [[113.11, 'That\'d'], [113.19, 'sure'], [113.46, 'be'], [113.88, 'a'], [114.02, 'chore']]),  // check
-  line('block-3', 114.50, 119.48, [[114.50, 'I'], [116.74, 'could'], [117.14, 'belong'], [117.74, 'to'], [118.10, 'everybody,'], [119.20, 'but']]),  // check
+  line('block-3', 116.60, 119.60, [[116.60, 'I'], [116.83, 'could'], [117.37, 'belong'], [117.98, 'to'], [118.29, 'everybody,'], [119.22, 'but']]),  // check
   line('block-3', 120.30, 121.92, [[120.30, 'I'], [120.38, 'want'], [120.58, 'to'], [120.82, 'be'], [121.22, 'yours']]),  // check
 
   line('block-4', 139.30, 141.10, [[139.30, 'I'], [139.38, 'could'], [139.80, 'make'], [140.16, 'the'], [140.48, 'A-list']]),  // check

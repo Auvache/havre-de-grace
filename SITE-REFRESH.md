@@ -111,10 +111,10 @@ Tick each box (`- [x]`) in this file and commit it with the work it describes.
 - [x] Quiet rows for songs with little content
 
 **Phase 6: Test everything** (section 5)
-- [ ] `npm run generate` passes
-- [ ] Desktop Chrome pass: every page, every scenario in section 5
-- [ ] Phone-width pass (390 px) on every page
-- [ ] Fix what the passes found, then re-check those pages
+- [x] `npm run generate` passes
+- [x] Desktop Chrome pass: every page, every scenario in section 5
+- [x] Phone-width pass (390 px) on every page
+- [x] Fix what the passes found, then re-check those pages
 
 **Phase 7: Report**
 - [ ] `SITE-REFRESH-REPORT.md` written (section 7), screenshots in
