@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>I Want to Be Yours · album</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet"><style>
+:root{--night:#0b110d;--panel:#16201a;--bone:#e8e6df;--dim:#7f8c7d;--acc:#a9bf9f;--rule:rgba(232,230,223,.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--night);color:var(--bone);font-family:Jost,system-ui,sans-serif;font-weight:200;padding-bottom:68px}
+a{color:inherit;text-decoration:none}
+.serif{font-family:"Cormorant Garamond",Georgia,serif}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:300}
+.eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--acc);font-weight:300}
+nav.site{display:flex;justify-content:space-between;align-items:center;padding:30px 56px;font-size:13px;letter-spacing:.14em;font-weight:300;color:#cfd2d0}
+nav.site .m{display:flex;gap:14px;align-items:center;letter-spacing:.34em;font-size:12px;text-transform:uppercase}
+nav.site .m svg{width:15px;height:19px}
+nav.site .l{display:flex;gap:40px}
+nav.site .l a.on{border-bottom:1px solid currentColor;padding-bottom:4px}
+.theatre{padding:30px 56px 0;text-align:center}
+.screen{position:relative;max-width:1180px;margin:0 auto;aspect-ratio:16/9;background:#000;box-shadow:0 0 120px rgba(120,160,110,.1);overflow:hidden}
+.screen img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.55) brightness(.7) contrast(1.1) hue-rotate(-8deg);object-position:50% 40%}
+.screen .badge{position:absolute;left:18px;top:16px;font-size:10px;letter-spacing:.24em;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:6px 10px;text-transform:uppercase}
+.screen .sub{position:absolute;left:0;right:0;bottom:44px;text-align:center;font-size:28px;font-weight:300;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+.title{padding:56px 56px 20px;text-align:center}
+.title h1{font-weight:200;font-size:72px;letter-spacing:.3em;text-indent:.3em}
+.title .meta{margin-top:18px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+.title .acts{margin-top:34px;display:inline-flex;gap:22px;align-items:center;font-size:12px;letter-spacing:.24em;text-transform:uppercase}
+.title .acts b{width:60px;height:60px;border-radius:50%;background:var(--bone);color:var(--night);display:grid;place-items:center}
+.title .acts b svg{width:16px;height:16px;margin-left:2px}
+.intro{max-width:820px;margin:0 auto;padding:110px 24px 120px;text-align:center}
+.intro p{font-family:"Cormorant Garamond";font-style:italic;font-weight:300;font-size:32px;line-height:1.45;color:#d8d6ce}
+.scene{display:grid;grid-template-columns:120px 1fr 1.1fr;gap:56px;padding:90px 56px;border-top:1px solid var(--rule);align-items:start}
+.scene .n{font-size:12px;letter-spacing:.2em;color:var(--acc);padding-top:12px}
+.scene h2{font-family:"Cormorant Garamond";font-weight:300;font-size:52px;line-height:1.02}
+.scene .dur{display:flex;gap:16px;align-items:center;margin-top:18px;font-size:12px;letter-spacing:.2em;color:var(--dim)}
+.scene .dur i{width:34px;height:34px;border:1px solid var(--bone);border-radius:50%;display:grid;place-items:center;color:var(--bone)}
+.scene .tag{display:inline-block;margin-top:16px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;border:1px solid var(--rule);padding:5px 9px;color:var(--dim)}
+.lyr{font-family:"Cormorant Garamond";font-size:24px;line-height:1.6;color:#d3d1c8;font-weight:300}
+.lyr em{color:var(--bone);font-style:italic}
+.lyr .more{display:block;margin-top:18px;font-family:Jost;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--acc)}
+.still{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.cap{margin-top:12px;font-size:12px;color:var(--dim);letter-spacing:.1em;display:flex;justify-content:space-between}
+.story{margin-top:34px;padding:28px 30px;background:var(--panel);font-size:16px;line-height:1.8;color:#c9c7bf;font-weight:300}
+.story b{display:block;font-weight:300;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.compact{padding:20px 56px 100px;border-top:1px solid var(--rule)}
+.compact .row{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.6fr) 80px;gap:56px;padding:26px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.compact .row .n{font-size:12px;letter-spacing:.2em;color:var(--acc)}
+.compact .row h3{font-family:"Cormorant Garamond";font-weight:300;font-size:32px}
+.compact .row p{font-family:"Cormorant Garamond";font-style:italic;font-size:20px;color:var(--dim)}
+.compact .row span:last-child{text-align:right;font-size:12px;color:var(--dim);letter-spacing:.14em}
+.credits{text-align:center;padding:130px 56px 120px;background:linear-gradient(180deg,var(--night),var(--panel))}
+.credits .row{display:grid;grid-template-columns:1fr 1fr;gap:36px;max-width:720px;margin:36px auto 0;text-align:left}
+.credits dt{text-align:right;color:var(--dim);letter-spacing:.22em;text-transform:uppercase;font-size:11px;line-height:2.9}
+.credits dd{font-size:16px;line-height:2.5;font-weight:300}
+.credits .plat{margin-top:70px;display:flex;justify-content:center;gap:34px;flex-wrap:wrap;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#cfd2d0}
+.next{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:center;padding:60px 56px;border-top:1px solid var(--rule)}
+.next img{width:110px;height:110px;object-fit:cover}
+.next b{font-family:"Cormorant Garamond";font-weight:300;font-size:34px;display:block;margin-top:6px}
+.next .go{font-size:12px;letter-spacing:.24em;text-transform:uppercase;border-bottom:1px solid var(--bone);padding-bottom:4px}
+footer.site{padding:36px 56px 40px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);flex-wrap:wrap;gap:16px}
+.dock{position:fixed;left:0;right:0;bottom:0;height:68px;background:rgba(14,21,16,.9);backdrop-filter:blur(14px);border-top:1px solid var(--rule);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 26px;z-index:40}
+.dock .prog{position:absolute;left:0;right:0;top:-1px;height:2px}.dock .prog i{display:block;height:2px;width:24%;background:var(--acc)}
+.dock .now{font-size:14px;font-weight:300}.dock .now span{display:block;font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;margin-top:2px}
+.dock .ctl{display:flex;gap:24px;align-items:center}.dock .ctl .pp{width:36px;height:36px;border-radius:50%;background:var(--bone);color:var(--night);display:grid;place-items:center}
+.dock .rt{display:flex;justify-content:flex-end;gap:24px;font-size:12px;color:var(--dim);align-items:center}
+.dock .side{display:flex;gap:6px}.dock .side i{font-style:normal;border:1px solid var(--rule);padding:3px 8px;font-size:10px;letter-spacing:.2em}.dock .side i.on{border-color:var(--bone);color:var(--bone)}
+@media (max-width:640px){
+  nav.site{padding:22px 20px}nav.site .l{gap:18px;font-size:12px}nav.site .m span{display:none}
+  .theatre{padding:10px 0 0}.screen .sub{font-size:18px;bottom:20px}
+  .title{padding:40px 20px 10px}.title h1{font-size:34px;letter-spacing:.22em}
+  .intro{padding:70px 20px}.intro p{font-size:24px}
+  .scene{grid-template-columns:1fr;gap:20px;padding:60px 20px}.scene h2{font-size:40px}
+  .compact{padding:10px 20px 60px}.compact .row{grid-template-columns:40px 1fr auto;gap:14px}.compact .row p{display:none}
+  .credits{padding:80px 20px}.credits .row{gap:16px}
+  .next{grid-template-columns:auto 1fr;padding:40px 20px}.next .go{grid-column:1/-1}
+  .dock{grid-template-columns:1fr auto;padding:0 16px}.dock .rt,.dock .ctl .sk{display:none}
+}</style></head><body>
+<nav class="site"><a class="m"><svg  viewBox="8 0 184 230" aria-hidden="true"><g fill="currentColor"><circle cx="100" cy="26" r="18" fill="none" stroke="currentColor" stroke-width="10"/><path d="M92.4 40h15.2l-1.8 173h-11.6Z"/><path d="M42 72h116v15H42Z"/><circle cx="42" cy="79.5" r="8.5"/><circle cx="158" cy="79.5" r="8.5"/><path d="M24 134A76 88 0 0 0 176 134L184 102L161 134A61 73 0 0 1 39 134L16 102Z"/></g></svg><span>Havre De Grace</span></a><div class="l"><a class="on">records</a><a class="">about</a><a class="">contact</a></div></nav>
+<div class="theatre"><div class="screen"><img src="img/forest-wide.jpg" alt=""><span class="badge">Still · slow drift until a film exists</span><div class="sub">I could be a singer, living on the road</div></div></div>
+<div class="title"><h1 style="font-size:48px">I WANT TO BE YOURS</h1><div class="meta">and other songs · Havre De Grace · 8 July 2025 · nine songs</div>
+<div class="acts"><b><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></b><span>Play the record</span></div></div>
+<div class="intro"><p>An accidental debut. Eight songs written and recorded for Stefan to listen to himself, eventually compiled, mixed, and released in 2025 under the name Stefan Auvache, then reissued as Havre De Grace in January 2026.</p></div>
+<section class="scene"><div class="n">04</div><div><h2>Scarecrow</h2><div class="dur"><i><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></i>5:50</div><span class="tag">Story</span></div>
+<div class="lyr"><em>She looks like a lightning strike</em><br>Laughs with her smile but never her eyes<br>Darkness builds under dark gray skies<br>Been waiting on sunlight for more than a while
+<div class="story"><b>The story</b>Part of how I write is making up stories as allegories for what I'm feeling, then putting the characters into songs. Scarecrow is one of those stories, and someday I'd like to tell it in full.</div></div></section>
+<section class="compact"><div class="row"><span class="n">01</span><h3>I Want to Be Yours</h3><p>I could be a singer, living on the road</p><span>4:26</span></div><div class="row"><span class="n">02</span><h3>Shades of Blue and Red</h3><p>Crossing the water on your way to me</p><span>3:18</span></div><div class="row"><span class="n">03</span><h3>Sky Blue</h3><p>I'm sitting in a place that I never thought I'd be</p><span>4:05</span></div><div class="row"><span class="n">05</span><h3>Jesus Creek</h3><p>There stands a tree house atop of cross hill</p><span>3:35</span></div><div class="row"><span class="n">06</span><h3>Demolition Woman (live)</h3><p>She's a demolition woman, coming for my heart</p><span>3:50</span></div><div class="row"><span class="n">07</span><h3>White Raven (live)</h3><p>I don't want to track in mud when I come into your home</p><span>6:04</span></div><div class="row"><span class="n">08</span><h3>Song for the Sick</h3><p>Her heart is a graveyard, her love is a ghost</p><span>5:18</span></div><div class="row"><span class="n">09</span><h3>I Want to Be Yours (demo)</h3><p>The first version, before the album</p><span>4:07</span></div></section>
+<div class="credits"><div class="eyebrow">Credits</div><dl class="row"><div><dt>Songs, guitars, vocals</dt><dt>Mixing, mastering, production</dt></div><div><dd>Stefan Auvache Bradley</dd><dd>Parker Holt</dd></div></dl>
+<div class="plat"><a>Spotify</a><a>Apple Music</a><a>Bandcamp</a><a>The record player</a></div></div>
+<div class="next"><img src="img/itw.jpg" alt=""><div><div class="eyebrow">The new record · 2026</div><b>Into the Wild</b></div><a class="go">Enter</a></div>
+<footer class="site"><span>Havre De Grace</span><span>No AI in the music</span></footer>
+<div class="dock"><div class="prog"><i></i></div><div class="now">Scarecrow<span>I Want to Be Yours · side A</span></div>
+<div class="ctl"><span class="sk"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 2h1.6v12H3zM14 2v12L5.5 8z" fill="currentColor"/></svg></span><span class="pp"><svg viewBox="0 0 16 16" width="12" height="12"><path d="M3 2h3.4v12H3zm6.6 0H13v12H9.6z" fill="currentColor"/></svg></span><span class="sk"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M11.4 2H13v12h-1.6zM2 2v12l8.5-6z" fill="currentColor"/></svg></span></div>
+<div class="rt"><span class="mono">1:31 / 5:50</span></div></div></body></html>

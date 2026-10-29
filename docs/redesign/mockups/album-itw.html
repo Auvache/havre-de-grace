@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Into the Wild · album</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet"><style>
+:root{--night:#0d1318;--panel:#151d25;--bone:#e8e6df;--dim:#8593a0;--acc:#9fb6cc;--rule:rgba(232,230,223,.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--night);color:var(--bone);font-family:Jost,system-ui,sans-serif;font-weight:200;padding-bottom:68px}
+a{color:inherit;text-decoration:none}
+.serif{font-family:"Cormorant Garamond",Georgia,serif}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:300}
+.eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--acc);font-weight:300}
+nav.site{display:flex;justify-content:space-between;align-items:center;padding:30px 56px;font-size:13px;letter-spacing:.14em;font-weight:300;color:#cfd2d0}
+nav.site .m{display:flex;gap:14px;align-items:center;letter-spacing:.34em;font-size:12px;text-transform:uppercase}
+nav.site .m svg{width:15px;height:19px}
+nav.site .l{display:flex;gap:40px}
+nav.site .l a.on{border-bottom:1px solid currentColor;padding-bottom:4px}
+.theatre{padding:30px 56px 0;text-align:center}
+.screen{position:relative;max-width:1180px;margin:0 auto;aspect-ratio:16/9;background:#000;box-shadow:0 0 120px rgba(120,150,180,.12);overflow:hidden}
+.screen img{width:100%;height:100%;object-fit:cover;display:block;}
+.screen .badge{position:absolute;left:18px;top:16px;font-size:10px;letter-spacing:.24em;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:6px 10px;text-transform:uppercase}
+.screen .sub{position:absolute;left:0;right:0;bottom:44px;text-align:center;font-size:28px;font-weight:300;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+.title{padding:56px 56px 20px;text-align:center}
+.title h1{font-weight:200;font-size:72px;letter-spacing:.3em;text-indent:.3em}
+.title .meta{margin-top:18px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+.title .acts{margin-top:34px;display:inline-flex;gap:22px;align-items:center;font-size:12px;letter-spacing:.24em;text-transform:uppercase}
+.title .acts b{width:60px;height:60px;border-radius:50%;background:var(--bone);color:var(--night);display:grid;place-items:center}
+.title .acts b svg{width:16px;height:16px;margin-left:2px}
+.intro{max-width:820px;margin:0 auto;padding:110px 24px 120px;text-align:center}
+.intro p{font-family:"Cormorant Garamond";font-style:italic;font-weight:300;font-size:32px;line-height:1.45;color:#d8d6ce}
+.scene{display:grid;grid-template-columns:120px 1fr 1.1fr;gap:56px;padding:90px 56px;border-top:1px solid var(--rule);align-items:start}
+.scene .n{font-size:12px;letter-spacing:.2em;color:var(--acc);padding-top:12px}
+.scene h2{font-family:"Cormorant Garamond";font-weight:300;font-size:52px;line-height:1.02}
+.scene .dur{display:flex;gap:16px;align-items:center;margin-top:18px;font-size:12px;letter-spacing:.2em;color:var(--dim)}
+.scene .dur i{width:34px;height:34px;border:1px solid var(--bone);border-radius:50%;display:grid;place-items:center;color:var(--bone)}
+.scene .tag{display:inline-block;margin-top:16px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;border:1px solid var(--rule);padding:5px 9px;color:var(--dim)}
+.lyr{font-family:"Cormorant Garamond";font-size:24px;line-height:1.6;color:#d3d1c8;font-weight:300}
+.lyr em{color:var(--bone);font-style:italic}
+.lyr .more{display:block;margin-top:18px;font-family:Jost;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--acc)}
+.still{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.cap{margin-top:12px;font-size:12px;color:var(--dim);letter-spacing:.1em;display:flex;justify-content:space-between}
+.story{margin-top:34px;padding:28px 30px;background:var(--panel);font-size:16px;line-height:1.8;color:#c9c7bf;font-weight:300}
+.story b{display:block;font-weight:300;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.compact{padding:20px 56px 100px;border-top:1px solid var(--rule)}
+.compact .row{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.6fr) 80px;gap:56px;padding:26px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.compact .row .n{font-size:12px;letter-spacing:.2em;color:var(--acc)}
+.compact .row h3{font-family:"Cormorant Garamond";font-weight:300;font-size:32px}
+.compact .row p{font-family:"Cormorant Garamond";font-style:italic;font-size:20px;color:var(--dim)}
+.compact .row span:last-child{text-align:right;font-size:12px;color:var(--dim);letter-spacing:.14em}
+.credits{text-align:center;padding:130px 56px 120px;background:linear-gradient(180deg,var(--night),var(--panel))}
+.credits .row{display:grid;grid-template-columns:1fr 1fr;gap:36px;max-width:720px;margin:36px auto 0;text-align:left}
+.credits dt{text-align:right;color:var(--dim);letter-spacing:.22em;text-transform:uppercase;font-size:11px;line-height:2.9}
+.credits dd{font-size:16px;line-height:2.5;font-weight:300}
+.credits .plat{margin-top:70px;display:flex;justify-content:center;gap:34px;flex-wrap:wrap;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#cfd2d0}
+.next{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:center;padding:60px 56px;border-top:1px solid var(--rule)}
+.next img{width:110px;height:110px;object-fit:cover}
+.next b{font-family:"Cormorant Garamond";font-weight:300;font-size:34px;display:block;margin-top:6px}
+.next .go{font-size:12px;letter-spacing:.24em;text-transform:uppercase;border-bottom:1px solid var(--bone);padding-bottom:4px}
+footer.site{padding:36px 56px 40px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);flex-wrap:wrap;gap:16px}
+.dock{position:fixed;left:0;right:0;bottom:0;height:68px;background:rgba(16,23,30,.9);backdrop-filter:blur(14px);border-top:1px solid var(--rule);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 26px;z-index:40}
+.dock .prog{position:absolute;left:0;right:0;top:-1px;height:2px}.dock .prog i{display:block;height:2px;width:24%;background:var(--acc)}
+.dock .now{font-size:14px;font-weight:300}.dock .now span{display:block;font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;margin-top:2px}
+.dock .ctl{display:flex;gap:24px;align-items:center}.dock .ctl .pp{width:36px;height:36px;border-radius:50%;background:var(--bone);color:var(--night);display:grid;place-items:center}
+.dock .rt{display:flex;justify-content:flex-end;gap:24px;font-size:12px;color:var(--dim);align-items:center}
+.dock .side{display:flex;gap:6px}.dock .side i{font-style:normal;border:1px solid var(--rule);padding:3px 8px;font-size:10px;letter-spacing:.2em}.dock .side i.on{border-color:var(--bone);color:var(--bone)}
+@media (max-width:640px){
+  nav.site{padding:22px 20px}nav.site .l{gap:18px;font-size:12px}nav.site .m span{display:none}
+  .theatre{padding:10px 0 0}.screen .sub{font-size:18px;bottom:20px}
+  .title{padding:40px 20px 10px}.title h1{font-size:34px;letter-spacing:.22em}
+  .intro{padding:70px 20px}.intro p{font-size:24px}
+  .scene{grid-template-columns:1fr;gap:20px;padding:60px 20px}.scene h2{font-size:40px}
+  .compact{padding:10px 20px 60px}.compact .row{grid-template-columns:40px 1fr auto;gap:14px}.compact .row p{display:none}
+  .credits{padding:80px 20px}.credits .row{gap:16px}
+  .next{grid-template-columns:auto 1fr;padding:40px 20px}.next .go{grid-column:1/-1}
+  .dock{grid-template-columns:1fr auto;padding:0 16px}.dock .rt,.dock .ctl .sk{display:none}
+}</style></head><body>
+<nav class="site"><a class="m"><svg  viewBox="8 0 184 230" aria-hidden="true"><g fill="currentColor"><circle cx="100" cy="26" r="18" fill="none" stroke="currentColor" stroke-width="10"/><path d="M92.4 40h15.2l-1.8 173h-11.6Z"/><path d="M42 72h116v15H42Z"/><circle cx="42" cy="79.5" r="8.5"/><circle cx="158" cy="79.5" r="8.5"/><path d="M24 134A76 88 0 0 0 176 134L184 102L161 134A61 73 0 0 1 39 134L16 102Z"/></g></svg><span>Havre De Grace</span></a><div class="l"><a class="on">records</a><a class="">about</a><a class="">contact</a></div></nav>
+<div class="theatre"><div class="screen"><img src="img/andalusia-40.jpg" alt=""><span class="badge">The album film · in progress</span></div></div>
+<div class="title"><h1>INTO THE WILD</h1><div class="meta">Havre De Grace · 17 July 2026 · ten songs · 36:45</div>
+<div class="acts"><b><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></b><span>Play the record</span></div></div>
+<div class="intro"><p>Into the Wild represents the true beginning of the Havre De Grace project. The songs were selected, organized, and produced to be listened to as a whole body of work. The album explores what music means to the artist and the listener: adventure, creativity, self-identity, and a medium for working through big emotions.</p></div>
+<section class="scene"><div class="n">01</div><div><h2>Into the Wild</h2><div class="dur"><i><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></i>3:25</div></div>
+<div class="lyr">Oh, I'm headed out on an adventure<br>To see if I can't lose my way<br>And stumble upon all the splendorous things<br>The gods hid about when they made<br><br><em>So I'm running into the wild</em><br>Oh, I'm running<a class="more">All the lyrics</a></div></section>
+<section class="scene"><div class="n">02</div><div><h2>Conman</h2><div class="dur"><i><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></i>4:00</div><span class="tag">Film</span></div>
+<div><img class="still" src="img/conman-25.jpg" alt=""><div class="cap"><span>Conman · the wall</span><span>Watch the film →</span></div></div></section>
+<section class="scene"><div class="n">03</div><div><h2>Goodbye, Norma Jeane</h2><div class="dur"><i><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></i>4:41</div><span class="tag">The single</span></div>
+<div class="lyr">Silver screen says Norma Jeane, oh<br>Something bigger's meant for me<br>With a silhouette like Juliet, oh<br>Someone else could cut your checks<a class="more">All the lyrics</a></div></section>
+<section class="scene"><div class="n">04</div><div><h2>Ivory</h2><div class="dur"><i><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></i>3:08</div></div>
+<div class="lyr">Her eyes are open ocean and blue butterfly wings<br>She's got some way about her when she gets on stage and sings, oh<br><em>Ivory</em><a class="more">All the lyrics</a></div></section>
+<section class="scene"><div class="n">05</div><div><h2>Andalusia</h2><div class="dur"><i><svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 2v12l10-6z" fill="currentColor"/></svg></i>2:53</div><span class="tag">Film · story</span></div>
+<div><img class="still" src="img/andalusia-80.jpg" alt=""><div class="cap"><span>Andalusia · cartography</span><span>Watch the film →</span></div>
+<div class="story"><b>The story</b>Where a song has a story, it sits here: a few paragraphs in your words. Most songs won't have one, and they get a quieter row further down instead of an empty box.</div></div></section>
+<section class="compact"><div class="row"><span class="n">06</span><h3>New York</h3><p>They say love when lost upon the rocks is best left burning out the coals</p><span>3:35</span></div><div class="row"><span class="n">07</span><h3>Meet Me at the Horizon</h3><p>Some nights the darkness is sweeter than others</p><span>3:40</span></div><div class="row"><span class="n">08</span><h3>Rocks in the Sea</h3><p>I drove by my hometown today</p><span>3:48</span></div><div class="row"><span class="n">09</span><h3>Ship to Stockholm</h3><p>Oh, away with the land and away with the light</p><span>4:16</span></div><div class="row"><span class="n">10</span><h3>Ghost</h3><p>The city burns and I’m a ghost</p><span>3:19</span></div></section>
+<div class="credits"><div class="eyebrow">Credits</div><dl class="row"><div><dt>Songwriting, vocals, guitar</dt><dt>Trumpet</dt><dt>Piano</dt><dt>Mellophone, mixing, production</dt></div>
+<div><dd>Stefan Auvache Bradley</dd><dd>Sam “Blaze” McKague</dd><dd>Josh Andromidas</dd><dd>Parker Holt</dd></div></dl>
+<div class="plat"><a>Spotify</a><a>Apple Music</a><a>YouTube Music</a><a>Bandcamp</a><a>Amazon</a><a>The record player</a></div></div>
+<div class="next"><img src="img/iwtby.jpg" alt=""><div><div class="eyebrow">The first record · 2025</div><b>I Want to Be Yours and Other Songs</b></div><a class="go">Enter</a></div>
+<footer class="site"><span>Havre De Grace</span><span>No AI in the music</span></footer>
+<div class="dock"><div class="prog"><i></i></div><div class="now">Andalusia<span>Into the Wild · side A</span></div>
+<div class="ctl"><span class="sk"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 2h1.6v12H3zM14 2v12L5.5 8z" fill="currentColor"/></svg></span><span class="pp"><svg viewBox="0 0 16 16" width="12" height="12"><path d="M3 2h3.4v12H3zm6.6 0H13v12H9.6z" fill="currentColor"/></svg></span><span class="sk"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M11.4 2H13v12h-1.6zM2 2v12l8.5-6z" fill="currentColor"/></svg></span></div>
+<div class="rt"><span class="side"><i class="on">A</i><i>B</i></span><span class="mono">0:42 / 2:53</span></div></div></body></html>
