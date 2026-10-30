@@ -50,7 +50,7 @@
     <RuleBreak class="divider" />
 
     <section class="block">
-      <div class="wrap person">
+      <div class="wrap person reveal-group">
         <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
         <div>
           <h2 class="section-title">About</h2>

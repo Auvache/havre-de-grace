@@ -8,6 +8,10 @@
   (ScrollReveal's wrappers, or `data-reveal="left" | "right"` to come in from a
   side). The outermost match wins, so nothing fades twice.
 
+  Where it comes from: an item that sits to one side of its row (half of a
+  two-column grid, say) slides in from that side; anything that spans its
+  column rises from below. On a phone everything rises.
+
   Nothing is hidden in the HTML. Only here, once the page has drawn, does an
   element below the fold get `reveal-pending`; anything already on screen is
   left exactly where it is. Without JavaScript, or with reduced motion, every
@@ -23,7 +27,27 @@ const TARGETS = [
 ].join(', ')
 
 // Items revealed in the same moment come in one after another.
-const STAGGER_MS = 110
+const STAGGER_MS = 140
+
+const MOBILE = '(max-width: 767px)'
+
+const sideOf = (el: HTMLElement): 'left' | 'right' | 'up' => {
+  if (window.matchMedia(MOBILE).matches) return 'up'
+
+  const marked = el.dataset.reveal
+  if (marked === 'left' || marked === 'section-left') return 'left'
+  if (marked === 'right' || marked === 'section-right') return 'right'
+
+  const parent = el.parentElement
+  if (!parent) return 'up'
+  const box = el.getBoundingClientRect()
+  const row = parent.getBoundingClientRect()
+  if (box.width > row.width * 0.7) return 'up'
+
+  const offset = (box.left + box.width / 2) - (row.left + row.width / 2)
+  if (Math.abs(offset) < row.width * 0.1) return 'up'
+  return offset < 0 ? 'left' : 'right'
+}
 
 export default defineNuxtPlugin((nuxtApp) => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -50,7 +74,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
       el.addEventListener('transitionend', settle)
     })
-  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' })
+  }, { threshold: 0, rootMargin: '0px 0px -8% 0px' })
 
   const scan = () => {
     const fold = window.innerHeight * 0.94
@@ -62,6 +86,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (el.parentElement?.closest('.reveal-pending')) continue
       if (el.getBoundingClientRect().top < fold) continue
 
+      el.dataset.revealFrom = sideOf(el)
       el.classList.add('reveal-pending')
       observer.observe(el)
     }

@@ -61,10 +61,11 @@ usePageSeo({
   margin-top: 14px;
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(24px, 2vw + 12px, 34px);
+  /* Always one line: the address is ~15.8em wide, so on a phone it is sized to the column (less the 20–24px gutters). */
+  font-size: min(clamp(24px, 2vw + 12px, 34px), calc((100vw - 48px) / 16.5));
+  white-space: nowrap;
   color: var(--deep);
   text-decoration: none;
-  overflow-wrap: anywhere;
 }
 
 .mail:hover {
