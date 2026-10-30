@@ -76,7 +76,7 @@ usePageSeo({
   max-width: 460px;
   margin: 56px auto 0;
   padding-top: 28px;
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
   font-size: 15px;
   line-height: 1.7;
   color: var(--soft);

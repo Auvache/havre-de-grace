@@ -44,7 +44,7 @@
       >
         <SectionHeading title="the facts" heading-tag="h2" />
 
-        <dl class="mt-8 divide-y divide-[color:var(--theme-border)] border-y border-theme text-sm">
+        <dl class="mt-8 divide-y-[1.2px] divide-[color:var(--line-ink)] border-y-[1.2px] border-[color:var(--line-ink)] text-sm">
           <!--
             The label sits above the value on phones and beside it from `sm` up.
             A fixed label column at 390px left the booking address — the single
@@ -117,7 +117,7 @@
 
       <ScrollReveal
         as="section"
-        class-name="border-t border-theme pt-12 text-center"
+        class-name="border-t-[1.2px] border-[color:var(--line-ink)] pt-12 text-center"
         variant="section-up"
         :delay-ms="80"
         :distance-px="44"

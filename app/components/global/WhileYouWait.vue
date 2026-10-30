@@ -42,7 +42,7 @@ const playing = computed(() => Boolean(record.value) && player.isPlaying(record.
   gap: 26px;
   align-items: center;
   padding: 30px 0;
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
 }
 
 .wait img {

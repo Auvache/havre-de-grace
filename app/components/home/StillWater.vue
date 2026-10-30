@@ -55,7 +55,7 @@
       <div class="wrap person">
         <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
         <div>
-          <p class="eyebrow">About</p>
+          <h2 class="section-title">About</h2>
           <p class="person__text">{{ bioQuote }}</p>
           <NuxtLink to="/about" class="u-link">Read more</NuxtLink>
         </div>
@@ -67,7 +67,7 @@
     </div>
 
     <section class="block" aria-labelledby="discography">
-      <h2 id="discography" class="discography">Discography</h2>
+      <h2 id="discography" class="section-title discography">Discography</h2>
       <div class="wrap records reveal-group">
         <NuxtLink v-for="album in albums" :key="album.slug" :to="recordHref(album.slug)" class="records__item">
           <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" loading="lazy" width="800" height="800">
@@ -257,15 +257,19 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   color: var(--deep);
 }
 
-.discography {
+/* About and Discography: thin spaced capitals, the size of a page's title. */
+.section-title {
   font-family: var(--font-display);
-  margin-bottom: 64px;
-  text-align: center;
   font-weight: 200;
   font-size: 16px;
   letter-spacing: 0.7em;
-  text-indent: 0.7em;
   text-transform: uppercase;
+}
+
+.discography {
+  margin-bottom: 64px;
+  text-align: center;
+  text-indent: 0.7em;
 }
 
 .person {
@@ -353,29 +357,25 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 56px;
-  /* The line and its diamond in one ink: the sea at half strength, a touch
-     heavier than the page's other hairlines. */
-  --divider-ink: color-mix(in srgb, var(--sea) 55%, transparent);
-  --divider-weight: 1.2px;
 }
 
 .divider::before,
 .divider::after {
   content: "";
   flex: 1;
-  height: var(--divider-weight);
-  background: var(--divider-ink);
+  /* A border, like the footer's and every other rule, so they all draw the same. */
+  border-top: var(--line);
 }
 
 .divider svg {
   width: 16px;
   height: 16px;
   fill: none;
-  stroke: var(--divider-ink);
+  stroke: var(--line-ink);
 }
 
 .divider path {
-  stroke-width: var(--divider-weight);
+  stroke-width: var(--line-weight);
   vector-effect: non-scaling-stroke;
 }
 

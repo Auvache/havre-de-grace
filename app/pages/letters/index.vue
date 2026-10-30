@@ -110,9 +110,9 @@ usePageSeo({
 }
 
 /* The full column, as wide as the rule over the 7-inch below, on two lines
-   (at the lede's usual 30px "out yet." fell to a third on its own). */
+   (at the lede's usual size "out yet." falls to a third on its own). */
 .intro .lede {
-  font-size: clamp(22px, 1.4vw + 8px, 28px);
+  font-size: clamp(21px, 1.3vw + 7px, 26px);
   text-wrap: pretty;
 }
 
@@ -134,8 +134,8 @@ usePageSeo({
   align-items: center;
   margin: 80px 0;
   padding: 56px 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
+  border-top: var(--line);
+  border-bottom: var(--line);
 }
 
 .vinyl {
@@ -208,7 +208,7 @@ usePageSeo({
 }
 
 .arch li {
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
 }
 
 .arch__row,

@@ -57,7 +57,7 @@ const FOOTER_COLUMNS = [
   align-items: center;
   gap: 40px;
   padding: 72px 24px 64px;
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: lowercase;

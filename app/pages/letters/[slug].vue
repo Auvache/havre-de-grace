@@ -109,7 +109,7 @@ usePageSeo({
 
 .letter-head {
   padding-bottom: 36px;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: var(--line);
 }
 
 .letter-title {
@@ -125,7 +125,7 @@ usePageSeo({
 .letter-next {
   margin-top: 72px;
   padding-top: 36px;
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
 }
 
 .letter-next__p {

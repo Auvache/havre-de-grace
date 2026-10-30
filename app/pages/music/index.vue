@@ -84,7 +84,7 @@ usePageSeo({
 
 /* A rule between records only; the footer brings its own. */
 .rec + .rec {
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
 }
 
 .rec:first-child {

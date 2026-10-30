@@ -29,6 +29,11 @@
   --deep: #3f5670;
   --mist: #e3e8ec;
   --rule: color-mix(in srgb, var(--ink) 14%, transparent);
+  /* The site's dividing lines (the homepage's diamonds, the footer, the rules
+     between sections and rows): the sea at half strength, 1.2px. */
+  --line-ink: color-mix(in srgb, var(--sea) 55%, transparent);
+  --line-weight: 1.2px;
+  --line: var(--line-weight) solid var(--line-ink);
   --soft: #59626c;
   --faint: #97a2ad;
   /* Titles, ledes, the nav and the small spaced capitals. */
@@ -413,11 +418,11 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
 
 .hairline-list {
   list-style: none;
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
 }
 
 .hairline-list > li {
-  border-bottom: 1px solid var(--rule);
+  border-bottom: var(--line);
 }
 
 @media (max-width: 640px) {
@@ -446,7 +451,7 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
   display: grid;
   grid-template-columns: 60px 1fr;
   padding: 22px 0;
-  border-top: 1px solid var(--rule);
+  border-top: var(--line);
   font-size: 18px;
   line-height: 1.6;
 }
