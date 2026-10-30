@@ -88,6 +88,11 @@ const FOOTER_LINKS = [
   text-decoration: none;
 }
 
+/* The right-hand column sits flush right, so the pair frames the middle. */
+.site-footer__links a:nth-child(n + 5) {
+  justify-self: end;
+}
+
 .site-footer__links a:hover {
   color: var(--theme-text);
 }

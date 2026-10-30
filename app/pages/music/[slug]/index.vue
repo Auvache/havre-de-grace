@@ -414,7 +414,7 @@ useSchemaOrg([
 }
 
 .intro p {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 300;
   font-size: clamp(24px, 2.3vw, 32px);
@@ -501,7 +501,7 @@ useSchemaOrg([
 }
 
 .next b {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 300;
   font-size: 34px;
   line-height: 1.15;

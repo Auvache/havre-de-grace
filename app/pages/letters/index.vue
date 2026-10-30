@@ -164,7 +164,7 @@ usePageSeo({
 }
 
 .vinyl__label b {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
   font-size: 17px;
@@ -172,7 +172,7 @@ usePageSeo({
 }
 
 .seven__h {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 300;
   font-size: 36px;
   line-height: 1.15;

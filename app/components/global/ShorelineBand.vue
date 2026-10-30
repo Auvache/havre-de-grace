@@ -4,7 +4,7 @@
 
   With a picture, the nav lies on it, so the page sets `definePageMeta({
   navOver: true })`; `data-nav-over` keeps the nav clear of a backing while it
-  is over the picture. With `:image="false"` there is no picture, just the
+  is over the picture. With `bare` there is no picture, just the
   title, and the page leaves navOver off so the nav's spacer clears it.
 
   The picture defaults to the current record's hero art (app/config/records.ts),
@@ -12,8 +12,8 @@
 -->
 
 <template>
-  <header :class="['band', { 'band--bare': image === false }]">
-    <div v-if="image !== false" class="band__pic" data-nav-over>
+  <header :class="['band', { 'band--bare': bare }]">
+    <div v-if="!bare" class="band__pic" data-nav-over>
       <img
         :src="src"
         alt=""
@@ -30,15 +30,17 @@ import { currentLook } from '~/config/records'
 
 const props = defineProps<{
   title: string
-  /** A picture other than the current record's hero art, or false for none. */
-  image?: string | false
+  /** No picture, just the title. */
+  bare?: boolean
+  /** A picture other than the current record's hero art. */
+  image?: string
   /** CSS object-position for the picture. */
   imagePosition?: string
   imageScale?: number
 }>()
 
 const hero = currentLook().hero
-const src = computed(() => props.image || hero.src)
+const src = computed(() => props.image ?? hero.src)
 const position = computed(() => props.imagePosition ?? hero.position ?? 'center')
 const scale = computed(() => props.imageScale ?? (props.image ? 1.04 : hero.scale ?? 1))
 </script>

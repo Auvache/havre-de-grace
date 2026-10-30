@@ -9,7 +9,7 @@
 
 <template>
   <div>
-    <ShorelineBand title="Records" :image="false" />
+    <ShorelineBand title="Records" bare />
 
     <div class="reading wide">
       <article v-for="album in albums" :key="album.slug" class="rec">

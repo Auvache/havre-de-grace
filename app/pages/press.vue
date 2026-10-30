@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ShorelineBand title="Press" :image="false" />
+    <ShorelineBand title="Press" bare />
     <div class="page-container section-space">
     <div class="mx-auto max-w-3xl space-y-16">
       <ScrollReveal

@@ -216,7 +216,7 @@ onBeforeUnmount(() => observer?.disconnect())
 }
 
 .scene__head h2 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(40px, 3.6vw, 52px);
   line-height: 1.02;
@@ -315,7 +315,7 @@ onBeforeUnmount(() => observer?.disconnect())
 }
 
 .lyr {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 24px;
   line-height: 1.6;
   color: #d3d1c8;
@@ -394,14 +394,14 @@ onBeforeUnmount(() => observer?.disconnect())
 }
 
 .quiet__row h3 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 300;
   font-size: 32px;
   line-height: 1.15;
 }
 
 .quiet__row p {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-size: 20px;
   color: var(--dim);

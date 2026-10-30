@@ -140,7 +140,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf))
 }
 
 h1 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 300;
   font-size: 44px;

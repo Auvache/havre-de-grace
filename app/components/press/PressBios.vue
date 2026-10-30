@@ -2,7 +2,6 @@
   <section>
     <SectionHeading
       title="bios"
-      description="Three lengths, ready to paste. Copy one, or download it as a text file."
       heading-tag="h2"
     />
 

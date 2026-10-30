@@ -1,22 +1,21 @@
 <!--
-  About: the title, a live photograph, Stefan's own line as the lede, the bio
-  from shared/data/bio.ts (which /about.md mirrors), and the full live set from
+  About: the title, a live photograph, the bio from shared/data/bio.ts (which
+  /about.md mirrors) in its own order, quote and all, and the full live set from
   Artichoke Music. Influences, the press kit and contact are in the footer.
 -->
 
 <template>
   <div>
-    <ShorelineBand title="About" :image="false" />
+    <ShorelineBand title="About" bare />
 
     <div class="reading">
       <figure class="fig">
         <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan Auvache Bradley playing an acoustic guitar on stage" width="1400" height="1400" fetchpriority="high">
       </figure>
 
-      <p class="lede">“{{ lede }}”</p>
-
       <div class="prose-body">
-        <p v-for="(paragraph, index) in body" :key="index">{{ paragraph.text }}</p>
+        <p v-for="(paragraph, index) in bioParagraphs" :key="index">{{ paragraph.text }}</p>
+        <p>You can get a taste of my music below.</p>
       </div>
 
       <div class="video">
@@ -45,10 +44,6 @@ const LIVE_SET = {
   name: 'Full Set (Live at Artichoke Music) | Havre De Grace',
   embedUrl: 'https://www.youtube-nocookie.com/embed/m32W35b0SrQ',
 }
-
-// Stefan's own line leads, without its quotation marks; the rest is the body.
-const lede = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"|"$/g, '')
-const body = bioParagraphs.filter((p) => !p.emphasis)
 
 const pageDescription = computed(() => `Havre De Grace is singer-songwriter Stefan Auvache Bradley. Bio, influences, press photos, and booking.`)
 
@@ -96,7 +91,7 @@ useSchemaOrg([
 
 <style scoped>
 .fig {
-  margin-bottom: 64px;
+  margin-bottom: 40px;
 }
 
 .fig img {

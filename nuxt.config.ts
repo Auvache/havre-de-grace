@@ -135,9 +135,9 @@ export default defineNuxtConfig({
       //
       // The 2026 refresh (SITE-REFRESH.md) sets its structure in Jost 200–400,
       // so 200 and 300 join them. That moves the old 350 headings to 300.
-      { name: 'Jost', provider: 'google', weights: [200, 300, 400, 700] },
-      // Titles, lyrics and pull quotes: italic, light.
-      { name: 'Cormorant Garamond', provider: 'google', weights: [300, 400], styles: ['normal', 'italic'] },
+      // Italic as well: titles and ledes are light italic Jost (the serif
+      // they used to be set in is gone).
+      { name: 'Jost', provider: 'google', weights: [200, 300, 400, 700], styles: ['normal', 'italic'] },
       // Times only.
       { name: 'IBM Plex Mono', provider: 'google', weights: [300] },
       // The album screens' lettering: Into the Wild's narrow hairline, and

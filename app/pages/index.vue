@@ -175,7 +175,7 @@ usePageSeo({
 }
 
 .hero__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 300;
   font-size: clamp(44px, 4.4vw, 64px);
@@ -267,7 +267,7 @@ usePageSeo({
 }
 
 .records__t b {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
   font-size: 30px;
@@ -326,7 +326,7 @@ usePageSeo({
 }
 
 .letter__h {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(34px, 3.2vw, 46px);
   margin: 18px 0;

@@ -54,7 +54,7 @@ const playing = computed(() => Boolean(record.value) && player.isPlaying(record.
 .wait__title {
   display: block;
   margin-top: 6px;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-size: 26px;
   line-height: 1.2;

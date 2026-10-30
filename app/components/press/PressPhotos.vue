@@ -2,7 +2,6 @@
   <section>
     <SectionHeading
       title="photos"
-      description="High resolution and free to use with credit. Right-click to save, or use the download links."
       heading-tag="h2"
     />
 

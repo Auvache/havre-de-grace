@@ -300,7 +300,7 @@ useSchemaOrg([
 }
 
 .head h1 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(40px, 5vw, 64px);
   line-height: 1.02;
@@ -358,7 +358,7 @@ useSchemaOrg([
 .lyrics {
   margin-top: 22px;
   white-space: pre-wrap;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 21px;
   line-height: 1.7;
   color: #d3d1c8;
