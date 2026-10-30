@@ -32,7 +32,7 @@
                 <svg v-if="player.isPlaying(album.slug)" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h3.4v12H3zm6.6 0H13v12H9.6z" fill="currentColor" /></svg>
                 <svg v-else viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2v12l10-6z" fill="currentColor" /></svg>
               </button>
-              <NuxtLink :to="recordHref(album.slug)" class="u-link">Enter the record</NuxtLink>
+              <NuxtLink :to="recordHref(album.slug)" class="u-link">Put the record on</NuxtLink>
             </div>
           </div>
         </article>
