@@ -3,6 +3,9 @@
   pages/index.vue keeps the page's SEO. The record, the letter, About and the
   discography, all on bone, parted by a hairline with a mark in the middle
   (chosen over a mist band and four other treatments on 2026-10-30).
+
+  `mark` is the one in the middle, while /home/1-3 choose between three:
+  the logo's anchor (the default), a diamond, a compass star.
 -->
 
 <template>
@@ -46,7 +49,7 @@
       </div>
     </section>
 
-    <div class="divider" aria-hidden="true"><BrandMark variant="anchorSmall" decorative /></div>
+    <div class="divider" aria-hidden="true"><DividerMark :mark="mark" /></div>
 
     <section class="block">
       <div class="wrap person">
@@ -59,7 +62,7 @@
       </div>
     </section>
 
-    <div class="divider" aria-hidden="true"><BrandMark variant="anchorSmall" decorative /></div>
+    <div class="divider" aria-hidden="true"><DividerMark :mark="mark" /></div>
 
     <section class="block" aria-labelledby="discography">
       <h2 id="discography" class="discography">Discography</h2>
@@ -79,6 +82,12 @@
 <script setup lang="ts">
 import { bioParagraphs } from '~~/shared/data/bio'
 import { CURRENT_RECORD, currentLook, lookFor, recordHref } from '~/config/records'
+
+withDefaults(defineProps<{
+  mark?: 'anchor' | 'diamond' | 'star'
+}>(), {
+  mark: 'anchor',
+})
 
 const siteProfile = useSiteProfile()
 const player = usePlayer()
@@ -359,10 +368,6 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   background: var(--rule);
 }
 
-.divider :deep(svg) {
-  width: 26px;
-  height: auto;
-}
 
 @media (max-width: 640px) {
   .divider {
