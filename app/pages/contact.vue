@@ -5,11 +5,9 @@
 
 <template>
   <div>
-    <ShorelineBand title="Contact" sub="Booking, press and licensing" image-position="center 70%" />
+    <ShorelineBand title="Contact" :image="false" />
 
     <div class="reading">
-      <p class="lede">Email is the fastest way to reach me. It goes straight to my inbox, and I answer everything.</p>
-
       <a :href="`mailto:${siteProfile.bookingEmail}`" class="address">{{ siteProfile.bookingEmail }}</a>
 
       <!--
@@ -29,24 +27,12 @@
           </div>
         </li>
       </ol>
-
-      <div class="elsewhere">
-        <p class="eyebrow">Elsewhere</p>
-        <p>Messages here reach me too, just more slowly than email.</p>
-        <nav aria-label="Elsewhere" class="elsewhere__links">
-          <a :href="siteProfile.artistLinks.instagram" rel="noopener">instagram</a>
-          <a :href="siteProfile.artistLinks.youtube" rel="noopener">youtube</a>
-          <a :href="siteProfile.artistLinks.bandcamp" rel="noopener">bandcamp</a>
-        </nav>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { schemaId } from '~/utils/schema'
-
-definePageMeta({ navOver: true })
 
 const siteProfile = useSiteProfile()
 
@@ -87,7 +73,6 @@ usePageSeo({
 <style scoped>
 .address {
   display: inline-block;
-  margin-top: 40px;
   font-family: var(--font-serif);
   font-style: italic;
   font-size: clamp(24px, 2.4vw, 30px);
@@ -99,24 +84,5 @@ usePageSeo({
 
 .address:hover {
   border-bottom-color: currentColor;
-}
-
-.elsewhere {
-  padding-top: 30px;
-  border-top: 1px solid var(--rule);
-}
-
-.elsewhere p:not(.eyebrow) {
-  margin-top: 12px;
-  font-size: 16px;
-  color: var(--soft);
-}
-
-.elsewhere__links {
-  display: flex;
-  gap: 26px;
-  margin-top: 18px;
-  font-size: 12px;
-  letter-spacing: 0.16em;
 }
 </style>

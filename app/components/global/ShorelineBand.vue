@@ -1,23 +1,27 @@
 <!--
-  The top of a Shoreline page: a short photographic band with the title in thin
-  spaced capitals, and an italic line under it. The nav lies on it, so a page
-  using this sets `definePageMeta({ navOver: true })`; `data-nav-over` keeps the
-  nav clear of a backing while it is over the picture.
+  The top of a Shoreline page: a short photographic band, then the page's title
+  under it in thin spaced capitals. Nothing is written on the picture.
+
+  With a picture, the nav lies on it, so the page sets `definePageMeta({
+  navOver: true })`; `data-nav-over` keeps the nav clear of a backing while it
+  is over the picture. With `:image="false"` there is no picture, just the
+  title, and the page leaves navOver off so the nav's spacer clears it.
 
   The picture defaults to the current record's hero art (app/config/records.ts),
-  so when a new record comes out every band re-skins with the homepage.
+  so when a new record comes out those bands re-skin with the homepage.
 -->
 
 <template>
-  <header class="band" data-nav-over>
-    <img
-      :src="src"
-      alt=""
-      :style="{ objectPosition: position, transform: `scale(${scale})` }"
-      fetchpriority="high"
-    >
+  <header :class="['band', { 'band--bare': image === false }]">
+    <div v-if="image !== false" class="band__pic" data-nav-over>
+      <img
+        :src="src"
+        alt=""
+        :style="{ objectPosition: position, transform: `scale(${scale})` }"
+        fetchpriority="high"
+      >
+    </div>
     <h1>{{ title }}</h1>
-    <p v-if="sub">{{ sub }}</p>
   </header>
 </template>
 
@@ -26,29 +30,28 @@ import { currentLook } from '~/config/records'
 
 const props = defineProps<{
   title: string
-  sub?: string
-  image?: string
+  /** A picture other than the current record's hero art, or false for none. */
+  image?: string | false
   /** CSS object-position for the picture. */
   imagePosition?: string
   imageScale?: number
 }>()
 
 const hero = currentLook().hero
-const src = computed(() => props.image ?? hero.src)
+const src = computed(() => props.image || hero.src)
 const position = computed(() => props.imagePosition ?? hero.position ?? 'center')
 const scale = computed(() => props.imageScale ?? (props.image ? 1.04 : hero.scale ?? 1))
 </script>
 
 <style scoped>
-.band {
+.band__pic {
   position: relative;
-  height: 440px;
+  height: 400px;
   overflow: hidden;
-  color: #fff;
   background: color-mix(in srgb, var(--sea) 60%, var(--mist));
 }
 
-.band img {
+.band__pic img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -56,19 +59,16 @@ const scale = computed(() => props.imageScale ?? (props.image ? 1.04 : hero.scal
   object-fit: cover;
 }
 
-.band::after {
+/* Only enough shade at the top for the nav's white links. */
+.band__pic::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(20, 28, 38, 0.28), rgba(20, 28, 38, 0.05) 45%, rgba(20, 28, 38, 0.35));
+  background: linear-gradient(180deg, rgba(20, 28, 38, 0.28), rgba(20, 28, 38, 0) 35%);
 }
 
 .band h1 {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 70px;
-  z-index: 2;
+  padding: 72px 16px 0;
   text-align: center;
   font-weight: 200;
   font-size: 16px;
@@ -78,28 +78,24 @@ const scale = computed(() => props.imageScale ?? (props.image ? 1.04 : hero.scal
   line-height: 1.6;
 }
 
-.band p {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 34px;
-  z-index: 2;
-  text-align: center;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.9);
+.band--bare h1 {
+  padding-top: 56px;
 }
 
 @media (max-width: 640px) {
-  .band {
-    height: 340px;
+  .band__pic {
+    height: 280px;
   }
 
   .band h1 {
+    padding-top: 52px;
     font-size: 14px;
     letter-spacing: 0.5em;
     text-indent: 0.5em;
+  }
+
+  .band--bare h1 {
+    padding-top: 36px;
   }
 }
 </style>

@@ -2,8 +2,7 @@
   The homepage, Still Water (docs/redesign/mockups/home.html).
 
   The current record's cover is the whole first screen with one play button.
-  Below it: the record and its songs, a lyric, both records, Stefan, and the
-  monthly letter. The record, its picture and its words come from
+  Below it: the records, the monthly letter, and Stefan. The record, its picture and its words come from
   app/config/records.ts and content/music, so a new record is a config change.
 -->
 
@@ -32,38 +31,8 @@
           <span>{{ heroLabel }}</span>
         </button>
       </div>
-      <a href="#music" class="hero__scroll">The record ↓</a>
+      <NuxtLink v-if="record" :to="`/music/${record.slug}`" class="hero__scroll">The record →</NuxtLink>
     </header>
-
-    <section v-if="record" id="music" class="block">
-      <div class="wrap album">
-        <div>
-          <p class="eyebrow">{{ releaseLine }}</p>
-          <h2 class="album__headline italic-title">{{ look.intro?.headline ?? record.title }}</h2>
-          <p class="album__text">{{ look.intro?.text }}</p>
-          <NuxtLink :to="`/music/${record.slug}`" class="u-link album__go">Enter the record</NuxtLink>
-        </div>
-
-        <ol class="tracks" :aria-label="`${record.title}, the songs`">
-          <li v-for="(track, i) in tracks" :key="track.slug" :class="{ on: player.isCurrent(record.slug, i) }">
-            <button type="button" @click="player.toggleAlbum(record, i)">
-              <span class="tracks__n" aria-hidden="true">{{ player.isPlaying(record.slug, i) ? '▶' : String(track.number).padStart(2, '0') }}</span>
-              <span class="tracks__t">{{ track.title }}</span>
-              <span class="tracks__d">{{ track.durationLabel }}</span>
-            </button>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <figure v-if="look.pullQuote" class="quote">
-      <blockquote>
-        <p>
-          <span v-for="(line, i) in look.pullQuote.lines" :key="i" class="quote__line">{{ line }} </span>
-        </p>
-      </blockquote>
-      <figcaption>{{ look.pullQuote.song }}</figcaption>
-    </figure>
 
     <section class="block">
       <div class="wrap records">
@@ -77,18 +46,7 @@
       </div>
     </section>
 
-    <section class="block block--tight">
-      <div class="wrap person">
-        <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
-        <div>
-          <p class="eyebrow">{{ siteProfile.legalName }}</p>
-          <p class="person__text">{{ bioQuote }}</p>
-          <NuxtLink to="/about" class="u-link">About</NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <section class="block block--tight">
+    <section class="block letter-band">
       <div class="wrap letter">
         <p class="eyebrow">Once a month</p>
         <h2 class="letter__h">Something new to listen to</h2>
@@ -100,12 +58,22 @@
         <NuxtLink to="/letters" class="letter__more">the letters</NuxtLink>
       </div>
     </section>
+
+    <section class="block">
+      <div class="wrap person">
+        <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
+        <div>
+          <p class="eyebrow">{{ siteProfile.legalName }}</p>
+          <p class="person__text">{{ bioQuote }}</p>
+          <NuxtLink to="/about" class="u-link">About</NuxtLink>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { bioParagraphs } from '~~/shared/data/bio'
-import { toPlayerTracks } from '~/composables/useAlbumPlayer'
 import { CURRENT_RECORD, currentLook, lookFor } from '~/config/records'
 import { schemaId } from '~/utils/schema'
 
@@ -123,19 +91,11 @@ const { albums, latestAlbum } = await useHomeAlbums()
 const record = computed(() =>
   albums.value.find((album) => album.slug === CURRENT_RECORD) ?? latestAlbum.value,
 )
-const tracks = computed(() => toPlayerTracks(record.value))
 
 const recordPlaying = computed(() => Boolean(record.value) && player.isPlaying(record.value!.slug))
 const heroLabel = computed(() => {
   if (!record.value || !player.isCurrent(record.value.slug) || !player.track.value) return 'Play the record'
   return player.playing.value ? `Playing · ${player.track.value.title}` : `Paused · ${player.track.value.title}`
-})
-
-const releaseLine = computed(() => {
-  const iso = record.value?.releaseDate?.match(/^(\d{4})-(\d{2})-(\d{2})$/)
-  if (!iso) return `The new record · ${record.value?.year ?? ''}`
-  const date = new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]))
-  return `The new record · ${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
 })
 
 // The bio's own pull quote, without its quotation marks.
@@ -274,117 +234,9 @@ usePageSeo({
   padding: 140px 56px;
 }
 
-.block--tight {
-  padding-top: 20px;
-}
-
 .wrap {
   max-width: 1080px;
   margin: 0 auto;
-}
-
-#music {
-  scroll-margin-top: 0;
-}
-
-.album {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 110px;
-  align-items: start;
-}
-
-.album__headline {
-  font-size: clamp(40px, 3.9vw, 56px);
-  margin: 18px 0 26px;
-}
-
-.album__text {
-  font-size: 17px;
-  line-height: 1.75;
-  color: color-mix(in srgb, var(--ink) 78%, var(--bone));
-  max-width: 390px;
-}
-
-.album__go {
-  margin-top: 30px;
-}
-
-.tracks {
-  list-style: none;
-  border-top: 1px solid var(--rule);
-}
-
-.tracks li {
-  border-bottom: 1px solid var(--rule);
-}
-
-.tracks button {
-  display: grid;
-  grid-template-columns: 44px 1fr auto;
-  width: 100%;
-  padding: 16px 0;
-  font: inherit;
-  font-size: 16px;
-  font-weight: 300;
-  text-align: left;
-  color: inherit;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-}
-
-.tracks button:hover .tracks__t {
-  color: var(--deep);
-}
-
-.tracks__n {
-  color: var(--faint);
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  padding-top: 3px;
-}
-
-.tracks__d {
-  color: var(--faint);
-  font-size: 13px;
-}
-
-.tracks li.on {
-  color: var(--deep);
-}
-
-.tracks li.on .tracks__n {
-  color: var(--deep);
-}
-
-.quote {
-  text-align: center;
-  padding: 160px 56px;
-  background: var(--mist);
-}
-
-.quote p {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(26px, 2.8vw, 40px);
-  line-height: 1.4;
-  max-width: 820px;
-  margin: 0 auto;
-  color: color-mix(in srgb, var(--ink) 90%, var(--bone));
-}
-
-.quote__line {
-  display: block;
-}
-
-.quote figcaption {
-  margin-top: 30px;
-  font-size: 11px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--sea);
 }
 
 .records {
@@ -428,6 +280,10 @@ usePageSeo({
 
 .records__item:hover b {
   color: var(--deep);
+}
+
+.letter-band {
+  background: var(--mist);
 }
 
 .person {
@@ -495,24 +351,10 @@ usePageSeo({
     padding: 80px 20px;
   }
 
-  .block--tight {
-    padding-top: 20px;
-  }
-
-  .album,
   .person,
   .records {
     grid-template-columns: 1fr;
     gap: 44px;
-  }
-
-  .quote {
-    padding: 90px 24px;
-  }
-
-  /* On a phone the sung lines don't fit a line each: let them run on. */
-  .quote__line {
-    display: inline;
   }
 
   .hero img {

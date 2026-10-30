@@ -5,10 +5,10 @@
 
 <template>
   <div>
-    <ShorelineBand title="Letters" sub="Once a month" image-position="center 30%" />
+    <ShorelineBand title="Letters" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
 
     <div class="reading">
-      <h1 class="lede">{{ letter.offerDetail }}</h1>
+      <p class="lede">{{ letter.offerDetail }}</p>
 
       <NewsletterSignup class="field" />
       <p class="fine">

@@ -10,10 +10,10 @@
 
 <template>
   <div>
-    <ShorelineBand title="Letters" sub="Once a month" image-position="center 30%" />
+    <ShorelineBand title="Letters" image-position="center 30%" />
 
     <div class="reading">
-      <h1 class="lede">Something new to listen to and the story behind it: a demo, an idea I'm working on, or a song that isn't out yet.</h1>
+      <p class="lede">Something new to listen to and the story behind it: a demo, an idea I'm working on, or a song that isn't out yet.</p>
 
       <NewsletterSignup class="field" />
 

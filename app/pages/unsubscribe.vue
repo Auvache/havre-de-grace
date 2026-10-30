@@ -15,7 +15,7 @@
 
 <template>
   <div>
-    <ShorelineBand title="Unsubscribe" image-position="center 40%" />
+    <ShorelineBand title="Unsubscribe" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
 
     <div class="reading">
       <p class="lede">No hard feelings, and no hoops. There are two ways off the list and both of them are one click.</p>

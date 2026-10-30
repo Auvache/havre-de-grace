@@ -10,7 +10,7 @@
 
 <template>
   <div>
-    <ShorelineBand title="Almost there" image-position="center 70%" />
+    <ShorelineBand title="Almost there" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
 
     <div class="reading">
       <p class="lede">One more step. Check your inbox for an email from Havre De Grace.</p>

@@ -25,9 +25,9 @@ export const useHeroAlbum = (albumSource: MaybeRefOrGetter<Album | null>) => {
   // Singles tied to a parent release link to that album; a standalone single
   // has no page of its own, so it points at the discography.
   const albumHref = computed(() => {
-    if (!album.value) return '/#music'
+    if (!album.value) return '/music'
     if (album.value.parentAlbumSlug) return `/music/${album.value.parentAlbumSlug}`
-    return album.value.isSingle ? '/#music' : `/music/${album.value.slug}`
+    return album.value.isSingle ? '/music' : `/music/${album.value.slug}`
   })
 
   const releaseDate = computed(() => toLocalDate(album.value?.releaseDate))

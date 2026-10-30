@@ -1,7 +1,7 @@
 <!--
   Records (docs/redesign/mockups/records.html): every record, newest first, each
-  with its cover, its own description, a play button and the way in. Then the
-  rooms that left the nav: the record player and the films.
+  with its cover, its own description, a play button and the way in. The record
+  player, the films and influences are linked from the footer.
 
   /music redirected to the homepage's discography until the 2026 refresh;
   /records now redirects here (nuxt.config.ts).
@@ -9,7 +9,7 @@
 
 <template>
   <div>
-    <ShorelineBand title="Records" sub="Newest first" image-position="center 55%" />
+    <ShorelineBand title="Records" :image="false" />
 
     <div class="reading wide">
       <article v-for="album in albums" :key="album.slug" class="rec">
@@ -34,12 +34,6 @@
           </div>
         </div>
       </article>
-
-      <nav class="also" aria-label="More to hear and see">
-        <NuxtLink to="/listen">the record player →</NuxtLink>
-        <NuxtLink to="/music-videos">the films →</NuxtLink>
-        <NuxtLink to="/influences">influences →</NuxtLink>
-      </nav>
     </div>
   </div>
 </template>
@@ -48,8 +42,6 @@
 import type { Album } from '~~/shared/types'
 import { lookFor } from '~/config/records'
 import { schemaId } from '~/utils/schema'
-
-definePageMeta({ navOver: true })
 
 const player = usePlayer()
 const { albums } = await useHomeAlbums()
@@ -118,25 +110,6 @@ usePageSeo({
   gap: 30px;
   margin-top: 30px;
   align-items: center;
-}
-
-.also {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 18px 50px;
-  margin-top: 70px;
-  font-size: 13px;
-  letter-spacing: 0.18em;
-  color: var(--soft);
-}
-
-.also a {
-  text-decoration: none;
-}
-
-.also a:hover {
-  color: var(--ink);
 }
 
 @media (max-width: 900px) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ShorelineBand title="Press" sub="Bios, photos and release details" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
+    <ShorelineBand title="Press" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
     <div class="page-container section-space">
     <div class="mx-auto max-w-3xl space-y-16">
       <ScrollReveal
