@@ -1,11 +1,9 @@
 <!--
   The homepage's body (Still Water, docs/redesign/mockups/home.html);
   pages/index.vue keeps the page's SEO. The record, the letter, About and the
-  discography, all on bone, parted by a hairline with a mark in the middle
-  (chosen over a mist band and four other treatments on 2026-10-30).
-
-  `mark` is the one in the middle, while /home/1-3 choose between three:
-  the logo's anchor (the default), a diamond, a compass star.
+  discography, all on bone, parted by a hairline that opens round a small
+  diamond drawn in the same line (chosen on 2026-10-30 over a mist band, four
+  other treatments and fifteen other marks).
 -->
 
 <template>
@@ -49,7 +47,9 @@
       </div>
     </section>
 
-    <div class="divider" aria-hidden="true"><DividerMark :mark="mark" /></div>
+    <div class="divider" aria-hidden="true">
+      <svg viewBox="0 0 20 20"><path d="M10 1l9 9-9 9-9-9z" /></svg>
+    </div>
 
     <section class="block">
       <div class="wrap person">
@@ -62,7 +62,9 @@
       </div>
     </section>
 
-    <div class="divider" aria-hidden="true"><DividerMark :mark="mark" /></div>
+    <div class="divider" aria-hidden="true">
+      <svg viewBox="0 0 20 20"><path d="M10 1l9 9-9 9-9-9z" /></svg>
+    </div>
 
     <section class="block" aria-labelledby="discography">
       <h2 id="discography" class="discography">Discography</h2>
@@ -82,12 +84,6 @@
 <script setup lang="ts">
 import { bioParagraphs } from '~~/shared/data/bio'
 import { CURRENT_RECORD, currentLook, lookFor, recordHref } from '~/config/records'
-
-withDefaults(defineProps<{
-  mark?: 'anchor' | 'diamond' | 'star'
-}>(), {
-  mark: 'anchor',
-})
 
 const siteProfile = useSiteProfile()
 const player = usePlayer()
@@ -348,7 +344,7 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   }
 }
 
-/* The hairline between sections, with the mark on it. */
+/* The hairline between sections, with the diamond in it. */
 .divider {
   display: flex;
   align-items: center;
@@ -357,7 +353,6 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 56px;
-  color: var(--sea);
 }
 
 .divider::before,
@@ -366,6 +361,19 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   flex: 1;
   height: 1px;
   background: var(--rule);
+}
+
+/* The diamond is the line itself: the same colour, the same 1px at any size. */
+.divider svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--rule);
+}
+
+.divider path {
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
 }
 
 
