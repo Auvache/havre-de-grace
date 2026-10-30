@@ -31,7 +31,7 @@
           <span>{{ heroLabel }}</span>
         </button>
       </div>
-      <NuxtLink v-if="record" :to="recordHref(record.slug)" class="hero__scroll">The record →</NuxtLink>
+      <NuxtLink v-if="record" :to="recordHref(record.slug)" class="hero__scroll">Put it on →</NuxtLink>
     </header>
 
     <section class="block">
