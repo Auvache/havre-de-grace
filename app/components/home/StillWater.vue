@@ -65,12 +65,8 @@
     <section class="block" aria-labelledby="discography">
       <h2 id="discography" class="section-title discography">Discography</h2>
       <div class="wrap records reveal-group">
-        <NuxtLink v-for="album in albums" :key="album.slug" :to="recordHref(album.slug)" class="records__item">
+        <NuxtLink v-for="album in albums" :key="album.slug" :to="recordHref(album.slug)" :aria-label="album.title" class="records__item">
           <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" loading="lazy" width="800" height="800">
-          <span class="records__t">
-            <b>{{ album.title }}</b>
-            <span>{{ album.year }}</span>
-          </span>
         </NuxtLink>
       </div>
     </section>
@@ -218,39 +214,13 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
 }
 
 .records__item {
-  display: grid;
-  gap: 18px;
-  text-decoration: none;
+  display: block;
 }
 
 .records__item img {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-}
-
-.records__t {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-}
-
-.records__t b {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: 30px;
-  line-height: 1.15;
-}
-
-.records__t span {
-  font-size: 12px;
-  color: var(--faint);
-  letter-spacing: 0.1em;
-}
-
-.records__item:hover b {
-  color: var(--deep);
 }
 
 /* About and Discography: thin spaced capitals, the size of a page's title. */
