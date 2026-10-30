@@ -1,19 +1,12 @@
 <!--
-  The homepage's body (Still Water, docs/redesign/mockups/home.html), shared by
-  / and the unlisted /home/1-5, which try five ways of moving between the
-  sections instead of the solid mist band. pages/index.vue keeps the page's
-  SEO; this keeps the record, the letter, About and the discography.
-
-  `transition`, when set:
-    1 Feathered: the mist band fades in and out, no edges.
-    2 Tide: one long wash down the page, bone to mist and back.
-    3 Shoreline: the mist band with soft wave edges.
-    4 Hairline: all on bone, sections parted by a hairline and the anchor.
-    5 Tones: each section its own pale tone, each blending into the next.
+  The homepage's body (Still Water, docs/redesign/mockups/home.html);
+  pages/index.vue keeps the page's SEO. The record, the letter, About and the
+  discography, all on bone, parted by a hairline with a mark in the middle
+  (chosen over a mist band and four other treatments on 2026-10-30).
 -->
 
 <template>
-  <div :class="['home', transition && `home--t${transition}`]">
+  <div class="home">
     <header class="hero" data-hero data-nav-over>
       <img
         :src="look.hero.src"
@@ -40,58 +33,52 @@
       <NuxtLink v-if="record" :to="recordHref(record.slug)" class="hero__scroll">The record →</NuxtLink>
     </header>
 
-    <div class="below">
-      <section class="block letter-band">
-        <div class="wrap letter">
-          <p class="eyebrow">Once a month</p>
-          <h2 class="letter__h">Something new to listen to</h2>
-          <p class="letter__text">
-            A demo, an idea I'm working on, or a song that isn't out yet, and the story behind it.
-            The first one is a 7-inch of two demos.
-          </p>
-          <NewsletterSignup label="Send it" centred class="letter__field" />
-          <NuxtLink to="/letters" class="letter__more">the letters</NuxtLink>
-        </div>
-      </section>
+    <section class="block">
+      <div class="wrap letter">
+        <p class="eyebrow">Once a month</p>
+        <h2 class="letter__h">Something new to listen to</h2>
+        <p class="letter__text">
+          A demo, an idea I'm working on, or a song that isn't out yet, and the story behind it.
+          The first one is a 7-inch of two demos.
+        </p>
+        <NewsletterSignup label="Send it" centred class="letter__field" />
+        <NuxtLink to="/letters" class="letter__more">the letters</NuxtLink>
+      </div>
+    </section>
 
-      <div v-if="transition === 4" class="divider" aria-hidden="true"><BrandMark variant="anchorSmall" decorative /></div>
-      <svg v-if="transition === 3" class="shore shore--top" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80V46C180 18 360 8 560 22s400 48 620 36c110-6 190-20 260-32v58Z" /></svg>
-      <section class="block person-band">
-        <div class="wrap person">
-          <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
-          <div>
-            <p class="eyebrow">About</p>
-            <p class="person__text">{{ bioQuote }}</p>
-            <NuxtLink to="/about" class="u-link">Read more</NuxtLink>
-          </div>
-        </div>
-      </section>
+    <div class="divider" aria-hidden="true"><BrandMark variant="anchorSmall" decorative /></div>
 
-      <svg v-if="transition === 3" class="shore shore--bottom" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0v30c200 30 420 40 640 24s420-44 600-40c80 2 150 10 200 18V0Z" /></svg>
-      <div v-if="transition === 4" class="divider" aria-hidden="true"><BrandMark variant="anchorSmall" decorative /></div>
-      <section class="block records-band" aria-labelledby="discography">
-        <h2 id="discography" class="discography">Discography</h2>
-        <div class="wrap records reveal-group">
-          <NuxtLink v-for="album in albums" :key="album.slug" :to="recordHref(album.slug)" class="records__item">
-            <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" loading="lazy" width="800" height="800">
-            <span class="records__t">
-              <b>{{ album.title }}</b>
-              <span>{{ album.year }}</span>
-            </span>
-          </NuxtLink>
+    <section class="block">
+      <div class="wrap person">
+        <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
+        <div>
+          <p class="eyebrow">About</p>
+          <p class="person__text">{{ bioQuote }}</p>
+          <NuxtLink to="/about" class="u-link">Read more</NuxtLink>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <div class="divider" aria-hidden="true"><BrandMark variant="anchorSmall" decorative /></div>
+
+    <section class="block" aria-labelledby="discography">
+      <h2 id="discography" class="discography">Discography</h2>
+      <div class="wrap records reveal-group">
+        <NuxtLink v-for="album in albums" :key="album.slug" :to="recordHref(album.slug)" class="records__item">
+          <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" loading="lazy" width="800" height="800">
+          <span class="records__t">
+            <b>{{ album.title }}</b>
+            <span>{{ album.year }}</span>
+          </span>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { bioParagraphs } from '~~/shared/data/bio'
 import { CURRENT_RECORD, currentLook, lookFor, recordHref } from '~/config/records'
-
-defineProps<{
-  transition?: 1 | 2 | 3 | 4 | 5
-}>()
 
 const siteProfile = useSiteProfile()
 const player = usePlayer()
@@ -149,6 +136,7 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
 }
 
 .hero h1 {
+  font-family: var(--font-display);
   font-weight: 200;
   font-size: 15px;
   letter-spacing: 0.7em;
@@ -264,11 +252,8 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   color: var(--deep);
 }
 
-.person-band {
-  background: var(--mist);
-}
-
 .discography {
+  font-family: var(--font-display);
   margin-bottom: 64px;
   text-align: center;
   font-weight: 200;
@@ -354,51 +339,8 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   }
 }
 
-/* ---- The five ways between sections (/home/1-5) ---- */
-
-/* 1 Feathered: the same mist, faded in and out instead of cut. */
-.home--t1 .person-band {
-  background: linear-gradient(180deg, var(--bone) 0%, var(--mist) 30%, var(--mist) 70%, var(--bone) 100%);
-}
-
-/* 2 Tide: no bands at all; the page itself goes from bone to mist and back. */
-.home--t2 .person-band {
-  background: transparent;
-}
-
-.home--t2 .below {
-  background: linear-gradient(
-    180deg,
-    var(--bone) 0%,
-    color-mix(in srgb, var(--mist) 70%, var(--bone)) 30%,
-    var(--mist) 52%,
-    color-mix(in srgb, var(--mist) 55%, var(--bone)) 78%,
-    var(--bone) 100%
-  );
-}
-
-/* 3 Shoreline: the mist band with a gentle wave at each edge. */
-.home--t3 .shore {
-  display: block;
-  width: 100%;
-  height: 56px;
-  fill: var(--mist);
-}
-
-.home--t3 .shore--top {
-  margin-bottom: -1px;
-}
-
-.home--t3 .shore--bottom {
-  margin-top: -1px;
-}
-
-/* 4 Hairline: everything on bone, parted by a rule with the anchor on it. */
-.home--t4 .person-band {
-  background: transparent;
-}
-
-.home--t4 .divider {
+/* The hairline between sections, with the mark on it. */
+.divider {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -409,39 +351,21 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   color: var(--sea);
 }
 
-.home--t4 .divider::before,
-.home--t4 .divider::after {
+.divider::before,
+.divider::after {
   content: "";
   flex: 1;
   height: 1px;
   background: var(--rule);
 }
 
-.home--t4 .divider :deep(svg) {
+.divider :deep(svg) {
   width: 26px;
   height: auto;
 }
 
-/* 5 Tones: bone, then warm sand, then a cool pale, each melting into the next. */
-.home--t5 {
-  --tone-sand: color-mix(in srgb, var(--bone) 78%, #d9cbb4);
-  --tone-cool: color-mix(in srgb, var(--bone) 55%, var(--mist));
-}
-
-.home--t5 .person-band {
-  background: linear-gradient(180deg, var(--bone) 0, var(--tone-sand) 180px);
-}
-
-.home--t5 .records-band {
-  background: linear-gradient(180deg, var(--tone-sand) 0, var(--tone-cool) 180px, var(--tone-cool) calc(100% - 140px), var(--bone) 100%);
-}
-
 @media (max-width: 640px) {
-  .home--t3 .shore {
-    height: 32px;
-  }
-
-  .home--t4 .divider {
+  .divider {
     padding: 0 20px;
   }
 }

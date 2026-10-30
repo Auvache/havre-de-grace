@@ -115,7 +115,7 @@ function onSeek(event: MouseEvent) {
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--rule);
   color: var(--ink);
-  font-family: Jost, system-ui, sans-serif;
+  font-family: var(--font-family-base);
   font-weight: 300;
 }
 

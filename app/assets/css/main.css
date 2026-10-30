@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --font-family-base: "Jost", system-ui, sans-serif;
+  /* Running text in Lato; titles and the spaced capitals in Raleway (2026-10-30). */
+  --font-family-base: "Lato", system-ui, sans-serif;
   --font-size-label: clamp(0.72rem, 0.69rem + 0.15vw, 0.84rem);
   --font-size-body: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
   --font-size-subheading: clamp(1.25rem, 1.12rem + 0.6vw, 1.5rem);
@@ -30,8 +31,8 @@
   --rule: color-mix(in srgb, var(--ink) 14%, transparent);
   --soft: #59626c;
   --faint: #97a2ad;
-  /* Titles and ledes: Jost too, since the serif went, and upright. */
-  --font-display: "Jost", system-ui, sans-serif;
+  /* Titles, ledes, the nav and the small spaced capitals. */
+  --font-display: "Raleway", system-ui, sans-serif;
   /* An inline link in running text: a quiet blue, so it reads as a link. */
   --link: #3a6894;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -291,6 +292,7 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
 }
 
 .eyebrow {
+  font-family: var(--font-display);
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.32em;
@@ -308,6 +310,7 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
 /* An action in words: small spaced capitals over a hairline. */
 .u-link {
   display: inline-block;
+  font-family: var(--font-display);
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.24em;

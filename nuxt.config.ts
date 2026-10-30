@@ -133,11 +133,13 @@ export default defineNuxtConfig({
       // 500 resolving to the 400 file exactly as they do today, so this adds a
       // bold for one page and changes nothing anywhere else.
       //
-      // The 2026 refresh (SITE-REFRESH.md) sets its structure in Jost 200–400,
-      // so 200 and 300 join them. That moves the old 350 headings to 300.
-      // Italic as well: titles and ledes are light italic Jost (the serif
-      // they used to be set in is gone).
+      // Jost is now the films' and the record player's lettering only; the
+      // pages moved to Raleway and Lato (below) on 2026-10-30.
       { name: 'Jost', provider: 'google', weights: [200, 300, 400, 700], styles: ['normal', 'italic'] },
+      // The site's type: Raleway for titles, ledes, the nav and the spaced
+      // capitals, Lato for running text (italic for emphasis in the letters).
+      { name: 'Raleway', provider: 'google', weights: [200, 300, 400], styles: ['normal'] },
+      { name: 'Lato', provider: 'google', weights: [300, 400, 700], styles: ['normal', 'italic'] },
       // Times only.
       { name: 'IBM Plex Mono', provider: 'google', weights: [300] },
       // The album screens' lettering: Into the Wild's narrow hairline, and

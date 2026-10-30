@@ -70,6 +70,7 @@ const scale = computed(() => props.imageScale ?? (props.image ? 1.04 : hero.scal
 }
 
 .band h1 {
+  font-family: var(--font-display);
   padding: 72px 16px 0;
   text-align: center;
   font-weight: 200;

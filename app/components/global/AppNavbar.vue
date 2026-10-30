@@ -168,6 +168,7 @@ onBeforeUnmount(unhook)
 <style scoped>
 .site-nav {
   position: fixed;
+  font-family: var(--font-display);
   inset: 0 0 auto;
   z-index: 45;
   color: var(--theme-text);
