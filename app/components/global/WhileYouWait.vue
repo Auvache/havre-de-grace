@@ -55,7 +55,7 @@ const playing = computed(() => Boolean(record.value) && player.isPlaying(record.
   display: block;
   margin-top: 6px;
   font-family: var(--font-display);
-  font-style: italic;
+  font-weight: 300;
   font-size: 26px;
   line-height: 1.2;
   text-decoration: none;

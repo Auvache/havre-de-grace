@@ -24,10 +24,28 @@ const LOGO_DRAW_MS = MARK_DRAW.done * 1000
 const LOGO_HOLD_AFTER_IN_MS = 500
 const OVERLAY_FADE_OUT_MS = 1250
 
-const splashSeen = useCookie<string | null>(SESSION_KEY, {
-  sameSite: 'lax',
-  path: '/',
-})
+// Remembered per tab (sessionStorage), and only once it has actually played.
+// It used to be a session cookie set by any page, but Chrome keeps session
+// cookies across restarts, and landing on /about first counted as seeing it,
+// so in practice it never played twice and rarely once (2026-10-30). Now a
+// new tab on the homepage gets it; a reload or coming back home doesn't.
+const readSeen = () => {
+  try {
+    return window.sessionStorage.getItem(SESSION_KEY) === '1'
+  }
+  catch {
+    return false
+  }
+}
+
+const markSeen = () => {
+  try {
+    window.sessionStorage.setItem(SESSION_KEY, '1')
+  }
+  catch {
+    // Storage blocked: it plays again next time, which is harmless.
+  }
+}
 
 // The splash is for meeting the band, so it plays on the homepage only. Every
 // other page is somewhere people come to for one thing, and it's five seconds
@@ -37,9 +55,9 @@ const skipsSplash = route.path !== '/'
 
 // The same on the server and in the browser, so hydration agrees: the HTML is
 // prerendered once for everybody and can't know who has seen the splash. A
-// returning visitor never sees it anyway: the inline script in nuxt.config
-// marks <html data-splash="seen"> before first paint and the rule below hides
-// it, and onMounted takes it out.
+// returning visitor (in this tab) never sees it anyway: the inline script in
+// nuxt.config marks <html data-splash="seen"> before first paint and the rule
+// below hides it, and onMounted takes it out.
 const isVisible = ref(!skipsSplash)
 const isExiting = ref(false)
 const drawnFor = ref(0)
@@ -70,30 +88,18 @@ const clearTimers = () => {
 }
 
 onMounted(() => {
-  if (String(splashSeen.value) === '1') {
-    isVisible.value = false
-    return
-  }
-
-  // Counts as seen, so going on from /links to /listen or the home page doesn't
-  // stop them mid-visit either.
+  // Another page: nothing to play, and going on to the homepage later is a
+  // move inside the app, so it doesn't play then either.
   if (skipsSplash) {
-    splashSeen.value = '1'
     return
   }
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (prefersReducedMotion) {
-    splashSeen.value = '1'
+  if (readSeen() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     isVisible.value = false
     return
   }
 
-  if (!isVisible.value) {
-    return
-  }
-
-  splashSeen.value = '1'
+  markSeen()
 
   timers.push(setTimeout(draw, BLANK_DELAY_MS))
 

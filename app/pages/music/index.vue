@@ -18,7 +18,7 @@
         </NuxtLink>
         <div>
           <p class="eyebrow">{{ meta(album) }}</p>
-          <h2 class="italic-title rec__title">{{ album.title }}</h2>
+          <h2 class="display-title rec__title">{{ album.title }}</h2>
           <p class="rec__text"><RichText :text="album.description" /></p>
           <div class="rec__acts">
             <button

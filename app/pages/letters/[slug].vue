@@ -18,7 +18,7 @@
             · No. {{ number }}
           </template>
         </p>
-        <h1 class="italic-title letter-title">{{ page.title }}</h1>
+        <h1 class="display-title letter-title">{{ page.title }}</h1>
         <p v-if="sentOn" class="letter-date">
           <time :datetime="sentOn">{{ formatLetterDate(sentOn) }}</time>
         </p>

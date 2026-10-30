@@ -1,7 +1,7 @@
 <!--
   About: the title, a live photograph, the bio from shared/data/bio.ts (which
-  /about.md mirrors) in its own order, quote and all, and the full live set from
-  Artichoke Music. Influences, the press kit and contact are in the footer.
+  /about.md mirrors) in its own order, quote and all, the two photographs from
+  the old About page, and the full live set from Artichoke Music. Influences, the press kit and contact are in the footer.
 -->
 
 <template>
@@ -15,7 +15,12 @@
 
       <div class="prose-body">
         <p v-for="(paragraph, index) in bioParagraphs" :key="index">{{ paragraph.text }}</p>
-        <p>You can get a taste of my music below.</p>
+      </div>
+
+      <!-- The pair from the old About page, side by side; each comes in from its own side. -->
+      <div class="pair reveal-group">
+        <img src="/images/site/stefan-woods-1000.jpg" alt="Stefan playing an acoustic guitar among tall trees" width="1000" height="1014" loading="lazy" data-reveal="left">
+        <img src="/images/site/stefan-portrait-1000.jpg" alt="Stefan Auvache Bradley, smiling, in a warm-lit room" width="1000" height="1000" loading="lazy" data-reveal="right">
       </div>
 
       <div class="video">
@@ -102,8 +107,30 @@ useSchemaOrg([
   filter: grayscale(1);
 }
 
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 56px;
+}
+
+.pair img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+@media (max-width: 640px) {
+  .pair {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
+  }
+}
+
+/* As far under the photos as they sit apart. */
 .video {
-  margin-top: 64px;
+  margin-top: 16px;
   aspect-ratio: 16 / 9;
   background: var(--mist);
 }

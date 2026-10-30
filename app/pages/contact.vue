@@ -59,7 +59,6 @@ usePageSeo({
   display: inline-block;
   margin-top: 14px;
   font-family: var(--font-display);
-  font-style: italic;
   font-weight: 300;
   font-size: clamp(24px, 2vw + 12px, 34px);
   color: var(--deep);
@@ -81,9 +80,5 @@ usePageSeo({
   font-size: 15px;
   line-height: 1.7;
   color: var(--soft);
-}
-
-.more a {
-  color: inherit;
 }
 </style>

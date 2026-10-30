@@ -30,8 +30,10 @@
   --rule: color-mix(in srgb, var(--ink) 14%, transparent);
   --soft: #59626c;
   --faint: #97a2ad;
-  /* Titles, ledes, the italic voice: Jost too, since the serif went. */
+  /* Titles and ledes: Jost too, since the serif went, and upright. */
   --font-display: "Jost", system-ui, sans-serif;
+  /* An inline link in running text: a quiet blue, so it reads as a link. */
+  --link: #3a6894;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   /* The persistent player's height; pages leave this much room at the bottom. */
   --player-height: 68px;
@@ -159,12 +161,11 @@ a {
   padding-block: clamp(var(--space-6), 11vw, var(--space-8));
 }
 
-/* Since the 2026 refresh a section heading is a title, not a shout: light
-   italic, sentence case. */
+/* Since the 2026 refresh a section heading is a title, not a shout: light,
+   sentence case. */
 .section-heading {
   font-family: var(--font-display);
   font-size: var(--font-size-heading);
-  font-style: italic;
   font-weight: 300;
   line-height: 1.1;
 }
@@ -298,9 +299,8 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
 }
 
 /* A title, a lyric, a pull quote. */
-.italic-title {
+.display-title {
   font-family: var(--font-display);
-  font-style: italic;
   font-weight: 200;
   line-height: 1.1;
 }
@@ -370,7 +370,6 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
 
 .lede {
   font-family: var(--font-display);
-  font-style: italic;
   font-weight: 300;
   font-size: clamp(22px, 1.5vw + 12px, 30px);
   line-height: 1.45;
@@ -388,6 +387,25 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+}
+
+/*
+  Every link inside a sentence, site-wide, is the quiet blue: "the press kit"
+  on Contact, "read the letters" on Subscribe. Only links with no class of
+  their own (NuxtLink writes an empty class="") or with .inline-link, so rows,
+  buttons and .u-link keep theirs; and not on the dark pages.
+*/
+:where(html:not([data-theme="dark"]) main) :where(p, li, dd, small, blockquote) :is(a:not([class]:not([class=""])), a.inline-link) {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--link) 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+:where(html:not([data-theme="dark"]) main) :where(p, li, dd, small, blockquote) :is(a:not([class]:not([class=""])), a.inline-link):hover {
+  color: var(--deep);
+  text-decoration-color: currentColor;
 }
 
 .hairline-list {

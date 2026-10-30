@@ -59,6 +59,48 @@
   opacity: 1;
 }
 
+/*
+  The rise into view (app/plugins/reveal.client.ts). Only the plugin adds
+  .reveal-pending, and only to things below the fold, so nothing here hides a
+  page that hasn't run its JavaScript.
+*/
+.reveal-pending {
+  --reveal-x: 0px;
+  --reveal-y: 48px;
+  opacity: 0;
+  filter: blur(4px);
+  transform: translate3d(var(--reveal-x), var(--reveal-y), 0) scale(0.98);
+  transition:
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-pending[data-reveal="left"],
+.reveal-pending[data-reveal="section-left"] {
+  --reveal-x: -64px;
+  --reveal-y: 16px;
+}
+
+.reveal-pending[data-reveal="right"],
+.reveal-pending[data-reveal="section-right"] {
+  --reveal-x: 64px;
+  --reveal-y: 16px;
+}
+
+.reveal-pending.is-revealed {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+@media (max-width: 767px) {
+  .reveal-pending[data-reveal] {
+    --reveal-x: 0px;
+    --reveal-y: 40px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-enter-active,
   .page-leave-active,

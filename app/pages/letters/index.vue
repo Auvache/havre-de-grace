@@ -13,9 +13,10 @@
     <ShorelineBand title="Letters" image-position="center 30%" />
 
     <div class="reading">
-      <p class="lede">Something new to listen to and the story behind it: a demo, an idea I'm working on, or a song that isn't out yet.</p>
-
-      <NewsletterSignup class="field" />
+      <div class="intro">
+        <p class="lede">Something new to listen to and the story behind it: a demo, an idea I'm working on, or a song that isn't out yet.</p>
+        <NewsletterSignup centred class="field" />
+      </div>
 
       <div class="seven">
         <div class="vinyl" aria-hidden="true">
@@ -105,8 +106,17 @@ usePageSeo({
 </script>
 
 <style scoped>
+.intro {
+  text-align: center;
+}
+
+.intro .lede {
+  text-wrap: balance;
+}
+
 .field {
   margin-top: 44px;
+  text-align: left;
 }
 
 .seven {
@@ -165,7 +175,6 @@ usePageSeo({
 
 .vinyl__label b {
   font-family: var(--font-display);
-  font-style: italic;
   font-weight: 400;
   font-size: 17px;
   line-height: 1.1;

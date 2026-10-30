@@ -176,14 +176,15 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en',
       },
-      // A returning visitor has a cookie saying they've seen the splash, and the
-      // prerendered HTML can't know that. Mark <html> before first paint so the
-      // splash stays hidden for them (see AppSplashScreen).
+      // A visitor who has already seen the splash in this tab has it noted in
+      // sessionStorage, and the prerendered HTML can't know that. Mark <html>
+      // before first paint so the splash stays hidden for them (see
+      // AppSplashScreen).
       script: [
         {
           key: 'splash-seen',
           tagPosition: 'head',
-          innerHTML: `try{if(/(?:^|;\\s*)hdg-splash-seen=/.test(document.cookie))document.documentElement.setAttribute('data-splash','seen')}catch(e){}`,
+          innerHTML: `try{if(sessionStorage.getItem('hdg-splash-seen')==='1')document.documentElement.setAttribute('data-splash','seen')}catch(e){}`,
         },
       ],
       meta: [
