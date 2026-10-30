@@ -10,7 +10,7 @@
 
 <template>
   <div>
-    <ShorelineBand title="Letters" image-position="center 30%" />
+    <ShorelineBand title="Letters" bare />
 
     <div class="reading">
       <div class="intro">
@@ -64,7 +64,6 @@
 import { letter } from '~~/shared/data/letter'
 import { formatLetterDate, publishedOn, toDay, today } from '~~/shared/utils/letterDates'
 
-definePageMeta({ navOver: true })
 
 const { data } = await useAsyncData('letters', () =>
   queryCollection('letters')
@@ -110,8 +109,17 @@ usePageSeo({
   text-align: center;
 }
 
+/* The full column, as wide as the rule over the 7-inch below, on two lines
+   (at the lede's usual 30px "out yet." fell to a third on its own). */
 .intro .lede {
-  text-wrap: balance;
+  font-size: clamp(22px, 1.4vw + 8px, 28px);
+  text-wrap: pretty;
+}
+
+@media (max-width: 640px) {
+  .intro .lede {
+    text-wrap: balance;
+  }
 }
 
 .field {
