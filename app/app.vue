@@ -52,20 +52,6 @@ useSchemaOrg([
     url: `${siteUrl}/`,
     description: siteProfile.description,
     genre: siteProfile.genres,
-    foundingLocation: {
-      '@type': 'Place',
-      name: siteProfile.location,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Vancouver',
-        addressRegion: 'WA',
-        addressCountry: 'US',
-      },
-    },
-    location: {
-      '@type': 'Place',
-      name: siteProfile.location,
-    },
     member: {
       '@type': 'OrganizationRole',
       member: { '@id': personId },
@@ -84,12 +70,8 @@ useSchemaOrg([
     alternateName: siteProfile.artistName,
     url: `${siteUrl}/about`,
     jobTitle: 'Singer-songwriter',
-    description: `Singer-songwriter and guitarist from ${siteProfile.location}, who records and performs as ${siteProfile.artistName}.`,
+    description: `Singer-songwriter and guitarist who records and performs as ${siteProfile.artistName}.`,
     image: toAbsoluteUrl('/images/profile.jpg'),
-    homeLocation: {
-      '@type': 'Place',
-      name: siteProfile.location,
-    },
     memberOf: { '@id': artistId },
   }),
 ])

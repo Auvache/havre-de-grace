@@ -26,7 +26,7 @@
       </figure>
 
       <div class="prose-body">
-        <p>A new record comes out every year on his birthday, June 6. There is no AI anywhere in the music: every song is written, played and sung by a person.</p>
+        <p>There is no AI anywhere in the music: every song is written, played and sung by a person.</p>
       </div>
 
       <div class="video">
@@ -61,7 +61,7 @@ const siteProfile = useSiteProfile()
 const lede = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"|"$/g, '')
 const body = bioParagraphs.filter((p) => !p.emphasis)
 
-const pageDescription = computed(() => `Havre De Grace is singer-songwriter Stefan Auvache Bradley, writing and recording acoustic folk music in Vancouver, Washington. Bio, influences, press photos, and booking.`)
+const pageDescription = computed(() => `Havre De Grace is singer-songwriter Stefan Auvache Bradley. Bio, influences, press photos, and booking.`)
 
 const { canonicalUrl } = usePageSeo({
   title: `About Havre De Grace | Stefan Auvache Bradley`,

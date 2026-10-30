@@ -187,7 +187,7 @@ export default defineNuxtModule({
           description: 'The artist, the discography, and how to get in touch.',
         }, blocks(
           '# Havre De Grace',
-          `_${siteProfile.description} Based in ${siteProfile.location}._`,
+          `_${siteProfile.description}_`,
           '## Releases',
           albums
             .map((album) =>
@@ -212,10 +212,9 @@ export default defineNuxtModule({
         // The Records page: every record, newest first, with its own words.
         await emit('/music', {
           title: 'Records',
-          description: 'Every Havre De Grace record, newest first. A new one every year on June 6.',
+          description: 'Every Havre De Grace record, newest first.',
         }, blocks(
           '# Records',
-          '_One every year, on June 6._',
           ...albums
             .filter((album) => !album.isSingle)
             .map((album) => blocks(
@@ -276,7 +275,6 @@ export default defineNuxtModule({
           [
             `- **Performing name:** ${siteProfile.artistName}`,
             `- **Legal name:** ${siteProfile.legalName}`,
-            `- **Based in:** ${siteProfile.location}`,
             `- **Genres:** ${siteProfile.genres.join(', ')}`,
             `- **Booking:** ${siteProfile.bookingEmail}`,
           ].join('\n'),
@@ -296,7 +294,6 @@ export default defineNuxtModule({
           [
             `- **Performing name:** ${siteProfile.artistName}`,
             `- **Legal name:** ${siteProfile.legalName}`,
-            `- **Based in:** ${siteProfile.location}`,
             `- **Genres:** ${siteProfile.genres.join(', ')}`,
             latest && `- **Latest release:** ${latest.title} (${latest.year})`,
             `- **Booking and press:** ${siteProfile.bookingEmail}`,
@@ -440,7 +437,7 @@ export default defineNuxtModule({
         // --- /llms.txt --------------------------------------------------------
         await write('/llms.txt', blocks(
           `# ${siteProfile.artistName}`,
-          `> ${siteProfile.description} Based in ${siteProfile.location}.`
+          `> ${siteProfile.description}`
           + ' This site holds the discography, lyrics, credits, liner notes, and booking contact.',
           'Every page listed below is also available as markdown at the same URL with'
           + ' `.md` appended, and the catalogue as structured JSON at /discography.json.',
@@ -473,7 +470,6 @@ export default defineNuxtModule({
             name: siteProfile.artistName,
             legalName: siteProfile.legalName,
             description: siteProfile.description,
-            location: siteProfile.location,
             genres: siteProfile.genres,
             url: `${siteUrl}/`,
             bookingEmail: siteProfile.bookingEmail,

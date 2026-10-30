@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen text-[var(--theme-text)]">
-    <AppNavbar immersive />
+    <AppNavbar />
     <main class="h-screen">
       <slot />
     </main>

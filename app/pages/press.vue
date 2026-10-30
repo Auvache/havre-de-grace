@@ -194,7 +194,6 @@ const formattedReleaseDate = computed(() => {
 const facts = computed(() => [
   { label: 'Performing name', value: siteProfile.artistName },
   { label: 'Legal name', value: siteProfile.legalName },
-  { label: 'Based in', value: siteProfile.location },
   { label: 'Genres', value: siteProfile.genres.join(', ') },
   ...(latestAlbum.value
     ? [{ label: 'Latest release', value: `${latestAlbum.value.title} (${latestAlbum.value.year})` }]
@@ -206,7 +205,7 @@ const facts = computed(() => [
   },
 ])
 
-const pageDescription = `Press kit for Havre De Grace, the acoustic folk project of Stefan Auvache Bradley: short, medium and long bios, high-resolution press photos, release details, and booking contact.`
+const pageDescription = `Press kit for Havre De Grace, singer-songwriter Stefan Auvache Bradley: short, medium and long bios, high-resolution press photos, release details, and booking contact.`
 
 const { siteUrl } = useAbsoluteUrl()
 

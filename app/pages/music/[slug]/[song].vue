@@ -22,8 +22,8 @@
         <p class="head__about">
           <em>{{ song.track.title }}</em> is track {{ song.trackNumber }} on
           <NuxtLink :to="`/music/${album.slug}`">{{ album.title }}</NuxtLink>,
-          the {{ albumOrdinal }} album by {{ siteProfile.artistName }}, the acoustic folk
-          project of {{ siteProfile.legalName }}<span v-if="formattedReleaseDate">, released {{ formattedReleaseDate }}</span>.<span v-if="song.track.duration"> Running time {{ song.track.duration }}.</span>
+          the {{ albumOrdinal }} album by {{ siteProfile.artistName }}, singer-songwriter
+          {{ siteProfile.legalName }}<span v-if="formattedReleaseDate">, released {{ formattedReleaseDate }}</span>.<span v-if="song.track.duration"> Running time {{ song.track.duration }}.</span>
         </p>
         <button v-if="playerIndex !== null" type="button" class="head__play" @click="player.toggleAlbum(album, playerIndex)">
           <b aria-hidden="true">

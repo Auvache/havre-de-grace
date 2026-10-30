@@ -32,7 +32,7 @@
 
       <div class="elsewhere">
         <p class="eyebrow">Elsewhere</p>
-        <p>Messages here reach me too, just more slowly than email. Based in {{ siteProfile.location }}.</p>
+        <p>Messages here reach me too, just more slowly than email.</p>
         <nav aria-label="Elsewhere" class="elsewhere__links">
           <a :href="siteProfile.artistLinks.instagram" rel="noopener">instagram</a>
           <a :href="siteProfile.artistLinks.youtube" rel="noopener">youtube</a>
@@ -67,7 +67,7 @@ const reasons = [
   },
 ]
 
-const pageDescription = `Booking, press, and licensing contact for Havre De Grace, the acoustic folk project of Stefan Auvache Bradley in Vancouver, Washington.`
+const pageDescription = `Booking, press, and licensing contact for Havre De Grace, singer-songwriter Stefan Auvache Bradley.`
 
 const { siteUrl } = useAbsoluteUrl()
 

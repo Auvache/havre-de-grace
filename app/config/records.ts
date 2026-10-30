@@ -2,8 +2,8 @@
  * The look of each record, in one place.
  *
  * The light pages (homepage, Records, About, Letters…) wear the *current*
- * record's palette and hero art. Every June 6 a new record comes out and the
- * site re-skins to it: add its entry to RECORD_LOOKS and point CURRENT_RECORD
+ * record's palette and hero art. When a new record comes out the site
+ * re-skins to it: add its entry to RECORD_LOOKS and point CURRENT_RECORD
  * at it. That one line is the whole re-skin. The anchor is the brand and never
  * changes; the sea is Into the Wild's.
  *
@@ -135,7 +135,7 @@ export const RECORD_LOOKS: Record<string, RecordLook> = {
   },
 }
 
-/** The record the light pages wear. Change this on June 6. */
+/** The record the light pages wear. Change this when a new record comes out. */
 export const CURRENT_RECORD = 'into-the-wild'
 
 export const currentLook = (): RecordLook => RECORD_LOOKS[CURRENT_RECORD]!

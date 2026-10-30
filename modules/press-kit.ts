@@ -134,7 +134,6 @@ const buildReadme = () => [
   'DETAILS',
   `  Performing name   ${siteProfile.artistName}`,
   `  Legal name        ${siteProfile.legalName}`,
-  `  Based in          ${siteProfile.location}`,
   `  Genres            ${siteProfile.genres.join(', ')}`,
   `  Booking & press   ${siteProfile.bookingEmail}`,
   '',

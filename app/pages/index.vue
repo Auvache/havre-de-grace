@@ -4,12 +4,12 @@
   The current record's cover is the whole first screen with one play button.
   Below it: the record and its songs, a lyric, both records, Stefan, and the
   monthly letter. The record, its picture and its words come from
-  app/config/records.ts and content/music, so June 6 is a config change.
+  app/config/records.ts and content/music, so a new record is a config change.
 -->
 
 <template>
   <div class="home">
-    <header class="hero" data-hero>
+    <header class="hero" data-hero data-nav-over>
       <img
         :src="look.hero.src"
         alt=""
@@ -82,7 +82,7 @@
         <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
         <div>
           <p class="eyebrow">{{ siteProfile.legalName }}</p>
-          <p class="person__text">{{ bioQuote }} A new record comes out every year on June 6.</p>
+          <p class="person__text">{{ bioQuote }}</p>
           <NuxtLink to="/about" class="u-link">About</NuxtLink>
         </div>
       </div>
@@ -143,10 +143,10 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
 
 const pageDescription = computed(() => {
   if (!latestAlbum.value) {
-    return `Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, from Vancouver, Washington. Albums, lyrics, credits, and booking.`
+    return `Havre De Grace is singer-songwriter Stefan Auvache Bradley. Albums, lyrics, credits, and booking.`
   }
 
-  return `Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, from Vancouver, Washington. Hear the album "${latestAlbum.value.title}", read the lyrics, and get booking details.`
+  return `Havre De Grace is singer-songwriter Stefan Auvache Bradley. Hear the album "${latestAlbum.value.title}", read the lyrics, and get booking details.`
 })
 
 // The homepage is the page *about* the artist, so its WebPage node names the

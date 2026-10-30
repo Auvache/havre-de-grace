@@ -125,7 +125,6 @@ export interface SiteProfile {
   artistName: string
   legalName: string
   description: string
-  location: string
   genres: string[]
   bookingEmail: string
   artistLinks: StreamingLinks

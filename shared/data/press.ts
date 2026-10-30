@@ -26,19 +26,19 @@ export const pressBios: PressBio[] = [
     id: 'short-bio',
     label: 'Short bio',
     usage: 'One or two lines — festival programs, show listings, socials.',
-    text: 'Havre De Grace is the acoustic folk project of singer-songwriter Stefan Auvache Bradley, based in Vancouver, Washington. He released his debut, I Want to Be Yours and Other Songs, in July 2025, and his second album, Into the Wild, in July 2026.',
+    text: 'Havre De Grace is singer-songwriter Stefan Auvache Bradley. He released his debut, I Want to Be Yours and Other Songs, in July 2025, and his second album, Into the Wild, in July 2026.',
   },
   {
     id: 'medium-bio',
     label: 'Medium bio',
     usage: 'A single paragraph — show announcements, blog posts, newsletters.',
-    text: `Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley, who writes and records acoustic folk music in Vancouver, Washington. He was raised on an eclectic mix of Led Zeppelin, REO Speedwagon, Heart, Michael Jackson and Donny Osmond, and found his own footing later in the songwriting of Bob Dylan, Jack White, John Mayer and Kristian Matsson's Tallest Man on Earth. His debut album, I Want to Be Yours and Other Songs, arrived in July 2025 under the name Stefan Auvache. Into the Wild followed on July 17, 2026 — a record built to be heard front to back.`,
+    text: `Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley, who writes and records his own songs. He was raised on an eclectic mix of Led Zeppelin, REO Speedwagon, Heart, Michael Jackson and Donny Osmond, and found his own footing later in the songwriting of Bob Dylan, Jack White, John Mayer and Kristian Matsson's Tallest Man on Earth. His debut album, I Want to Be Yours and Other Songs, arrived in July 2025 under the name Stefan Auvache. Into the Wild followed on July 17, 2026 — a record built to be heard front to back.`,
   },
   {
     id: 'long-bio',
     label: 'Long bio',
     usage: 'Full biography — features, interviews, program notes.',
-    text: `Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley, who writes and records acoustic folk music in Vancouver, Washington.
+    text: `Havre De Grace is the musical alias of singer-songwriter Stefan Auvache Bradley, who writes and records his own songs.
 
 "I love music and music loves me. I can't help but play the guitar and write songs."
 

@@ -16,7 +16,7 @@
 
 <template>
   <div v-if="album" class="cinema" :style="cinemaStyle">
-    <div class="theatre">
+    <div class="theatre" data-nav-over>
       <ClientOnly>
         <AlbumScreen :look="look" :lyrics="lyrics" />
         <template #fallback>
@@ -250,7 +250,7 @@ const pageDescription = computed(() => {
   }
 
   const trackCount = album.value.tracklist.length
-  return `${album.value.title} by ${siteProfile.artistName} — the acoustic folk project of ${siteProfile.legalName}. All ${trackCount} tracks with full lyrics and credits, plus the album in digital vinyl format.`
+  return `${album.value.title} by ${siteProfile.artistName}, singer-songwriter ${siteProfile.legalName}. All ${trackCount} tracks with full lyrics and credits, plus the album in digital vinyl format.`
 })
 
 const { canonicalUrl } = usePageSeo({

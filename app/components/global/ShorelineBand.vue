@@ -1,14 +1,15 @@
 <!--
   The top of a Shoreline page: a short photographic band with the title in thin
   spaced capitals, and an italic line under it. The nav lies on it, so a page
-  using this sets `definePageMeta({ navOver: true })`.
+  using this sets `definePageMeta({ navOver: true })`; `data-nav-over` keeps the
+  nav clear of a backing while it is over the picture.
 
   The picture defaults to the current record's hero art (app/config/records.ts),
-  so on June 6 every band re-skins with the homepage.
+  so when a new record comes out every band re-skins with the homepage.
 -->
 
 <template>
-  <header class="band">
+  <header class="band" data-nav-over>
     <img
       :src="src"
       alt=""

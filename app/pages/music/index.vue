@@ -9,7 +9,7 @@
 
 <template>
   <div>
-    <ShorelineBand title="Records" sub="One every year, on June 6" image-position="center 55%" />
+    <ShorelineBand title="Records" sub="Newest first" image-position="center 55%" />
 
     <div class="reading wide">
       <article v-for="album in albums" :key="album.slug" class="rec">
@@ -77,7 +77,7 @@ useSchemaOrg([
 
 usePageSeo({
   title: 'Records | Havre De Grace',
-  description: 'Every Havre De Grace record, newest first: Into the Wild (2026) and I Want to Be Yours and Other Songs (2025). A new record comes out every year on June 6.',
+  description: 'Every Havre De Grace record, newest first: Into the Wild (2026) and I Want to Be Yours and Other Songs (2025).',
 })
 </script>
 

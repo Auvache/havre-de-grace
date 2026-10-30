@@ -1,5 +1,5 @@
 const SITE_URL = 'https://havredegracemusic.com'
-const SITE_DESCRIPTION = 'Havre De Grace is the acoustic folk and singer-songwriter project of Stefan Auvache Bradley, based in Vancouver, Washington. Albums, lyrics, credits, and booking.'
+const SITE_DESCRIPTION = 'Havre De Grace is singer-songwriter Stefan Auvache Bradley. Albums, lyrics, credits, and booking.'
 
 // Legacy /listen URLs, redirected to the single record-player scene.
 //

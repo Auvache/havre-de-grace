@@ -62,7 +62,7 @@
   --radius-lg: 1rem;
 
   --max-content-width: 75rem;
-  --nav-height: 4.5rem;
+  --nav-height: var(--nav-h-scrolled);
 
   /* The mailing-list strip sits under the nav row inside the same fixed
      header, so what content has to clear is the pair of them, not the nav
@@ -89,6 +89,17 @@ body,
 html {
   scroll-behavior: smooth;
   overflow-x: clip;
+  /* The fixed nav (AppNavbar): its height at the top of the page and once
+     scrolled. app/router.options.ts measures it for anchor jumps. */
+  --nav-h: 78px;
+  --nav-h-scrolled: 62px;
+}
+
+@media (max-width: 640px) {
+  html {
+    --nav-h: 62px;
+    --nav-h-scrolled: 54px;
+  }
 }
 
 body {
@@ -264,12 +275,6 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
 .nav-link:hover::after,
 .nav-link[data-active="true"]::after {
   transform: scaleX(1);
-}
-
-@media (max-width: 767px) {
-  :root {
-    --nav-height: 4rem;
-  }
 }
 
 
