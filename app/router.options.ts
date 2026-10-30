@@ -52,7 +52,9 @@ export default <RouterConfig>{
       return savedPosition
     }
 
-    if (to.hash) {
+    // On the record player the hash names a record to put on the deck
+    // (/listen#<slug>), not an element to scroll to.
+    if (to.hash && !/^\/listen(?:\/|$)/.test(to.path)) {
       if (import.meta.client && to.path !== from.path) {
         await waitForElement(to.hash)
       }

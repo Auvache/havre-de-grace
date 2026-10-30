@@ -5,12 +5,12 @@
 
 <template>
   <div v-if="record" class="wait">
-    <NuxtLink :to="`/music/${record.slug}`" :aria-label="record.title">
+    <NuxtLink :to="recordHref(record.slug)" :aria-label="record.title">
       <img :src="look.thumb" alt="" width="84" height="84">
     </NuxtLink>
     <div>
       <p class="eyebrow">{{ eyebrow }}</p>
-      <NuxtLink :to="`/music/${record.slug}`" class="wait__title">{{ record.title }}</NuxtLink>
+      <NuxtLink :to="recordHref(record.slug)" class="wait__title">{{ record.title }}</NuxtLink>
     </div>
     <button
       type="button"
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { CURRENT_RECORD, currentLook } from '~/config/records'
+import { CURRENT_RECORD, currentLook, recordHref } from '~/config/records'
 
 withDefaults(defineProps<{ eyebrow?: string }>(), { eyebrow: 'While you wait' })
 

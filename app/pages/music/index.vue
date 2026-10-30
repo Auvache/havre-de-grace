@@ -13,7 +13,7 @@
 
     <div class="reading wide">
       <article v-for="album in albums" :key="album.slug" class="rec">
-        <NuxtLink :to="`/music/${album.slug}`" class="rec__cover" :aria-label="`${album.title}, the record`">
+        <NuxtLink :to="recordHref(album.slug)" class="rec__cover" :aria-label="`${album.title}, the record`">
           <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" width="840" height="840" :loading="album === albums[0] ? 'eager' : 'lazy'">
         </NuxtLink>
         <div>
@@ -30,7 +30,7 @@
               <svg v-if="player.isPlaying(album.slug)" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h3.4v12H3zm6.6 0H13v12H9.6z" fill="currentColor" /></svg>
               <svg v-else viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2v12l10-6z" fill="currentColor" /></svg>
             </button>
-            <NuxtLink :to="`/music/${album.slug}`" class="u-link">Enter the record</NuxtLink>
+            <NuxtLink :to="recordHref(album.slug)" class="u-link">Enter the record</NuxtLink>
           </div>
         </div>
       </article>
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import type { Album } from '~~/shared/types'
-import { lookFor } from '~/config/records'
+import { lookFor, recordHref } from '~/config/records'
 import { schemaId } from '~/utils/schema'
 
 const player = usePlayer()
@@ -80,11 +80,19 @@ usePageSeo({
   gap: 80px;
   align-items: center;
   padding: 60px 0;
-  border-bottom: 1px solid var(--rule);
+}
+
+/* A rule between records only; the footer brings its own. */
+.rec + .rec {
+  border-top: 1px solid var(--rule);
 }
 
 .rec:first-child {
   padding-top: 0;
+}
+
+.rec:last-child {
+  padding-bottom: 0;
 }
 
 .rec__cover img {

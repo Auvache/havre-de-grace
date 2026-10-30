@@ -13,6 +13,9 @@ export const handOffOnSameAlbum = true
 /** How long the bar and the sound take to fade when a page stops them. */
 export const FADE_MS = 300
 
+/** The record player's fade: the music winds down while the deck comes up. */
+export const LISTEN_FADE_MS = 2000
+
 /**
  * Pages with their own sound: the record player, the 7-inch, the films and the
  * demo shelf. Arriving on one fades the bar out and stops the music, so two
@@ -24,6 +27,10 @@ export const STOP_ROUTES: RegExp[] = [
   /^\/music-videos(?:\/|$)/,
   /^\/tools(?:\/|$)/,
 ]
+
+/** How long the music takes to fade when arriving on `path` stops it. */
+export const stopFadeFor = (path: string): number =>
+  /^\/listen(?:\/|$)/.test(path) ? LISTEN_FADE_MS : FADE_MS
 
 /** An album page or one of its song pages: /music/<album>[/<song>]. */
 export const albumSlugOf = (path: string): string | null =>

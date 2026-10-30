@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ShorelineBand title="Press" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
+    <ShorelineBand title="Press" :image="false" />
     <div class="page-container section-space">
     <div class="mx-auto max-w-3xl space-y-16">
       <ScrollReveal
@@ -106,10 +106,10 @@
             <StreamingLinks :links="latestAlbum.streamingLinks" compact />
 
             <NuxtLink
-              :to="`/music/${latestAlbum.slug}`"
+              :to="recordHref(latestAlbum.slug)"
               class="nav-link inline-block text-sm hover:text-[var(--color-accent)]"
             >
-              tracklist and credits
+              hear it on the record player
             </NuxtLink>
           </div>
         </article>
@@ -145,9 +145,8 @@
 
 <script setup lang="ts">
 import type { Album } from '~~/shared/types'
+import { recordHref } from '~/config/records'
 import { schemaId } from '~/utils/schema'
-
-definePageMeta({ navOver: true })
 
 const siteProfile = useSiteProfile()
 

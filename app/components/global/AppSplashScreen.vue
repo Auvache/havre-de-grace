@@ -29,14 +29,11 @@ const splashSeen = useCookie<string | null>(SESSION_KEY, {
   path: '/',
 })
 
-// Pages someone arrives at to do one thing: the link-in-bio hub, the mailing
-// list's pages (signup, confirm, the 7-inch, the letters), the record player,
-// which has an intro of its own, and the unlisted workbench. The splash is for
-// meeting the band; here it's five seconds between them and what they came for.
-const SPLASH_OFF_ROUTES = /^\/(?:links|thank-you|seven-inch|listen|subscribe|unsubscribe|letters|tools|music-videos|logo)(?:\/|$)/
-
+// The splash is for meeting the band, so it plays on the homepage only. Every
+// other page is somewhere people come to for one thing, and it's five seconds
+// between them and what they came for.
 const route = useRoute()
-const skipsSplash = SPLASH_OFF_ROUTES.test(route.path)
+const skipsSplash = route.path !== '/'
 
 // The same on the server and in the browser, so hydration agrees: the HTML is
 // prerendered once for everybody and can't know who has seen the splash. A

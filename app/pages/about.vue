@@ -11,7 +11,6 @@
     <div class="reading">
       <figure class="fig">
         <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan Auvache Bradley playing an acoustic guitar on stage" width="1400" height="1400" fetchpriority="high">
-        <figcaption>Artichoke Music, August 2026</figcaption>
       </figure>
 
       <p class="lede">“{{ lede }}”</p>
@@ -106,13 +105,6 @@ useSchemaOrg([
   object-fit: cover;
   object-position: 50% 35%;
   filter: grayscale(1);
-}
-
-.fig figcaption {
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--faint);
-  text-align: right;
 }
 
 .video {

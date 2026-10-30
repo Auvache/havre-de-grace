@@ -312,7 +312,8 @@ export function usePlayer() {
       const step = (now: number) => {
         // A frame stamp can be a moment older than `start`; clamp it.
         const k = Math.max(0, Math.min(1, (now - start) / ms))
-        el.volume = Math.min(1, Math.max(0, from * (1 - k)))
+        // Squared, so a long fade sinks away rather than cutting off at the end.
+        el.volume = Math.min(1, Math.max(0, from * (1 - k) ** 2))
         if (k < 1) {
           fadeFrame = requestAnimationFrame(step)
           return

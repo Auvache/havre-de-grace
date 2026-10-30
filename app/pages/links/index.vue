@@ -160,7 +160,7 @@
 
       <footer class="mt-8 space-y-3 text-center text-[0.85rem]">
         <p>
-          <NuxtLink to="/music/i-want-to-be-yours-and-other-songs" class="links-quiet-link">
+          <NuxtLink :to="recordHref('i-want-to-be-yours-and-other-songs')" class="links-quiet-link">
             Previous album: <span class="italic">I Want to Be Yours and Other Songs</span> →
           </NuxtLink>
         </p>
@@ -178,6 +178,7 @@ import instagramIcon from '~~/assets/images/instagram.png'
 import youtubeIcon from '~~/assets/images/youtube.png'
 import type { ServiceKey } from '~/composables/useLinkHub'
 import { letter } from '~~/shared/data/letter'
+import { recordHref } from '~/config/records'
 
 definePageMeta({
   layout: 'links',

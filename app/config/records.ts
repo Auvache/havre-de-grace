@@ -135,6 +135,14 @@ export const RECORD_LOOKS: Record<string, RecordLook> = {
   },
 }
 
+/**
+ * Where a link to a record goes. The album pages are still being worked on, so
+ * for now every link to a record opens the record player with it on the deck
+ * (/listen#<slug>). The album pages stay built, reached only through the record
+ * player's hidden text sleeve, the sitemap and the markdown mirrors.
+ */
+export const recordHref = (slug: string): string => `/listen#${slug}`
+
 /** The record the light pages wear. Change this when a new record comes out. */
 export const CURRENT_RECORD = 'into-the-wild'
 

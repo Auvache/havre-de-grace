@@ -24,7 +24,7 @@
         <i :style="{ transform: `scaleX(${player.progress.value})` }" />
       </button>
 
-      <NuxtLink :to="recordHref" class="player-bar__now">
+      <NuxtLink :to="recordLink" class="player-bar__now">
         <img :src="player.record.value?.thumb" alt="" width="40" height="40">
         <span class="player-bar__titles">
           <b>{{ player.track.value?.title }}</b>
@@ -47,7 +47,7 @@
 
       <div class="player-bar__rt">
         <span class="mono">{{ formatClock(player.currentTime.value) }} / {{ formatClock(player.duration.value) }}</span>
-        <NuxtLink :to="recordHref">open the record</NuxtLink>
+        <NuxtLink :to="recordLink">open the record</NuxtLink>
         <button type="button" class="x" aria-label="Stop and close the player" @click="player.close()">
           <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.3" /></svg>
         </button>
@@ -58,7 +58,8 @@
 
 <script setup lang="ts">
 import { formatClock } from '~/composables/useAlbumPlayer'
-import { STOP_ROUTES, albumSlugOf, handOffOnSameAlbum } from '~/config/player'
+import { STOP_ROUTES, albumSlugOf, handOffOnSameAlbum, stopFadeFor } from '~/config/player'
+import { recordHref } from '~/config/records'
 
 const route = useRoute()
 const player = usePlayer()
@@ -73,12 +74,12 @@ const visible = computed(() =>
   && !pageAlbum.value,
 )
 
-const recordHref = computed(() => `/music/${player.record.value?.slug ?? ''}`)
+const recordLink = computed(() => recordHref(player.record.value?.slug ?? ''))
 
 function applyRouteRules() {
   if (!player.record.value) return
   if (onStopRoute.value) {
-    player.fadeOutAndStop()
+    player.fadeOutAndStop(stopFadeFor(route.path))
     return
   }
   const album = pageAlbum.value

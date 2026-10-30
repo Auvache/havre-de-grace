@@ -2,7 +2,8 @@
   The homepage, Still Water (docs/redesign/mockups/home.html).
 
   The current record's cover is the whole first screen with one play button.
-  Below it: the records, the monthly letter, and Stefan. The record, its picture and its words come from
+  Below it: the monthly letter, Stefan, and the discography. A record links to
+  the record player for now (recordHref in app/config/records.ts). The record, its picture and its words come from
   app/config/records.ts and content/music, so a new record is a config change.
 -->
 
@@ -31,22 +32,10 @@
           <span>{{ heroLabel }}</span>
         </button>
       </div>
-      <NuxtLink v-if="record" :to="`/music/${record.slug}`" class="hero__scroll">The record →</NuxtLink>
+      <NuxtLink v-if="record" :to="recordHref(record.slug)" class="hero__scroll">The record →</NuxtLink>
     </header>
 
     <section class="block">
-      <div class="wrap records">
-        <NuxtLink v-for="album in albums" :key="album.slug" :to="`/music/${album.slug}`" class="records__item">
-          <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" loading="lazy" width="800" height="800">
-          <span class="records__t">
-            <b>{{ album.title }}</b>
-            <span>{{ album.year }}</span>
-          </span>
-        </NuxtLink>
-      </div>
-    </section>
-
-    <section class="block letter-band">
       <div class="wrap letter">
         <p class="eyebrow">Once a month</p>
         <h2 class="letter__h">Something new to listen to</h2>
@@ -59,7 +48,7 @@
       </div>
     </section>
 
-    <section class="block">
+    <section class="block person-band">
       <div class="wrap person">
         <img src="/images/site/live-artichoke-1400.jpg" alt="Stefan playing an acoustic guitar on stage" loading="lazy" width="1400" height="1400">
         <div>
@@ -69,12 +58,25 @@
         </div>
       </div>
     </section>
+
+    <section class="block" aria-labelledby="discography">
+      <h2 id="discography" class="discography">Discography</h2>
+      <div class="wrap records">
+        <NuxtLink v-for="album in albums" :key="album.slug" :to="recordHref(album.slug)" class="records__item">
+          <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" loading="lazy" width="800" height="800">
+          <span class="records__t">
+            <b>{{ album.title }}</b>
+            <span>{{ album.year }}</span>
+          </span>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { bioParagraphs } from '~~/shared/data/bio'
-import { CURRENT_RECORD, currentLook, lookFor } from '~/config/records'
+import { CURRENT_RECORD, currentLook, lookFor, recordHref } from '~/config/records'
 import { schemaId } from '~/utils/schema'
 
 definePageMeta({
@@ -282,8 +284,18 @@ usePageSeo({
   color: var(--deep);
 }
 
-.letter-band {
+.person-band {
   background: var(--mist);
+}
+
+.discography {
+  margin-bottom: 64px;
+  text-align: center;
+  font-weight: 200;
+  font-size: 16px;
+  letter-spacing: 0.7em;
+  text-indent: 0.7em;
+  text-transform: uppercase;
 }
 
 .person {
