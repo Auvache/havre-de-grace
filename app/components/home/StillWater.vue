@@ -2,8 +2,8 @@
   The homepage's body (Still Water, docs/redesign/mockups/home.html);
   pages/index.vue keeps the page's SEO. The record, the letter, About and the
   discography, all on bone, parted by a hairline that opens round a small
-  diamond drawn in the same line (chosen on 2026-10-30 over a mist band, four
-  other treatments and fifteen other marks).
+  diamond (chosen on 2026-10-30 over a mist band, four other treatments and
+  fifteen other marks).
 -->
 
 <template>
@@ -363,16 +363,17 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   background: var(--rule);
 }
 
-/* The diamond is the line itself: the same colour, the same 1px at any size. */
+/* Halfway between a blue mark and the line itself: the sea at half strength,
+   a touch heavier than the 1px hairline. */
 .divider svg {
   width: 16px;
   height: 16px;
   fill: none;
-  stroke: var(--rule);
+  stroke: color-mix(in srgb, var(--sea) 55%, transparent);
 }
 
 .divider path {
-  stroke-width: 1px;
+  stroke-width: 1.2px;
   vector-effect: non-scaling-stroke;
 }
 
