@@ -353,27 +353,29 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 56px;
+  /* The line and its diamond in one ink: the sea at half strength, a touch
+     heavier than the page's other hairlines. */
+  --divider-ink: color-mix(in srgb, var(--sea) 55%, transparent);
+  --divider-weight: 1.2px;
 }
 
 .divider::before,
 .divider::after {
   content: "";
   flex: 1;
-  height: 1px;
-  background: var(--rule);
+  height: var(--divider-weight);
+  background: var(--divider-ink);
 }
 
-/* Halfway between a blue mark and the line itself: the sea at half strength,
-   a touch heavier than the 1px hairline. */
 .divider svg {
   width: 16px;
   height: 16px;
   fill: none;
-  stroke: color-mix(in srgb, var(--sea) 55%, transparent);
+  stroke: var(--divider-ink);
 }
 
 .divider path {
-  stroke-width: 1.2px;
+  stroke-width: var(--divider-weight);
   vector-effect: non-scaling-stroke;
 }
 
