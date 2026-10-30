@@ -117,13 +117,15 @@
 
       <ScrollReveal
         as="section"
-        class-name="border-t-[1.2px] border-[color:var(--line-ink)] pt-12 text-center"
+        class-name="text-center"
         variant="section-up"
         :delay-ms="80"
         :distance-px="44"
         :threshold="0.12"
         root-margin="0px 0px -8% 0px"
       >
+        <RuleBreak class="mb-12" />
+
         <SectionHeading
           title="interviews and requests"
           description="Interview requests, additional photos, or anything not covered here."

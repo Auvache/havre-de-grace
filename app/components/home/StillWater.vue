@@ -2,8 +2,8 @@
   The homepage's body (Still Water, docs/redesign/mockups/home.html);
   pages/index.vue keeps the page's SEO. The record, the letter, About and the
   discography, all on bone, parted by a hairline that opens round a small
-  diamond (chosen on 2026-10-30 over a mist band, four other treatments and
-  fifteen other marks).
+  diamond (RuleBreak; chosen on 2026-10-30 over a mist band, four other
+  treatments and fifteen other marks).
 -->
 
 <template>
@@ -47,9 +47,7 @@
       </div>
     </section>
 
-    <div class="divider" aria-hidden="true">
-      <svg viewBox="0 0 20 20"><path d="M10 1l9 9-9 9-9-9z" /></svg>
-    </div>
+    <RuleBreak class="divider" />
 
     <section class="block">
       <div class="wrap person">
@@ -62,9 +60,7 @@
       </div>
     </section>
 
-    <div class="divider" aria-hidden="true">
-      <svg viewBox="0 0 20 20"><path d="M10 1l9 9-9 9-9-9z" /></svg>
-    </div>
+    <RuleBreak class="divider" />
 
     <section class="block" aria-labelledby="discography">
       <h2 id="discography" class="section-title discography">Discography</h2>
@@ -348,37 +344,12 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
   }
 }
 
-/* The hairline between sections, with the diamond in it. */
+/* The break between sections (RuleBreak), as wide as the content. */
 .divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 56px;
 }
-
-.divider::before,
-.divider::after {
-  content: "";
-  flex: 1;
-  /* A border, like the footer's and every other rule, so they all draw the same. */
-  border-top: var(--line);
-}
-
-.divider svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: var(--line-ink);
-}
-
-.divider path {
-  stroke-width: var(--line-weight);
-  vector-effect: non-scaling-stroke;
-}
-
 
 @media (max-width: 640px) {
   .divider {

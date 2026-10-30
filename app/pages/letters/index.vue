@@ -18,6 +18,8 @@
         <NewsletterSignup centred class="field" />
       </div>
 
+      <RuleBreak class="seven-rule" />
+
       <div class="seven">
         <div class="vinyl" aria-hidden="true">
           <div class="vinyl__label">
@@ -32,6 +34,8 @@
           <p class="seven__p">All I Need on side A, Skin and Bones on the flip. They aren't out anywhere else.</p>
         </div>
       </div>
+
+      <RuleBreak class="seven-rule seven-rule--after" />
 
       <section class="arch" aria-labelledby="letters-archive">
         <h2 id="letters-archive" class="eyebrow">The letters</h2>
@@ -127,15 +131,21 @@ usePageSeo({
   text-align: left;
 }
 
+/* The 7-inch sits between two diamond breaks. */
+.seven-rule {
+  margin-top: 80px;
+}
+
+.seven-rule--after {
+  margin: 0 0 80px;
+}
+
 .seven {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 56px;
   align-items: center;
-  margin: 80px 0;
   padding: 56px 0;
-  border-top: var(--line);
-  border-bottom: var(--line);
 }
 
 .vinyl {

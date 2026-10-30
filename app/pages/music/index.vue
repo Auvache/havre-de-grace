@@ -12,28 +12,31 @@
     <ShorelineBand title="Records" bare />
 
     <div class="reading wide">
-      <article v-for="album in albums" :key="album.slug" class="rec">
-        <NuxtLink :to="recordHref(album.slug)" class="rec__cover" :aria-label="`${album.title}, the record`">
-          <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" width="840" height="840" :loading="album === albums[0] ? 'eager' : 'lazy'">
-        </NuxtLink>
-        <div>
-          <p class="eyebrow">{{ meta(album) }}</p>
-          <h2 class="display-title rec__title">{{ album.title }}</h2>
-          <p class="rec__text"><RichText :text="album.description" /></p>
-          <div class="rec__acts">
-            <button
-              type="button"
-              class="pp"
-              :aria-label="player.isPlaying(album.slug) ? `Pause ${album.title}` : `Play ${album.title}`"
-              @click="player.toggleAlbum(album)"
-            >
-              <svg v-if="player.isPlaying(album.slug)" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h3.4v12H3zm6.6 0H13v12H9.6z" fill="currentColor" /></svg>
-              <svg v-else viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2v12l10-6z" fill="currentColor" /></svg>
-            </button>
-            <NuxtLink :to="recordHref(album.slug)" class="u-link">Enter the record</NuxtLink>
+      <template v-for="(album, index) in albums" :key="album.slug">
+        <RuleBreak v-if="index > 0" />
+        <article class="rec">
+          <NuxtLink :to="recordHref(album.slug)" class="rec__cover" :aria-label="`${album.title}, the record`">
+            <img :src="lookFor(album.slug)?.cover ?? album.coverImage" :alt="album.coverAlt" width="840" height="840" :loading="album === albums[0] ? 'eager' : 'lazy'">
+          </NuxtLink>
+          <div>
+            <p class="eyebrow">{{ meta(album) }}</p>
+            <h2 class="display-title rec__title">{{ album.title }}</h2>
+            <p class="rec__text"><RichText :text="album.description" /></p>
+            <div class="rec__acts">
+              <button
+                type="button"
+                class="pp"
+                :aria-label="player.isPlaying(album.slug) ? `Pause ${album.title}` : `Play ${album.title}`"
+                @click="player.toggleAlbum(album)"
+              >
+                <svg v-if="player.isPlaying(album.slug)" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h3.4v12H3zm6.6 0H13v12H9.6z" fill="currentColor" /></svg>
+                <svg v-else viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2v12l10-6z" fill="currentColor" /></svg>
+              </button>
+              <NuxtLink :to="recordHref(album.slug)" class="u-link">Enter the record</NuxtLink>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      </template>
     </div>
   </div>
 </template>
@@ -80,11 +83,6 @@ usePageSeo({
   gap: 80px;
   align-items: center;
   padding: 60px 0;
-}
-
-/* A rule between records only; the footer brings its own. */
-.rec + .rec {
-  border-top: var(--line);
 }
 
 .rec:first-child {

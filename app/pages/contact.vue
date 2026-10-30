@@ -1,7 +1,7 @@
 <!--
   Contact: every request goes to one address, so the page is that address.
-  Under a rule, the two things worth adding: what a booking email needs, and
-  where the press material already is.
+  Under a diamond break, the two things worth adding: what a booking email
+  needs, and where the press material already is.
 -->
 
 <template>
@@ -11,6 +11,7 @@
     <div class="reading contact">
       <p>For booking, press, licensing, or anything else, email</p>
       <a :href="`mailto:${siteProfile.bookingEmail}`" class="mail">{{ siteProfile.bookingEmail }}</a>
+      <RuleBreak class="rule" />
       <p class="more">
         For a show, include the date, the city, the venue and the kind of night it is.
         Bios and photos are in the <NuxtLink to="/press">press kit</NuxtLink>.
@@ -72,11 +73,15 @@ usePageSeo({
   text-underline-offset: 0.2em;
 }
 
+/* The break sits as far under the address as the note sits under it. */
+.rule {
+  max-width: 460px;
+  margin: 28px auto 0;
+}
+
 .more {
   max-width: 460px;
-  margin: 56px auto 0;
-  padding-top: 28px;
-  border-top: var(--line);
+  margin: 33px auto 0;
   font-size: 15px;
   line-height: 1.7;
   color: var(--soft);

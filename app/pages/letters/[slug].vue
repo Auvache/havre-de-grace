@@ -24,7 +24,11 @@
         </p>
       </header>
 
+      <RuleBreak class="letter-rule" />
+
       <ContentRenderer :value="page" class="letter-body" />
+
+      <RuleBreak class="letter-rule letter-rule--next" />
 
       <section class="letter-next" aria-labelledby="letter-signup-heading">
         <p id="letter-signup-heading" class="eyebrow">The next one</p>
@@ -109,7 +113,11 @@ usePageSeo({
 
 .letter-head {
   padding-bottom: 36px;
-  border-bottom: var(--line);
+}
+
+/* The diamond breaks under the heading and before the signup. */
+.letter-rule--next {
+  margin-top: 72px;
 }
 
 .letter-title {
@@ -123,9 +131,7 @@ usePageSeo({
 }
 
 .letter-next {
-  margin-top: 72px;
-  padding-top: 36px;
-  border-top: var(--line);
+  margin-top: 36px;
 }
 
 .letter-next__p {
