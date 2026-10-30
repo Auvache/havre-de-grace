@@ -11,14 +11,17 @@
  * onsets.py (on a strum a bar or so before the voice, and just before the next strum).
  *
  * THE HAIRLINE STYLE (chosen 27 Oct 2026 from ten mock-ups, minimal to maximal, after the poster
- * style and its variants were tried and dropped)
+ * style and its variants were tried and dropped; made heavier and steady on 30 Oct 2026)
  *
- * One lyric line at a time, centred: small (34 px) thin Inter capitals, widely spaced (0.38 em), white
- * with a soft shadow, no punctuation but apostrophes and hyphens. A line fades in just before its first
- * word with every word dim, each word turns white as it's sung, and the line stays up 1.6 s after its
- * last word, then fades; when the next line comes sooner, a quick handoff just before its first word. Every line
- * is gone before the clip ends (Shorts loop). A long line wraps into two balanced rows. A line that
- * started before `--start` is left out, so a clip never opens mid-line.
+ * One lyric line at a time, centred: Inter Medium capitals (38 px), widely spaced (0.32 em), white with a
+ * soft shadow, no punctuation but apostrophes and hyphens. On 30 Oct the user picked option "D" of four
+ * weights (the 34 px Light was hard to read) and dropped the fill-in: the whole line is white from the start.
+ * A line fades in just before its first word and stays up until 1.6 s after the singing of it stops, then
+ * fades; when the next line comes sooner, a quick handoff just before its first word, but never while the
+ * line is still being sung. Whisper's word ends cut a held note short, so `--vocals` (the take's Demucs vocal
+ * stem, e.g. the work dir's vocals.wav) finds where the voice really falls silent. Every line is gone before
+ * the clip ends (Shorts loop). A long line wraps into balanced rows. A line that started before `--start` is
+ * left out, so a clip never opens mid-line.
  *
  * The caption sits in the frame's x 90–930 (the right edge stays clear for the Shorts buttons) with its
  * top at `--top`: under the chin, on something plain, after looking at the take. `--scrim` swaps the
@@ -59,6 +62,7 @@ const { values: opt } = parseArgs({
   options: {
     video: { type: 'string' },
     timed: { type: 'string' },
+    vocals: { type: 'string' }, // the take's vocal stem, to hold each line until its singing stops
     out: { type: 'string' },
     start: { type: 'string' },
     end: { type: 'string' },
@@ -85,10 +89,9 @@ const W = 1080, H = 1920
 const TOPS = opt.top.split(',').map((k) => (k.includes(':') ? k.split(':').map(Number) : [-Infinity, Number(k)]))
 const LEFT = 90, RIGHT = 150, TOP = TOPS[0][1]
 const topAt = (t) => TOPS.findLast(([at]) => at <= t + Number(opt.start))?.[1] ?? TOP
-const DIM = opt.scrim ? 0.45 : 0.3 // opacity of the words not yet sung
-// TAIL: a line stays up 1.6 s after its last word, so there's time to finish reading it (0.6 was too quick
-// to read, 27 Oct 2026); a line that's followed straight away still hands off to the next
-const LEAD = 0.35, TAIL = 1.6, FADE = 0.3, HANDOFF = 0.12, WORD_IN = 0.14
+// TAIL: a line stays up 1.6 s after its singing stops, so there's time to finish reading it (0.6 was too
+// quick to read, 27 Oct 2026); a line that's followed straight away still hands off to the next
+const LEAD = 0.35, TAIL = 1.6, FADE = 0.3, HANDOFF = 0.12
 
 const start = Math.round(Number(opt.start) * FPS) / FPS
 const end = Math.round(Number(opt.end) * FPS) / FPS
@@ -101,38 +104,67 @@ for (const w of opt.timed ? JSON.parse(readFileSync(opt.timed, 'utf8')) : []) {
   ;(lines[w.line] ??= []).push({ text: w.w.replace(/[^\p{L}\p{N}'’-]/gu, '').toUpperCase(), s: w.s - start, e: w.e - start })
 }
 const shown = lines.filter((l) => l && l[0].s >= -0.05 && l[0].s < dur)
+
+// the vocal stem's level in 20 ms steps (dB, clip time)
+const STEP = 0.02
+let env = null
+if (opt.vocals) {
+  const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', start.toFixed(6), '-t', dur.toFixed(6), '-i', opt.vocals,
+    '-ac', '1', '-ar', '8000', '-f', 'f32le', '-'], { maxBuffer: 1 << 28 })
+  const x = new Float32Array(pcm.buffer, pcm.byteOffset, pcm.length >> 2), n = 8000 * STEP
+  env = Array.from({ length: Math.floor(x.length / n) }, (_, k) => {
+    let s = 0
+    for (let j = k * n; j < (k + 1) * n; j++) s += x[j] * x[j]
+    return 10 * Math.log10(s / n + 1e-12)
+  })
+}
+// where a line's singing stops: from its last word, the first 0.3 s that stays 30 dB under the line's loudest
+// (or under -60 dB), never past the next line's first word; without a stem, the last word's end
+for (const [i, l] of shown.entries()) {
+  const limit = Math.min(shown[i + 1]?.[0].s ?? dur, dur) - 0.05
+  l.sung = Math.min(l.at(-1).e, limit)
+  if (!env) continue
+  const db = (t) => env[Math.floor(t / STEP)] ?? -120
+  let peak = -120
+  for (let t = Math.max(0, l[0].s); t < l.at(-1).e; t += STEP) peak = Math.max(peak, db(t))
+  const thr = Math.max(peak - 30, -60)
+  let quiet = 0, t = Math.max(0, l.at(-1).s)
+  for (; t < limit && quiet < 0.3; t += STEP) quiet = db(t) < thr ? quiet + STEP : 0
+  l.sung = Math.max(l.sung, Math.min(t - quiet, limit))
+}
 for (const [i, l] of shown.entries()) {
   l.in = Math.max(0, l[0].s - LEAD)
-  l.out = Math.min(l.at(-1).e + TAIL, dur - FADE - 0.05) // gone before the clip ends: Shorts loop
+  l.out = Math.min(l.sung + TAIL, dur - FADE - 0.05) // gone before the clip ends: Shorts loop
   l.fi = l.fo = FADE
   const prev = shown[i - 1]
-  // never two lines at once: when lines run back to back, a quick handoff just before the new line's first word
+  // never two lines at once: when lines run back to back, a quick handoff just before the new line's first word,
+  // but not before the old line has been sung out
   if (prev && prev.out + prev.fo > l.in) {
-    const at = Math.max(prev.at(-1).s + 0.2, l[0].s - 0.25)
+    const at = Math.max(prev.sung, prev.at(-1).s + 0.2, l[0].s - 0.25)
     prev.out = Math.min(prev.out, at - HANDOFF)
     prev.fo = HANDOFF
     l.in = at
     l.fi = HANDOFF
   }
 }
-for (const l of shown) console.log(`${l.in.toFixed(2)}-${l.out.toFixed(2)}  ${l.map((w) => w.text).join(' ')}`)
+for (const l of shown) console.log(`${l.in.toFixed(2)}-${l.out.toFixed(2)}  sung to ${l.sung.toFixed(2)} (last word ${l.at(-1).e.toFixed(2)})  ${l.map((w) => w.text).join(' ')}`)
 
 const tmp = mkdtempSync(join(tmpdir(), 'short-'))
 if (shown.length) {
 const browser = await chromium.launch({ channel: 'chrome', args: ['--hide-scrollbars'] })
 const page = await browser.newPage({ viewport: { width: W, height: H } })
 await page.setContent(`<!doctype html><html><head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=block">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=block">
 <style>
   html,body{margin:0;width:${W}px;height:${H}px;background:transparent;overflow:hidden}
   .cap{position:absolute;left:${LEFT}px;right:${RIGHT}px;top:${TOP}px;text-align:center;text-wrap:balance;
-       font:300 34px/1.6 Inter;letter-spacing:.38em;padding-left:.38em;color:#fff;text-shadow:${opt.scrim
+       font:500 38px/1.6 Inter;letter-spacing:.32em;padding-left:.32em;color:#fff;text-shadow:${opt.scrim
          ? '0 0 4px rgba(0,0,0,.8),0 0 12px rgba(0,0,0,.75),0 0 28px rgba(0,0,0,.6)'
          : '0 1px 10px rgba(0,0,0,.6)'}}
 </style></head><body><div class="cap" id="cap"></div></body></html>`)
 const ok = await page.evaluate(async () => {
-  await document.fonts.load('300 34px Inter', 'ABC')
-  return document.fonts.check('300 34px Inter')
+  await document.fonts.load('500 38px Inter', 'ABC')
+  return document.fonts.check('500 38px Inter')
 })
 if (!ok) throw new Error('Inter did not load; refusing to render in a fallback face')
 
@@ -144,19 +176,17 @@ for (let f = 0; f < Math.round(dur * FPS); f++) {
   let key = 'empty', state = null
   if (l) {
     const opacity = Math.min(ease((t - l.in) / l.fi), 1 - ease((t - l.out) / l.fo))
-    const words = l.map((w) => DIM + (1 - DIM) * ease((t - w.s + 0.04) / WORD_IN))
-    state = { html: l !== current ? l.map((w) => `<span class="w">${w.text}</span>`).join(' ') : null, opacity, words, top: topAt(t) }
+    state = { html: l !== current ? l.map((w) => w.text).join(' ') : null, opacity, top: topAt(t) }
     current = l
-    key = `${shown.indexOf(l)}|${state.top}|${opacity.toFixed(3)}|${words.map((x) => x.toFixed(3)).join(',')}`
+    key = `${shown.indexOf(l)}|${state.top}|${opacity.toFixed(3)}`
   }
   const path = join(tmp, `${String(f).padStart(5, '0')}.png`)
   if (key === prevKey) { linkSync(prevPath, path); continue } // most frames repeat the one before
   await page.evaluate((s) => {
     const cap = document.getElementById('cap')
-    if (s && s.html !== null) cap.innerHTML = s.html
+    if (s && s.html !== null) cap.textContent = s.html
     cap.style.opacity = s ? s.opacity : 0
     if (s) cap.style.top = `${s.top}px`
-    if (s) cap.querySelectorAll('.w').forEach((w, i) => (w.style.opacity = s.words[i]))
   }, state)
   await page.screenshot({ path, omitBackground: true })
   prevKey = key, prevPath = path

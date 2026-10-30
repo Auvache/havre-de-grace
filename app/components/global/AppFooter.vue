@@ -2,7 +2,7 @@
   The footer, centred: it opens with the anchor break (RuleBreak), the one
   place the anchor marks a line, so it always means the end of the page. Then
   every streaming and social service as its own icon, and the site's pages in
-  two columns (the music on the left, the person on the right). The nav carries
+  two columns of three (the music on the left, the person on the right). The nav carries
   only records / about / contact, so this is where everything else is found.
   No signup (a page has one at most, and it's the page's own).
 
@@ -32,17 +32,16 @@ withDefaults(defineProps<{
 
 const siteProfile = useSiteProfile()
 
-// The music, then the person. /music-videos is left out: it stays built, but
-// nothing visible links to it for now (2026-10-30).
+// The music, then the person. /music-videos and /influences are left out:
+// they stay built, but nothing visible links to them for now (2026-10-30).
 const FOOTER_COLUMNS = [
   [
     { label: 'records', to: '/music' },
     { label: 'record player', to: '/listen' },
-    { label: 'influences', to: '/influences' },
+    { label: 'letters', to: '/letters' },
   ],
   [
     { label: 'about', to: '/about' },
-    { label: 'letters', to: '/letters' },
     { label: 'press kit', to: '/press' },
     { label: 'contact', to: '/contact' },
   ],
@@ -72,7 +71,7 @@ const FOOTER_COLUMNS = [
 /* Edge to edge, across the footer's own padding. */
 .site-footer__rule {
   align-self: stretch;
-  margin: 0 -24px 32px;
+  margin: 0 -24px 6px;
 }
 
 .site-footer__links {
@@ -113,7 +112,7 @@ const FOOTER_COLUMNS = [
   }
 
   .site-footer__rule {
-    margin: 0 -20px 24px;
+    margin: 0 -20px 0;
   }
 
   .site-footer__links {
