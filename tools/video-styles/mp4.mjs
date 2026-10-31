@@ -52,6 +52,7 @@ const FILMS = {
   cartography: ['cartography.mjs', 'cartographyFrame'],
   'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
   relief: ['relief.mjs', 'reliefFrame'],
+  maze: ['maze.mjs', 'mazeFrame'],
   screenprint: ['screenprint.mjs', 'screenprintFrame'],
   etching: ['etching.mjs', 'etchingFrame'],
   engraving: ['engraving.mjs', 'engravingFrame'],

@@ -4,8 +4,8 @@
 <rect x="0" y="0" width="1600" height="900" fill="#ece4d2"/>
     <rect x="24" y="24" width="1552" height="796" rx="5" fill="none" stroke="#d9cfb9" stroke-width="3"/>
     <rect x="26" y="26" width="1548" height="792" rx="4" fill="none" stroke="#fff8ea" stroke-width="1.5" opacity="0.7"/>
-<g clip-path="url(#otg-maze-0-clip)"><rect x="34" y="34" width="1532" height="776" fill="#ece4d2"/>
-  <path d="" stroke="#1b1915" stroke-width="3" fill="none" stroke-linecap="square"/>
+<g clip-path="url(#otg-maze-0-clip)"><defs></defs><rect x="34" y="34" width="1532" height="776" fill="#ece4d2"/>
+  <g transform="translate(800 422) scale(76)" stroke="#1b1915" stroke-width="0.0395" fill="none" stroke-linecap="square"></g>
   <path d="M-42 422H610.1" stroke="#b5392a" stroke-width="5" fill="none" opacity="1" stroke-linecap="round"/>
   <circle cx="610.1" cy="422" r="23.9" fill="none" stroke="#b5392a" stroke-width="2" opacity="0.4"/>
   <circle cx="610.1" cy="422" r="13.9" fill="#b5392a"/></g>
