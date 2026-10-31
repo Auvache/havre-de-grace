@@ -49,6 +49,11 @@
             <p class="mt-1 text-base italic text-[color:var(--color-accent)]">
               {{ song.core }}
             </p>
+            <p v-if="song.slug === 'conman'" class="mt-2 text-sm">
+              <NuxtLink to="/music-videos/heist" class="underline">
+                The heist: five jobs on a blueprint, three ways →
+              </NuxtLink>
+            </p>
           </div>
         </header>
 

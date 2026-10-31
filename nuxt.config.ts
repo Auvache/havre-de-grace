@@ -420,6 +420,7 @@ export default defineNuxtConfig({
         '/music-videos/album',
         '/music-videos/ideas',
         '/music-videos/off-the-grid',
+        '/music-videos/heist',
         '/music-videos/maze',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
