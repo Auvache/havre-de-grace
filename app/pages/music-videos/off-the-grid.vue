@@ -6,15 +6,15 @@
           Into the Wild · idea A
         </p>
         <h1 class="display-heading">
-          Off the Grid, five ways
+          Off the Grid, and the maze
         </h1>
         <p class="text-base leading-relaxed muted-text">
-          A town plan that frays into a contour map, and a red route that
-          keeps to the streets until it gets out. Below are the idea as first
-          drawn and four ways it could go. Each one has ten frames from the
-          start to the end of the song, at the same ten seconds of the record:
-          intro, verse, chorus, break, verse, chorus, horns, verse, last
-          chorus, outro.
+          First, the maze: the idea rethought as a red dot finding its way
+          out of one maze after another, each one bigger, panicking in the
+          third and getting out once it calms down. Then Off the Grid as
+          first drawn and four ways it could go, ten frames each at the same
+          ten seconds of the record: intro, verse, chorus, break, verse,
+          chorus, horns, verse, last chorus, outro.
         </p>
         <p class="text-sm muted-text">
           <NuxtLink to="/music-videos/ideas#into-the-wild" class="underline">
@@ -83,7 +83,7 @@ import { OFF_THE_GRID_VARIANTS } from '~/config/offTheGridVariants'
 definePageMeta({ layout: 'default' })
 
 useHead({
-  title: 'Off the Grid, five ways',
+  title: 'Off the Grid, and the maze',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 

@@ -1,0 +1,13 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Maze, 0:32"><style>@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap');
+  svg text { font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif; font-variant-ligatures: none; }</style>
+<defs><clipPath id="otg-maze-2-clip"><rect x="34" y="34" width="1532" height="776"/></clipPath></defs>
+<rect x="0" y="0" width="1600" height="900" fill="#ece4d2"/>
+    <rect x="24" y="24" width="1552" height="796" rx="5" fill="none" stroke="#d9cfb9" stroke-width="3"/>
+    <rect x="26" y="26" width="1548" height="792" rx="4" fill="none" stroke="#fff8ea" stroke-width="1.5" opacity="0.7"/>
+<g clip-path="url(#otg-maze-2-clip)"><rect x="34" y="34" width="1532" height="776" fill="#ece4d2"/>
+  <path d="M458 156H1142M458 232H534M686 232H914M990 232H1066M534 308H610M686 308H990M762 384H838M914 384H990M458 460H534M610 460H762M838 460H914M990 460H1066M686 536H990M1066 536H1142M534 612H686M458 688H1142M458 156V688M610 156V536M990 156V232M990 384V612M1142 156V384M1142 460V688M686 232V384M686 536V612M1066 232V384M1066 536V612M914 308V384M914 612V688M534 384V460M534 536V612M762 384V536M762 612V688M838 384V460M838 536V612" stroke="#1b1915" stroke-width="3" fill="none" stroke-linecap="square"/>
+  <path d="M800 422L800 498L876 498L952 498L952 422L876 422L876 346L800 346L724 346L724 422L648 422L648 346L648 270L648 194L697.1 194" stroke="#b5392a" stroke-width="4.5" fill="none" opacity="1" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="697.1" cy="194" r="22.5" fill="none" stroke="#b5392a" stroke-width="2" opacity="0.5"/>
+  <circle cx="697.1" cy="194" r="14.1" fill="#b5392a"/></g>
+<g opacity="1"><text x="800" y="866.9" font-size="33" font-weight="700" fill="#1b1915" text-anchor="middle">OH, THE EARTH OUT OF WATER AND IRON</text></g>
+</svg>

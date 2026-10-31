@@ -26,7 +26,7 @@ const sections = (t) => score.sections.find((s) => t >= s.from && t < s.to)?.lab
 
 const variants = picked.map((v, a) => ({
   ...v,
-  frames: moments.map((time, i) => ({
+  frames: (process.env.MOMENTS ? moments : v.moments ?? moments).map((time, i) => ({
     time,
     section: sections(time),
     line: sungAt(score, time)?.text ?? '',
@@ -62,7 +62,7 @@ export interface OffTheGridVariant { id: string; name: string; summary: string; 
 
 export const OFF_THE_GRID_VARIANTS: OffTheGridVariant[] = ${JSON.stringify(data, null, 2)}
 `)
-  console.log(`site → ${data.length * moments.length} stills in public/video-styles/off-the-grid`)
+  console.log(`site → ${data.reduce((n, v) => n + v.stills.length, 0)} stills in public/video-styles/off-the-grid`)
 } else {
   const out = resolve(root, process.env.OUT ?? '.off-the-grid.html')
   const cells = variants.flatMap((v) => v.frames.map((f) =>

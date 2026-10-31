@@ -11,6 +11,91 @@ export interface OffTheGridVariant { id: string; name: string; summary: string; 
 
 export const OFF_THE_GRID_VARIANTS: OffTheGridVariant[] = [
   {
+    "id": "maze",
+    "name": "The Maze",
+    "summary": "Blank paper, and the red line comes in from the left to the centre, where a maze draws itself around it. It wanders and finds the way out on the first chorus, straight into a bigger maze growing round the first; out again on the second chorus, into a third, very complex one. Through the horns it scrambles, frantic, pulse racing, and gets nowhere: the faint red scribble. At verse 3 it stops and takes a deep breath, then walks the clean way out, solid red through the scribble, reaching the door as the last chorus starts. The camera pulls back: all three were the middle of a maze too big to see the edge of, and he walks on into it, calm. The dot pulses like breathing the whole time: slow when calm, racing in the panic.",
+    "stills": [
+      {
+        "time": 6,
+        "section": "Intro",
+        "line": "",
+        "src": "/video-styles/off-the-grid/maze-1.svg"
+      },
+      {
+        "time": 14,
+        "section": "Intro",
+        "line": "",
+        "src": "/video-styles/off-the-grid/maze-2.svg"
+      },
+      {
+        "time": 32,
+        "section": "Verse 1",
+        "line": "Oh, the Earth out of water and iron",
+        "src": "/video-styles/off-the-grid/maze-3.svg"
+      },
+      {
+        "time": 48.5,
+        "section": "Chorus",
+        "line": "So I'm running into the wild",
+        "src": "/video-styles/off-the-grid/maze-4.svg"
+      },
+      {
+        "time": 58,
+        "section": "Chorus",
+        "line": "Oh, I'm running",
+        "src": "/video-styles/off-the-grid/maze-5.svg"
+      },
+      {
+        "time": 85,
+        "section": "Verse 2",
+        "line": "Oh, I want to take stories with meaning",
+        "src": "/video-styles/off-the-grid/maze-6.svg"
+      },
+      {
+        "time": 106,
+        "section": "Chorus",
+        "line": "Oh, I'm running",
+        "src": "/video-styles/off-the-grid/maze-7.svg"
+      },
+      {
+        "time": 135,
+        "section": "Horns",
+        "line": "",
+        "src": "/video-styles/off-the-grid/maze-8.svg"
+      },
+      {
+        "time": 154,
+        "section": "Verse 3",
+        "line": "Oh, I'm headed out on an adventure",
+        "src": "/video-styles/off-the-grid/maze-9.svg"
+      },
+      {
+        "time": 172,
+        "section": "Verse 3",
+        "line": "The sound of the wind through the sage",
+        "src": "/video-styles/off-the-grid/maze-10.svg"
+      },
+      {
+        "time": 186,
+        "section": "Final chorus",
+        "line": "So I'm running into the wild",
+        "src": "/video-styles/off-the-grid/maze-11.svg"
+      },
+      {
+        "time": 196,
+        "section": "Final chorus",
+        "line": "Oh, I'm running",
+        "src": "/video-styles/off-the-grid/maze-12.svg"
+      },
+      {
+        "time": 204,
+        "section": "Outro",
+        "line": "",
+        "src": "/video-styles/off-the-grid/maze-13.svg"
+      }
+    ]
+  },
+  {
     "id": "original",
     "name": "As drawn",
     "summary": "The idea as it is on the ideas page, for comparison. The camera pans east with the route all song: the town, the grid fraying, then the hills. Verses walk, choruses run, the outro slows to a stop.",

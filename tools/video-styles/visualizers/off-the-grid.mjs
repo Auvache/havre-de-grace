@@ -15,6 +15,7 @@
  */
 import { PLATE, CX, CY, INK, PAPER, RED } from './sheet.mjs'
 import { rng, r, clamp01, lerp, easeInOut } from '../../../shared/video/kit.mjs'
+import { MAZE } from './maze.mjs'
 import { offTheGrid, route, routeUpTo, PEAKS, contourRing, travelled, GRID_END, WORLD, STREET, SLATE } from './into-the-wild.mjs'
 
 const { x: PX, y: PY, w: PW, h: PH } = PLATE
@@ -311,6 +312,7 @@ function whiteline(args) {
 export const MOMENTS = [8, 30, 53, 63, 85, 105, 130, 170, 192, 204]
 
 export const VARIANTS = [
+  MAZE,
   {
     id: 'original',
     name: 'As drawn',
