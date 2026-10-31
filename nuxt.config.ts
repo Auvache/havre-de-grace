@@ -319,8 +319,8 @@ export default defineNuxtConfig({
     '/unsubscribe': {
       robots: 'noindex, follow',
     },
-    // Where Kit sends a signup before it's confirmed (pages/thank-you.vue):
-    // "check your inbox", for someone already signing up. Same reasoning as
+    // Where Kit sends a signup once it's confirmed (pages/thank-you.vue):
+    // "you're in", for someone already on the list. Same reasoning as
     // /unsubscribe.
     '/thank-you': {
       robots: 'noindex, follow',
@@ -339,8 +339,8 @@ export default defineNuxtConfig({
     '/music-videos/**': {
       robots: 'noindex, nofollow',
     },
-    // The mailing list's welcome gift (pages/seven-inch.vue). Reached from Kit's
-    // confirmation redirect and the first welcome email, and nothing else.
+    // The mailing list's welcome gift (pages/seven-inch.vue). Reached from the
+    // first welcome email, and nothing else.
     // Unlisted, so `nofollow` too; its audio is covered by the X-Robots-Tag on
     // /seven-inch/** in public/customHttp.json.
     '/seven-inch': {

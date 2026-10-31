@@ -1,7 +1,7 @@
 <!--
   The list's welcome gift: a 7-inch single on the record player, two demos that
-  aren't out anywhere else. Kit sends people here once they confirm, and the
-  first welcome email links here too.
+  aren't out anywhere else. The first welcome email links here; confirming
+  lands on /thank-you, which points to that email.
 
   Unlisted, not private: nothing links to it, it's noindexed (nuxt.config.ts)
   and so is its audio (public/customHttp.json), but anyone with the URL can

@@ -1,41 +1,37 @@
 <!--
-  Where Kit sends someone straight after they sign up, before they've
-  confirmed: the "Clare form" redirect (Kit's own hosted form, and the site's
-  signup when JavaScript is off and the form posts to Kit directly). With
-  JavaScript the signup says "check your inbox" in place and never comes here.
+  Where Kit sends someone once they've clicked the link in the confirmation
+  email (the "Clare form", after confirming). They're on the list, and the
+  first welcome email, "Your first 7-inch", is already on its way with the
+  link to /seven-inch.
 
-  So the job is the one step left, confirming, and what's waiting after it:
-  Kit's confirmation link lands on /seven-inch.
+  Before confirming, nobody comes here: the site's signup says "check your
+  inbox" in place, and a Kit-hosted or no-JavaScript submit gets Kit's own
+  success message (set 2026-10-31; until then that redirect came here too).
 -->
 
 <template>
   <div>
-    <ShorelineBand title="Almost there" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
+    <ShorelineBand title="You're in" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
 
     <div class="reading">
-      <p class="lede">One more step. Check your inbox for an email from Havre De Grace.</p>
+      <p class="lede">Thank you for confirming. You're on the Havre De Grace mailing list.</p>
 
       <ol class="steps">
         <li>
           <div>
-            Open the email from Havre De Grace
-            <small>No email after a few minutes? Look in spam or promotions, and drag it to your inbox so the next one lands there.</small>
+            Your first 7-inch is on its way
+            <small>Look for an email called "Your first 7-inch": two demos that aren't out anywhere else. Not there in a few minutes? Check spam or promotions, and drag it to your inbox so the next one lands there.</small>
           </div>
         </li>
-        <li><div>Click the link to confirm</div></li>
         <li>
           <div>
-            Your first 7-inch is waiting
-            <small>Two demos that aren't out anywhere else. After that, {{ letter.offerShort.charAt(0).toLowerCase() + letter.offerShort.slice(1) }}</small>
+            After that
+            <small>{{ letter.offerDetail }}</small>
           </div>
         </li>
       </ol>
 
       <WhileYouWait />
-
-      <p v-if="shortsUrl" class="shorts">
-        Or <a :href="shortsUrl" target="_blank" rel="noopener">watch the Shorts</a>.
-      </p>
     </div>
   </div>
 </template>
@@ -45,23 +41,9 @@ import { letter } from '~~/shared/data/letter'
 
 definePageMeta({ navOver: true })
 
-const siteProfile = useSiteProfile()
-const shortsUrl = computed(() => siteProfile.artistLinks.youtube ? `${siteProfile.artistLinks.youtube}/shorts` : '')
-
 usePageSeo({
-  title: `Almost there | Havre De Grace`,
-  description: 'Confirm your email to join the Havre De Grace mailing list.',
+  title: `You're in | Havre De Grace`,
+  description: 'Thank you for joining the Havre De Grace mailing list.',
 })
 </script>
 
-<style scoped>
-.shorts {
-  font-size: 15px;
-  color: var(--soft);
-}
-
-.shorts a {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-</style>
