@@ -419,6 +419,7 @@ export default defineNuxtConfig({
         '/music-videos/into-the-wild-styles',
         '/music-videos/album',
         '/music-videos/ideas',
+        '/music-videos/off-the-grid',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
       ],

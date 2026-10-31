@@ -588,3 +588,6 @@ export const CONCEPTS = [
     frame: road,
   },
 ]
+
+/* For off-the-grid.mjs, the alternatives to idea 1. */
+export { offTheGrid, route, routeUpTo, PEAKS, contourRing, travelled, sectionKind, isChorus, GRID_END, WORLD, STREET, SLATE }

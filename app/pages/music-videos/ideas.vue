@@ -79,6 +79,11 @@
               <p class="text-sm leading-relaxed muted-text">
                 <span class="label-text mr-2 text-[0.55rem] text-[color:var(--color-accent)]">Red</span>{{ idea.red }}
               </p>
+              <p v-if="idea.id === 'off-the-grid'" class="text-sm">
+                <NuxtLink to="/music-videos/off-the-grid" class="underline">
+                  Five ways it could go, ten frames each →
+                </NuxtLink>
+              </p>
             </div>
             <div class="grid gap-3 sm:grid-cols-3 lg:col-span-2">
               <figure v-for="still in idea.stills.slice(1)" :key="still.src" class="min-w-0 space-y-2">
