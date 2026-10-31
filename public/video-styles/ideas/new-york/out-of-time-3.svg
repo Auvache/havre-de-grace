@@ -1,0 +1,68 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Out of Time, 1:50"><style>@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap');
+  svg text { font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif; font-variant-ligatures: none; }</style>
+<defs><clipPath id="new-york-3-2-clip"><rect x="34" y="34" width="1532" height="776"/></clipPath></defs>
+<rect x="0" y="0" width="1600" height="900" fill="#ece4d2"/>
+    <rect x="24" y="24" width="1552" height="796" rx="5" fill="none" stroke="#d9cfb9" stroke-width="3"/>
+    <rect x="26" y="26" width="1548" height="792" rx="4" fill="none" stroke="#fff8ea" stroke-width="1.5" opacity="0.7"/>
+<g clip-path="url(#new-york-3-2-clip)"><defs><pattern id="new-york-3-2-mh" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(90)"><rect width="5" height="1.6" fill="#1b1915"/></pattern></defs>
+  <rect x="34" y="34" width="1532" height="776" fill="#ece4d2"/>
+  <path d="M34 722H1566" stroke="#1b1915" stroke-width="2"/>
+  <path d="M56 700L121 250L187 250L252 700Z" fill="#ece4d2" stroke="#1b1915" stroke-width="3"/>
+  <clipPath id="new-york-3-2-m0"><path d="M56 700L121 250L187 250L252 700Z"/></clipPath>
+  <rect x="172" y="250" width="196" height="450" fill="url(#new-york-3-2-mh)" clip-path="url(#new-york-3-2-m0)"/>
+  <path d="M-2.9 369L-15.6 348.6M33.6 349.6L28.7 338.6M72.4 335.5L65.8 312.4M112.8 326.9L111.1 315M154 324L154 300M195.2 326.9L196.9 315M235.6 335.5L242.2 312.4M274.4 349.6L279.3 338.6M310.9 369L323.6 348.6" stroke="#1b1915" stroke-width="1.6"/>
+  <rect x="42" y="700" width="224" height="22" fill="#1b1915"/>
+  <path d="M154 620L255.2 285" stroke="#1b1915" stroke-width="4" stroke-linecap="round"/>
+  <rect x="201.8" y="400.3" width="30" height="24" fill="#d9a13b" stroke="#1b1915" stroke-width="2" transform="rotate(16.81 216.8 412.3)"/>
+  <circle cx="154" cy="620" r="7" fill="#1b1915"/>
+  <text x="154" y="758" font-size="22" font-weight="600" fill="#1b1915" text-anchor="middle" letter-spacing="1">♩ = 98.5</text><path d="M271.33333333333337 700L336.33333333333337 250L402.33333333333337 250L467.33333333333337 700Z" fill="#ece4d2" stroke="#1b1915" stroke-width="3"/>
+  <clipPath id="new-york-3-2-m1"><path d="M271.33333333333337 700L336.33333333333337 250L402.33333333333337 250L467.33333333333337 700Z"/></clipPath>
+  <rect x="387.33333333333337" y="250" width="196" height="450" fill="url(#new-york-3-2-mh)" clip-path="url(#new-york-3-2-m1)"/>
+  <path d="M212.5 369L199.8 348.6M248.9 349.6L244.1 338.6M287.7 335.5L281.1 312.4M328.1 326.9L326.5 315M369.3 324L369.3 300M410.5 326.9L412.2 315M450.9 335.5L457.5 312.4M489.7 349.6L494.6 338.6M526.2 369L538.9 348.6" stroke="#1b1915" stroke-width="1.6"/>
+  <rect x="257.33333333333337" y="700" width="224" height="22" fill="#1b1915"/>
+  <path d="M369.3 620L470.6 285" stroke="#1b1915" stroke-width="4" stroke-linecap="round"/>
+  <rect x="417.1" y="400.3" width="30" height="24" fill="#d9a13b" stroke="#1b1915" stroke-width="2" transform="rotate(16.81 432.1 412.3)"/>
+  <circle cx="369.33333333333337" cy="620" r="7" fill="#1b1915"/>
+  <text x="369.3" y="758" font-size="22" font-weight="600" fill="#1b1915" text-anchor="middle" letter-spacing="1">♩ = 98.5</text><path d="M486.66666666666674 700L551.6666666666667 250L617.6666666666667 250L682.6666666666667 700Z" fill="#ece4d2" stroke="#1b1915" stroke-width="3"/>
+  <clipPath id="new-york-3-2-m2"><path d="M486.66666666666674 700L551.6666666666667 250L617.6666666666667 250L682.6666666666667 700Z"/></clipPath>
+  <rect x="602.6666666666667" y="250" width="196" height="450" fill="url(#new-york-3-2-mh)" clip-path="url(#new-york-3-2-m2)"/>
+  <path d="M427.8 369L415.1 348.6M464.3 349.6L459.4 338.6M503.1 335.5L496.5 312.4M543.5 326.9L541.8 315M584.7 324L584.7 300M625.9 326.9L627.5 315M666.3 335.5L672.9 312.4M705.1 349.6L709.9 338.6M741.5 369L754.2 348.6" stroke="#1b1915" stroke-width="1.6"/>
+  <rect x="472.66666666666674" y="700" width="224" height="22" fill="#1b1915"/>
+  <path d="M584.7 620L685.9 285" stroke="#1b1915" stroke-width="4" stroke-linecap="round"/>
+  <rect x="632.4" y="400.3" width="30" height="24" fill="#d9a13b" stroke="#1b1915" stroke-width="2" transform="rotate(16.81 647.4 412.3)"/>
+  <circle cx="584.6666666666667" cy="620" r="7" fill="#1b1915"/>
+  <text x="584.7" y="758" font-size="22" font-weight="600" fill="#1b1915" text-anchor="middle" letter-spacing="1">♩ = 98.5</text><path d="M702 700L767 250L833 250L898 700Z" fill="#ece4d2" stroke="#1b1915" stroke-width="3"/>
+  <clipPath id="new-york-3-2-m3"><path d="M702 700L767 250L833 250L898 700Z"/></clipPath>
+  <rect x="818" y="250" width="196" height="450" fill="url(#new-york-3-2-mh)" clip-path="url(#new-york-3-2-m3)"/>
+  <path d="M643.1 369L630.4 348.6M679.6 349.6L674.7 338.6M718.4 335.5L711.8 312.4M758.8 326.9L757.1 315M800 324L800 300M841.2 326.9L842.9 315M881.6 335.5L888.2 312.4M920.4 349.6L925.3 338.6M956.9 369L969.6 348.6" stroke="#1b1915" stroke-width="1.6"/>
+  <rect x="688" y="700" width="224" height="22" fill="#1b1915"/>
+  <path d="M800 620L670.1 295" stroke="#b5392a" stroke-width="6" stroke-linecap="round"/>
+  <rect x="704.4" y="406.5" width="30" height="24" fill="#b5392a" stroke="#1b1915" stroke-width="2" transform="rotate(-21.79 719.4 418.5)"/>
+  <circle cx="800" cy="620" r="7" fill="#1b1915"/>
+  <text x="800" y="758" font-size="22" font-weight="600" fill="#b5392a" text-anchor="middle" letter-spacing="1">♩ = 98.5</text><path d="M917.3333333333334 700L982.3333333333334 250L1048.3333333333335 250L1113.3333333333335 700Z" fill="#ece4d2" stroke="#1b1915" stroke-width="3"/>
+  <clipPath id="new-york-3-2-m4"><path d="M917.3333333333334 700L982.3333333333334 250L1048.3333333333335 250L1113.3333333333335 700Z"/></clipPath>
+  <rect x="1033.3333333333335" y="250" width="196" height="450" fill="url(#new-york-3-2-mh)" clip-path="url(#new-york-3-2-m4)"/>
+  <path d="M858.5 369L845.8 348.6M894.9 349.6L890.1 338.6M933.7 335.5L927.1 312.4M974.1 326.9L972.5 315M1015.3 324L1015.3 300M1056.5 326.9L1058.2 315M1096.9 335.5L1103.5 312.4M1135.7 349.6L1140.6 338.6M1172.2 369L1184.9 348.6" stroke="#1b1915" stroke-width="1.6"/>
+  <rect x="903.3333333333334" y="700" width="224" height="22" fill="#1b1915"/>
+  <path d="M1015.3 620L1116.6 285" stroke="#1b1915" stroke-width="4" stroke-linecap="round"/>
+  <rect x="1063.1" y="400.3" width="30" height="24" fill="#d9a13b" stroke="#1b1915" stroke-width="2" transform="rotate(16.81 1078.1 412.3)"/>
+  <circle cx="1015.3333333333334" cy="620" r="7" fill="#1b1915"/>
+  <text x="1015.3" y="758" font-size="22" font-weight="600" fill="#1b1915" text-anchor="middle" letter-spacing="1">♩ = 98.5</text><path d="M1132.6666666666667 700L1197.6666666666667 250L1263.6666666666667 250L1328.6666666666667 700Z" fill="#ece4d2" stroke="#1b1915" stroke-width="3"/>
+  <clipPath id="new-york-3-2-m5"><path d="M1132.6666666666667 700L1197.6666666666667 250L1263.6666666666667 250L1328.6666666666667 700Z"/></clipPath>
+  <rect x="1248.6666666666667" y="250" width="196" height="450" fill="url(#new-york-3-2-mh)" clip-path="url(#new-york-3-2-m5)"/>
+  <path d="M1073.8 369L1061.1 348.6M1110.3 349.6L1105.4 338.6M1149.1 335.5L1142.5 312.4M1189.5 326.9L1187.8 315M1230.7 324L1230.7 300M1271.9 326.9L1273.5 315M1312.3 335.5L1318.9 312.4M1351.1 349.6L1355.9 338.6M1387.5 369L1400.2 348.6" stroke="#1b1915" stroke-width="1.6"/>
+  <rect x="1118.6666666666667" y="700" width="224" height="22" fill="#1b1915"/>
+  <path d="M1230.7 620L1331.9 285" stroke="#1b1915" stroke-width="4" stroke-linecap="round"/>
+  <rect x="1278.4" y="400.3" width="30" height="24" fill="#d9a13b" stroke="#1b1915" stroke-width="2" transform="rotate(16.81 1293.4 412.3)"/>
+  <circle cx="1230.6666666666667" cy="620" r="7" fill="#1b1915"/>
+  <text x="1230.7" y="758" font-size="22" font-weight="600" fill="#1b1915" text-anchor="middle" letter-spacing="1">♩ = 98.5</text><path d="M1348 700L1413 250L1479 250L1544 700Z" fill="#ece4d2" stroke="#1b1915" stroke-width="3"/>
+  <clipPath id="new-york-3-2-m6"><path d="M1348 700L1413 250L1479 250L1544 700Z"/></clipPath>
+  <rect x="1464" y="250" width="196" height="450" fill="url(#new-york-3-2-mh)" clip-path="url(#new-york-3-2-m6)"/>
+  <path d="M1289.1 369L1276.4 348.6M1325.6 349.6L1320.7 338.6M1364.4 335.5L1357.8 312.4M1404.8 326.9L1403.1 315M1446 324L1446 300M1487.2 326.9L1488.9 315M1527.6 335.5L1534.2 312.4M1566.4 349.6L1571.3 338.6M1602.9 369L1615.6 348.6" stroke="#1b1915" stroke-width="1.6"/>
+  <rect x="1334" y="700" width="224" height="22" fill="#1b1915"/>
+  <path d="M1446 620L1547.2 285" stroke="#1b1915" stroke-width="4" stroke-linecap="round"/>
+  <rect x="1493.8" y="400.3" width="30" height="24" fill="#d9a13b" stroke="#1b1915" stroke-width="2" transform="rotate(16.81 1508.8 412.3)"/>
+  <circle cx="1446" cy="620" r="7" fill="#1b1915"/>
+  <text x="1446" y="758" font-size="22" font-weight="600" fill="#1b1915" text-anchor="middle" letter-spacing="1">♩ = 98.5</text></g>
+<g opacity="1"><text x="800" y="866.9" font-size="33" font-weight="700" fill="#1b1915" text-anchor="middle">NO, NO, NO, NO</text></g>
+</svg>

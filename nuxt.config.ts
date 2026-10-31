@@ -418,6 +418,7 @@ export default defineNuxtConfig({
         '/music-videos/rocks-in-the-sea',
         '/music-videos/into-the-wild-styles',
         '/music-videos/album',
+        '/music-videos/ideas',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
       ],

@@ -1,0 +1,9 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Red Carpet, 4:30"><style>@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap');
+  svg text { font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif; font-variant-ligatures: none; }</style>
+<defs><clipPath id="goodbye-norma-jeane-2-3-clip"><rect x="34" y="34" width="1532" height="776"/></clipPath></defs>
+<rect x="0" y="0" width="1600" height="900" fill="#ece4d2"/>
+    <rect x="24" y="24" width="1552" height="796" rx="5" fill="none" stroke="#d9cfb9" stroke-width="3"/>
+    <rect x="26" y="26" width="1548" height="792" rx="4" fill="none" stroke="#fff8ea" stroke-width="1.5" opacity="0.7"/>
+<g clip-path="url(#goodbye-norma-jeane-2-3-clip)"><rect x="34" y="34" width="1532" height="776" fill="#1b1915"/><path d="M-122.9 1114.3L1722.9 1114.3L942.3 425.6L657.7 425.6Z" fill="#b5392a"/><path d="M82.2 933.3L1517.8 933.3M420 635.3L1180 635.3M541.6 528L1058.4 528M604.2 472.7L995.8 472.7M642.4 439L957.6 439" stroke="#1b1915" stroke-width="1.2" opacity="0.45"/><path d="M-255.6 933.3L-255.6 532.2M404.2 537.5L404.2 387.1M556.4 446.2L556.4 353.6M1855.6 933.3L1855.6 532.2M1195.8 537.5L1195.8 387.1M1043.6 446.2L1043.6 353.6" stroke="#ece4d2" stroke-width="3" fill="none"/><path d="M-255.6 532.2Q224.2 534.9 404.2 387.1M404.2 387.1Q498.4 423 556.4 353.6M1855.6 532.2Q1375.8 534.9 1195.8 387.1M1195.8 387.1Q1101.6 423 1043.6 353.6" stroke="#e59aae" stroke-width="5" fill="none"/></g>
+
+</svg>

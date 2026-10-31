@@ -1,0 +1,17 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Off the Grid, 0:24"><style>@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap');
+  svg text { font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif; font-variant-ligatures: none; }</style>
+<defs><clipPath id="into-the-wild-0-0-clip"><rect x="34" y="34" width="1532" height="776"/></clipPath></defs>
+<rect x="0" y="0" width="1600" height="900" fill="#ece4d2"/>
+    <rect x="24" y="24" width="1552" height="796" rx="5" fill="none" stroke="#d9cfb9" stroke-width="3"/>
+    <rect x="26" y="26" width="1548" height="792" rx="4" fill="none" stroke="#fff8ea" stroke-width="1.5" opacity="0.7"/>
+<g clip-path="url(#into-the-wild-0-0-clip)"><defs><pattern id="into-the-wild-0-0-h" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1b1915" stroke-width="1.6"/></pattern></defs>
+  <rect x="34" y="34" width="1532" height="776" fill="#ece4d2"/>
+  <g fill="url(#into-the-wild-0-0-h)" stroke="#1b1915" stroke-width="1.5" opacity="0.8"><rect x="50" y="70" width="98" height="98"/><rect x="50" y="460" width="98" height="98"/><rect x="310" y="70" width="98" height="98"/><rect x="310" y="200" width="98" height="98"/><rect x="310" y="330" width="98" height="98"/><rect x="310" y="460" width="98" height="98"/><rect x="440" y="330" width="98" height="98"/><rect x="570" y="200" width="98" height="98"/><rect x="570" y="460" width="98" height="98"/><rect x="700" y="70" width="98" height="98"/><rect x="830" y="70" width="98" height="98"/><rect x="830" y="330" width="98" height="98"/><rect x="830" y="590" width="98" height="98"/><rect x="960" y="590" width="98" height="98"/><rect x="1350" y="330" width="98" height="98"/><rect x="1350" y="590" width="98" height="98"/><rect x="1480" y="330" width="98" height="98"/><rect x="1480" y="590" width="98" height="98"/></g>
+  <path d="M34 34V810M164 34V810M294 34V810M424 34V810M554 34V810M684 34V810M814 34V810M944 34V810M1074 34V810M1204 34V810M1334 34V810M1464 34V788.9M34 54H1566M34 184H1566M34 314H1566M34 444H1566M34 574H1566M34 704H1566" stroke="#1b1915" stroke-width="2" fill="none"/>
+  <path d="" stroke="#586a70" stroke-width="1.6" fill="none"/>
+  <path d="" stroke="#586a70" stroke-width="3" fill="none"/>
+  <path d="M294 592.7L424 592.7L661.7 592.7" stroke="#b5392a" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="661.7" cy="592.7" r="11" fill="#b5392a"/>
+  <circle cx="661.7" cy="592.7" r="20" fill="none" stroke="#b5392a" stroke-width="2" opacity="0.6"/></g>
+<g opacity="1"><text x="800" y="866.9" font-size="33" font-weight="700" fill="#1b1915" text-anchor="middle">TO SEE IF I CAN'T LOSE MY WAY</text></g>
+</svg>

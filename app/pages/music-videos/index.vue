@@ -46,6 +46,10 @@
         </h2>
         <ul class="space-y-2 text-sm leading-relaxed muted-text">
           <li>
+            <NuxtLink to="/music-videos/ideas" class="underline">/music-videos/ideas</NuxtLink>
+            — the new direction: five visualizer ideas for each song.
+          </li>
+          <li>
             <NuxtLink to="/music-videos/styles" class="underline">/music-videos/styles</NuxtLink>
             — the twelve-style suite the album direction was chosen from.
           </li>
