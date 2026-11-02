@@ -13,13 +13,20 @@
  * leads back where he has been, he does not take; a door he can see he goes
  * straight to; when every way he can see is spent he stops, stumped, and
  * walks back to the nearest place that still had a way he hadn't tried. He
- * slows into corners, stops dead at the end of a dead end, hesitates at a
- * fork. At each door he stops in the doorway while the next maze is drawn
- * round him, then goes on.
+ * slows into corners, stops where he sees he can go no further (never at
+ * the end wall), hesitates at a fork. At each door he stops in the doorway
+ * while the next maze is drawn round him, then goes on.
+ *
+ * The rules he keeps (as asked, 2026-11-02): he is cautious, confident,
+ * overconfident or in a tantrum; he covers as much ground as he can; he
+ * stops as soon as he sees he can't go on; he takes wrong ways often but
+ * not constantly, never one twice (in the tantrum, never one a third time);
+ * and he never turns round or gets frustrated but at a dead end.
  *
  * How fast he goes, how long he hesitates and how long he stays stumped is
  * his confidence (`confidence`, `gait`), and it follows the song (2026-11-02,
- * as asked): gained through the first maze, kept to the break, lost slowly to
+ * as asked): gained through the first maze (a stop at each of its first
+ * turns, shorter each time: FIRST_TURNS), kept to the break, lost slowly to
  * nothing by the end of verse 2; then the meltdown (he stops and pulses hard
  * after the last "running", and races every way through the horns, old ground
  * and dead ends included, blind to the door); then in the lull before verse 3
@@ -347,16 +354,18 @@ function ringDepth(k, x, y) {
  *           and grows sure of himself as he walks the clear way out.
  */
 const SET_OFF = 20.31 // "To see if I can't lose my way", once the first maze is drawn round him
+const FIRST_ARRIVAL = 35.74916225942066 // in the second maze's doorway, as he always has been
 const MELTDOWN = 110.8 // the horns come in
 const SPRINT = 116.24 // the loudest hit in the horns
 const FOCUS = 144 // he starts to come round
 const STOP = 148.19 // the harmonic
 const SET_OUT = 152.52 // "headed"
-const PANIC_SEED = 449
-const DEAD_END_LEAD = 9 // how long before the horns he turns for the dead end
+const PANIC_SEED = 60 // chosen (2026-11-02) for a sprint that covers the most ground
+const AFTER_SEED = 10 // the walk out after the breath, chosen so he reaches the last box at 3:04
+const DEAD_END_LEAD = 20 // how long before the horns he starts looking for the dead end
 
 const confidence = (time) => {
-  if (time < 32) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (32 - SET_OFF))))
+  if (time < FIRST_ARRIVAL) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (FIRST_ARRIVAL - SET_OFF))))
   if (time < 58.4) return 1
   if (time < 99.85) return 1 - ((time - 58.4) / (99.85 - 58.4)) ** 1.5 // slowly at first
   if (time < SET_OUT) return 0
@@ -372,6 +381,7 @@ export const moodAt = (time) => {
   if (s === 'focus') return 'coming round'
   if (s !== 'walk') return s
   const c = confidence(time)
+  if (time < FIRST_ARRIVAL) return c < 0.4 ? 'cautious' : c < 0.85 ? 'gaining confidence' : 'sure'
   return time >= SET_OUT && c < 0.85 ? 'careful' : c > 0.85 ? 'sure' : c < 0.2 ? 'unsure' : time < 58.4 ? 'gaining confidence' : 'losing confidence'
 }
 const PANIC_GAIT = { px: 720, hesitate: 0, stumped: 0, momentum: 0.35, wander: 1, pulse: 2.6 }
@@ -386,12 +396,25 @@ const gait = (time) => {
   if (s === 'meltdown') return { px: 0, pulse: lerp(1.2, 3.2, easeInOut(ramp(time, MELTDOWN, MELTDOWN + 2.5))) }
   // The breath slows from the sprint's to the slowest of the film.
   if (s === 'breathe') return { px: 0, pulse: lerp(1.4, 0.22, easeInOut(ramp(time, STOP, STOP + 3))) }
-  const c = s === 'enter' ? 1 : confidence(time)
-  const pulse = s === 'enter' ? 0.24 : lerp(0.36, 0.27, c)
+  return walkGait(s === 'enter' ? 1 : confidence(time), time)
+}
+const walkGait = (c, time) => {
+  const pulse = time < SET_OFF ? 0.24 : lerp(0.36, 0.27, c)
   // Out of the breath, it quickens only gradually.
   const settle = time >= SET_OUT ? easeInOut(ramp(time, SET_OUT, SET_OUT + 3)) : 1
   return { px: lerp(150, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: lerp(0.22, pulse, settle) }
 }
+
+/*
+ * The first maze (as asked, 2026-11-02): he has only just realised he is in a
+ * maze. He stops at every turn, long at first and less each time, and walks
+ * a little faster after each, so he is sure of himself by its door. His
+ * confidence there is counted in turns, not seconds; the walk is then fitted
+ * to arrive in the second maze's doorway exactly when it always has
+ * (FIRST_ARRIVAL), so nothing from the second maze on moves.
+ */
+const FIRST_TURNS = [1.3, 0.9, 0.6, 0.35]
+const firstConfidence = (turns) => easeInOut(clamp01(turns / FIRST_TURNS.length)) * 0.9 + 0.05
 
 /** Screen px per cell that fits maze k on the plate. */
 const fitScale = (k) => Math.min(PW / (SIZES[k][0] + 1.4), PH / (SIZES[k][1] + 1.4))
@@ -437,7 +460,8 @@ const WALK = (() => {
   let doorway = false // just stepped through a door: stop and wait for the maze
   let lastBreath = [-1, -1]
   const g = rng(1729)
-  const gp = rng(PANIC_SEED) // the sprint and after, so they can be tuned without moving what comes before
+  const gp = rng(PANIC_SEED) // the sprint, so it can be tuned without moving what comes before
+  const ga = rng(AFTER_SEED) // and the walk out after the breath
   const trodden = new Map() // cells he has run through in the sprint, and how often
 
   /* Looking down the corridor from `from` towards `next`. */
@@ -517,38 +541,91 @@ const WALK = (() => {
     return doorCache.get(kk)
   }
 
-  /* The way from `from` to `goal` within maze k. */
-  const pathTo = (from, goal) => {
-    const prev = new Map([[key(...from), null]])
-    const queue = [from]
-    while (queue.length) {
-      const c = queue.shift()
-      if (same(c, goal)) break
-      for (const n of neighbours(k, c)) if (!prev.has(key(...n))) { prev.set(key(...n), c); queue.push(n) }
-    }
-    const path = []
-    for (let c = goal; c; c = prev.get(key(...c))) path.unshift(c)
-    return path
-  }
-  /* The dead end he can reach latest before the horns at this pace, well away from the door. */
+  /*
+   * The dead end he can reach latest before the horns at this pace, well away
+   * from the door, as a route: on the way he is already going (the rest of a
+   * walk back, or on from here, never turning round), then only into ground
+   * he has never been down. It ends where he first sees the end wall (the
+   * start of the dead end's last straight, as `look` would see it), not at
+   * the wall: he stops there, and the meltdown comes.
+   */
   const pickDeadEnd = (vc) => {
     const door = M.doors[k]
-    const left = MELTDOWN - t - 0.6
-    const dist = new Map([[key(...here), 0]])
-    const queue = [here]
+    const left = (MELTDOWN - t) * 0.9
+    const lead = route.length ? [here, ...route] : [here]
+    const from = lead.at(-1)
+    const before = lead.length > 1 ? lead.at(-2) : [here[0] - came[0], here[1] - came[1]]
+    const prev = new Map([[key(...from), null]])
+    const dist = new Map([[key(...from), lead.length - 1]])
+    const queue = [from]
     let best = null
     while (queue.length) {
       const c = queue.shift()
       const d = dist.get(key(...c))
       const exits = neighbours(k, c)
       const far = !door || Math.abs(c[0] - door.inside[0]) + Math.abs(c[1] - door.inside[1]) >= 16
-      const time = (d * 1.4) / vc
-      if (d >= 3 && exits.length === 1 && far && time <= left && (!best || d > best.d)) best = { c, d }
-      for (const n of exits) if (!dist.has(key(...n))) { dist.set(key(...n), d + 1); queue.push(n) }
+      if (exits.length === 1 && far && d >= 3) {
+        // Back along the corridor to where its last straight begins.
+        const path = []
+        for (let p = c; p; p = prev.get(key(...p))) path.unshift(p)
+        let s = path.length - 1
+        const d0 = dirOf(path[s - 1], path[s])
+        while (s > 1 && same(dirOf(path[s - 2], path[s - 1]), d0) && neighbours(k, path[s - 1]).length === 2) s--
+        const stopAt = path[s - 1]
+        const steps = d - (path.length - s)
+        // Where he stops, every way on is spent: the dead end, and any other
+        // he has walked or can see is one too. He is stuck. And he gets there
+        // just before the horns: the latest he can, at no less than 70% of
+        // his pace (`pace`).
+        const came0 = path[s - 2] ?? before
+        const stuck = neighbours(k, stopAt).every((n) => same(n, came0) || same(n, path[s]) ||
+          visited.has(key(...n)) || dead.has(key(...n)) || look(stopAt, n).blind)
+        const est = (steps * 1.4) / vc
+        if (stuck && steps >= 1 && est <= left && (!best || steps > best.steps))
+          best = { steps, route: [...lead.slice(1), ...path.slice(1, s)], seen: path.slice(s), stopAt, pace: Math.max(0.7, est / left), est }
+      }
+      for (const n of exits) {
+        const kn = key(...n)
+        if (dist.has(kn) || same(n, before) || visited.has(kn) || dead.has(kn)) continue
+        dist.set(kn, d + 1)
+        prev.set(kn, c)
+        queue.push(n)
+      }
     }
-    return best?.c ?? null
+    return best
   }
   let deadEnd = null
+
+  /*
+   * Blind alleys: every dead end of maze k and the corridor that leads to it,
+   * back to the fork it leaves. `blindAlley(c)` names the one a cell is in (its
+   * dead end), `entering` is a step into one from outside it, and `runsDown`
+   * counts the sprint's runs down each.
+   */
+  const alleys = new Map()
+  const alleyMap = (kk) => {
+    if (alleys.has(kk)) return alleys.get(kk)
+    const out = new Map()
+    const ends = new Set([...M.doors.map((d) => key(...d.inside)), ...M.doors.map((d) => key(...d.outside)), key(0, 0)])
+    const [w, h] = SIZES[kk] ?? [0, 0]
+    for (let x = -(w - 1) / 2; x <= (w - 1) / 2; x++) for (let y = -(h - 1) / 2; y <= (h - 1) / 2; y++) {
+      if (mazeOf(x, y) !== kk || ends.has(key(x, y)) || neighbours(kk, [x, y]).length !== 1) continue
+      let from = null
+      let at = [x, y]
+      for (;;) {
+        out.set(key(...at), key(x, y))
+        const on = neighbours(kk, at).filter((n) => !same(n, from))
+        if (on.length !== 1 || neighbours(kk, on[0]).length !== 2) break
+        from = at
+        at = on[0]
+      }
+    }
+    alleys.set(kk, out)
+    return out
+  }
+  const blindAlley = (c) => alleyMap(k).get(key(...c))
+  const entering = (a, b) => blindAlley(b) !== undefined && blindAlley(a) !== blindAlley(b)
+  const runsDown = new Map()
 
   /* Where he goes next from `here`, and how long he stops first. */
   const decide = (state, P) => {
@@ -578,30 +655,35 @@ const WALK = (() => {
       }
       const ahead = [here[0] + came[0], here[1] + came[1]]
       const forward = opts.length > 1 ? opts.filter((o) => !same(o, back)) : opts
+      // Never down one dead end a third time (as asked, 2026-11-02).
+      const spent = (o) => entering(here, o) && (runsDown.get(blindAlley(o)) ?? 0) >= 2
       const weight = (o) => {
         const n = trodden.get(key(...o)) ?? 0
         const toDoor = nearDoorAhead(o)
-        return (1 / (1 + n) ** 2.5) * (toDoor ? 0.02 : 1) * (same(o, ahead) ? 1 + P.momentum : 1)
+        return (1 / (1 + n) ** 2.5) * (toDoor ? 0.02 : 1) * (same(o, ahead) ? 1 + P.momentum : 1) * (spent(o) ? 0 : 1)
       }
-      const ws = forward.map(weight)
+      let ws = forward.map(weight)
+      if (!ws.some((w) => w > 0)) ws = forward.map(() => 1)
       let pickAt = gp() * ws.reduce((t, w) => t + w, 0)
       let pick = forward.at(-1)
       for (let i = 0; i < forward.length; i++) { pickAt -= ws[i]; if (pickAt <= 0) { pick = forward[i]; break } }
       route = []
       return { next: pick, pause: 0 }
     }
-    if (route.length) return { next: route.shift(), pause: 0 }
+    if (route.length) return { next: route.shift(), pause: 0, sure: true }
     const views = opts.filter((o) => !same(o, back)).map((o) => ({ o, ...look(here, o) }))
     const seen = views.find((v) => v.sawDoor)
     if (seen) {
       route = seen.cells.slice(1, seen.cells.findIndex((c) => same(c, door.inside)) + 1)
-      return { next: seen.o, pause: 0 } // he's seen it: no stopping now
+      return { next: seen.o, pause: 0, sure: true } // he's seen it: no stopping now
     }
     for (const v of views) if (v.blind) for (const c of v.cells) dead.add(key(...c))
-    const fresh = views.filter((v) => !v.blind && !visited.has(key(...v.o)))
+    // After the breath he remembers the wrong ways he found walking before
+    // the horns (put in `dead` at the breath), and never takes one again.
+    const fresh = views.filter((v) => !v.blind && !visited.has(key(...v.o)) && !(t >= SET_OUT && dead.has(key(...v.o))))
     if (fresh.length) {
       const score = (v) => ringDepth(k, ...v.cells.at(-1)) +
-        (same(dirOf(here, v.o), came) ? P.momentum : 0) + (t >= MELTDOWN ? gp() : g()) * P.wander
+        (same(dirOf(here, v.o), came) ? P.momentum : 0) + (t >= MELTDOWN ? ga() : g()) * P.wander
       fresh.sort((p, q) => score(q) - score(p))
       return { next: fresh[0].o, pause: fresh.length > 1 ? P.hesitate : 0 }
     }
@@ -622,6 +704,8 @@ const WALK = (() => {
   }
 
   let guard = 0
+  let firstTurns = 0 // turns he has stopped at in the first maze
+  let calm = null // what he knew of the maze when the horns came
   let rest = true // standing still: the next step starts from nothing
   while (t < END && guard++ < 40000) {
     const state = stateAt(t)
@@ -643,14 +727,41 @@ const WALK = (() => {
       push(t, Math.max(t, until), here, here, 0, 0)
       t = Math.max(t, until)
       rest = true
-      // After the breath: fresh eyes. He walks it as he did before the meltdown,
-      // wrong turns and all, and finds his own way out.
-      if (state === 'breathe') { visited = new Set([key(...here)]); dead = new Set(); route = [] }
+      // When the horns come: what he knows of this maze, walking calmly.
+      if (state === 'meltdown') calm = { visited: new Set(visited), dead: new Set(dead) }
+      // After the breath: fresh eyes. He walks it as he did before the
+      // meltdown, wrong turns and all, and finds his own way out. The sprint is
+      // a blur (a way he only ran down then he may take once more), but every
+      // wrong way he found before it he remembers: all he had walked or seen
+      // that is not on the way from here to the door.
+      if (state === 'breathe') {
+        const onWay = new Set(M.doors[k] ? solve(here, M.doors[k].inside).map((c) => key(...c)) : [])
+        visited = new Set([key(...here)])
+        dead = new Set([...(calm?.visited ?? []), ...(calm?.dead ?? [])].filter((c) => !onWay.has(c)))
+        route = []
+      }
       continue
     }
     if (doorway) {
       // In the next maze's doorway: stop, and wait while it is drawn round him.
       stop()
+      // Out of the first maze: his walking (not his stops) sped up or slowed
+      // so he arrives when he always has.
+      if (!arrivals.length) {
+        const first = segs.filter((s) => s.t0 >= SET_OFF)
+        const still = (s) => same(s.a, s.b)
+        const stops = first.filter(still).reduce((n, s) => n + s.t1 - s.t0, 0)
+        const f = (FIRST_ARRIVAL - SET_OFF - stops) / (t - SET_OFF - stops)
+        let at = SET_OFF
+        for (const s of first) {
+          const d = (s.t1 - s.t0) * (still(s) ? 1 : f)
+          s.t0 = at
+          s.t1 = at += d
+          s.va /= f
+          s.vb /= f
+        }
+        t = FIRST_ARRIVAL
+      }
       arrivals.push(t)
       // In the last box's doorway: one deep breath as it is finished, and on at 3:09.
       const last = k === A - 1
@@ -662,30 +773,43 @@ const WALK = (() => {
       rest = true
       continue
     }
-    const P = gait(t)
-    const vc = P.px / fitScale(k)
+    const first = k === 0 && state === 'walk'
+    const P = first ? walkGait(firstConfidence(firstTurns), t) : gait(t)
+    let vc = P.px / fitScale(k)
     // Before the horns he takes one more wrong turn, into a dead end well away
-    // from the door, timed to get there first: stuck there, the meltdown
-    // comes, and the sprint starts by turning round and backtracking out.
+    // from the door he has never been down, timed to get there just first. He
+    // stops where he sees the end wall, stuck: the meltdown comes, and the sprint
+    // starts by turning round and backtracking out.
+    // Looked for at every step from DEAD_END_LEAD out, until there is one he
+    // would not reach more than a little early.
     if (state === 'walk' && t >= MELTDOWN - DEAD_END_LEAD && t < MELTDOWN && !deadEnd) {
-      deadEnd = pickDeadEnd(vc) ?? here
-      route = deadEnd === here ? [] : pathTo(here, deadEnd).slice(1)
+      const found = pickDeadEnd(vc)
+      if (found && found.est >= 0.5 * (MELTDOWN - t) * 0.9) deadEnd = found
+      if (deadEnd) {
+        route = [...deadEnd.route]
+        for (const c of deadEnd.seen) dead.add(key(...c))
+      }
     }
-    if (deadEnd && same(here, deadEnd) && t < MELTDOWN) {
+    if (deadEnd && t < MELTDOWN) vc *= deadEnd.pace
+    if (deadEnd && same(here, deadEnd.stopAt) && !route.length && t < MELTDOWN) {
       stop()
       push(t, MELTDOWN, here, here, 0, 0)
       t = MELTDOWN
       rest = true
+      // Facing the dead end: the way on is back.
+      if (deadEnd.seen.length) came = dirOf(deadEnd.seen[0], here)
       continue
     }
     const decided = decide(state, P)
     const { next } = decided
-    // A hesitation too short to read as a stop is a slowing down instead.
-    const glance = decided.pause > 0 && decided.pause < 0.2
-    const pause = glance ? 0 : decided.pause
     const dir = dirOf(here, next)
     const straight = dir[0] === came[0] && dir[1] === came[1]
     const reverse = dir[0] === -came[0] && dir[1] === -came[1]
+    // The first maze: a stop at every turn he chooses, shorter each time.
+    const turnStop = first && !straight && !reverse && !decided.sure ? FIRST_TURNS[firstTurns++] ?? 0 : 0
+    // A hesitation too short to read as a stop is a slowing down instead.
+    const glance = decided.pause > 0 && decided.pause < 0.2 && !turnStop
+    const pause = glance ? 0 : Math.max(decided.pause, turnStop)
     // How fast he passes through `here`: full on, slowed for a corner or a glance, or stopped.
     const vHere = rest || pause > 0 || reverse ? 0 : glance ? vc * 0.4 : straight ? vc : vc * 0.55
     rest = false
@@ -705,7 +829,10 @@ const WALK = (() => {
       route = []
       doorway = true
     }
-    if (state === 'panic' || state === 'focus') trodden.set(key(...next), (trodden.get(key(...next)) ?? 0) + 1)
+    if (state === 'panic' || state === 'focus') {
+      trodden.set(key(...next), (trodden.get(key(...next)) ?? 0) + 1)
+      if (entering(here, next)) runsDown.set(blindAlley(next), (runsDown.get(blindAlley(next)) ?? 0) + 1)
+    }
     pending = { t, a: here, va: vHere, vc }
     came = dir
     here = next
