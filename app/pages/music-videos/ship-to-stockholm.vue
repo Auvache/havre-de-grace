@@ -167,15 +167,15 @@
             — the album's art direction: the sheet, inks and motion all ten songs share.
           </li>
           <li>
-            <NuxtLink to="/music-videos/into-the-wild" class="underline">/music-videos/into-the-wild</NuxtLink>
+            <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>
             — track one, the woodcut.
           </li>
           <li>
-            <NuxtLink to="/music-videos/conman" class="underline">/music-videos/conman</NuxtLink>
+            <NuxtLink to="/music-videos/conman-print" class="underline">/music-videos/conman-print</NuxtLink>
             — track two, the torn gallery.
           </li>
           <li>
-            <NuxtLink to="/music-videos/goodbye-norma-jeane" class="underline">/music-videos/goodbye-norma-jeane</NuxtLink>
+            <NuxtLink to="/music-videos/goodbye-norma-jeane-print" class="underline">/music-videos/goodbye-norma-jeane-print</NuxtLink>
             — track three, the screenprint.
           </li>
           <li>

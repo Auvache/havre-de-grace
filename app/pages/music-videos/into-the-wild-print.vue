@@ -164,11 +164,11 @@
             — the five styles this was chosen from, over the same fifteen seconds.
           </li>
           <li>
-            <NuxtLink to="/music-videos/conman" class="underline">/music-videos/conman</NuxtLink>
+            <NuxtLink to="/music-videos/conman-print" class="underline">/music-videos/conman-print</NuxtLink>
             — track two, the torn gallery.
           </li>
           <li>
-            <NuxtLink to="/music-videos/goodbye-norma-jeane" class="underline">/music-videos/goodbye-norma-jeane</NuxtLink>
+            <NuxtLink to="/music-videos/goodbye-norma-jeane-print" class="underline">/music-videos/goodbye-norma-jeane-print</NuxtLink>
             — track three, the screenprint.
           </li>
           <li>
@@ -191,7 +191,7 @@
 
 <script setup lang="ts">
 /*
- * /music-videos/into-the-wild — the whole song, as the album's woodcut
+ * /music-videos/into-the-wild-print — the whole song, as the album's woodcut
  * (shared/video/films/relief.mjs, app/config/albumStyle.ts).
  *
  * Unlisted and noindexed like everything under /music-videos: it restates a

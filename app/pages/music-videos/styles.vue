@@ -28,7 +28,7 @@
           across the whole album — is at
           <NuxtLink to="/music-videos/album" class="underline">/music-videos/album</NuxtLink>,
           and its first song as a whole film at
-          <NuxtLink to="/music-videos/into-the-wild" class="underline">/music-videos/into-the-wild</NuxtLink>.
+          <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>.
         </p>
         <p class="text-base leading-relaxed muted-text">
           Nothing here is animated. Each sheet is one still, deliberately loaded

@@ -68,6 +68,7 @@ const FILMS = {
   woodcut: ['woodcut.mjs', 'woodcutFrame'],
   relief: ['relief.mjs', 'reliefFrame'],
   maze: ['maze.mjs', 'mazeFrame'],
+  marquee: ['marquee.mjs', 'marqueeFrame'],
   screenprint: ['screenprint.mjs', 'screenprintFrame'],
   etching: ['etching.mjs', 'etchingFrame'],
   engraving: ['engraving.mjs', 'engravingFrame'],

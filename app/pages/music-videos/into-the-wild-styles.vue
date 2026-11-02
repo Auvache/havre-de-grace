@@ -88,7 +88,7 @@
             — the style suite, and the written spec each of these is built from.
           </li>
           <li>
-            <NuxtLink to="/music-videos/into-the-wild" class="underline">/music-videos/into-the-wild</NuxtLink>
+            <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>
             — the whole song, as the album's woodcut.
           </li>
           <li>
@@ -108,7 +108,7 @@
 <script setup lang="ts">
 /*
  * /music-videos/into-the-wild-styles — five styles over the same fifteen seconds.
- * The chosen one, Relief, runs as the whole film at /music-videos/into-the-wild.
+ * The chosen one, Relief, runs as the whole film at /music-videos/into-the-wild-print.
  *
  * Unlisted and noindexed like the rest of /music-videos: it restates a
  * published lyric and exists to be shared by link for a decision.

@@ -147,7 +147,7 @@
             — the twelve-style suite this was chosen from.
           </li>
           <li>
-            <NuxtLink to="/music-videos/into-the-wild" class="underline">/music-videos/into-the-wild</NuxtLink>
+            <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>
             — the title track as a whole film, in this woodcut.
           </li>
           <li>

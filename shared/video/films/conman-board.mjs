@@ -711,7 +711,7 @@ export const BOARD_H = SH * 4
 const SEAM = 7
 /*
  * `span` is how many plates a section is, across and down (2026-09-28, the
- * panning tests on /music-videos/conman): a section of span [√5, √5] holds
+ * panning tests on /music-videos/conman-print): a section of span [√5, √5] holds
  * five times the sheets at the same size, so the camera sees as many at a
  * time and has room to pan inside it. The board the film runs is 1 × 1.
  */

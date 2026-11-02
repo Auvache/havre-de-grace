@@ -1439,7 +1439,7 @@ export function makeWallFrame({ swap = {} } = {}) {
   }
 }
 
-/** The film, as it stands: the lineup on /music-videos/conman. */
+/** The film, as it stands: the lineup on /music-videos/conman-print. */
 export const wallFrame = makeWallFrame()
 
 /** Where each slot's own ten seconds are, for the style guide. */

@@ -17,7 +17,7 @@
           chorus, horns, verse, last chorus, outro.
         </p>
         <p class="text-sm muted-text">
-          <NuxtLink to="/music-videos/maze" class="underline">
+          <NuxtLink to="/music-videos/into-the-wild" class="underline">
             The maze, moving: the motion test →
           </NuxtLink>
         </p>

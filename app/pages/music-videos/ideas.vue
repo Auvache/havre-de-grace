@@ -49,9 +49,9 @@
             <p class="mt-1 text-base italic text-[color:var(--color-accent)]">
               {{ song.core }}
             </p>
-            <p v-if="song.slug === 'conman'" class="mt-2 text-sm">
-              <NuxtLink to="/music-videos/heist" class="underline">
-                The heist: five jobs on a blueprint, three ways →
+            <p v-if="IN_WORK[song.slug]" class="mt-2 text-sm">
+              <NuxtLink :to="`/music-videos/${song.slug}`" class="underline">
+                {{ IN_WORK[song.slug] }} →
               </NuxtLink>
             </p>
           </div>
@@ -130,6 +130,14 @@ useHead({
   title: 'Visualizer ideas',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
+
+/* Songs whose visualizer has gone past these first ideas, on their own page. */
+const IN_WORK: Record<string, string> = {
+  'into-the-wild': 'The maze: the motion test',
+  'conman': 'The heist: five jobs on a blueprint, three ways',
+  'goodbye-norma-jeane': 'The marquee: the motion test',
+  'meet-me-at-the-horizon': 'Lying awake: constellations, nightmares, monkey brain',
+}
 
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 </script>

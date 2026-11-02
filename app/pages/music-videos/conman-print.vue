@@ -276,11 +276,11 @@
             — the album's art direction: the sheet, inks and motion all ten songs share.
           </li>
           <li>
-            <NuxtLink to="/music-videos/into-the-wild" class="underline">/music-videos/into-the-wild</NuxtLink>
+            <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>
             — track one, the woodcut.
           </li>
           <li>
-            <NuxtLink to="/music-videos/goodbye-norma-jeane" class="underline">/music-videos/goodbye-norma-jeane</NuxtLink>
+            <NuxtLink to="/music-videos/goodbye-norma-jeane-print" class="underline">/music-videos/goodbye-norma-jeane-print</NuxtLink>
             — track three, the screenprint.
           </li>
           <li>
@@ -303,7 +303,7 @@
 
 <script setup lang="ts">
 /*
- * /music-videos/conman — the whole song, as two boards: theirs torn down, mine
+ * /music-videos/conman-print — the whole song, as two boards: theirs torn down, mine
  * pasted up out of the scraps (shared/video/films/conman-board-film.mjs, on the
  * board in conman-board.mjs and the tear in shared/video/torn.mjs;
  * app/config/albumStyle.ts). The plan was decided on the stills in
@@ -312,7 +312,7 @@
  *
  * Unlisted and noindexed like everything under /music-videos: it restates a
  * published song's lyric in full and exists to be shared by link for a
- * decision. Shaped like /music-videos/goodbye-norma-jeane: the page owns the
+ * decision. Shaped like /music-videos/goodbye-norma-jeane-print: the page owns the
  * projector and the furniture, MusicVideoSvgFilm runs the film, and
  * app/config/conmanScore.ts is the cut.
  */

@@ -4,7 +4,7 @@
  * `currentTime` is where the sound is, but it is not reported smoothly. Firefox
  * and Safari step it every quarter second or so. Chrome reports a new value
  * every frame, but quantised to its audio callbacks, about 10 ms: measured on
- * /music-videos/conman, one frame's step was 15 ms and the next 26 ms against a
+ * /music-videos/conman-print, one frame's step was 15 ms and the next 26 ms against a
  * steady 16.7. Read raw, or re-anchored on every report, a slow pan judders by
  * that much — invisible in a cut, obvious on a camera drifting forty units a
  * second.

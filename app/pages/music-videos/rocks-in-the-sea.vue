@@ -170,7 +170,7 @@
             — the album's art direction: the sheet, inks and motion all ten songs share.
           </li>
           <li>
-            <NuxtLink to="/music-videos/into-the-wild" class="underline">/music-videos/into-the-wild</NuxtLink>
+            <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>
             — track one, the woodcut.
           </li>
           <li>

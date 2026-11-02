@@ -93,13 +93,19 @@
         The stills this came from, and the Off the Grid versions before it, are on
         <NuxtLink to="/music-videos/off-the-grid" class="underline">/music-videos/off-the-grid</NuxtLink>.
       </p>
+
+      <p class="text-sm leading-relaxed muted-text">
+        <NuxtLink to="/music-videos/ideas#into-the-wild" class="underline">← All the ideas</NuxtLink>
+        · The earlier printmaking film is at
+        <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>.
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 /*
- * /music-videos/maze — the motion test for Into the Wild's maze
+ * /music-videos/into-the-wild — the maze, the motion test for Into the Wild's maze
  * (shared/video/films/maze.mjs), the whole song with a projector, opening on
  * the horns. Unlisted and noindexed like everything under /music-videos.
  */

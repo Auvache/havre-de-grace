@@ -186,7 +186,7 @@
 
 <script setup lang="ts">
 /*
- * /music-videos/meet-me-at-the-horizon — the whole song, as the album's
+ * /music-videos/meet-me-at-the-horizon-print — the whole song, as the album's
  * mezzotint (shared/video/films/mezzotint.mjs, app/config/albumStyle.ts).
  *
  * Unlisted and noindexed like everything under /music-videos: it restates a

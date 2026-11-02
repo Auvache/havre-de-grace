@@ -2,7 +2,7 @@
  * Conman — the board, as a film. Track two of Into the Wild, whole song.
  *
  * The plan, taken with the person watching on 2026-09-28 from the stills on
- * /music-videos/conman (conman-board-stills.mjs):
+ * /music-videos/conman-print (conman-board-stills.mjs):
  *
  *   Intro      The hard porthole opening ('stamp', opening() in album.mjs):
  *              CONMAN on black, the band's mark stamped down on it, and the
@@ -93,7 +93,7 @@ function camera(shots, tt, whip = null) {
  * 2026-09-28: each section five times the sheets at the same size, the camera
  * arriving on its middle and panning slowly across it while the line is sung,
  * and the moves between sections fast enough to disorient. Five readings of
- * that, side by side on /music-videos/conman (0:23–0:45: A, B, C, D).
+ * that, side by side on /music-videos/conman-print (0:23–0:45: A, B, C, D).
  *
  * A pan shot sits at the section's middle until `go`, then travels `D`
  * (world units) along a curve bowed `bend` of its length to one side, its

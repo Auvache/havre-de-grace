@@ -3,7 +3,7 @@
  * anything moves: the break tearing the old board down to black, my board
  * pasted up out of its scraps, my board torn in turn, and the ending.
  *
- * Shown on /music-videos/conman and written to a sheet by
+ * Shown on /music-videos/conman-print and written to a sheet by
  * tools/video-styles/conman-board-mock.mjs. The tears and the paste-up are
  * placed by hash here; the film's plan will place them on the words.
  *

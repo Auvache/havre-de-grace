@@ -1,7 +1,7 @@
 /*
  * The stills of Conman's board (shared/video/films/conman-board-stills.mjs) on
  * one static sheet, for rasterising and reading without a dev server — the
- * same stills /music-videos/conman shows.
+ * same stills /music-videos/conman-print shows.
  *
  *   node tools/video-styles/conman-board-mock.mjs            # writes .conman-board.html
  *   PICK=0,3,4 node tools/video-styles/conman-board-mock.mjs # just those stills
