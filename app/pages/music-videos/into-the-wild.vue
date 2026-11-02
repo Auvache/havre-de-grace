@@ -9,16 +9,25 @@
           Into the Wild — the maze
         </h1>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          A red dot finding its way out of one maze after another, each one
-          grown round the last. It panics in the third through the horns, then
-          stops, breathes and takes the clean way out as the last chorus
-          starts, and the camera pulls back to show it was all the middle of
-          a maze too big to see the edge of.
+          The mark drawn on, the title drawn on, then blank paper. A red dot
+          comes in from the left and the first maze is drawn round it. It walks
+          the way somebody walks a maze: it looks down each corridor, won't take
+          one it can see is a dead end or leads back where it has been, goes
+          straight for a door it can see, and stops when it is stumped. Out in a
+          few seconds, into a bigger maze drawn round the first, and the next,
+          and the next. Its line fades out behind it.
         </p>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          This is a motion test, so judge the movement, not the finish: the
-          dot's breathing pulse, the scramble in the horns, the stop at verse 3,
-          and whether the zooms read as one move or a slideshow.
+          Its mood sets its pace: sure of itself through verse 1, plowing on
+          too fast into the chorus (it charges into dead ends it didn't stop to
+          look down), then unsure in the break, when the fifth maze is too big
+          to charge through. Panic comes later, in the horns.
+        </p>
+        <p class="max-w-3xl text-base leading-relaxed muted-text">
+          This test is the first minute, on a loop. Judge the movement: whether
+          it walks like a person, whether the moods read, and the pace of the
+          mazes. The rest of the song plays if you untick the loop, but it
+          hasn't been looked at yet.
         </p>
       </header>
 
@@ -61,6 +70,14 @@
           @update:muted="player.muted.value = $event"
           @fullscreen="toggleFullscreen"
         />
+
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+          <label class="flex cursor-pointer items-center gap-2">
+            <input v-model="loop" type="checkbox">
+            Loop the test, {{ clock(TEST.from) }}–{{ clock(TEST.to) }}
+          </label>
+          <span class="muted-text">Now: {{ clock(player.time.value) }} · {{ currentSection.label }} · {{ moodAt(player.time.value) }}</span>
+        </div>
       </section>
 
       <section class="space-y-4">
@@ -68,9 +85,9 @@
           Jump to
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
-          Tap a moment to start the film there. The one to watch first is the
-          panic into the calm. When something is off, the most useful note is a
-          time and what you saw: "at 2:31 the stop feels too sudden".
+          Tap a moment to start the film there. When something is off, the most
+          useful note is a time and what you saw: "at 0:41 it charges past a
+          way out it should have seen".
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
           <li v-for="beat in BEATS" :key="beat.at">
@@ -111,7 +128,7 @@
  */
 import { INTO_THE_WILD_SCORE, sectionAt } from '~/config/intoTheWildScore'
 import { useMusicVideoPlayer } from '~/composables/useMusicVideoPlayer'
-import { mazeFrame } from '~~/shared/video/films/maze.mjs'
+import { mazeFrame, moodAt } from '~~/shared/video/films/maze.mjs'
 
 definePageMeta({ layout: 'default' })
 
@@ -124,22 +141,30 @@ const score = INTO_THE_WILD_SCORE
 const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
-/* At rest, before anyone presses play: the scramble in the third maze. */
-const POSTER_AT = 135
+/* At rest, before anyone presses play: the second maze, sure of himself. */
+const POSTER_AT = 26
+
+/* The test: the first minute, on a loop until unticked. */
+const TEST = { from: 0, to: 60 }
+const loop = ref(true)
+watch(() => player.time.value, (t) => {
+  if (loop.value && player.playing.value && t >= TEST.to) player.seek(TEST.from)
+})
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
 )
 const currentSection = computed(() => sectionAt(player.time.value))
 
 const BEATS = [
-  { at: 108, label: 'Panic → calm', note: 'The third maze, through the horns: the scramble and the racing pulse, the stop at verse 3, the deep breaths, and the clean way out. About 80 seconds.', key: true },
-  { at: 0, label: 'The way in', note: 'Blank paper, the line from the left, the first maze drawn round it.' },
-  { at: 44, label: 'First way out', note: 'Out on "running", and the second maze grows round the first while the camera pulls back.' },
-  { at: 96, label: 'Into the third', note: 'Out of the second on the chorus, into the big one.' },
-  { at: 178, label: 'The pull back', note: 'The door on the last chorus, and the zoom out to the maze with no edge.' },
+  { at: 0, label: 'Opening', note: 'The mark drawn on, then the title, then the black lifts off the paper.' },
+  { at: 12, label: 'The way in', note: 'In from the left, and the first maze drawn round him, stroke by stroke.', key: true },
+  { at: 15.6, label: 'Sure', note: 'Sets off on the first word. Out of the first maze by 0:22, the second by 0:32, the third by 0:43.' },
+  { at: 40.5, label: 'Plowing on', note: 'Overconfident into the chorus: fastest yet, no stopping to look, so the odd dead end.', key: true },
+  { at: 54, label: 'Unsure', note: 'Into the fifth maze, and at the break he slows right down and hesitates at every fork.' },
 ]
 
 const jump = (at: number) => {
+  if (at >= TEST.to) loop.value = false
   player.seek(at)
   if (!player.playing.value) player.toggle()
 }
