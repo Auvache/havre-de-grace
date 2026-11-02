@@ -102,6 +102,10 @@ const inBox = (k, x, y) => {
  * cells are a pixel and a half, small, but still a maze.
  */
 const ANCHOR_K = 31 / 15
+/** The anchor's maze is drawn in blocks this many cells across. */
+const ANCHOR_BLOCK = 2
+/** The boxes' walls far out, to match the anchor's tone (measured: 0.55 left them 15 levels lighter). */
+const BOX_TONE = 0.75
 const ANCHOR_AT = [100, 79.5] // the stock's middle, where the shank crosses it: the mazes' centre
 const toUnits = (x, y) => [ANCHOR_AT[0] + x / ANCHOR_K, ANCHOR_AT[1] + y / ANCHOR_K]
 const ANCHOR_MID = ((3 + 222) / 2 - ANCHOR_AT[1]) * ANCHOR_K
@@ -218,22 +222,73 @@ function build() {
     doors.push({ inside, outside, side })
     entry = outside
   }
-  // The anchor: a backtracker over its cells, from every part not yet reached
-  // (a thin joint can leave a piece on its own; it is still a maze).
+  // The anchor: a backtracker over blocks of ANCHOR_BLOCK × ANCHOR_BLOCK cells,
+  // each block open inside and joined to the next across its whole shared
+  // edge, so its passages are twice the width of the boxes'. Cells a pixel
+  // and a half wide beat against the screen's pixels into a checkerboard; at
+  // three they read as a maze. A block cut by the anchor's edge or by the last
+  // box is just smaller, so nothing has to line up.
   const g = rng(1066)
-  const seen = new Set()
-  for (const start of ANCHOR_CELLS) {
-    if (seen.has(start)) continue
-    seen.add(start)
-    const stack = [start.split(',').map(Number)]
+  const groups = new Map()
+  for (const c of ANCHOR_CELLS) {
+    const [x, y] = c.split(',').map(Number)
+    const gk = key(Math.floor(x / ANCHOR_BLOCK), Math.floor(y / ANCHOR_BLOCK))
+    if (!groups.has(gk)) groups.set(gk, [])
+    groups.get(gk).push([x, y])
+  }
+  const blockOf = new Map()
+  const blocks = []
+  for (const cells of groups.values()) {
+    // A group the edge splits in two is two blocks.
+    const left = new Set(cells.map((c) => key(...c)))
+    while (left.size) {
+      const first = [...left][0]
+      const part = []
+      const stack = [first]
+      left.delete(first)
+      while (stack.length) {
+        const c = stack.pop()
+        part.push(c)
+        const [x, y] = c.split(',').map(Number)
+        for (const [dx, dy] of Object.values(DIRS)) {
+          const n = key(x + dx, y + dy)
+          if (left.has(n)) { left.delete(n); stack.push(n); link([x, y], [x + dx, y + dy]) }
+        }
+      }
+      for (const c of part) blockOf.set(c, blocks.length)
+      blocks.push(part)
+    }
+  }
+  // Which fine edges join each pair of neighbouring blocks.
+  const borders = new Map()
+  for (const c of ANCHOR_CELLS) {
+    const [x, y] = c.split(',').map(Number)
+    for (const [dx, dy] of [[1, 0], [0, 1]]) {
+      const n = key(x + dx, y + dy)
+      if (!ANCHOR_CELLS.has(n)) continue
+      const p = blockOf.get(c)
+      const q = blockOf.get(n)
+      if (p === q) continue
+      const bk = p < q ? `${p}|${q}` : `${q}|${p}`
+      if (!borders.has(bk)) borders.set(bk, [])
+      borders.get(bk).push([[x, y], [x + dx, y + dy]])
+    }
+  }
+  const nextTo = blocks.map(() => [])
+  for (const bk of borders.keys()) { const [p, q] = bk.split('|').map(Number); nextTo[p].push(q); nextTo[q].push(p) }
+  const reached = new Set()
+  for (let start = 0; start < blocks.length; start++) {
+    if (reached.has(start)) continue
+    reached.add(start)
+    const stack = [start]
     while (stack.length) {
-      const [x, y] = stack.at(-1)
-      const next = Object.values(DIRS).map(([dx, dy]) => [x + dx, y + dy]).filter(([a, b]) => ANCHOR_CELLS.has(key(a, b)) && !seen.has(key(a, b)))
+      const b = stack.at(-1)
+      const next = nextTo[b].filter((q) => !reached.has(q))
       if (!next.length) { stack.pop(); continue }
-      const n = next[Math.floor(g() * next.length)]
-      link([x, y], n)
-      seen.add(key(...n))
-      stack.push(n)
+      const q = next[Math.floor(g() * next.length)]
+      for (const [c, d] of borders.get(b < q ? `${b}|${q}` : `${q}|${b}`)) link(c, d)
+      reached.add(q)
+      stack.push(q)
     }
   }
   // The last box is the stock's thickness, so it cuts the anchor into four
@@ -297,7 +352,8 @@ const SPRINT = 116.24 // the loudest hit in the horns
 const FOCUS = 144 // he starts to come round
 const STOP = 148.19 // the harmonic
 const SET_OUT = 152.52 // "headed"
-const PANIC_SEED = 23
+const PANIC_SEED = 449
+const DEAD_END_LEAD = 9 // how long before the horns he turns for the dead end
 
 const confidence = (time) => {
   if (time < 32) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (32 - SET_OFF))))
@@ -351,8 +407,9 @@ const ENTER = { from: 11.5, to: 13.3, startX: (PX - CX) / fitScale(0) - 1.5 }
 const drawTime = (k) => Math.min(3.4, 1.9 + 0.3 * k)
 /** The camera's pull back to the new maze, from his arrival in the doorway. */
 const PULL = 1.3
-/** The deep breath in the last box's doorway, once it is drawn round him. */
-const LAST_BREATH = 3
+/** In the last box's doorway: a deep breath as it is finished round him, and on at 3:09. */
+const LAST_BREATH = 2.6
+const LAST_GO = 189
 
 /*
  * The whole walk, simulated once: `segs`, each a stretch of time from a to b
@@ -460,6 +517,39 @@ const WALK = (() => {
     return doorCache.get(kk)
   }
 
+  /* The way from `from` to `goal` within maze k. */
+  const pathTo = (from, goal) => {
+    const prev = new Map([[key(...from), null]])
+    const queue = [from]
+    while (queue.length) {
+      const c = queue.shift()
+      if (same(c, goal)) break
+      for (const n of neighbours(k, c)) if (!prev.has(key(...n))) { prev.set(key(...n), c); queue.push(n) }
+    }
+    const path = []
+    for (let c = goal; c; c = prev.get(key(...c))) path.unshift(c)
+    return path
+  }
+  /* The dead end he can reach latest before the horns at this pace, well away from the door. */
+  const pickDeadEnd = (vc) => {
+    const door = M.doors[k]
+    const left = MELTDOWN - t - 0.6
+    const dist = new Map([[key(...here), 0]])
+    const queue = [here]
+    let best = null
+    while (queue.length) {
+      const c = queue.shift()
+      const d = dist.get(key(...c))
+      const exits = neighbours(k, c)
+      const far = !door || Math.abs(c[0] - door.inside[0]) + Math.abs(c[1] - door.inside[1]) >= 16
+      const time = (d * 1.4) / vc
+      if (d >= 3 && exits.length === 1 && far && time <= left && (!best || d > best.d)) best = { c, d }
+      for (const n of exits) if (!dist.has(key(...n))) { dist.set(key(...n), d + 1); queue.push(n) }
+    }
+    return best?.c ?? null
+  }
+  let deadEnd = null
+
   /* Where he goes next from `here`, and how long he stops first. */
   const decide = (state, P) => {
     const door = M.doors[k]
@@ -562,10 +652,10 @@ const WALK = (() => {
       // In the next maze's doorway: stop, and wait while it is drawn round him.
       stop()
       arrivals.push(t)
-      // In the last box's doorway, once it is drawn: one deep breath before he goes on.
-      const breath = k === A - 1 ? LAST_BREATH : 0
-      const until = t + PULL * 0.2 + drawTime(k) + 0.25 + breath
-      if (breath) lastBreath = [until - breath, until]
+      // In the last box's doorway: one deep breath as it is finished, and on at 3:09.
+      const last = k === A - 1
+      const until = last ? Math.max(LAST_GO, t + PULL * 0.2 + drawTime(k) + 0.25) : t + PULL * 0.2 + drawTime(k) + 0.25
+      if (last) lastBreath = [until - LAST_BREATH, until]
       push(t, until, here, here, 0, 0)
       t = until
       doorway = false
@@ -574,6 +664,20 @@ const WALK = (() => {
     }
     const P = gait(t)
     const vc = P.px / fitScale(k)
+    // Before the horns he takes one more wrong turn, into a dead end well away
+    // from the door, timed to get there first: stuck there, the meltdown
+    // comes, and the sprint starts by turning round and backtracking out.
+    if (state === 'walk' && t >= MELTDOWN - DEAD_END_LEAD && t < MELTDOWN && !deadEnd) {
+      deadEnd = pickDeadEnd(vc) ?? here
+      route = deadEnd === here ? [] : pathTo(here, deadEnd).slice(1)
+    }
+    if (deadEnd && same(here, deadEnd) && t < MELTDOWN) {
+      stop()
+      push(t, MELTDOWN, here, here, 0, 0)
+      t = MELTDOWN
+      rest = true
+      continue
+    }
     const decided = decide(state, P)
     const { next } = decided
     // A hesitation too short to read as a stop is a slowing down instead.
@@ -803,10 +907,12 @@ function wallLib(uid) {
 }
 
 /** The walls drawn by `time`: finished chunks as <use>s, the strokes being drawn inline. */
-function walls(time, uid) {
+function walls(time, uid, s = Infinity) {
   let uses = ''
+  let boxes = ''
   let live = ''
   CHUNKED.forEach((chunks, k) => {
+    if (k === A && boxes === '') { boxes = uses; uses = '' }
     if (time < DRAWN[k][0]) return
     const pen = RUNS[k].length <= PEN_LIMIT
     chunks.forEach((c, j) => {
@@ -824,7 +930,12 @@ function walls(time, uid) {
       if (done) live += `<path d="${done}"/>`
     })
   })
-  return uses + live
+  if (boxes === '') { boxes = uses; uses = '' }
+  // Far out, the boxes (a wall a cell) are twice as dense as the anchor (a
+  // wall a block), and would show as a dark patch in the stock: they fade to
+  // its tone as the cells go from five pixels to under two.
+  const fade = lerp(1, BOX_TONE, clamp01((5 - s) / 3.4))
+  return (fade < 0.999 ? `<g opacity="${r(fade, 3)}">${boxes}</g>` : boxes) + uses + live
 }
 
 /* ── The pulse ────────────────────────────────────────────────────── */
@@ -955,7 +1066,7 @@ export function mazePlate({ time, uid }) {
   const wallW = s >= 2.67 ? Math.max(0.8, Math.min(3, s * 0.05)) : s * 0.3
   const appear = clamp01((time - ENTER.from) / 0.3)
   const plate = `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
-  <g transform="translate(${r(CX - lx * s, 3)} ${r(CY - ly * s, 3)}) scale(${r(s, 5)})" stroke="${INK}" stroke-width="${(wallW / s).toFixed(4)}" fill="none" stroke-linecap="square">${walls(time, uid)}</g>
+  <g transform="translate(${r(CX - lx * s, 3)} ${r(CY - ly * s, 3)}) scale(${r(s, 5)})" stroke="${INK}" stroke-width="${(wallW / s).toFixed(4)}" fill="none" stroke-linecap="square">${walls(time, uid, s)}</g>
   <g stroke="${RED}" fill="none" stroke-linejoin="round" stroke-linecap="butt">${trail}</g>
   <g opacity="${r(appear, 3)}"><circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad * (1.2 + ringU * 1.6 * deep))}" fill="none" stroke="${RED}" stroke-width="2" opacity="${r(0.6 * (1 - ringU))}"/>
   <circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad)}" fill="${RED}"/></g>`
