@@ -10,24 +10,21 @@
         </h1>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
           The mark drawn on, the title drawn on, then blank paper. A red dot
-          comes in from the left and the first maze is drawn round it. It walks
-          the way somebody walks a maze: it looks down each corridor, won't take
-          one it can see is a dead end or leads back where it has been, goes
-          straight for a door it can see, and stops when it is stumped. Out in a
-          few seconds, into a bigger maze drawn round the first, and the next,
-          and the next. Its line fades out behind it.
+          comes in from the left and the first maze is drawn round it; its only
+          way out goes all the way round, anticlockwise. The dot walks the way
+          somebody walks a maze: it looks down each corridor, won't take one it
+          can see is a dead end or leads back where it has been, goes straight
+          for a door it can see, and stops when it is stumped. At each door it
+          stands still while the next maze is drawn round it, then goes on. Its
+          line fades out behind it.
         </p>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          Its mood sets its pace: sure of itself through verse 1, plowing on
-          too fast into the chorus (it charges into dead ends it didn't stop to
-          look down), then unsure in the break, when the fifth maze is too big
-          to charge through. Panic comes later, in the horns.
-        </p>
-        <p class="max-w-3xl text-base leading-relaxed muted-text">
-          This test is the first minute, on a loop. Judge the movement: whether
-          it walks like a person, whether the moods read, and the pace of the
-          mazes. The rest of the song plays if you untick the loop, but it
-          hasn't been looked at yet.
+          It gains confidence through the first maze and keeps it through the
+          first chorus, then loses it slowly to nothing by the end of verse 2.
+          After the last "running" it melts down: stops, pulses hard, then
+          races every way through the horns, old ground and dead ends and all.
+          In the lull before verse 3 it breathes, and walks the clear way out,
+          sure of itself, reaching the door as the last chorus comes in.
         </p>
       </header>
 
@@ -144,9 +141,9 @@ const stage = useTemplateRef<HTMLElement>('stage')
 /* At rest, before anyone presses play: the second maze, sure of himself. */
 const POSTER_AT = 26
 
-/* The test: the first minute, on a loop until unticked. */
+/* The first minute on a loop, if ticked. */
 const TEST = { from: 0, to: 60 }
-const loop = ref(true)
+const loop = ref(false)
 watch(() => player.time.value, (t) => {
   if (loop.value && player.playing.value && t >= TEST.to) player.seek(TEST.from)
 })
@@ -157,10 +154,12 @@ const currentSection = computed(() => sectionAt(player.time.value))
 
 const BEATS = [
   { at: 0, label: 'Opening', note: 'The mark drawn on, then the title, then the black lifts off the paper.' },
-  { at: 12, label: 'The way in', note: 'In from the left, and the first maze drawn round him, stroke by stroke.', key: true },
-  { at: 15.6, label: 'Sure', note: 'Sets off on the first word. Out of the first maze by 0:22, the second by 0:32, the third by 0:43.' },
-  { at: 40.5, label: 'Plowing on', note: 'Overconfident into the chorus: fastest yet, no stopping to look, so the odd dead end.', key: true },
-  { at: 54, label: 'Unsure', note: 'Into the fifth maze, and at the break he slows right down and hesitates at every fork.' },
+  { at: 12, label: 'The way in', note: 'In from the left, the first maze drawn round him; unsure at first, then all the way round it, gaining confidence.', key: true },
+  { at: 29, label: 'A door', note: 'He stops in the doorway while the second maze is drawn round him, then goes on, sure of himself.' },
+  { at: 58, label: 'Losing it', note: 'From the break to the end of verse 2 he slows, hesitates longer at forks, and stops longer when stumped.' },
+  { at: 102, label: 'Meltdown', note: 'After the last "running": he stops and pulses hard, then from the horns races every way, getting nowhere.', key: true },
+  { at: 145, label: 'The breath', note: 'The horns drop away and he breathes; on the first word of verse 3 he walks the clear way out.', key: true },
+  { at: 178, label: 'Out', note: 'Through the door as the last chorus comes in, and the pull back to the maze with no edge.' },
 ]
 
 const jump = (at: number) => {

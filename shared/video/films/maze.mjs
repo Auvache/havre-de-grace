@@ -9,21 +9,24 @@
  * that, and on: each maze the ring round the last.
  *
  * He moves like somebody walking a maze, not like a solver. At every cell he
- * looks down each corridor as far as he can see. A corridor he can see is a
- * dead end, or one that leads back where he has been, he does not take; a
- * door he can see he goes straight to; when every way he can see is spent he
- * stops, stumped, and walks back to the nearest place that still had a way
- * he hadn't tried. He slows into corners, stops dead at the end of a dead
- * end, hesitates at a fork. How fast, how long he hesitates and how far he
- * bothers to look is his mood (MOODS), and the mood follows the song:
+ * looks down each corridor. A corridor he can see is a dead end, or one that
+ * leads back where he has been, he does not take; a door he can see he goes
+ * straight to; when every way he can see is spent he stops, stumped, and
+ * walks back to the nearest place that still had a way he hadn't tried. He
+ * slows into corners, stops dead at the end of a dead end, hesitates at a
+ * fork. At each door he stops in the doorway while the next maze is drawn
+ * round him, then goes on.
  *
- *   unsure  slowest; looks everywhere, hesitates at every fork
- *   sure    building confidence: quick, a glance at a fork
- *   bold    overconfident, plowing on: fast, never stops to look, sees two
- *           cells ahead at most, so he charges into dead ends a careful
- *           walker would have seen
- *   panic   fastest, no plan: any way at all, dead ends and old ground
- *           included, and he cannot see the door (the horns)
+ * How fast he goes, how long he hesitates and how long he stays stumped is
+ * his confidence (`confidence`, `gait`), and it follows the song (2026-11-02,
+ * as asked): gained through the first maze, kept to the break, lost slowly to
+ * nothing by the end of verse 2; then the meltdown (he stops and pulses hard
+ * after the last "running", and races every way through the horns, old ground
+ * and dead ends included, blind to the door); then in the lull before verse 3
+ * he breathes, and walks the clear way out at the confident pace.
+ *
+ * The first maze is laid by hand (ROUTE0): its only way out goes all the way
+ * round, anticlockwise, to the door on the right.
  *
  * The line he leaves fades out behind him over TRAIL seconds.
  *
@@ -88,6 +91,20 @@ const inBox = (k, x, y) => {
 /** Which maze a cell belongs to (its smallest enclosing box). */
 const mazeOf = (x, y) => SIZES.findIndex((_, k) => inBox(k, x, y))
 
+/*
+ * The first maze's way out, laid by hand: up from the middle to the top,
+ * along it to the left, down the left side, the length of the bottom, and up
+ * the right side to the door, which stays where it was (east, one row up).
+ */
+const ROUTE0 = (() => {
+  const out = [[0, 0], [0, -1], [0, -2]]
+  for (let x = -1; x >= -4; x--) out.push([x, -2])
+  for (let y = -1; y <= 2; y++) out.push([-4, y])
+  for (let x = -3; x <= 4; x++) out.push([x, 2])
+  for (let y = 1; y >= -1; y--) out.push([4, y])
+  return out
+})()
+
 function build() {
   const open = new Set() // passages, as "x,y|x,y" both ways
   const link = (a, b) => { open.add(`${key(...a)}|${key(...b)}`); open.add(`${key(...b)}|${key(...a)}`) }
@@ -97,9 +114,15 @@ function build() {
     const [w, h] = SIZES[k]
     const g = rng(SEEDS[k])
     const mine = (x, y) => inBox(k, x, y) && !inBox(k - 1, x, y)
-    // Recursive backtracker from the cell the last maze's door lets onto.
+    // Recursive backtracker from the cell the last maze's door lets onto. The
+    // first maze is laid by hand first: its only way out goes all the way
+    // round, anticlockwise (ROUTE0), and the backtracker hangs dead ends off it.
     const seen = new Set([key(...entry)])
     const stack = [entry]
+    if (k === 0) {
+      for (let i = 1; i < ROUTE0.length; i++) { link(ROUTE0[i - 1], ROUTE0[i]); seen.add(key(...ROUTE0[i])) }
+      stack.splice(0, 1, ...ROUTE0.filter(() => g() < 0.5), ROUTE0[0])
+    }
     while (stack.length) {
       const [x, y] = stack.at(-1)
       const next = Object.values(DIRS).map(([dx, dy]) => [x + dx, y + dy]).filter(([a, b]) => mine(a, b) && !seen.has(key(a, b)))
@@ -112,7 +135,7 @@ function build() {
     const side = DOORS[k]
     if (!side) break
     const span = side === 'e' || side === 'w' ? h - 3 : w - 3
-    const along = Math.round((g() - 0.5) * span)
+    const along = k === 0 ? ROUTE0.at(-1)[1] : Math.round((g() - 0.5) * span)
     const hw = (w - 1) / 2
     const hh = (h - 1) / 2
     const inside = { e: [hw, along], w: [-hw, along], n: [along, -hh], s: [along, hh] }[side]
@@ -138,32 +161,48 @@ function ringDepth(k, x, y) {
 /* ── The walk ─────────────────────────────────────────────────────── */
 
 /*
- * The moods, by song second, and what each does. `px` is his cruising speed
- * in screen pixels a second, so a bigger maze (smaller cells) is not a slower
- * film; `hesitate` the stop at a fork, `stumped` the stop on finding he has
- * run out of ways; `sight` how many cells down a corridor he looks.
+ * His mood, by song second. Walking, it is one number, his confidence `c`
+ * (0 unsure, 1 sure of himself), and everything about how he walks is read
+ * off it (`gait`): his cruising speed in screen pixels a second (so a bigger
+ * maze, with smaller cells, is not a slower film), the stop at a fork, the
+ * stop on finding he has run out of ways, how much he wanders. He gains it
+ * through the first maze, keeps it through verse 1 and the chorus, and loses
+ * it slowly to nothing by the end of verse 2. Then the meltdown: he stops and
+ * pulses hard at the end of the last sung line; races in every direction
+ * through the horns, old ground and dead ends and all, and cannot see a door;
+ * and in the lull before verse 3 he breathes, and walks on sure of himself.
  */
-const MOODS = [
-  [0, 'sure'],
-  [40.5, 'bold'], // the end of verse 1 into the chorus: "running"
-  [58.4, 'unsure'], // the break: a maze he can't charge through
-  [72, 'sure'],
-  [99.85, 'bold'],
-  [110.8, 'panic'], // the horns
-  [151.4, 'still'], // stops, breathes
-  [157.5, 'sure'],
-]
-const MOOD = {
-  unsure: { px: 150, hesitate: 0.6, stumped: 1.1, sight: Infinity, momentum: 0, wander: 0.9, pulse: 0.34 },
-  sure: { px: 340, hesitate: 0.12, stumped: 0.45, sight: Infinity, momentum: 0.15, wander: 0.5, pulse: 0.27 },
-  bold: { px: 520, hesitate: 0, stumped: 0.3, sight: 2, momentum: 0.8, wander: 0.4, pulse: 0.5 },
-  panic: { px: 720, hesitate: 0, stumped: 0, sight: 0, momentum: 0.35, wander: 1, pulse: 2.6 },
-  still: { px: 0, pulse: 0.13 },
+const SET_OFF = 15.6 // the first word
+const MELTDOWN = 105.3 // just after "Oh, I'm running", the last line before the horns
+const PANIC = 110.8 // the horns
+const BREATHE = 147.6 // the horns drop away, 8 dB, until the voice
+const ON_AGAIN = 151.85 // "Oh, I'm headed out on an adventure"
+
+const confidence = (time) => {
+  if (time < 30) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (30 - SET_OFF))))
+  if (time < 58.4) return 1
+  if (time < 99.85) return 1 - easeInOut((time - 58.4) / (99.85 - 58.4))
+  if (time < ON_AGAIN) return 0
+  return 1
 }
-export const moodAt = (time) => MOODS.findLast(([t]) => time >= t)[1]
-const STILL_END = 157.5
-/** The last chorus: he reaches the door he walks calmly to. */
-const LAST_DOOR = 183.85
+/** What he is doing at `time`: 'enter', 'walk', 'meltdown', 'panic' or 'breathe'. */
+const stateAt = (time) => (time < SET_OFF ? 'enter' : time < MELTDOWN ? 'walk' : time < PANIC ? 'meltdown'
+  : time < BREATHE ? 'panic' : time < ON_AGAIN ? 'breathe' : 'walk')
+/** The mood in words, for the page. */
+export const moodAt = (time) => {
+  const s = stateAt(time)
+  if (s !== 'walk') return s === 'enter' ? 'arriving' : s
+  const c = confidence(time)
+  return c > 0.85 ? 'sure' : c < 0.2 ? 'unsure' : time < 58.4 ? 'gaining confidence' : 'losing confidence'
+}
+const gait = (time) => {
+  const s = stateAt(time)
+  if (s === 'panic') return { px: 720, hesitate: 0, stumped: 0, momentum: 0.35, wander: 1, pulse: 2.6 }
+  if (s === 'meltdown') return { px: 0, pulse: 3.1 }
+  if (s === 'breathe') return { px: 0, pulse: 0.14 }
+  const c = s === 'enter' ? 1 : confidence(time)
+  return { px: lerp(130, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: s === 'enter' ? 0.24 : lerp(0.36, 0.27, c) }
+}
 
 /** Screen px per cell that fits maze k on the plate. */
 const fitScale = (k) => Math.min(PW / (SIZES[k][0] + 1.4), PH / (SIZES[k][1] + 1.4))
@@ -174,18 +213,22 @@ const dirOf = (a, b) => [Math.sign(b[0] - a[0]), Math.sign(b[1] - a[1])]
 
 /** The way in: from off the plate's left edge to the centre, stopping there. */
 const ENTER = { from: 12.1, to: 14.5, startX: (PX - CX) / fitScale(0) - 1.5 }
-/** He sets off on the first word. */
-const SET_OFF = 15.6
+
+/** How long maze k takes to draw once he is standing in its doorway. */
+const drawTime = (k) => Math.min(3.4, 1.9 + 0.3 * k)
+/** The camera's pull back to the new maze, from his arrival in the doorway. */
+const PULL = 1.3
 
 /*
  * The whole walk, simulated once: `segs`, each a stretch of time from a to b
  * with speeds va → vb in cells a second (constant acceleration, so he speeds
- * up out of a stop and slows into a corner), or a pause (a = b). `exits` are
- * when he steps through each maze's door.
+ * up out of a stop and slows into a corner), or a pause (a = b). `arrivals`
+ * are when he comes to a stop in each next maze's doorway; he waits there
+ * while it is drawn round him.
  */
 const WALK = (() => {
   const segs = []
-  const exits = []
+  const arrivals = []
   const push = (t0, t1, a, b, va, vb, ease = false) => segs.push({ t0, t1, a, b, va, vb, ease })
   let t = ENTER.to
   push(ENTER.from, ENTER.to, [ENTER.startX, 0], [0, 0], (2 * -ENTER.startX) / (ENTER.to - ENTER.from), 0)
@@ -199,17 +242,19 @@ const WALK = (() => {
   let dead = new Set()
   let route = [] // cells he has decided to walk, in order
   let pending = null // the step into `here`, waiting on how he leaves it
+  let doorway = false // just stepped through a door: stop and wait for the maze
+  let calm = false // after the breath, until he is through that maze's door
   const g = rng(1729)
 
   /* Looking down the corridor from `from` towards `next`. */
-  const look = (from, next, sight) => {
+  const look = (from, next) => {
     const door = M.doors[k]
     const cells = [next]
     let side = false
     let sawDoor = same(next, door?.inside)
     const d = dirOf(from, next)
     let at = next
-    while (cells.length < sight) {
+    for (;;) {
       for (const n of neighbours(k, at)) if (!same(n, cells.at(-2) ?? from) && !same(n, [at[0] + d[0], at[1] + d[1]])) side = true
       const ahead = [at[0] + d[0], at[1] + d[1]]
       if (!neighbours(k, at).some((n) => same(n, ahead))) break
@@ -218,13 +263,7 @@ const WALK = (() => {
       if (same(at, door?.inside)) sawDoor = true
     }
     // Seen all the way to a wall, nothing off it: a dead end.
-    let blind = false
-    if (cells.length < sight) {
-      const last = cells.at(-1)
-      const out = neighbours(k, last).filter((n) => !same(n, cells.at(-2) ?? from))
-      blind = !out.length && !side && !sawDoor
-    }
-    else side = true // couldn't see the end: assume it goes somewhere
+    const blind = !side && !sawDoor
     return { cells, side, blind, sawDoor }
   }
 
@@ -251,43 +290,41 @@ const WALK = (() => {
   }
 
   /* The shortest way through maze k (after the breath, he can see it). */
-  const solve = (kk, from, goal) => {
+  const solve = (from, goal) => {
     const prev = new Map([[key(...from), null]])
     const queue = [from]
     while (queue.length) {
       const c = queue.shift()
       if (same(c, goal)) break
-      for (const n of neighbours(kk, c)) if (!prev.has(key(...n))) { prev.set(key(...n), c); queue.push(n) }
+      for (const n of neighbours(k, c)) if (!prev.has(key(...n))) { prev.set(key(...n), c); queue.push(n) }
     }
     const path = []
     for (let c = goal; c; c = prev.get(key(...c))) path.unshift(c)
     return path
   }
-  let calm = false // from the breath until he is through that maze's door
 
   /* Where he goes next from `here`, and how long he stops first. */
-  const decide = (mood) => {
-    const P = MOOD[mood]
+  const decide = (state, P) => {
     const door = M.doors[k]
-    if (mood !== 'panic' && same(here, door?.inside)) return { next: door.outside, pause: 0 }
+    if (state !== 'panic' && same(here, door?.inside)) return { next: door.outside, pause: 0 }
     const opts = neighbours(k, here)
-    if (mood === 'panic') {
-      // No plan: any way, the door included only as a wall.
-      const back = [here[0] - came[0], here[1] - came[1]]
+    const back = [here[0] - came[0], here[1] - came[1]]
+    if (state === 'panic') {
+      // No plan and no memory: any way on at a fork, old ground and dead ends
+      // and all, turning back only when he hits a wall; the door is a wall.
       const ahead = [here[0] + came[0], here[1] + came[1]]
       const pool = opts.length > 1 ? opts.filter((o) => !same(o, back)) : opts
       const pick = pool.find((o) => same(o, ahead) && g() < P.momentum) ?? pool[Math.floor(g() * pool.length)]
       route = []
       return { next: pick, pause: 0 }
     }
-    if (calm && route.length === 0 && door) {
+    if (calm && !route.length && door) {
       // After the breath he thinks it through and walks the clear way out.
-      route = solve(k, here, door.inside).slice(1)
+      route = solve(here, door.inside).slice(1)
       if (!route.length) return { next: door.outside, pause: 0 }
     }
     if (route.length) return { next: route.shift(), pause: 0 }
-    const back = [here[0] - came[0], here[1] - came[1]]
-    const views = opts.filter((o) => !same(o, back)).map((o) => ({ o, ...look(here, o, P.sight) }))
+    const views = opts.filter((o) => !same(o, back)).map((o) => ({ o, ...look(here, o) }))
     const seen = views.find((v) => v.sawDoor)
     if (seen) {
       route = seen.cells.slice(1, seen.cells.findIndex((c) => same(c, door.inside)) + 1)
@@ -308,31 +345,42 @@ const WALK = (() => {
     return { next: path[0], pause: P.stumped }
   }
 
+  /* Bring the step into `here` to a stop. */
+  const stop = () => {
+    if (!pending) return
+    const d = pending.va > 0 ? 2 / pending.va : 1.7 / pending.vc
+    push(pending.t, pending.t + d, pending.a, here, pending.va, 0, pending.va <= 0)
+    t = pending.t + d
+    pending = null
+  }
+
   let guard = 0
-  let calmPace = 0
   let rest = true // standing still: the next step starts from nothing
   while (t < END && guard++ < 40000) {
-    const mood = moodAt(t)
-    if (mood === 'still') {
-      if (pending) {
-        const d = pending.va > 0 ? 2 / pending.va : 1.7 / pending.vc
-        push(pending.t, pending.t + d, pending.a, here, pending.va, 0, pending.va <= 0)
-        t = pending.t + d
-        pending = null
-      }
-      push(t, Math.max(t, STILL_END), here, here, 0, 0)
-      t = Math.max(t, STILL_END)
+    const state = stateAt(t)
+    if (state === 'meltdown' || state === 'breathe') {
+      stop()
+      const until = state === 'meltdown' ? PANIC : ON_AGAIN
+      push(t, Math.max(t, until), here, here, 0, 0)
+      t = Math.max(t, until)
       rest = true
-      calm = true
-      route = []
-      const way = M.doors[k] ? solve(k, here, M.doors[k].inside).length : 0
-      // Paced to reach the door as the last chorus starts (corners cost a little).
-      calmPace = way ? (way * 1.45) / (LAST_DOOR - STILL_END) : 0
+      if (state === 'breathe') { calm = true; route = [] }
       continue
     }
-    const P = MOOD[mood]
-    const vc = calm && calmPace ? calmPace : P.px / fitScale(k)
-    const { next, pause } = decide(mood)
+    if (doorway) {
+      // In the next maze's doorway: stop, and wait while it is drawn round him.
+      stop()
+      arrivals.push(t)
+      const until = t + PULL * 0.2 + drawTime(k) + 0.25
+      push(t, until, here, here, 0, 0)
+      t = until
+      doorway = false
+      rest = true
+      continue
+    }
+    const P = gait(t)
+    const vc = P.px / fitScale(k)
+    const { next, pause } = decide(state, P)
     const dir = dirOf(here, next)
     const straight = dir[0] === came[0] && dir[1] === came[1]
     const reverse = dir[0] === -came[0] && dir[1] === -came[1]
@@ -349,19 +397,19 @@ const WALK = (() => {
     if (pause > 0) { push(t, t + pause, here, here, 0, 0); t += pause }
     // Through a door: the next maze, and he knows nothing of it.
     if (M.doors[k] && same(here, M.doors[k].inside) && same(next, M.doors[k].outside)) {
-      exits.push(t)
       k += 1
       visited = new Set()
       dead = new Set()
       route = []
       calm = false
+      doorway = true
     }
     pending = { t, a: here, va: vHere, vc }
     came = dir
     here = next
     visited.add(key(...here))
   }
-  return { segs, exits }
+  return { segs, arrivals }
 })()
 
 /** Where he is at `time`, in cells. */
@@ -388,17 +436,18 @@ function posAt(time) {
 }
 
 /** Which maze he is in at `time`. */
-const mazeAt = (time) => WALK.exits.filter((e) => e <= time).length
+const mazeAt = (time) => WALK.arrivals.filter((e) => e <= time).length
 
 /* ── Walls ────────────────────────────────────────────────────────── */
 
 /** When maze k is drawn: the first round him as he arrives, each next one as he nears its door. */
 const DRAWN = (() => {
-  const out = SIZES.map((_, k) => (k === 0 ? [13.0, 15.5] : WALK.exits[k - 1] !== undefined
-    ? [WALK.exits[k - 1] - 2.4 - Math.min(2.5, k * 0.4), WALK.exits[k - 1] + 0.5]
+  // Each next maze is drawn while he stands in its doorway, the camera pulling back as it starts.
+  const out = SIZES.map((_, k) => (k === 0 ? [13.0, 15.5] : WALK.arrivals[k - 1] !== undefined
+    ? [WALK.arrivals[k - 1] + PULL * 0.2, WALK.arrivals[k - 1] + PULL * 0.2 + drawTime(k)]
     : null))
   // The pull back at the end: every maze not yet drawn, one after another, out to the last.
-  let at = Math.max(190, (WALK.exits.at(-1) ?? 0) + 3)
+  let at = Math.max(190, (WALK.arrivals.at(-1) ?? 0) + 6)
   return out.map((w) => {
     if (w) return w
     const span = [at, at + 4]
@@ -524,7 +573,7 @@ function walls(time, uid) {
 
 /* ── The pulse ────────────────────────────────────────────────────── */
 
-const rate = (time) => (time < SET_OFF ? 0.24 : MOOD[moodAt(time)].pulse)
+const rate = (time) => gait(time).pulse
 const phaseTable = (() => {
   const t = [0]
   for (let i = 1; i <= END * 10 + 20; i++) t.push(t[i - 1] + rate(i * 0.1) * 0.1 * Math.PI * 2)
@@ -541,10 +590,10 @@ const phaseAt = (time) => {
 const ZOOM = (() => {
   const keys = [[0, fitScale(0)]]
   const add = (t, s) => keys.push([Math.max(t, keys.at(-1)[0] + 0.05), s])
-  WALK.exits.forEach((e, k) => {
+  WALK.arrivals.forEach((e, k) => {
     if (k + 1 >= SIZES.length) return
-    add(DRAWN[k + 1][0] - 0.2, fitScale(k))
-    add(e + 0.6, fitScale(k + 1))
+    add(e, fitScale(k))
+    add(e + PULL, fitScale(k + 1))
   })
   // The outro: the whole of the last maze, whatever he is in.
   const last = fitScale(SIZES.length - 1)
@@ -595,14 +644,14 @@ export function mazePlate({ time, uid }) {
     trail += `<path d="${d}" stroke-width="${r(width * (0.35 + 0.65 * life), 2)}" opacity="${r(life ** 1.6, 3)}"/>`
   }
 
-  // Frantic: a tremble, eased in and out with the horns.
-  const shake = window01(time, 110.8, 151.4, 1.5) * 0.12
+  // A tremble: building through the meltdown, frantic through the horns, gone for the breath.
+  const shake = Math.max(window01(time, MELTDOWN, PANIC + 0.5, 1) * 0.07 * ramp(time, MELTDOWN, PANIC), window01(time, PANIC, BREATHE, 1) * 0.12)
   const jx = shake * (Math.sin(time * 41.3) + 0.6 * Math.sin(time * 67.9 + 1.3))
   const jy = shake * (Math.sin(time * 37.1 + 2.1) + 0.6 * Math.sin(time * 59.3))
   // The pulse: the dot swells and settles on each breath, and a ring goes out on each one.
   const ph = phaseAt(time)
   const breath = 0.5 + 0.5 * Math.sin(ph)
-  const deep = 1 + 0.8 * window01(time, 151.4, STILL_END, 1.2)
+  const deep = 1 + 0.8 * window01(time, BREATHE, ON_AGAIN, 1.2) + 1.3 * window01(time, MELTDOWN, PANIC + 0.6, 0.8)
   const base = Math.max(7, Math.min(11, s * 0.13))
   const rad = base * (1 + 0.28 * breath * deep)
   const ringU = ((ph / (Math.PI * 2)) % 1 + 1) % 1
@@ -635,4 +684,4 @@ ${openingSvg(time, uid)}`,
 }
 
 /** For tuning and the page: when he leaves each maze, and the mood clock. */
-export const MAZE_WALK = { exits: WALK.exits, moods: MOODS, doors: M.doors, segs: WALK.segs }
+export const MAZE_WALK = { arrivals: WALK.arrivals, doors: M.doors, segs: WALK.segs }
