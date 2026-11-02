@@ -146,6 +146,12 @@ const ANCHOR_CELLS = (() => {
       if (inkAt(...toUnits(x, y))) out.add(key(x, y))
     }
   }
+  // A stray cell on its own at a curve's edge is no maze: leave it out.
+  for (const c of [...out]) {
+    const [x, y] = c.split(',').map(Number)
+    const touches = Object.values(DIRS).some(([dx, dy]) => out.has(key(x + dx, y + dy)) || inBox(A - 1, x + dx, y + dy))
+    if (!touches) out.delete(c)
+  }
   return out
 })()
 
@@ -230,6 +236,25 @@ function build() {
       stack.push(n)
     }
   }
+  // The last box is the stock's thickness, so it cuts the anchor into four
+  // (shank above and below, stock left and right). Gaps in its walls on every
+  // side, three a side, make it all one maze to explore, with no way out.
+  const [bw, bh] = SIZES[A - 1]
+  const bx = (bw - 1) / 2
+  const by = (bh - 1) / 2
+  const sides = [
+    Array.from({ length: bw }, (_, i) => [[i - bx, -by], [i - bx, -by - 1]]),
+    Array.from({ length: bw }, (_, i) => [[i - bx, by], [i - bx, by + 1]]),
+    Array.from({ length: bh }, (_, i) => [[-bx, i - by], [-bx - 1, i - by]]),
+    Array.from({ length: bh }, (_, i) => [[bx, i - by], [bx + 1, i - by]]),
+  ]
+  for (const side of sides) {
+    const touching = side.filter(([, out]) => ANCHOR_CELLS.has(key(...out)))
+    for (let n = 0; n < 3 && touching.length; n++) {
+      const [inner, out] = touching.splice(Math.floor(g() * touching.length), 1)[0]
+      link(inner, out)
+    }
+  }
   return { open, doors, connected: (a, b) => open.has(`${key(...a)}|${key(...b)}`) }
 }
 const M = build()
@@ -304,9 +329,12 @@ const gait = (time) => {
   }
   if (s === 'meltdown') return { px: 0, pulse: lerp(1.2, 3.2, easeInOut(ramp(time, MELTDOWN, MELTDOWN + 2.5))) }
   // The breath slows from the sprint's to the slowest of the film.
-  if (s === 'breathe') return { px: 0, pulse: lerp(1.4, 0.14, easeInOut(ramp(time, STOP, STOP + 3.4))) }
+  if (s === 'breathe') return { px: 0, pulse: lerp(1.4, 0.22, easeInOut(ramp(time, STOP, STOP + 3))) }
   const c = s === 'enter' ? 1 : confidence(time)
-  return { px: lerp(150, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: s === 'enter' ? 0.24 : lerp(0.36, 0.27, c) }
+  const pulse = s === 'enter' ? 0.24 : lerp(0.36, 0.27, c)
+  // Out of the breath, it quickens only gradually.
+  const settle = time >= SET_OUT ? easeInOut(ramp(time, SET_OUT, SET_OUT + 3)) : 1
+  return { px: lerp(150, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: lerp(0.22, pulse, settle) }
 }
 
 /** Screen px per cell that fits maze k on the plate. */
@@ -323,6 +351,8 @@ const ENTER = { from: 11.5, to: 13.3, startX: (PX - CX) / fitScale(0) - 1.5 }
 const drawTime = (k) => Math.min(3.4, 1.9 + 0.3 * k)
 /** The camera's pull back to the new maze, from his arrival in the doorway. */
 const PULL = 1.3
+/** The deep breath in the last box's doorway, once it is drawn round him. */
+const LAST_BREATH = 3
 
 /*
  * The whole walk, simulated once: `segs`, each a stretch of time from a to b
@@ -348,6 +378,7 @@ const WALK = (() => {
   let route = [] // cells he has decided to walk, in order
   let pending = null // the step into `here`, waiting on how he leaves it
   let doorway = false // just stepped through a door: stop and wait for the maze
+  let lastBreath = [-1, -1]
   const g = rng(1729)
   const gp = rng(PANIC_SEED) // the sprint and after, so they can be tuned without moving what comes before
   const trodden = new Map() // cells he has run through in the sprint, and how often
@@ -531,7 +562,10 @@ const WALK = (() => {
       // In the next maze's doorway: stop, and wait while it is drawn round him.
       stop()
       arrivals.push(t)
-      const until = t + PULL * 0.2 + drawTime(k) + 0.25
+      // In the last box's doorway, once it is drawn: one deep breath before he goes on.
+      const breath = k === A - 1 ? LAST_BREATH : 0
+      const until = t + PULL * 0.2 + drawTime(k) + 0.25 + breath
+      if (breath) lastBreath = [until - breath, until]
       push(t, until, here, here, 0, 0)
       t = until
       doorway = false
@@ -573,7 +607,7 @@ const WALK = (() => {
     here = next
     visited.add(key(...here))
   }
-  return { segs, arrivals }
+  return { segs, arrivals, lastBreath }
 })()
 
 /** Where he is at `time`, in cells. */
@@ -735,7 +769,10 @@ const RUNS = [...SIZES, null].map((size, k) => {
   const lengths = runs.map((q) => Math.abs(q[2] - q[0]) + Math.abs(q[3] - q[1]))
   const total = lengths.reduce((s, l) => s + l, 0)
   const span = to - from
-  const each = (l) => Math.min(span * 0.3, 0.16 + 0.045 * l)
+  // The pen at one steady speed: a long wall takes longer than a short one,
+  // about three strokes going at once, so it reads as a hand, not in bursts.
+  const pen = total / (3 * span)
+  const each = (l) => Math.max(0.2, Math.min(span * 0.5, l / pen))
   let acc = 0
   return runs.map((q, i) => {
     const start = from + (span - each(lengths[i])) * (acc / total)
@@ -780,7 +817,8 @@ function walls(time, uid) {
       for (const { q, start, end } of c.runs) {
         if (time < start) continue
         if (time >= end) { done += `M${q[0]} ${q[1]}L${q[2]} ${q[3]}`; continue }
-        const u = easeInOut((time - start) / (end - start))
+        const x = (time - start) / (end - start)
+        const u = 0.75 * x + 0.25 * easeInOut(x) // steady, softened only at the ends
         live += `<path d="M${q[0]} ${q[1]}L${q[2]} ${q[3]}" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${r(1 - u, 4)}" stroke-linecap="butt"/>`
       }
       if (done) live += `<path d="${done}"/>`
@@ -791,7 +829,7 @@ function walls(time, uid) {
 
 /* ── The pulse ────────────────────────────────────────────────────── */
 
-const rate = (time) => gait(time).pulse
+const rate = (time) => (time >= WALK.lastBreath[0] && time < WALK.lastBreath[1] ? 0.3 : gait(time).pulse)
 const phaseTable = (() => {
   const t = [0]
   for (let i = 1; i <= END * 10 + 20; i++) t.push(t[i - 1] + rate(i * 0.1) * 0.1 * Math.PI * 2)
@@ -906,7 +944,7 @@ export function mazePlate({ time, uid }) {
   // The pulse: the dot swells and settles on each breath, and a ring goes out on each one.
   const ph = phaseAt(time)
   const breath = 0.5 + 0.5 * Math.sin(ph)
-  const deep = 1 + 0.8 * window01(time, STOP, SET_OUT, 1.2) + 1.3 * window01(time, MELTDOWN + 0.6, SPRINT + 0.6, 1.4)
+  const deep = 1 + 0.8 * window01(time, STOP, SET_OUT + 2.5, 1.4) + 1.3 * window01(time, MELTDOWN + 0.6, SPRINT + 0.6, 1.4) + 0.9 * window01(time, ...WALK.lastBreath, 0.8)
   const base = Math.max(7, Math.min(11, s * 0.13))
   const rad = base * (1 + 0.28 * breath * deep)
   const ringU = ((ph / (Math.PI * 2)) % 1 + 1) % 1
@@ -953,7 +991,7 @@ ${openingSvg(time, uid)}`,
 }
 
 /** For tuning and the page: when he leaves each maze, and the mood clock. */
-export const MAZE_WALK = { arrivals: WALK.arrivals, doors: M.doors, segs: WALK.segs }
+export const MAZE_WALK = { arrivals: WALK.arrivals, doors: M.doors, segs: WALK.segs, anchorCells: ANCHOR_CELLS, open: M.open }
 
 /** Seconds of silence an export holds on the end card after the record (mp4.mjs reads it). */
 mazeFrame.hold = 4
