@@ -88,6 +88,7 @@ const { values: opt } = parseArgs({
     workers: { type: 'string', default: String(Math.max(2, Math.min(8, cpus().length - 4))) },
     crf: { type: 'string', default: '12' },
     out: { type: 'string' },
+    tail: { type: 'string' },
   },
 })
 
@@ -114,8 +115,10 @@ const audioSeconds = Number(execFileSync('ffprobe', [
   '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mp3,
 ]).toString().trim())
 
+/* Silence after the record: `--tail`, or what the film asks for (`frame.hold`), held on its last frames. */
+const tail = opt.tail !== undefined ? Number(opt.tail) : Number(film.hold ?? 0)
 const from = opt.from ? Number(opt.from) : 0
-const to = opt.to ? Number(opt.to) : audioSeconds
+const to = opt.to ? Number(opt.to) : audioSeconds + tail
 const first = Math.round(from * fps)
 const last = Math.ceil(to * fps) // exclusive
 const total = last - first
@@ -243,8 +246,10 @@ for (const [key, label] of [['seg4k', '2160p'], ['seg1080', '1080p']]) {
   execFileSync('ffmpeg', [
     '-v', 'error', '-y',
     '-i', joined,
-    '-ss', String(first / fps), '-t', String(total / fps), '-i', mp3,
+    '-ss', String(first / fps), '-i', mp3,
     '-map', '0:v', '-map', '1:a',
+    // Padded with silence when the film runs on past the record.
+    '-af', `apad=whole_dur=${total / fps}`, '-t', String(total / fps),
     '-c:v', 'copy', '-c:a', 'aac', '-b:a', '320k',
     '-movflags', '+faststart', out,
   ])

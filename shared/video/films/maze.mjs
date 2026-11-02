@@ -168,39 +168,56 @@ function ringDepth(k, x, y) {
  * maze, with smaller cells, is not a slower film), the stop at a fork, the
  * stop on finding he has run out of ways, how much he wanders. He gains it
  * through the first maze, keeps it through verse 1 and the chorus, and loses
- * it slowly to nothing by the end of verse 2. Then the meltdown: he stops and
- * pulses hard at the end of the last sung line; races in every direction
- * through the horns, old ground and dead ends and all, and cannot see a door;
- * and in the lull before verse 3 he breathes, and walks on sure of himself.
+ * it slowly to nothing by the end of verse 2. Then (timed to the record, as
+ * asked 2026-11-02):
+ *
+ *   1:50.8  the horns: the meltdown. He stops and pulses harder and harder.
+ *   1:56.24 the loudest hit in the horns: he sprints, every way at once, old
+ *           ground and dead ends and all, blind to the door.
+ *   2:24    he starts to come round, slowing, as if realising he has to focus,
+ *   2:28.19 and stops dead on the harmonic as the horns drop away (the
+ *           bright ping 17 dB over the lull). His breathing slows.
+ *   2:32.52 "headed", in the first line of verse 3: he sets out carefully,
+ *           and grows sure of himself as he walks the clear way out.
  */
 const SET_OFF = 15.6 // the first word
-const MELTDOWN = 105.3 // just after "Oh, I'm running", the last line before the horns
-const PANIC = 110.8 // the horns
-const BREATHE = 147.6 // the horns drop away, 8 dB, until the voice
-const ON_AGAIN = 151.85 // "Oh, I'm headed out on an adventure"
+const MELTDOWN = 110.8 // the horns come in
+const SPRINT = 116.24 // the loudest hit in the horns
+const FOCUS = 144 // he starts to come round
+const STOP = 148.19 // the harmonic
+const SET_OUT = 152.52 // "headed"
 
 const confidence = (time) => {
   if (time < 30) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (30 - SET_OFF))))
   if (time < 58.4) return 1
   if (time < 99.85) return 1 - easeInOut((time - 58.4) / (99.85 - 58.4))
-  if (time < ON_AGAIN) return 0
-  return 1
+  if (time < SET_OUT) return 0
+  return lerp(0.25, 1, easeInOut(clamp01((time - SET_OUT) / 7)))
 }
-/** What he is doing at `time`: 'enter', 'walk', 'meltdown', 'panic' or 'breathe'. */
-const stateAt = (time) => (time < SET_OFF ? 'enter' : time < MELTDOWN ? 'walk' : time < PANIC ? 'meltdown'
-  : time < BREATHE ? 'panic' : time < ON_AGAIN ? 'breathe' : 'walk')
+/** What he is doing at `time`: 'enter', 'walk', 'meltdown', 'panic', 'focus' or 'breathe'. */
+const stateAt = (time) => (time < SET_OFF ? 'enter' : time < MELTDOWN ? 'walk' : time < SPRINT ? 'meltdown'
+  : time < FOCUS ? 'panic' : time < STOP ? 'focus' : time < SET_OUT ? 'breathe' : 'walk')
 /** The mood in words, for the page. */
 export const moodAt = (time) => {
   const s = stateAt(time)
-  if (s !== 'walk') return s === 'enter' ? 'arriving' : s
+  if (s === 'enter') return 'arriving'
+  if (s === 'focus') return 'coming round'
+  if (s !== 'walk') return s
   const c = confidence(time)
-  return c > 0.85 ? 'sure' : c < 0.2 ? 'unsure' : time < 58.4 ? 'gaining confidence' : 'losing confidence'
+  return time >= SET_OUT && c < 0.85 ? 'careful' : c > 0.85 ? 'sure' : c < 0.2 ? 'unsure' : time < 58.4 ? 'gaining confidence' : 'losing confidence'
 }
+const PANIC_GAIT = { px: 720, hesitate: 0, stumped: 0, momentum: 0.35, wander: 1, pulse: 2.6 }
 const gait = (time) => {
   const s = stateAt(time)
-  if (s === 'panic') return { px: 720, hesitate: 0, stumped: 0, momentum: 0.35, wander: 1, pulse: 2.6 }
-  if (s === 'meltdown') return { px: 0, pulse: 3.1 }
-  if (s === 'breathe') return { px: 0, pulse: 0.14 }
+  if (s === 'panic') return PANIC_GAIT
+  // Coming round: the sprint slows away to nothing by the harmonic.
+  if (s === 'focus') {
+    const u = easeInOut(ramp(time, FOCUS, STOP))
+    return { ...PANIC_GAIT, px: Math.max(60, 720 * (1 - u)), pulse: lerp(2.6, 1.5, u) }
+  }
+  if (s === 'meltdown') return { px: 0, pulse: lerp(1.2, 3.2, easeInOut(ramp(time, MELTDOWN, MELTDOWN + 2.5))) }
+  // The breath slows from the sprint's to the slowest of the film.
+  if (s === 'breathe') return { px: 0, pulse: lerp(1.4, 0.14, easeInOut(ramp(time, STOP, STOP + 3.4))) }
   const c = s === 'enter' ? 1 : confidence(time)
   return { px: lerp(130, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: s === 'enter' ? 0.24 : lerp(0.36, 0.27, c) }
 }
@@ -244,7 +261,7 @@ const WALK = (() => {
   let route = [] // cells he has decided to walk, in order
   let pending = null // the step into `here`, waiting on how he leaves it
   let doorway = false // just stepped through a door: stop and wait for the maze
-  let calm = false // after the breath, until he is through that maze's door
+  let calm = false // after the breath: he sees the way out of every maze from here on
   const g = rng(1729)
 
   /* Looking down the corridor from `from` towards `next`. */
@@ -307,10 +324,11 @@ const WALK = (() => {
   /* Where he goes next from `here`, and how long he stops first. */
   const decide = (state, P) => {
     const door = M.doors[k]
-    if (state !== 'panic' && same(here, door?.inside)) return { next: door.outside, pause: 0 }
+    const frantic = state === 'panic' || state === 'focus'
+    if (!frantic && same(here, door?.inside)) return { next: door.outside, pause: 0 }
     const opts = neighbours(k, here)
     const back = [here[0] - came[0], here[1] - came[1]]
-    if (state === 'panic') {
+    if (frantic) {
       // No plan and no memory: any way on at a fork, old ground and dead ends
       // and all, turning back only when he hits a wall; the door is a wall.
       const ahead = [here[0] + came[0], here[1] + came[1]]
@@ -359,9 +377,21 @@ const WALK = (() => {
   let rest = true // standing still: the next step starts from nothing
   while (t < END && guard++ < 40000) {
     const state = stateAt(t)
+    // Coming round: once the slowing step would carry him past the harmonic, he stops.
+    if (state === 'focus' && pending && pending.t + (pending.va > 0 ? 2 / pending.va : 1.7 / pending.vc) >= STOP) {
+      // The last step eased to land on the harmonic exactly.
+      const d = Math.max(0.35, STOP - pending.t)
+      push(pending.t, pending.t + d, pending.a, here, pending.va, 0, 'land')
+      t = pending.t + d
+      pending = null
+      push(t, Math.max(t, STOP), here, here, 0, 0)
+      t = Math.max(t, STOP)
+      rest = true
+      continue
+    }
     if (state === 'meltdown' || state === 'breathe') {
       stop()
-      const until = state === 'meltdown' ? PANIC : ON_AGAIN
+      const until = state === 'meltdown' ? SPRINT : SET_OUT
       push(t, Math.max(t, until), here, here, 0, 0)
       t = Math.max(t, until)
       rest = true
@@ -406,8 +436,7 @@ const WALK = (() => {
       visited = new Set()
       dead = new Set()
       route = []
-      calm = false
-      doorway = true
+      doorway = true // calm stays: after the breath he sees each way out
     }
     pending = { t, a: here, va: vHere, vc }
     came = dir
@@ -434,7 +463,12 @@ function posAt(time) {
   const tau = time - s.t0
   const L = Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1])
   let u
-  if (s.ease) u = easeInOut(tau / d)
+  if (s.ease === 'land') {
+    // Leaving at his speed, arriving at rest, at a set time: a Hermite curve.
+    const x = tau / d
+    u = clamp01(-2 * x ** 3 + 3 * x ** 2 + ((s.va * d) / (L || 1)) * (x ** 3 - 2 * x ** 2 + x))
+  }
+  else if (s.ease) u = easeInOut(tau / d)
   else if (L === 0) u = 0
   else u = clamp01((s.va * tau + (0.5 * (s.vb - s.va) * tau * tau) / d) / L)
   return [lerp(s.a[0], s.b[0], u), lerp(s.a[1], s.b[1], u)]
@@ -463,18 +497,21 @@ function smoothAt(time) {
 }
 
 /** Which maze he is in at `time`. */
-const mazeAt = (time) => WALK.arrivals.filter((e) => e <= time).length
+/** The doorways the film shows: any after 3:06 would fall in the pull back or past the end card. */
+const ARRIVALS = WALK.arrivals.filter((a) => a < 186)
+
+const mazeAt = (time) => ARRIVALS.filter((e) => e <= time).length
 
 /* ── Walls ────────────────────────────────────────────────────────── */
 
 /** When maze k is drawn: the first round him as he arrives, each next one as he nears its door. */
 const DRAWN = (() => {
   // Each next maze is drawn while he stands in its doorway, the camera pulling back as it starts.
-  const out = SIZES.map((_, k) => (k === 0 ? [13.0, 15.5] : WALK.arrivals[k - 1] !== undefined
-    ? [WALK.arrivals[k - 1] + PULL * 0.2, WALK.arrivals[k - 1] + PULL * 0.2 + drawTime(k)]
+  const out = SIZES.map((_, k) => (k === 0 ? [13.0, 15.5] : ARRIVALS[k - 1] !== undefined
+    ? [ARRIVALS[k - 1] + PULL * 0.2, ARRIVALS[k - 1] + PULL * 0.2 + drawTime(k)]
     : null))
   // The pull back at the end: every maze not yet drawn, one after another, out to the last.
-  let at = Math.max(186, (WALK.arrivals.at(-1) ?? 0) + 5)
+  let at = Math.max(186, (ARRIVALS.at(-1) ?? 0) + 5)
   return out.map((w) => {
     if (w) return w
     const span = [at, at + 4]
@@ -617,7 +654,7 @@ const phaseAt = (time) => {
 const ZOOM = (() => {
   const keys = [[0, fitScale(0)]]
   const add = (t, s) => keys.push([Math.max(t, keys.at(-1)[0] + 0.05), s])
-  WALK.arrivals.forEach((e, k) => {
+  ARRIVALS.forEach((e, k) => {
     if (k + 1 >= SIZES.length) return
     add(e, fitScale(k))
     add(e + PULL, fitScale(k + 1))
@@ -673,14 +710,17 @@ export function mazePlate({ time, uid }) {
     trail += `<path d="${d}" stroke-width="${r(width * (0.25 + 0.75 * life), 2)}" opacity="${r(life ** 1.3, 3)}"/>`
   }
 
-  // A tremble: building through the meltdown, frantic through the horns, gone for the breath.
-  const shake = Math.max(window01(time, MELTDOWN, PANIC + 0.5, 1) * 0.07 * ramp(time, MELTDOWN, PANIC), window01(time, PANIC, BREATHE, 1) * 0.12)
+  // A tremble: building through the meltdown, frantic through the sprint, easing as he comes round.
+  const shake = Math.max(
+    window01(time, MELTDOWN, SPRINT + 0.5, 1) * 0.07 * ramp(time, MELTDOWN, SPRINT),
+    window01(time, SPRINT, STOP, 0.6) * 0.12 * (1 - ramp(time, FOCUS, STOP)),
+  )
   const jx = shake * (Math.sin(time * 41.3) + 0.6 * Math.sin(time * 67.9 + 1.3))
   const jy = shake * (Math.sin(time * 37.1 + 2.1) + 0.6 * Math.sin(time * 59.3))
   // The pulse: the dot swells and settles on each breath, and a ring goes out on each one.
   const ph = phaseAt(time)
   const breath = 0.5 + 0.5 * Math.sin(ph)
-  const deep = 1 + 0.8 * window01(time, BREATHE, ON_AGAIN, 1.2) + 1.3 * window01(time, MELTDOWN, PANIC + 0.6, 0.8)
+  const deep = 1 + 0.8 * window01(time, STOP, SET_OUT, 1.2) + 1.3 * window01(time, MELTDOWN + 0.6, SPRINT + 0.6, 1.4)
   const base = Math.max(7, Math.min(11, s * 0.13))
   const rad = base * (1 + 0.28 * breath * deep)
   const ringU = ((ph / (Math.PI * 2)) % 1 + 1) % 1
@@ -696,11 +736,14 @@ export function mazePlate({ time, uid }) {
   return { plate, lib: wallLib(uid) }
 }
 
+/** The last note, as asked (2026-11-02): the hit at 3:23.1 rings to about 3:24.3. */
+const END_CARD = 204.0
+
 /** The film: the opening, then the album's cover sheet, the plate, the lyric in the margin. */
 export function mazeFrame({ time, score, lockup = '', uid = 'maze' }) {
   // The last note: a hard cut to the band's mark on black, as Andalusia ends,
-  // and it holds (no credits).
-  if (time >= score.endCardAt) {
+  // and it holds (no credits), past the record's end into silence.
+  if (time >= END_CARD) {
     return {
       lib: [wallLib(uid)],
       label: 'End card',
@@ -723,3 +766,6 @@ ${openingSvg(time, uid)}`,
 
 /** For tuning and the page: when he leaves each maze, and the mood clock. */
 export const MAZE_WALK = { arrivals: WALK.arrivals, doors: M.doors, segs: WALK.segs }
+
+/** Seconds of silence an export holds on the end card after the record (mp4.mjs reads it). */
+mazeFrame.hold = 4

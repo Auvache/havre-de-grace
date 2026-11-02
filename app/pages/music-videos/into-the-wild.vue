@@ -21,10 +21,12 @@
         <p class="max-w-3xl text-base leading-relaxed muted-text">
           It gains confidence through the first maze and keeps it through the
           first chorus, then loses it slowly to nothing by the end of verse 2.
-          After the last "running" it melts down: stops, pulses hard, then
-          races every way through the horns, old ground and dead ends and all.
-          In the lull before verse 3 it breathes, and walks the clear way out,
-          sure of itself, reaching the door as the last chorus comes in.
+          When the horns come in it melts down: stops and pulses harder and
+          harder, then on the loudest hit races every way, old ground and dead
+          ends and all. Late in the horns it comes round, slowing, and stops on
+          the harmonic as they drop away; its breathing slows, and on "headed"
+          it sets out carefully, growing sure of itself. On the last note, the
+          mark.
         </p>
       </header>
 
@@ -154,12 +156,13 @@ const currentSection = computed(() => sectionAt(player.time.value))
 
 const BEATS = [
   { at: 0, label: 'Opening', note: 'The mark drawn on, then the title, then the black lifts off the paper.' },
-  { at: 12, label: 'The way in', note: 'In from the left, the first maze drawn round him; unsure at first, then all the way round it, gaining confidence.', key: true },
+  { at: 12, label: 'The way in', note: 'In from the left, the first maze drawn round him; unsure at first, then all the way round it, gaining confidence.' },
   { at: 29, label: 'A door', note: 'He stops in the doorway while the second maze is drawn round him, then goes on, sure of himself.' },
   { at: 58, label: 'Losing it', note: 'From the break to the end of verse 2 he slows, hesitates longer at forks, and stops longer when stumped.' },
-  { at: 102, label: 'Meltdown', note: 'After the last "running": he stops and pulses hard, then from the horns races every way, getting nowhere.', key: true },
-  { at: 145, label: 'The breath', note: 'The horns drop away and he breathes; on the first word of verse 3 he walks the clear way out.', key: true },
-  { at: 178, label: 'Out', note: 'Through the door as the last chorus comes in, the pull back to the maze with no edge, and the mark on the last note (3:23.5).' },
+  { at: 108, label: 'Meltdown', note: 'The horns (1:51): he stops and pulses harder and harder; on the big hit at 1:56 he sprints every way.', key: true },
+  { at: 141, label: 'Coming round', note: 'From 2:24 he slows, and stops dead on the harmonic at 2:28; his breathing slows.', key: true },
+  { at: 150, label: 'Sets out', note: 'On "headed" (2:32.5) he sets out carefully, and steps through the door he was beside all along.' },
+  { at: 196, label: 'The end', note: 'The pull back to the maze with no edge, and the mark on the last note (3:24).' },
 ]
 
 const jump = (at: number) => {
