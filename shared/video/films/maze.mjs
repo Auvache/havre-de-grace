@@ -40,7 +40,7 @@
  * (tools/video-styles/visualizers/maze.mjs).
  */
 import { rng, r, clamp01, lerp, easeInOut, ramp } from '../kit.mjs'
-import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric, markDrawnAt, MARK_DRAW, ANCHOR_MARKUP } from '../album.mjs'
+import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric, markDrawnAt, MARK_DRAW } from '../album.mjs'
 import { drawLines } from '../hairline-draw.mjs'
 import { TITLES } from '../titles.mjs'
 import { END_BLACK, END_INK } from '../ending.mjs'
@@ -74,23 +74,87 @@ function openingSvg(time, uid) {
 /* ── The mazes ────────────────────────────────────────────────────── */
 
 // Odd sizes, centred on cell (0, 0), each the ring round the last, roughly
-// the plate's shape. Small first, so the first ones go by quickly.
-const SIZES = [[9, 5], [17, 9], [27, 13], [41, 21], [61, 31], [91, 47], [135, 69], [201, 105]]
-// Which side each maze's door is on. The last has none: it never ends.
-const DOORS = ['e', 'w', 'n', 'e', 's', 'w', 'e', null]
-const SEEDS = [12, 27, 49, 10, 47, 59, 71, 92]
+// the plate's shape. Small first, so the first ones go by quickly. Round the
+// fifth is the last maze of all, the band's anchor (ANCHOR, below), which
+// has no door: it never ends.
+const SIZES = [[9, 5], [17, 9], [27, 13], [41, 21], [61, 31]]
+const DOORS = ['e', 'w', 'n', 'e', null]
+const SEEDS = [12, 27, 49, 10, 47]
+/** The anchor's maze number: one past the boxes. */
+const A = SIZES.length
 
 const DIRS = { n: [0, -1], s: [0, 1], e: [1, 0], w: [-1, 0] }
 const key = (x, y) => `${x},${y}`
 const same = (a, b) => a && b && a[0] === b[0] && a[1] === b[1]
 
 const inBox = (k, x, y) => {
-  if (k < 0) return false
+  if (k < 0 || k >= A) return false
   const [w, h] = SIZES[k]
   return Math.abs(x) <= (w - 1) / 2 && Math.abs(y) <= (h - 1) / 2
 }
-/** Which maze a cell belongs to (its smallest enclosing box). */
-const mazeOf = (x, y) => SIZES.findIndex((_, k) => inBox(k, x, y))
+
+/*
+ * The anchor (as asked, 2026-11-02): every maze was the middle of the band's
+ * anchor, the stock where the shank crosses it, and the anchor is one more
+ * maze, all the way out. In anchor units (the mark's own: 0–200 across, 3–222
+ * down) the stock is 15 thick, so the fifth maze's 31 cells make ANCHOR_K
+ * cells a unit, and the whole anchor is about 450 cells tall: at the end the
+ * cells are a pixel and a half, small, but still a maze.
+ */
+const ANCHOR_K = 31 / 15
+const ANCHOR_AT = [100, 79.5] // the stock's middle, where the shank crosses it: the mazes' centre
+const toUnits = (x, y) => [ANCHOR_AT[0] + x / ANCHOR_K, ANCHOR_AT[1] + y / ANCHOR_K]
+const ANCHOR_MID = ((3 + 222) / 2 - ANCHOR_AT[1]) * ANCHOR_K
+const ANCHOR_BOX = {
+  x0: Math.floor((16 - ANCHOR_AT[0]) * ANCHOR_K), x1: Math.ceil((184 - ANCHOR_AT[0]) * ANCHOR_K),
+  y0: Math.floor((3 - ANCHOR_AT[1]) * ANCHOR_K), y1: Math.ceil((222 - ANCHOR_AT[1]) * ANCHOR_K),
+}
+/* The arms (the mark's crescent with its flukes) as a polygon: outer arc, fluke, inner arc, fluke. */
+const ARMS = (() => {
+  const pts = []
+  for (let i = 0; i <= 48; i++) { const a = Math.PI - (Math.PI * i) / 48; pts.push([100 + 76 * Math.cos(a), 134 + 88 * Math.sin(a)]) }
+  pts.push([184, 102], [161, 134])
+  for (let i = 0; i <= 48; i++) { const a = (Math.PI * i) / 48; pts.push([100 + 61 * Math.cos(a), 134 + 73 * Math.sin(a)]) }
+  pts.push([16, 102])
+  return pts
+})()
+const SHANK = [[92.4, 40], [107.6, 40], [105.8, 213], [94.2, 213]]
+function inPolygon(poly, x, y) {
+  let inside = false
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i]
+    const [xj, yj] = poly[j]
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside
+  }
+  return inside
+}
+/** Is the anchor's ink at this point (anchor units)? Ring, shank, stock and its balls, arms. */
+function inkAt(u, v) {
+  const ring = Math.hypot(u - 100, v - 26)
+  if (ring >= 13 && ring <= 23) return true
+  if (u >= 42 && u <= 158 && v >= 72 && v <= 87) return true
+  if (Math.hypot(u - 42, v - 79.5) <= 8.5 || Math.hypot(u - 158, v - 79.5) <= 8.5) return true
+  if (u >= 92 && u <= 108 && v >= 40 && v <= 213 && inPolygon(SHANK, u, v)) return true
+  return v >= 102 && v <= 222 && (u <= 42 || u >= 158 || v >= 190 || Math.hypot((u - 100) / 76, (v - 134) / 88) <= 1) && inPolygon(ARMS, u, v)
+}
+/** The anchor maze's cells: every cell whose centre is in the anchor's ink, outside the boxes. */
+const ANCHOR_CELLS = (() => {
+  const out = new Set()
+  for (let y = ANCHOR_BOX.y0; y <= ANCHOR_BOX.y1; y++) {
+    for (let x = ANCHOR_BOX.x0; x <= ANCHOR_BOX.x1; x++) {
+      if (inBox(A - 1, x, y)) continue
+      if (inkAt(...toUnits(x, y))) out.add(key(x, y))
+    }
+  }
+  return out
+})()
+
+/** Which maze a cell belongs to: its smallest enclosing box, else the anchor (A), else none (-1). */
+const mazeOf = (x, y) => {
+  const k = SIZES.findIndex((_, i) => inBox(i, x, y))
+  if (k >= 0) return k
+  return ANCHOR_CELLS.has(key(x, y)) ? A : -1
+}
 
 /*
  * The first maze's way out, laid by hand: up from the middle to the top,
@@ -148,12 +212,31 @@ function build() {
     doors.push({ inside, outside, side })
     entry = outside
   }
+  // The anchor: a backtracker over its cells, from every part not yet reached
+  // (a thin joint can leave a piece on its own; it is still a maze).
+  const g = rng(1066)
+  const seen = new Set()
+  for (const start of ANCHOR_CELLS) {
+    if (seen.has(start)) continue
+    seen.add(start)
+    const stack = [start.split(',').map(Number)]
+    while (stack.length) {
+      const [x, y] = stack.at(-1)
+      const next = Object.values(DIRS).map(([dx, dy]) => [x + dx, y + dy]).filter(([a, b]) => ANCHOR_CELLS.has(key(a, b)) && !seen.has(key(a, b)))
+      if (!next.length) { stack.pop(); continue }
+      const n = next[Math.floor(g() * next.length)]
+      link([x, y], n)
+      seen.add(key(...n))
+      stack.push(n)
+    }
+  }
   return { open, doors, connected: (a, b) => open.has(`${key(...a)}|${key(...b)}`) }
 }
 const M = build()
 
 /** How far out a cell sits within its maze's ring, 0 inner edge to 1 outer. */
 function ringDepth(k, x, y) {
+  if (k === A) return clamp01(Math.hypot(x, y - ANCHOR_MID * 0.4) / (ANCHOR_BOX.y1 - ANCHOR_BOX.y0))
   const [w, h] = SIZES[k]
   const outer = Math.max(Math.abs(x) / ((w - 1) / 2 || 1), Math.abs(y) / ((h - 1) / 2 || 1))
   if (k === 0) return outer
@@ -189,6 +272,7 @@ const SPRINT = 116.24 // the loudest hit in the horns
 const FOCUS = 144 // he starts to come round
 const STOP = 148.19 // the harmonic
 const SET_OUT = 152.52 // "headed"
+const PANIC_SEED = 23
 
 const confidence = (time) => {
   if (time < 32) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (32 - SET_OFF))))
@@ -264,8 +348,9 @@ const WALK = (() => {
   let route = [] // cells he has decided to walk, in order
   let pending = null // the step into `here`, waiting on how he leaves it
   let doorway = false // just stepped through a door: stop and wait for the maze
-  let calm = false // after the breath: he sees the way out of every maze from here on
   const g = rng(1729)
+  const gp = rng(PANIC_SEED) // the sprint and after, so they can be tuned without moving what comes before
+  const trodden = new Map() // cells he has run through in the sprint, and how often
 
   /* Looking down the corridor from `from` towards `next`. */
   const look = (from, next) => {
@@ -352,24 +437,37 @@ const WALK = (() => {
     const opts = neighbours(k, here)
     const back = [here[0] - came[0], here[1] - came[1]]
     if (frantic) {
-      // No plan and no memory: any way on at a fork, old ground and dead ends
-      // and all, turning back only when he hits a wall; the door is a wall.
-      // And nowhere near the door: inside the nearest 40% of the maze (by the
-      // walk to it) he only ever turns away from it.
+      // No plan: any way on at a fork, never turning back but at a wall, old
+      // ground and dead ends and all, but spread about: a way he has been down
+      // is less likely the more often he has (so not three times running), and
+      // a way that leads near the door (within 12 cells of it, as the crow
+      // flies, in the next 40 cells along it) is unlikely, so he stays clear.
+      const nearDoorAhead = (o) => {
+        if (!door) return false
+        const man = (c) => Math.abs(c[0] - door.inside[0]) + Math.abs(c[1] - door.inside[1])
+        const seen = new Set([key(...here), key(...o)])
+        let front = [o]
+        for (let depth = 0; depth < 20 && front.length; depth++) {
+          if (front.some((c) => man(c) < 10)) return true
+          const next = []
+          for (const c of front) for (const n of neighbours(k, c)) if (!seen.has(key(...n))) { seen.add(key(...n)); next.push(n) }
+          front = next
+        }
+        return false
+      }
       const ahead = [here[0] + came[0], here[1] + came[1]]
-      const D = doorDistance(k)
-      const near = (c) => D && (D.get(key(...c)) ?? Infinity) < D.far * 0.4 && D.get(key(...c)) < (D.get(key(...here)) ?? Infinity)
-      const away = opts.filter((o) => !near(o))
-      const choices = away.length ? away : opts
-      const pool = choices.length > 1 ? choices.filter((o) => !same(o, back)) : choices
-      const pick = pool.find((o) => same(o, ahead) && g() < P.momentum) ?? pool[Math.floor(g() * pool.length)]
+      const forward = opts.length > 1 ? opts.filter((o) => !same(o, back)) : opts
+      const weight = (o) => {
+        const n = trodden.get(key(...o)) ?? 0
+        const toDoor = nearDoorAhead(o)
+        return (1 / (1 + n) ** 2.5) * (toDoor ? 0.02 : 1) * (same(o, ahead) ? 1 + P.momentum : 1)
+      }
+      const ws = forward.map(weight)
+      let pickAt = gp() * ws.reduce((t, w) => t + w, 0)
+      let pick = forward.at(-1)
+      for (let i = 0; i < forward.length; i++) { pickAt -= ws[i]; if (pickAt <= 0) { pick = forward[i]; break } }
       route = []
       return { next: pick, pause: 0 }
-    }
-    if (calm && !route.length && door) {
-      // After the breath he thinks it through and walks the clear way out.
-      route = solve(here, door.inside).slice(1)
-      if (!route.length) return { next: door.outside, pause: 0 }
     }
     if (route.length) return { next: route.shift(), pause: 0 }
     const views = opts.filter((o) => !same(o, back)).map((o) => ({ o, ...look(here, o) }))
@@ -382,7 +480,7 @@ const WALK = (() => {
     const fresh = views.filter((v) => !v.blind && !visited.has(key(...v.o)))
     if (fresh.length) {
       const score = (v) => ringDepth(k, ...v.cells.at(-1)) +
-        (same(dirOf(here, v.o), came) ? P.momentum : 0) + g() * P.wander
+        (same(dirOf(here, v.o), came) ? P.momentum : 0) + (t >= MELTDOWN ? gp() : g()) * P.wander
       fresh.sort((p, q) => score(q) - score(p))
       return { next: fresh[0].o, pause: fresh.length > 1 ? P.hesitate : 0 }
     }
@@ -424,7 +522,9 @@ const WALK = (() => {
       push(t, Math.max(t, until), here, here, 0, 0)
       t = Math.max(t, until)
       rest = true
-      if (state === 'breathe') { calm = true; route = [] }
+      // After the breath: fresh eyes. He walks it as he did before the meltdown,
+      // wrong turns and all, and finds his own way out.
+      if (state === 'breathe') { visited = new Set([key(...here)]); dead = new Set(); route = [] }
       continue
     }
     if (doorway) {
@@ -465,8 +565,9 @@ const WALK = (() => {
       visited = new Set()
       dead = new Set()
       route = []
-      doorway = true // calm stays: after the breath he sees each way out
+      doorway = true
     }
+    if (state === 'panic' || state === 'focus') trodden.set(key(...next), (trodden.get(key(...next)) ?? 0) + 1)
     pending = { t, a: here, va: vHere, vc }
     came = dir
     here = next
@@ -525,9 +626,14 @@ function smoothAt(time) {
   return [x / sum, y / sum]
 }
 
+/** The last pull back, in song seconds: one steady move from the maze he is in out to the whole anchor. */
+const OUTRO = [193, 202.3]
+const OUTRO_EASE = 1
+
+/** The doorways the film shows: any after 3:08 would fall in the pull back or past the end card. */
+const ARRIVALS = WALK.arrivals.filter((a) => a < 188)
+
 /** Which maze he is in at `time`. */
-/** The doorways the film shows: any after 3:06 would fall in the pull back or past the end card. */
-const ARRIVALS = WALK.arrivals.filter((a) => a < 186)
 
 const mazeAt = (time) => ARRIVALS.filter((e) => e <= time).length
 
@@ -540,14 +646,16 @@ const DRAWN = (() => {
   const out = SIZES.map((_, k) => (k === 0 ? [16.6, 19.2] : ARRIVALS[k - 1] !== undefined
     ? [ARRIVALS[k - 1] + PULL * 0.2, ARRIVALS[k - 1] + PULL * 0.2 + drawTime(k)]
     : null))
-  // The pull back at the end: every maze not yet drawn, one after another, out to the last.
-  let at = Math.max(186, (ARRIVALS.at(-1) ?? 0) + 5)
-  return out.map((w) => {
+  // Any box he never reached comes in just before the pull back; the anchor
+  // comes in, middle outward, as the pull back starts, while it is still
+  // mostly out of frame.
+  let at = Math.max(186, (ARRIVALS.at(-1) ?? 0) + 4)
+  return [...out.map((w) => {
     if (w) return w
-    const span = [at, at + 4]
-    at += 3
+    const span = [at, at + 3]
+    at += 2
     return span
-  })
+  }), [OUTRO[0] - 0.5, OUTRO[0] + 2.5]]
 })()
 const CHUNKS = 24
 /* Mazes with more runs than this appear chunk by chunk rather than stroke by stroke. */
@@ -558,15 +666,19 @@ const PEN_LIMIT = 1600
  * would draw them (ring by ring out from the middle, round each ring from the
  * door it was entered by), each with when it is drawn.
  */
-const RUNS = SIZES.map((size, k) => {
-  const [w, h] = size
+const RUNS = [...SIZES, null].map((size, k) => {
+  const anchor = k === A
+  const [w, h] = anchor ? [ANCHOR_BOX.x1 - ANCHOR_BOX.x0, ANCHOR_BOX.y1 - ANCHOR_BOX.y0] : size
   const hw = (w - 1) / 2
   const hh = (h - 1) / 2
+  const [x0, x1, y0, y1] = anchor ? [ANCHOR_BOX.x0, ANCHOR_BOX.x1, ANCHOR_BOX.y0, ANCHOR_BOX.y1] : [-hw, hw, -hh, hh]
   const hMap = new Map()
   const vMap = new Map()
   const add = (map, line, at) => { if (!map.has(line)) map.set(line, []); map.get(line).push(at) }
-  for (let y = -hh; y <= hh; y++) {
-    for (let x = -hw; x <= hw; x++) {
+  const cells = anchor ? [...ANCHOR_CELLS].map((c) => c.split(',').map(Number)) : null
+  for (let y = y0; y <= y1; y++) {
+    for (let x = x0; x <= x1; x++) {
+      if (anchor) break
       if (mazeOf(x, y) !== k) continue
       for (const [d, [dx, dy]] of Object.entries(DIRS)) {
         const other = mazeOf(x + dx, y + dy)
@@ -578,6 +690,18 @@ const RUNS = SIZES.map((size, k) => {
         if (d === 'w') add(vMap, x - 0.5, y - 0.5)
         if (d === 'e') add(vMap, x + 0.5, y - 0.5)
       }
+    }
+  }
+  for (const [x, y] of cells ?? []) {
+    for (const [d, [dx, dy]] of Object.entries(DIRS)) {
+      const other = mazeOf(x + dx, y + dy)
+      if (M.connected([x, y], [x + dx, y + dy])) continue
+      if (other !== -1 && other < k) continue
+      if ((d === 'w' || d === 'n') && other === k) continue
+      if (d === 'n') add(hMap, y - 0.5, x - 0.5)
+      if (d === 's') add(hMap, y + 0.5, x - 0.5)
+      if (d === 'w') add(vMap, x - 0.5, y - 0.5)
+      if (d === 'e') add(vMap, x + 0.5, y - 0.5)
     }
   }
   const runs = []
@@ -595,13 +719,13 @@ const RUNS = SIZES.map((size, k) => {
   merge(hMap, true)
   merge(vMap, false)
   // Ring by ring outward, and round each ring starting from where he came in.
-  const enter = k === 0 ? [-1, 0] : M.doors[k - 1].outside
+  const enter = k === 0 ? [-1, 0] : anchor ? [1, 0] : M.doors[k - 1].outside
   const a0 = Math.atan2(enter[1], enter[0])
-  const rings = Math.max(3, Math.round(Math.min(w, h) / 4))
+  const rings = anchor ? 40 : Math.max(3, Math.round(Math.min(w, h) / 4))
   const order = (run) => {
     const mx = (run[0] + run[2]) / 2
     const my = (run[1] + run[3]) / 2
-    const depth = ringDepth(k, Math.max(-hw, Math.min(hw, Math.round(mx))), Math.max(-hh, Math.min(hh, Math.round(my))))
+    const depth = anchor ? ringDepth(A, mx, my) : ringDepth(k, Math.max(-hw, Math.min(hw, Math.round(mx))), Math.max(-hh, Math.min(hh, Math.round(my))))
     const a = (((Math.atan2(my, mx) - a0) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)
     return Math.min(rings - 1, Math.floor(depth * rings)) + a / (2 * Math.PI)
   }
@@ -636,7 +760,7 @@ const libCache = new Map()
 function wallLib(uid) {
   if (!libCache.has(uid)) {
     libCache.set(uid, `<defs>${CHUNKED.flatMap((chunks, k) => chunks.map((c, j) =>
-      `<path id="${uid}-w${k}-${j}" d="${c.d}"/>`)).join('')}${anchorLib(uid)}</defs>`)
+      `<path id="${uid}-w${k}-${j}" d="${c.d}"/>`)).join('')}</defs>`)
   }
   return libCache.get(uid)
 }
@@ -680,8 +804,14 @@ const phaseAt = (time) => {
 
 /* ── The camera ───────────────────────────────────────────────────── */
 
-/** The last pull back's three keys, in song seconds: from the maze he is in, to the stock's edges, to the whole anchor. */
-const OUTRO = [188, 200, 202.3]
+/*
+ * The last pull back (as asked, 2026-11-02): one steady move, out from the
+ * maze he is in to the whole anchor, a second's ease at each end and an even
+ * speed between, in log scale. The anchor is about 15 times its stock, so the
+ * stock's edges show early in the move; by 3:22.3 the whole anchor is on the
+ * plate, and the camera holds there, the red dot in it, until the mark on
+ * black at the last note.
+ */
 
 /** Screen px per cell: each maze fitted to the plate, pulling back as the next is drawn round it. */
 const ZOOM = (() => {
@@ -695,121 +825,29 @@ const ZOOM = (() => {
   return keys.filter(([t]) => t < OUTRO[0])
 })()
 
-/* ── The anchor ───────────────────────────────────────────────────── */
-
-/*
- * The last pull back (as asked, 2026-11-02): it never stops at the last
- * maze. All of them were the middle of the band's anchor — the stock, where
- * the shank crosses it — and the anchor is a maze too, all the way out. The
- * stock's top and bottom edges come into view at 3:20; by 3:22.3 the whole
- * anchor is on the plate, and the camera holds there, the red dot in it,
- * until the mark on black at the last note.
- *
- * In anchor units (ANCHOR_MARKUP: 0–200 across, 3–222 down) the stock is 15
- * thick, so the last maze's 105 cells make ANCHOR_K = 7 cells a unit. Outside
- * the drawn mazes the anchor is filled with a maze texture: a 64-cell tile,
- * generated on a torus so its edges meet, masked to the anchor's shape with
- * the last maze's rectangle cut out.
- */
-const ANCHOR_K = 7
-const ANCHOR_AT = [100, 79.5] // the stock's middle, where the shank crosses it: the mazes' centre
-const AW = (u) => (u - ANCHOR_AT[0]) * ANCHOR_K
-const AH = (u) => (u - ANCHOR_AT[1]) * ANCHOR_K
-const ANCHOR_BOX = { x: AW(10), y: AH(0), w: 180 * ANCHOR_K, h: 226 * ANCHOR_K }
-const ANCHOR_MID = AH((3 + 222) / 2)
-const LAST = SIZES.at(-1)
-
 /** Screen px per cell when the whole anchor (219 units tall) fills 90% of the plate. */
 const ANCHOR_FIT = (PH * 0.9) / (219 * ANCHOR_K)
-/** At 3:20 the stock (the last maze's height) fills 91% of the plate: its edges just showing. */
-const EDGE_FIT = (PH * 0.91) / LAST[1]
 
-const TEX = 64
-const TEX_PATH = (() => {
-  const g = rng(2026)
-  const linked = new Set()
-  const at = (x, y) => (((y % TEX) + TEX) % TEX) * TEX + (((x % TEX) + TEX) % TEX)
-  const link = (a, b) => { linked.add(`${a}|${b}`); linked.add(`${b}|${a}`) }
-  const seen = new Set([0])
-  const stack = [[0, 0]]
-  while (stack.length) {
-    const [x, y] = stack.at(-1)
-    const next = Object.values(DIRS).map(([dx, dy]) => [x + dx, y + dy]).filter(([a, b]) => !seen.has(at(a, b)))
-    if (!next.length) { stack.pop(); continue }
-    const [a, b] = next[Math.floor(g() * next.length)]
-    link(at(x, y), at(a, b))
-    seen.add(at(a, b))
-    stack.push([((a % TEX) + TEX) % TEX, ((b % TEX) + TEX) % TEX])
-  }
-  // Each cell's east and south walls; those on the tile's far edges again on its near ones.
-  let d = ''
-  for (let y = 0; y < TEX; y++) {
-    for (let x = 0; x < TEX; x++) {
-      if (!linked.has(`${at(x, y)}|${at(x + 1, y)}`)) { d += `M${x + 1} ${y}V${y + 1}`; if (x === TEX - 1) d += `M0 ${y}V${y + 1}` }
-      if (!linked.has(`${at(x, y)}|${at(x, y + 1)}`)) { d += `M${x} ${y + 1}H${x + 1}`; if (y === TEX - 1) d += `M${x} 0H${x + 1}` }
-    }
-  }
-  return d
-})()
-
-/** The anchor's defs: the texture's walls and the mask, mounted once with the walls. */
-const anchorLib = (uid) => `<path id="${uid}-tex" d="${TEX_PATH}"/>` +
-  `<mask id="${uid}-anchor" maskUnits="userSpaceOnUse" x="${ANCHOR_BOX.x}" y="${ANCHOR_BOX.y}" width="${ANCHOR_BOX.w}" height="${ANCHOR_BOX.h}">` +
-  `<g transform="scale(${ANCHOR_K}) translate(${-ANCHOR_AT[0]} ${-ANCHOR_AT[1]})" fill="#fff" style="color:#fff">${ANCHOR_MARKUP}</g>` +
-  `<rect x="${-(LAST[0] / 2)}" y="${-(LAST[1] / 2)}" width="${LAST[0]}" height="${LAST[1]}" fill="#000"/></mask>`
-
-/*
- * The anchor's fill at this scale, in the walls' group. Three layers hand over
- * as the cells shrink below a pixel or two: the drawn mazes (faded out by the
- * caller over `real`), the texture (a pattern whose line weight follows the
- * walls'), and a flat ink at the texture's own tone (51%, measured), so the
- * anchor the camera holds on is clean, with no tile seams.
- */
-const TONE = 0.51
-const handover = (s) => ({ real: 1 - clamp01((2.8 - s) / 0.7), flat: clamp01((2.1 - s) / 0.6) })
-function anchorFill(time, uid, wallWorld, s) {
-  if (time < 195) return ''
-  const { real, flat } = handover(s)
-  const box = `x="${ANCHOR_BOX.x}" y="${ANCHOR_BOX.y}" width="${ANCHOR_BOX.w}" height="${ANCHOR_BOX.h}"`
-  const inner = `x="${-(LAST[0] / 2)}" y="${-(LAST[1] / 2)}" width="${LAST[0]}" height="${LAST[1]}"`
-  let out = ''
-  if (flat < 1) {
-    out += `<pattern id="${uid}-texp" patternUnits="userSpaceOnUse" x="-0.5" y="-0.5" width="${TEX}" height="${TEX}"><use href="#${uid}-tex" fill="none" stroke="${INK}" stroke-width="${wallWorld.toFixed(4)}" stroke-linecap="square"/></pattern>` +
-      `<g opacity="${r(1 - flat, 3)}"><rect ${box} fill="url(#${uid}-texp)" stroke="none" mask="url(#${uid}-anchor)"/>` +
-      (real < 1 ? `<rect ${inner} fill="url(#${uid}-texp)" stroke="none" opacity="${r(1 - real, 3)}"/>` : '') + '</g>'
-  }
-  if (flat > 0) {
-    out += `<g transform="scale(${ANCHOR_K}) translate(${-ANCHOR_AT[0]} ${-ANCHOR_AT[1]})" fill="${INK}" stroke="none" style="color:${INK}" opacity="${r(TONE * flat, 3)}">${ANCHOR_MARKUP}</g>`
-  }
-  return out
-}
-
-/** A monotone cubic through the outro's keys in log scale: no overshoot, velocity continuous, still at both ends. */
-function outroScale(time) {
-  const ys = [Math.log(keyScale(OUTRO[0])), Math.log(EDGE_FIT), Math.log(ANCHOR_FIT)]
-  const hs = [OUTRO[1] - OUTRO[0], OUTRO[2] - OUTRO[1]]
-  const ds = [(ys[1] - ys[0]) / hs[0], (ys[2] - ys[1]) / hs[1]]
-  const m = [0, ds[0] * ds[1] > 0 ? (3 * (hs[0] + hs[1])) / ((2 * hs[1] + hs[0]) / ds[0] + (hs[1] + 2 * hs[0]) / ds[1]) : 0, 0]
-  const i = time < OUTRO[1] ? 0 : 1
-  const h = hs[i]
-  const x = clamp01((time - OUTRO[i]) / h)
-  const h00 = 2 * x ** 3 - 3 * x ** 2 + 1
-  const h10 = x ** 3 - 2 * x ** 2 + x
-  const h01 = -2 * x ** 3 + 3 * x ** 2
-  const h11 = x ** 3 - x ** 2
-  return Math.exp(h00 * ys[i] + h10 * h * m[i] + h01 * ys[i + 1] + h11 * h * m[i + 1])
+/** How far through the pull back, 0–1: a trapezoid of speed, so the middle is even. */
+function outroProgress(time) {
+  const T = OUTRO[1] - OUTRO[0]
+  const a = OUTRO_EASE
+  const v = 1 / (T - a)
+  const tau = clamp01((time - OUTRO[0]) / T) * T
+  if (tau < a) return (v * tau * tau) / (2 * a)
+  if (tau > T - a) return 1 - (v * (T - tau) ** 2) / (2 * a)
+  return v * (tau - a / 2)
 }
 
 function scaleAt(time) {
-  if (time >= OUTRO[0]) return outroScale(Math.min(time, OUTRO[2]))
-  return keyScale(time)
+  if (time < OUTRO[0]) return keyScale(time)
+  const u = outroProgress(time)
+  return Math.exp(lerp(Math.log(keyScale(OUTRO[0])), Math.log(ANCHOR_FIT), u))
 }
 
-/** Where the camera looks, in cells: the mazes' centre, drifting down to the anchor's as it all comes into view. */
+/** Where the camera looks, in cells: the mazes' centre, drifting down to the anchor's as it all comes in. */
 function lookAt(time) {
-  const s = scaleAt(time)
-  const u = clamp01((Math.log(EDGE_FIT) - Math.log(s)) / (Math.log(EDGE_FIT) - Math.log(ANCHOR_FIT)))
-  return [0, ANCHOR_MID * easeInOut(u)]
+  return [0, ANCHOR_MID * outroProgress(time) ** 2]
 }
 
 function keyScale(time) {
@@ -875,11 +913,11 @@ export function mazePlate({ time, uid }) {
   const hx = sx(dot[0] + jx)
   const hy = sy(dot[1] + jy)
   // Walls keep a hairline down to cells of 2.7 px; below that they are a
-  // share of the cell, so far off the maze is a tone, not solid ink.
+  // share of the cell, so far out the anchor stays a maze, not solid ink.
   const wallW = s >= 2.67 ? Math.max(0.8, Math.min(3, s * 0.05)) : s * 0.3
   const appear = clamp01((time - ENTER.from) / 0.3)
   const plate = `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
-  <g transform="translate(${r(CX - lx * s, 3)} ${r(CY - ly * s, 3)}) scale(${r(s, 5)})" stroke="${INK}" stroke-width="${(wallW / s).toFixed(4)}" fill="none" stroke-linecap="square">${anchorFill(time, uid, wallW / s, s)}${handover(s).real < 1 ? `<g opacity="${r(handover(s).real, 3)}">${walls(time, uid)}</g>` : walls(time, uid)}</g>
+  <g transform="translate(${r(CX - lx * s, 3)} ${r(CY - ly * s, 3)}) scale(${r(s, 5)})" stroke="${INK}" stroke-width="${(wallW / s).toFixed(4)}" fill="none" stroke-linecap="square">${walls(time, uid)}</g>
   <g stroke="${RED}" fill="none" stroke-linejoin="round" stroke-linecap="butt">${trail}</g>
   <g opacity="${r(appear, 3)}"><circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad * (1.2 + ringU * 1.6 * deep))}" fill="none" stroke="${RED}" stroke-width="2" opacity="${r(0.6 * (1 - ringU))}"/>
   <circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad)}" fill="${RED}"/></g>`

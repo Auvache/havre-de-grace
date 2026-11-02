@@ -161,10 +161,10 @@ const BEATS = [
   { at: 11, label: 'The way in', note: 'In from the left; once his line has faded the first maze is drawn round him, and on "To see if I can\'t lose my way" he sets off, all the way round it.' },
   { at: 29, label: 'A door', note: 'He stops in the doorway while the second maze is drawn round him, then goes on, sure of himself.' },
   { at: 58, label: 'Losing it', note: 'From the break to the end of verse 2 he slows, hesitates longer at forks, and stops longer when stumped.' },
-  { at: 108, label: 'Meltdown', note: 'The horns (1:51): he stops and pulses harder and harder; on the big hit at 1:56 he sprints every way.', key: true },
+  { at: 108, label: 'Meltdown', note: 'The horns (1:51): he stops and pulses harder and harder; on the big hit at 1:56 he sprints all over, never the same way three times, turning back only at walls.', key: true },
   { at: 141, label: 'Coming round', note: 'From 2:24 he slows, and stops dead on the harmonic at 2:28; his breathing slows.', key: true },
-  { at: 150, label: 'Sets out', note: 'On "headed" (2:32.5) he sets out carefully, and steps through the door he was beside all along.' },
-  { at: 194, label: 'The anchor', note: 'The pull back: the last maze’s edges at 3:20, the whole anchor at 3:22, held, and the mark on the last note (3:23.8).', key: true },
+  { at: 150, label: 'Sets out', note: 'On "headed" (2:32.5) he sets out carefully; a few wrong turns he puts right, and out through the door as the last chorus comes in (3:04.7).' },
+  { at: 190, label: 'The anchor', note: 'One steady pull back from 3:13: the maze he is in, then all of it, the band’s anchor made of maze, held from 3:22.3, and the mark on the last note (3:23.8).', key: true },
 ]
 
 const jump = (at: number) => {
