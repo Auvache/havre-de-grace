@@ -40,7 +40,7 @@
  * (tools/video-styles/visualizers/maze.mjs).
  */
 import { rng, r, clamp01, lerp, easeInOut, ramp } from '../kit.mjs'
-import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric, markDrawnAt, MARK_DRAW } from '../album.mjs'
+import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric, markDrawnAt, MARK_DRAW, ANCHOR_MARKUP } from '../album.mjs'
 import { drawLines } from '../hairline-draw.mjs'
 import { TITLES } from '../titles.mjs'
 import { END_BLACK, END_INK } from '../ending.mjs'
@@ -101,7 +101,10 @@ const ROUTE0 = (() => {
   const out = [[0, 0], [0, -1], [0, -2]]
   for (let x = -1; x >= -4; x--) out.push([x, -2])
   for (let y = -1; y <= 2; y++) out.push([-4, y])
-  for (let x = -3; x <= 4; x++) out.push([x, 2])
+  // The bottom, with a step up and back down in the middle of it.
+  for (let x = -3; x <= -1; x++) out.push([x, 2])
+  out.push([-1, 1], [0, 1], [1, 1], [1, 2])
+  for (let x = 2; x <= 4; x++) out.push([x, 2])
   for (let y = 1; y >= -1; y--) out.push([4, y])
   return out
 })()
@@ -180,7 +183,7 @@ function ringDepth(k, x, y) {
  *   2:32.52 "headed", in the first line of verse 3: he sets out carefully,
  *           and grows sure of himself as he walks the clear way out.
  */
-const SET_OFF = 15.6 // the first word
+const SET_OFF = 20.31 // "To see if I can't lose my way", once the first maze is drawn round him
 const MELTDOWN = 110.8 // the horns come in
 const SPRINT = 116.24 // the loudest hit in the horns
 const FOCUS = 144 // he starts to come round
@@ -188,9 +191,9 @@ const STOP = 148.19 // the harmonic
 const SET_OUT = 152.52 // "headed"
 
 const confidence = (time) => {
-  if (time < 30) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (30 - SET_OFF))))
+  if (time < 32) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (32 - SET_OFF))))
   if (time < 58.4) return 1
-  if (time < 99.85) return 1 - easeInOut((time - 58.4) / (99.85 - 58.4))
+  if (time < 99.85) return 1 - ((time - 58.4) / (99.85 - 58.4)) ** 1.5 // slowly at first
   if (time < SET_OUT) return 0
   return lerp(0.25, 1, easeInOut(clamp01((time - SET_OUT) / 7)))
 }
@@ -219,7 +222,7 @@ const gait = (time) => {
   // The breath slows from the sprint's to the slowest of the film.
   if (s === 'breathe') return { px: 0, pulse: lerp(1.4, 0.14, easeInOut(ramp(time, STOP, STOP + 3.4))) }
   const c = s === 'enter' ? 1 : confidence(time)
-  return { px: lerp(130, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: s === 'enter' ? 0.24 : lerp(0.36, 0.27, c) }
+  return { px: lerp(150, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: s === 'enter' ? 0.24 : lerp(0.36, 0.27, c) }
 }
 
 /** Screen px per cell that fits maze k on the plate. */
@@ -230,7 +233,7 @@ const neighbours = (k, [x, y]) =>
 const dirOf = (a, b) => [Math.sign(b[0] - a[0]), Math.sign(b[1] - a[1])]
 
 /** The way in: from off the plate's left edge to the centre, stopping there. */
-const ENTER = { from: 12.1, to: 14.5, startX: (PX - CX) / fitScale(0) - 1.5 }
+const ENTER = { from: 11.5, to: 13.3, startX: (PX - CX) / fitScale(0) - 1.5 }
 
 /** How long maze k takes to draw once he is standing in its doorway. */
 const drawTime = (k) => Math.min(3.4, 1.9 + 0.3 * k)
@@ -321,6 +324,26 @@ const WALK = (() => {
     return path
   }
 
+  /* How far each cell of maze k is from its door, walking: a Map, and `far`, the farthest. */
+  const doorCache = new Map()
+  const doorDistance = (kk) => {
+    if (!M.doors[kk]) return null
+    if (!doorCache.has(kk)) {
+      const D = new Map([[key(...M.doors[kk].inside), 0]])
+      const queue = [M.doors[kk].inside]
+      let far = 0
+      while (queue.length) {
+        const c = queue.shift()
+        const d = D.get(key(...c))
+        far = Math.max(far, d)
+        for (const n of neighbours(kk, c)) if (!D.has(key(...n))) { D.set(key(...n), d + 1); queue.push(n) }
+      }
+      D.far = far
+      doorCache.set(kk, D)
+    }
+    return doorCache.get(kk)
+  }
+
   /* Where he goes next from `here`, and how long he stops first. */
   const decide = (state, P) => {
     const door = M.doors[k]
@@ -331,8 +354,14 @@ const WALK = (() => {
     if (frantic) {
       // No plan and no memory: any way on at a fork, old ground and dead ends
       // and all, turning back only when he hits a wall; the door is a wall.
+      // And nowhere near the door: inside the nearest 40% of the maze (by the
+      // walk to it) he only ever turns away from it.
       const ahead = [here[0] + came[0], here[1] + came[1]]
-      const pool = opts.length > 1 ? opts.filter((o) => !same(o, back)) : opts
+      const D = doorDistance(k)
+      const near = (c) => D && (D.get(key(...c)) ?? Infinity) < D.far * 0.4 && D.get(key(...c)) < (D.get(key(...here)) ?? Infinity)
+      const away = opts.filter((o) => !near(o))
+      const choices = away.length ? away : opts
+      const pool = choices.length > 1 ? choices.filter((o) => !same(o, back)) : choices
       const pick = pool.find((o) => same(o, ahead) && g() < P.momentum) ?? pool[Math.floor(g() * pool.length)]
       route = []
       return { next: pick, pause: 0 }
@@ -506,8 +535,9 @@ const mazeAt = (time) => ARRIVALS.filter((e) => e <= time).length
 
 /** When maze k is drawn: the first round him as he arrives, each next one as he nears its door. */
 const DRAWN = (() => {
-  // Each next maze is drawn while he stands in its doorway, the camera pulling back as it starts.
-  const out = SIZES.map((_, k) => (k === 0 ? [13.0, 15.5] : ARRIVALS[k - 1] !== undefined
+  // The first once he is in the middle and his line in has faded; each next
+  // one while he stands in its doorway, the camera pulling back as it starts.
+  const out = SIZES.map((_, k) => (k === 0 ? [16.6, 19.2] : ARRIVALS[k - 1] !== undefined
     ? [ARRIVALS[k - 1] + PULL * 0.2, ARRIVALS[k - 1] + PULL * 0.2 + drawTime(k)]
     : null))
   // The pull back at the end: every maze not yet drawn, one after another, out to the last.
@@ -606,7 +636,7 @@ const libCache = new Map()
 function wallLib(uid) {
   if (!libCache.has(uid)) {
     libCache.set(uid, `<defs>${CHUNKED.flatMap((chunks, k) => chunks.map((c, j) =>
-      `<path id="${uid}-w${k}-${j}" d="${c.d}"/>`)).join('')}</defs>`)
+      `<path id="${uid}-w${k}-${j}" d="${c.d}"/>`)).join('')}${anchorLib(uid)}</defs>`)
   }
   return libCache.get(uid)
 }
@@ -650,6 +680,9 @@ const phaseAt = (time) => {
 
 /* ── The camera ───────────────────────────────────────────────────── */
 
+/** The last pull back's three keys, in song seconds: from the maze he is in, to the stock's edges, to the whole anchor. */
+const OUTRO = [188, 200, 202.3]
+
 /** Screen px per cell: each maze fitted to the plate, pulling back as the next is drawn round it. */
 const ZOOM = (() => {
   const keys = [[0, fitScale(0)]]
@@ -659,13 +692,127 @@ const ZOOM = (() => {
     add(e, fitScale(k))
     add(e + PULL, fitScale(k + 1))
   })
-  // The outro: the whole of the last maze, whatever he is in.
-  const last = fitScale(SIZES.length - 1)
-  // It is all out by the last note (the end card), so it runs 188 to 202.
-  if (keys.at(-1)[1] > last && keys.at(-1)[0] < 188) keys.push([188, keys.at(-1)[1]], [202, last])
-  return keys
+  return keys.filter(([t]) => t < OUTRO[0])
 })()
+
+/* ── The anchor ───────────────────────────────────────────────────── */
+
+/*
+ * The last pull back (as asked, 2026-11-02): it never stops at the last
+ * maze. All of them were the middle of the band's anchor — the stock, where
+ * the shank crosses it — and the anchor is a maze too, all the way out. The
+ * stock's top and bottom edges come into view at 3:20; by 3:22.3 the whole
+ * anchor is on the plate, and the camera holds there, the red dot in it,
+ * until the mark on black at the last note.
+ *
+ * In anchor units (ANCHOR_MARKUP: 0–200 across, 3–222 down) the stock is 15
+ * thick, so the last maze's 105 cells make ANCHOR_K = 7 cells a unit. Outside
+ * the drawn mazes the anchor is filled with a maze texture: a 64-cell tile,
+ * generated on a torus so its edges meet, masked to the anchor's shape with
+ * the last maze's rectangle cut out.
+ */
+const ANCHOR_K = 7
+const ANCHOR_AT = [100, 79.5] // the stock's middle, where the shank crosses it: the mazes' centre
+const AW = (u) => (u - ANCHOR_AT[0]) * ANCHOR_K
+const AH = (u) => (u - ANCHOR_AT[1]) * ANCHOR_K
+const ANCHOR_BOX = { x: AW(10), y: AH(0), w: 180 * ANCHOR_K, h: 226 * ANCHOR_K }
+const ANCHOR_MID = AH((3 + 222) / 2)
+const LAST = SIZES.at(-1)
+
+/** Screen px per cell when the whole anchor (219 units tall) fills 90% of the plate. */
+const ANCHOR_FIT = (PH * 0.9) / (219 * ANCHOR_K)
+/** At 3:20 the stock (the last maze's height) fills 91% of the plate: its edges just showing. */
+const EDGE_FIT = (PH * 0.91) / LAST[1]
+
+const TEX = 64
+const TEX_PATH = (() => {
+  const g = rng(2026)
+  const linked = new Set()
+  const at = (x, y) => (((y % TEX) + TEX) % TEX) * TEX + (((x % TEX) + TEX) % TEX)
+  const link = (a, b) => { linked.add(`${a}|${b}`); linked.add(`${b}|${a}`) }
+  const seen = new Set([0])
+  const stack = [[0, 0]]
+  while (stack.length) {
+    const [x, y] = stack.at(-1)
+    const next = Object.values(DIRS).map(([dx, dy]) => [x + dx, y + dy]).filter(([a, b]) => !seen.has(at(a, b)))
+    if (!next.length) { stack.pop(); continue }
+    const [a, b] = next[Math.floor(g() * next.length)]
+    link(at(x, y), at(a, b))
+    seen.add(at(a, b))
+    stack.push([((a % TEX) + TEX) % TEX, ((b % TEX) + TEX) % TEX])
+  }
+  // Each cell's east and south walls; those on the tile's far edges again on its near ones.
+  let d = ''
+  for (let y = 0; y < TEX; y++) {
+    for (let x = 0; x < TEX; x++) {
+      if (!linked.has(`${at(x, y)}|${at(x + 1, y)}`)) { d += `M${x + 1} ${y}V${y + 1}`; if (x === TEX - 1) d += `M0 ${y}V${y + 1}` }
+      if (!linked.has(`${at(x, y)}|${at(x, y + 1)}`)) { d += `M${x} ${y + 1}H${x + 1}`; if (y === TEX - 1) d += `M${x} 0H${x + 1}` }
+    }
+  }
+  return d
+})()
+
+/** The anchor's defs: the texture's walls and the mask, mounted once with the walls. */
+const anchorLib = (uid) => `<path id="${uid}-tex" d="${TEX_PATH}"/>` +
+  `<mask id="${uid}-anchor" maskUnits="userSpaceOnUse" x="${ANCHOR_BOX.x}" y="${ANCHOR_BOX.y}" width="${ANCHOR_BOX.w}" height="${ANCHOR_BOX.h}">` +
+  `<g transform="scale(${ANCHOR_K}) translate(${-ANCHOR_AT[0]} ${-ANCHOR_AT[1]})" fill="#fff" style="color:#fff">${ANCHOR_MARKUP}</g>` +
+  `<rect x="${-(LAST[0] / 2)}" y="${-(LAST[1] / 2)}" width="${LAST[0]}" height="${LAST[1]}" fill="#000"/></mask>`
+
+/*
+ * The anchor's fill at this scale, in the walls' group. Three layers hand over
+ * as the cells shrink below a pixel or two: the drawn mazes (faded out by the
+ * caller over `real`), the texture (a pattern whose line weight follows the
+ * walls'), and a flat ink at the texture's own tone (51%, measured), so the
+ * anchor the camera holds on is clean, with no tile seams.
+ */
+const TONE = 0.51
+const handover = (s) => ({ real: 1 - clamp01((2.8 - s) / 0.7), flat: clamp01((2.1 - s) / 0.6) })
+function anchorFill(time, uid, wallWorld, s) {
+  if (time < 195) return ''
+  const { real, flat } = handover(s)
+  const box = `x="${ANCHOR_BOX.x}" y="${ANCHOR_BOX.y}" width="${ANCHOR_BOX.w}" height="${ANCHOR_BOX.h}"`
+  const inner = `x="${-(LAST[0] / 2)}" y="${-(LAST[1] / 2)}" width="${LAST[0]}" height="${LAST[1]}"`
+  let out = ''
+  if (flat < 1) {
+    out += `<pattern id="${uid}-texp" patternUnits="userSpaceOnUse" x="-0.5" y="-0.5" width="${TEX}" height="${TEX}"><use href="#${uid}-tex" fill="none" stroke="${INK}" stroke-width="${wallWorld.toFixed(4)}" stroke-linecap="square"/></pattern>` +
+      `<g opacity="${r(1 - flat, 3)}"><rect ${box} fill="url(#${uid}-texp)" stroke="none" mask="url(#${uid}-anchor)"/>` +
+      (real < 1 ? `<rect ${inner} fill="url(#${uid}-texp)" stroke="none" opacity="${r(1 - real, 3)}"/>` : '') + '</g>'
+  }
+  if (flat > 0) {
+    out += `<g transform="scale(${ANCHOR_K}) translate(${-ANCHOR_AT[0]} ${-ANCHOR_AT[1]})" fill="${INK}" stroke="none" style="color:${INK}" opacity="${r(TONE * flat, 3)}">${ANCHOR_MARKUP}</g>`
+  }
+  return out
+}
+
+/** A monotone cubic through the outro's keys in log scale: no overshoot, velocity continuous, still at both ends. */
+function outroScale(time) {
+  const ys = [Math.log(keyScale(OUTRO[0])), Math.log(EDGE_FIT), Math.log(ANCHOR_FIT)]
+  const hs = [OUTRO[1] - OUTRO[0], OUTRO[2] - OUTRO[1]]
+  const ds = [(ys[1] - ys[0]) / hs[0], (ys[2] - ys[1]) / hs[1]]
+  const m = [0, ds[0] * ds[1] > 0 ? (3 * (hs[0] + hs[1])) / ((2 * hs[1] + hs[0]) / ds[0] + (hs[1] + 2 * hs[0]) / ds[1]) : 0, 0]
+  const i = time < OUTRO[1] ? 0 : 1
+  const h = hs[i]
+  const x = clamp01((time - OUTRO[i]) / h)
+  const h00 = 2 * x ** 3 - 3 * x ** 2 + 1
+  const h10 = x ** 3 - 2 * x ** 2 + x
+  const h01 = -2 * x ** 3 + 3 * x ** 2
+  const h11 = x ** 3 - x ** 2
+  return Math.exp(h00 * ys[i] + h10 * h * m[i] + h01 * ys[i + 1] + h11 * h * m[i + 1])
+}
+
 function scaleAt(time) {
+  if (time >= OUTRO[0]) return outroScale(Math.min(time, OUTRO[2]))
+  return keyScale(time)
+}
+
+/** Where the camera looks, in cells: the mazes' centre, drifting down to the anchor's as it all comes into view. */
+function lookAt(time) {
+  const s = scaleAt(time)
+  const u = clamp01((Math.log(EDGE_FIT) - Math.log(s)) / (Math.log(EDGE_FIT) - Math.log(ANCHOR_FIT)))
+  return [0, ANCHOR_MID * easeInOut(u)]
+}
+
+function keyScale(time) {
   const j = ZOOM.findIndex(([t]) => t > time)
   if (j < 0) return ZOOM.at(-1)[1]
   if (j === 0) return ZOOM[0][1]
@@ -687,8 +834,9 @@ const TRAIL_BINS = 32
 /** The plate alone — what goes inside the sheet. Returns { plate, lib }. */
 export function mazePlate({ time, uid }) {
   const s = scaleAt(time)
-  const sx = (x) => CX + x * s
-  const sy = (y) => CY + y * s
+  const [lx, ly] = lookAt(time)
+  const sx = (x) => CX + (x - lx) * s
+  const sy = (y) => CY + (y - ly) * s
   const dot = smoothAt(time)
 
   // The trail: where he was over the last TRAIL seconds, sampled finely,
@@ -726,18 +874,20 @@ export function mazePlate({ time, uid }) {
   const ringU = ((ph / (Math.PI * 2)) % 1 + 1) % 1
   const hx = sx(dot[0] + jx)
   const hy = sy(dot[1] + jy)
-  const wallW = Math.max(0.8, Math.min(3, s * 0.05))
+  // Walls keep a hairline down to cells of 2.7 px; below that they are a
+  // share of the cell, so far off the maze is a tone, not solid ink.
+  const wallW = s >= 2.67 ? Math.max(0.8, Math.min(3, s * 0.05)) : s * 0.3
   const appear = clamp01((time - ENTER.from) / 0.3)
   const plate = `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
-  <g transform="translate(${r(CX)} ${r(CY)}) scale(${r(s, 4)})" stroke="${INK}" stroke-width="${(wallW / s).toFixed(4)}" fill="none" stroke-linecap="square">${walls(time, uid)}</g>
+  <g transform="translate(${r(CX - lx * s, 3)} ${r(CY - ly * s, 3)}) scale(${r(s, 5)})" stroke="${INK}" stroke-width="${(wallW / s).toFixed(4)}" fill="none" stroke-linecap="square">${anchorFill(time, uid, wallW / s, s)}${handover(s).real < 1 ? `<g opacity="${r(handover(s).real, 3)}">${walls(time, uid)}</g>` : walls(time, uid)}</g>
   <g stroke="${RED}" fill="none" stroke-linejoin="round" stroke-linecap="butt">${trail}</g>
   <g opacity="${r(appear, 3)}"><circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad * (1.2 + ringU * 1.6 * deep))}" fill="none" stroke="${RED}" stroke-width="2" opacity="${r(0.6 * (1 - ringU))}"/>
   <circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad)}" fill="${RED}"/></g>`
   return { plate, lib: wallLib(uid) }
 }
 
-/** The last note, as asked (2026-11-02): the hit at 3:23.1 rings to about 3:24.3. */
-const END_CARD = 204.0
+/** The last note (the hit at 3:23.1 rings to about 3:24.3): 3:24.0 was a smidge late. */
+const END_CARD = 203.8
 
 /** The film: the opening, then the album's cover sheet, the plate, the lyric in the margin. */
 export function mazeFrame({ time, score, lockup = '', uid = 'maze' }) {

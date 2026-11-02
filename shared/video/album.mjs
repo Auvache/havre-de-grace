@@ -379,6 +379,8 @@ const LOCKUP = {
     ['M6.5 0V100M6.5 6.5H51.5M6.5 50H48M6.5 93.5H51.5', 1138],
   ],
 }
+/** The anchor alone, in its own units (0–200 across, 3–222 down), in currentColor. */
+export const ANCHOR_MARKUP = LOCKUP.anchor
 const FULL = 'M0 0H1600V900H0Z'
 /* Where the mark sits: in the middle of the black, a little high. */
 const LOGO_AT = { x: 800, y: 400, s: 0.56 }
