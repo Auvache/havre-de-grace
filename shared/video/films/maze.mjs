@@ -43,6 +43,7 @@ import { rng, r, clamp01, lerp, easeInOut, ramp } from '../kit.mjs'
 import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric, markDrawnAt, MARK_DRAW } from '../album.mjs'
 import { drawLines } from '../hairline-draw.mjs'
 import { TITLES } from '../titles.mjs'
+import { END_BLACK, END_INK } from '../ending.mjs'
 
 const { x: PX, y: PY, w: PW, h: PH } = COVER_SHEET.plate
 const CX = PX + PW / 2
@@ -77,7 +78,7 @@ function openingSvg(time, uid) {
 const SIZES = [[9, 5], [17, 9], [27, 13], [41, 21], [61, 31], [91, 47], [135, 69], [201, 105]]
 // Which side each maze's door is on. The last has none: it never ends.
 const DOORS = ['e', 'w', 'n', 'e', 's', 'w', 'e', null]
-const SEEDS = [12, 27, 21, 10, 47, 59, 71, 92]
+const SEEDS = [12, 27, 49, 10, 47, 59, 71, 92]
 
 const DIRS = { n: [0, -1], s: [0, 1], e: [1, 0], w: [-1, 0] }
 const key = (x, y) => `${x},${y}`
@@ -328,7 +329,7 @@ const WALK = (() => {
     const seen = views.find((v) => v.sawDoor)
     if (seen) {
       route = seen.cells.slice(1, seen.cells.findIndex((c) => same(c, door.inside)) + 1)
-      return { next: seen.o, pause: P.hesitate * 0.5 }
+      return { next: seen.o, pause: 0 } // he's seen it: no stopping now
     }
     for (const v of views) if (v.blind) for (const c of v.cells) dead.add(key(...c))
     const fresh = views.filter((v) => !v.blind && !visited.has(key(...v.o)))
@@ -380,12 +381,16 @@ const WALK = (() => {
     }
     const P = gait(t)
     const vc = P.px / fitScale(k)
-    const { next, pause } = decide(state, P)
+    const decided = decide(state, P)
+    const { next } = decided
+    // A hesitation too short to read as a stop is a slowing down instead.
+    const glance = decided.pause > 0 && decided.pause < 0.2
+    const pause = glance ? 0 : decided.pause
     const dir = dirOf(here, next)
     const straight = dir[0] === came[0] && dir[1] === came[1]
     const reverse = dir[0] === -came[0] && dir[1] === -came[1]
-    // How fast he passes through `here`: full on, slowed for a corner, or stopped.
-    const vHere = rest || pause > 0 || reverse ? 0 : straight ? vc : vc * 0.55
+    // How fast he passes through `here`: full on, slowed for a corner or a glance, or stopped.
+    const vHere = rest || pause > 0 || reverse ? 0 : glance ? vc * 0.4 : straight ? vc : vc * 0.55
     rest = false
     if (pending) {
       const { a, va } = pending
@@ -435,6 +440,28 @@ function posAt(time) {
   return [lerp(s.a[0], s.b[0], u), lerp(s.a[1], s.b[1], u)]
 }
 
+/*
+ * Where he is, smoothed: a short moving average of posAt, so the corners he
+ * turns are rounded and the line he leaves is one sweep rather than a run of
+ * right angles. The window is a fixed fraction of a cell, so it rounds a
+ * corner as much at a run as at a walk, and never cuts through a wall.
+ */
+function smoothAt(time) {
+  const P = gait(time)
+  const cells = P.px > 0 ? P.px / scaleAt(time) : 0
+  const w = cells > 0 ? Math.max(0.012, Math.min(0.09, 0.2 / cells)) : 0.09
+  let x = 0
+  let y = 0
+  let sum = 0
+  for (const [k, wt] of [[-2, 1], [-1, 2], [0, 3], [1, 2], [2, 1]]) {
+    const p = posAt(time + (k * w) / 2)
+    x += p[0] * wt
+    y += p[1] * wt
+    sum += wt
+  }
+  return [x / sum, y / sum]
+}
+
 /** Which maze he is in at `time`. */
 const mazeAt = (time) => WALK.arrivals.filter((e) => e <= time).length
 
@@ -447,7 +474,7 @@ const DRAWN = (() => {
     ? [WALK.arrivals[k - 1] + PULL * 0.2, WALK.arrivals[k - 1] + PULL * 0.2 + drawTime(k)]
     : null))
   // The pull back at the end: every maze not yet drawn, one after another, out to the last.
-  let at = Math.max(190, (WALK.arrivals.at(-1) ?? 0) + 6)
+  let at = Math.max(186, (WALK.arrivals.at(-1) ?? 0) + 5)
   return out.map((w) => {
     if (w) return w
     const span = [at, at + 4]
@@ -597,7 +624,8 @@ const ZOOM = (() => {
   })
   // The outro: the whole of the last maze, whatever he is in.
   const last = fitScale(SIZES.length - 1)
-  if (keys.at(-1)[1] > last && keys.at(-1)[0] < 199) keys.push([199, keys.at(-1)[1]], [210, last])
+  // It is all out by the last note (the end card), so it runs 188 to 202.
+  if (keys.at(-1)[1] > last && keys.at(-1)[0] < 188) keys.push([188, keys.at(-1)[1]], [202, last])
   return keys
 })()
 function scaleAt(time) {
@@ -616,21 +644,22 @@ const window01 = (t, a, b, fade) => Math.min(easeInOut(clamp01((t - a) / fade)),
 
 /** How long the line he leaves takes to fade to nothing. */
 const TRAIL = 3.2
-const TRAIL_STEP = 1 / 24
-const TRAIL_BINS = 10
+const TRAIL_STEP = 1 / 60
+const TRAIL_BINS = 32
 
 /** The plate alone — what goes inside the sheet. Returns { plate, lib }. */
 export function mazePlate({ time, uid }) {
   const s = scaleAt(time)
   const sx = (x) => CX + x * s
   const sy = (y) => CY + y * s
-  const dot = posAt(time)
+  const dot = smoothAt(time)
 
-  // The trail: where he was over the last TRAIL seconds, thinning and fading with age.
+  // The trail: where he was over the last TRAIL seconds, sampled finely,
+  // tapering and fading with age in many small steps.
   const width = Math.max(1.5, Math.min(5, s * 0.06))
   const first = Math.max(WALK.segs[0].t0, time - TRAIL)
   const pts = []
-  for (let u = first; u < time; u += TRAIL_STEP) pts.push([u, posAt(u)])
+  for (let u = first; u < time; u += TRAIL_STEP) pts.push([u, smoothAt(u)])
   pts.push([time, dot])
   let trail = ''
   const per = Math.max(2, Math.ceil(pts.length / TRAIL_BINS))
@@ -640,8 +669,8 @@ export function mazePlate({ time, uid }) {
     const age = (time - part[Math.floor(part.length / 2)][0]) / TRAIL
     const life = 1 - clamp01(age)
     if (life <= 0.02) continue
-    const d = part.map(([, [x, y]], j) => `${j ? 'L' : 'M'}${r(sx(x))} ${r(sy(y))}`).join('')
-    trail += `<path d="${d}" stroke-width="${r(width * (0.35 + 0.65 * life), 2)}" opacity="${r(life ** 1.6, 3)}"/>`
+    const d = part.map(([, [x, y]], j) => `${j ? 'L' : 'M'}${r(sx(x), 2)} ${r(sy(y), 2)}`).join('')
+    trail += `<path d="${d}" stroke-width="${r(width * (0.25 + 0.75 * life), 2)}" opacity="${r(life ** 1.3, 3)}"/>`
   }
 
   // A tremble: building through the meltdown, frantic through the horns, gone for the breath.
@@ -661,14 +690,23 @@ export function mazePlate({ time, uid }) {
   const appear = clamp01((time - ENTER.from) / 0.3)
   const plate = `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
   <g transform="translate(${r(CX)} ${r(CY)}) scale(${r(s, 4)})" stroke="${INK}" stroke-width="${(wallW / s).toFixed(4)}" fill="none" stroke-linecap="square">${walls(time, uid)}</g>
-  <g stroke="${RED}" fill="none" stroke-linejoin="round" stroke-linecap="round">${trail}</g>
+  <g stroke="${RED}" fill="none" stroke-linejoin="round" stroke-linecap="butt">${trail}</g>
   <g opacity="${r(appear, 3)}"><circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad * (1.2 + ringU * 1.6 * deep))}" fill="none" stroke="${RED}" stroke-width="2" opacity="${r(0.6 * (1 - ringU))}"/>
   <circle cx="${r(hx)}" cy="${r(hy)}" r="${r(rad)}" fill="${RED}"/></g>`
   return { plate, lib: wallLib(uid) }
 }
 
 /** The film: the opening, then the album's cover sheet, the plate, the lyric in the margin. */
-export function mazeFrame({ time, score, uid = 'maze' }) {
+export function mazeFrame({ time, score, lockup = '', uid = 'maze' }) {
+  // The last note: a hard cut to the band's mark on black, as Andalusia ends,
+  // and it holds (no credits).
+  if (time >= score.endCardAt) {
+    return {
+      lib: [wallLib(uid)],
+      label: 'End card',
+      svg: `<rect width="1600" height="900" fill="${END_BLACK}"/><g transform="translate(800 450) scale(${r(500 / 918, 5)}) translate(-459 -309.5)" style="color:${END_INK}">${lockup}</g>`,
+    }
+  }
   const { plate, lib } = mazePlate({ time, uid })
   const section = score.sections.find((s) => time >= s.from && time < s.to) ?? score.sections.at(-1)
   const clip = `${uid}-plate`

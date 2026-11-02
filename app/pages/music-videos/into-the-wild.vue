@@ -159,7 +159,7 @@ const BEATS = [
   { at: 58, label: 'Losing it', note: 'From the break to the end of verse 2 he slows, hesitates longer at forks, and stops longer when stumped.' },
   { at: 102, label: 'Meltdown', note: 'After the last "running": he stops and pulses hard, then from the horns races every way, getting nowhere.', key: true },
   { at: 145, label: 'The breath', note: 'The horns drop away and he breathes; on the first word of verse 3 he walks the clear way out.', key: true },
-  { at: 178, label: 'Out', note: 'Through the door as the last chorus comes in, and the pull back to the maze with no edge.' },
+  { at: 178, label: 'Out', note: 'Through the door as the last chorus comes in, the pull back to the maze with no edge, and the mark on the last note (3:23.5).' },
 ]
 
 const jump = (at: number) => {
