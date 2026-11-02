@@ -26,9 +26,11 @@
  * How fast he goes, how long he hesitates and how long he stays stumped is
  * his confidence (`confidence`, `gait`), and it follows the song (2026-11-02,
  * as asked): gained through the first maze (a stop at each of its first
- * turns, shorter each time: FIRST_TURNS), kept to the break, lost slowly to
- * nothing by the end of verse 2; then the meltdown (he stops and pulses hard
- * after the last "running", and races every way through the horns, old ground
+ * turns, shorter each time: FIRST_TURNS; out of it on "the Earth out of
+ * water and iron"), kept to the break; then he pushes, quicker and a little
+ * aggressive, through verse 2 and the chorus, until he runs into a dead end
+ * and has to wait; then the meltdown (he stops and pulses hard after the
+ * last "running", and races every way through the horns, old ground
  * and dead ends included, blind to the door); then in the lull before verse 3
  * he breathes, and walks the clear way out at the confident pace.
  *
@@ -86,7 +88,9 @@ function openingSvg(time, uid) {
 // has no door: it never ends.
 const SIZES = [[9, 5], [17, 9], [27, 13], [41, 21], [61, 31]]
 const DOORS = ['e', 'w', 'n', 'e', null]
-const SEEDS = [12, 27, 49, 10, 47]
+// The second was re-laid (2026-11-02, was 49) with its door where it was, so
+// every maze round it is the same: one with more to it, for the faster build-up.
+const SEEDS = [12, 27, 2772, 10, 47]
 /** The anchor's maze number: one past the boxes. */
 const A = SIZES.length
 
@@ -335,15 +339,20 @@ function ringDepth(k, x, y) {
 /* ── The walk ─────────────────────────────────────────────────────── */
 
 /*
- * His mood, by song second. Walking, it is one number, his confidence `c`
- * (0 unsure, 1 sure of himself), and everything about how he walks is read
- * off it (`gait`): his cruising speed in screen pixels a second (so a bigger
- * maze, with smaller cells, is not a slower film), the stop at a fork, the
- * stop on finding he has run out of ways, how much he wanders. He gains it
- * through the first maze, keeps it through verse 1 and the chorus, and loses
- * it slowly to nothing by the end of verse 2. Then (timed to the record, as
- * asked 2026-11-02):
+ * His mood, by song second. Walking, it is his confidence `c` (0 unsure, 1
+ * sure of himself) and, before the horns, his drive (0 steady, 1 pushing too
+ * hard), and everything about how he walks is read off them (`gait`): his
+ * cruising speed in screen pixels a second (so a bigger maze, with smaller
+ * cells, is not a slower film), the stop at a fork, the stop on finding he
+ * has run out of ways, how much he wanders, how fast he pulses. He gains
+ * confidence through the first maze and keeps it through verse 1 and the
+ * chorus. From the break he pushes (as asked, 2026-11-02: not slower but
+ * faster, a little aggressive): quicker all the time, no stopping at forks,
+ * the shortest of stops at a dead end before he turns, charging straight on,
+ * pulsing faster, until he runs into the dead end before the horns. Then
+ * (timed to the record, as asked 2026-11-02):
  *
+ *   1:49.16 he stops where he sees he can go no further, and waits.
  *   1:50.8  the horns: the meltdown. He stops and pulses harder and harder.
  *   1:56.24 the loudest hit in the horns: he sprints, every way at once, old
  *           ground and dead ends and all, blind to the door.
@@ -352,25 +361,39 @@ function ringDepth(k, x, y) {
  *           bright ping 17 dB over the lull). His breathing slows.
  *   2:32.52 "headed", in the first line of verse 3: he sets out carefully,
  *           and grows sure of himself as he walks the clear way out.
+ *
+ * From the horns on, the film is as approved on 2026-11-02, and must not
+ * change: it is simulated on from where he stands at 1:50.8 (HORNS_AT), what
+ * he knows of the maze then, and the pulse's phase then (HORNS_PHASE). The
+ * walk before it was chosen (BUILD_SEED) to bring him there knowing nothing
+ * the walk out after the breath would use, so all of it comes out the same.
  */
-const SET_OFF = 20.31 // "To see if I can't lose my way", once the first maze is drawn round him
-const FIRST_ARRIVAL = 35.74916225942066 // in the second maze's doorway, as he always has been
+const SET_OFF = 16.52 // "headed", the first maze drawn round him
+const FIRST_ARRIVAL = 32.3 // in the second maze's doorway: it is drawn round him on "the Earth out of water and iron"
+const BUILD = 58.4 // the break: from here he pushes, harder and harder
+const HORNS_STOP = 109.16 // he stops, stuck, where he sees the dead end
+const HORNS_AT = [10, -10] // and that is here
+const HORNS_PHASE = 204.26049835919619 // the pulse's phase at the horns, as approved
 const MELTDOWN = 110.8 // the horns come in
 const SPRINT = 116.24 // the loudest hit in the horns
 const FOCUS = 144 // he starts to come round
 const STOP = 148.19 // the harmonic
 const SET_OUT = 152.52 // "headed"
+const BUILD_SEED = 2 // the walk through the second maze: in it until 1:36.9
+const HORNS_SEED = 8 // and the third, to the dead end: the way he went when it was approved
+const HORNS_NEAR = 12 // he makes for the dead end once it is this many cells on
 const PANIC_SEED = 60 // chosen (2026-11-02) for a sprint that covers the most ground
 const AFTER_SEED = 10 // the walk out after the breath, chosen so he reaches the last box at 3:04
 const DEAD_END_LEAD = 20 // how long before the horns he starts looking for the dead end
 
 const confidence = (time) => {
   if (time < FIRST_ARRIVAL) return lerp(0.08, 1, easeInOut(clamp01((time - SET_OFF) / (FIRST_ARRIVAL - SET_OFF))))
-  if (time < 58.4) return 1
-  if (time < 99.85) return 1 - ((time - 58.4) / (99.85 - 58.4)) ** 1.5 // slowly at first
+  if (time < MELTDOWN) return 1
   if (time < SET_OUT) return 0
   return lerp(0.25, 1, easeInOut(clamp01((time - SET_OUT) / 7)))
 }
+/** How hard he is pushing, 0–1: from the break, quicker and quicker, until the dead end. */
+const drive = (time) => (time < BUILD || time >= MELTDOWN ? 0 : clamp01((time - BUILD) / (HORNS_STOP - BUILD)) ** 1.4)
 /** What he is doing at `time`: 'enter', 'walk', 'meltdown', 'panic', 'focus' or 'breathe'. */
 const stateAt = (time) => (time < SET_OFF ? 'enter' : time < MELTDOWN ? 'walk' : time < SPRINT ? 'meltdown'
   : time < FOCUS ? 'panic' : time < STOP ? 'focus' : time < SET_OUT ? 'breathe' : 'walk')
@@ -382,7 +405,11 @@ export const moodAt = (time) => {
   if (s !== 'walk') return s
   const c = confidence(time)
   if (time < FIRST_ARRIVAL) return c < 0.4 ? 'cautious' : c < 0.85 ? 'gaining confidence' : 'sure'
-  return time >= SET_OUT && c < 0.85 ? 'careful' : c > 0.85 ? 'sure' : c < 0.2 ? 'unsure' : time < 58.4 ? 'gaining confidence' : 'losing confidence'
+  if (time < MELTDOWN) {
+    const d = drive(time)
+    return time >= HORNS_STOP ? 'stuck' : d < 0.1 ? 'sure' : d < 0.5 ? 'overconfident' : 'impatient'
+  }
+  return c < 0.85 ? 'careful' : 'sure'
 }
 const PANIC_GAIT = { px: 720, hesitate: 0, stumped: 0, momentum: 0.35, wander: 1, pulse: 2.6 }
 const gait = (time) => {
@@ -396,13 +423,20 @@ const gait = (time) => {
   if (s === 'meltdown') return { px: 0, pulse: lerp(1.2, 3.2, easeInOut(ramp(time, MELTDOWN, MELTDOWN + 2.5))) }
   // The breath slows from the sprint's to the slowest of the film.
   if (s === 'breathe') return { px: 0, pulse: lerp(1.4, 0.22, easeInOut(ramp(time, STOP, STOP + 3))) }
-  return walkGait(s === 'enter' ? 1 : confidence(time), time)
+  return walkGait(s === 'enter' ? 1 : confidence(time), time, drive(time))
 }
-const walkGait = (c, time) => {
-  const pulse = time < SET_OFF ? 0.24 : lerp(0.36, 0.27, c)
+const walkGait = (c, time, d = 0) => {
+  const pulse = time < SET_OFF ? 0.24 : lerp(lerp(0.36, 0.27, c), 0.8, d)
   // Out of the breath, it quickens only gradually.
   const settle = time >= SET_OUT ? easeInOut(ramp(time, SET_OUT, SET_OUT + 3)) : 1
-  return { px: lerp(150, 340, c), hesitate: lerp(0.75, 0.12, c), stumped: lerp(1.4, 0.45, c), momentum: lerp(0, 0.15, c), wander: lerp(0.9, 0.5, c), pulse: lerp(0.22, pulse, settle) }
+  return {
+    px: lerp(150, 340, c) + 190 * d,
+    hesitate: lerp(0.75, 0.12, c) * (1 - d),
+    stumped: lerp(lerp(1.4, 0.45, c), 0.28, d),
+    momentum: lerp(lerp(0, 0.15, c), 0.4, d),
+    wander: lerp(0.9, 0.5, c),
+    pulse: lerp(0.22, pulse, settle),
+  }
 }
 
 /*
@@ -410,8 +444,7 @@ const walkGait = (c, time) => {
  * maze. He stops at every turn, long at first and less each time, and walks
  * a little faster after each, so he is sure of himself by its door. His
  * confidence there is counted in turns, not seconds; the walk is then fitted
- * to arrive in the second maze's doorway exactly when it always has
- * (FIRST_ARRIVAL), so nothing from the second maze on moves.
+ * to arrive in the second maze's doorway on its line (FIRST_ARRIVAL).
  */
 const FIRST_TURNS = [1.3, 0.9, 0.6, 0.35]
 const firstConfidence = (turns) => easeInOut(clamp01(turns / FIRST_TURNS.length)) * 0.9 + 0.05
@@ -459,7 +492,32 @@ const WALK = (() => {
   let pending = null // the step into `here`, waiting on how he leaves it
   let doorway = false // just stepped through a door: stop and wait for the maze
   let lastBreath = [-1, -1]
-  const g = rng(1729)
+  const arrivalSegs = [] // the doorway stop each arrival starts
+  let buildFrom = null // when he leaves the second maze's doorway
+
+  /*
+   * His walking since `from` (not his stops) sped up or slowed evenly, so
+   * that where he is now he gets to at `to`.
+   */
+  const fit = (from, to) => {
+    const range = segs.filter((s) => s.t0 >= from)
+    const still = (s) => same(s.a, s.b)
+    const stops = range.filter(still).reduce((n, s) => n + s.t1 - s.t0, 0)
+    const f = (to - from - stops) / (t - from - stops)
+    let at = from
+    for (const s of range) {
+      const d = (s.t1 - s.t0) * (still(s) ? 1 : f)
+      s.t0 = at
+      s.t1 = at += d
+      s.va /= f
+      s.vb /= f
+    }
+    arrivalSegs.forEach((i, j) => { arrivals[j] = segs[i].t0 })
+    t = to
+  }
+  const g = rng(1729) // the first maze
+  const gb = rng(BUILD_SEED) // the second maze
+  const g3 = rng(HORNS_SEED) // the third, before the horns
   const gp = rng(PANIC_SEED) // the sprint, so it can be tuned without moving what comes before
   const ga = rng(AFTER_SEED) // and the walk out after the breath
   const trodden = new Map() // cells he has run through in the sprint, and how often
@@ -542,16 +600,15 @@ const WALK = (() => {
   }
 
   /*
-   * The dead end he can reach latest before the horns at this pace, well away
-   * from the door, as a route: on the way he is already going (the rest of a
-   * walk back, or on from here, never turning round), then only into ground
-   * he has never been down. It ends where he first sees the end wall (the
-   * start of the dead end's last straight, as `look` would see it), not at
-   * the wall: he stops there, and the meltdown comes.
+   * The dead end he stops at before the horns (the one seen from HORNS_AT), as
+   * a route, if he can get there from here: on the way he is already going
+   * (the rest of a walk back, or on from here, never turning round), then
+   * only into ground he has never been down. It ends where he first sees the
+   * end wall (the start of the dead end's last straight, as `look` would see
+   * it), not at the wall: he stops there, and the meltdown comes.
    */
-  const pickDeadEnd = (vc) => {
+  const pickDeadEnd = () => {
     const door = M.doors[k]
-    const left = (MELTDOWN - t) * 0.9
     const lead = route.length ? [here, ...route] : [here]
     const from = lead.at(-1)
     const before = lead.length > 1 ? lead.at(-2) : [here[0] - came[0], here[1] - came[1]]
@@ -574,15 +631,12 @@ const WALK = (() => {
         const stopAt = path[s - 1]
         const steps = d - (path.length - s)
         // Where he stops, every way on is spent: the dead end, and any other
-        // he has walked or can see is one too. He is stuck. And he gets there
-        // just before the horns: the latest he can, at no less than 70% of
-        // his pace (`pace`).
+        // he has walked or can see is one too. He is stuck.
         const came0 = path[s - 2] ?? before
         const stuck = neighbours(k, stopAt).every((n) => same(n, came0) || same(n, path[s]) ||
           visited.has(key(...n)) || dead.has(key(...n)) || look(stopAt, n).blind)
-        const est = (steps * 1.4) / vc
-        if (stuck && steps >= 1 && est <= left && (!best || steps > best.steps))
-          best = { steps, route: [...lead.slice(1), ...path.slice(1, s)], seen: path.slice(s), stopAt, pace: Math.max(0.7, est / left), est }
+        if (stuck && steps >= 1 && same(stopAt, HORNS_AT) && (!best || steps > best.steps))
+          best = { steps, route: [...lead.slice(1), ...path.slice(1, s)], seen: path.slice(s), stopAt }
       }
       for (const n of exits) {
         const kn = key(...n)
@@ -683,7 +737,7 @@ const WALK = (() => {
     const fresh = views.filter((v) => !v.blind && !visited.has(key(...v.o)) && !(t >= SET_OUT && dead.has(key(...v.o))))
     if (fresh.length) {
       const score = (v) => ringDepth(k, ...v.cells.at(-1)) +
-        (same(dirOf(here, v.o), came) ? P.momentum : 0) + (t >= MELTDOWN ? ga() : g()) * P.wander
+        (same(dirOf(here, v.o), came) ? P.momentum : 0) + (t >= MELTDOWN ? ga() : k === 3 ? g3() : k > 0 ? gb() : g()) * P.wander
       fresh.sort((p, q) => score(q) - score(p))
       return { next: fresh[0].o, pause: fresh.length > 1 ? P.hesitate : 0 }
     }
@@ -745,23 +799,9 @@ const WALK = (() => {
     if (doorway) {
       // In the next maze's doorway: stop, and wait while it is drawn round him.
       stop()
-      // Out of the first maze: his walking (not his stops) sped up or slowed
-      // so he arrives when he always has.
-      if (!arrivals.length) {
-        const first = segs.filter((s) => s.t0 >= SET_OFF)
-        const still = (s) => same(s.a, s.b)
-        const stops = first.filter(still).reduce((n, s) => n + s.t1 - s.t0, 0)
-        const f = (FIRST_ARRIVAL - SET_OFF - stops) / (t - SET_OFF - stops)
-        let at = SET_OFF
-        for (const s of first) {
-          const d = (s.t1 - s.t0) * (still(s) ? 1 : f)
-          s.t0 = at
-          s.t1 = at += d
-          s.va /= f
-          s.vb /= f
-        }
-        t = FIRST_ARRIVAL
-      }
+      // Out of the first maze: on its line.
+      if (!arrivals.length) fit(SET_OFF, FIRST_ARRIVAL)
+      arrivalSegs.push(segs.length)
       arrivals.push(t)
       // In the last box's doorway: one deep breath as it is finished, and on at 3:09.
       const last = k === A - 1
@@ -769,30 +809,31 @@ const WALK = (() => {
       if (last) lastBreath = [until - LAST_BREATH, until]
       push(t, until, here, here, 0, 0)
       t = until
+      if (arrivals.length === 1) buildFrom = t
       doorway = false
       rest = true
       continue
     }
     const first = k === 0 && state === 'walk'
     const P = first ? walkGait(firstConfidence(firstTurns), t) : gait(t)
-    let vc = P.px / fitScale(k)
+    const vc = P.px / fitScale(k)
     // Before the horns he takes one more wrong turn, into a dead end well away
-    // from the door he has never been down, timed to get there just first. He
-    // stops where he sees the end wall, stuck: the meltdown comes, and the sprint
-    // starts by turning round and backtracking out.
-    // Looked for at every step from DEAD_END_LEAD out, until there is one he
-    // would not reach more than a little early.
+    // from the door he has never been down. He stops where he sees the end
+    // wall, stuck: the meltdown comes, and the sprint starts by turning round
+    // and backtracking out. Looked for at every step from DEAD_END_LEAD out,
+    // until it is close on along the way he is going.
     if (state === 'walk' && t >= MELTDOWN - DEAD_END_LEAD && t < MELTDOWN && !deadEnd) {
-      const found = pickDeadEnd(vc)
-      if (found && found.est >= 0.5 * (MELTDOWN - t) * 0.9) deadEnd = found
+      const found = pickDeadEnd()
+      if (found && found.steps <= HORNS_NEAR) deadEnd = found
       if (deadEnd) {
         route = [...deadEnd.route]
         for (const c of deadEnd.seen) dead.add(key(...c))
       }
     }
-    if (deadEnd && t < MELTDOWN) vc *= deadEnd.pace
     if (deadEnd && same(here, deadEnd.stopAt) && !route.length && t < MELTDOWN) {
       stop()
+      // Everything since the second maze's doorway fitted so he stops here on time.
+      fit(buildFrom, HORNS_STOP)
       push(t, MELTDOWN, here, here, 0, 0)
       t = MELTDOWN
       rest = true
@@ -906,9 +947,10 @@ const mazeAt = (time) => ARRIVALS.filter((e) => e <= time).length
 
 /** When maze k is drawn: the first round him as he arrives, each next one as he nears its door. */
 const DRAWN = (() => {
-  // The first once he is in the middle and his line in has faded; each next
+  // The first once he is in the middle, as his line in fades, so he can set
+  // off on "headed"; each next
   // one while he stands in its doorway, the camera pulling back as it starts.
-  const out = SIZES.map((_, k) => (k === 0 ? [16.6, 19.2] : ARRIVALS[k - 1] !== undefined
+  const out = SIZES.map((_, k) => (k === 0 ? [13.9, 16.3] : ARRIVALS[k - 1] !== undefined
     ? [ARRIVALS[k - 1] + PULL * 0.2, ARRIVALS[k - 1] + PULL * 0.2 + drawTime(k)]
     : null))
   // Any box he never reached comes in just before the pull back; the anchor
@@ -1068,9 +1110,13 @@ function walls(time, uid, s = Infinity) {
 /* ── The pulse ────────────────────────────────────────────────────── */
 
 const rate = (time) => (time >= WALK.lastBreath[0] && time < WALK.lastBreath[1] ? 0.3 : gait(time).pulse)
+/* Counted on from the horns, where it is as approved, and back from them to the start. */
 const phaseTable = (() => {
-  const t = [0]
-  for (let i = 1; i <= END * 10 + 20; i++) t.push(t[i - 1] + rate(i * 0.1) * 0.1 * Math.PI * 2)
+  const h = Math.round(MELTDOWN * 10)
+  const t = []
+  t[h] = HORNS_PHASE
+  for (let i = h + 1; i <= END * 10 + 20; i++) t[i] = t[i - 1] + rate(i * 0.1) * 0.1 * Math.PI * 2
+  for (let i = h; i > 0; i--) t[i - 1] = t[i] - rate(i * 0.1) * 0.1 * Math.PI * 2
   return t
 })()
 const phaseAt = (time) => {
@@ -1200,8 +1246,8 @@ export function mazePlate({ time, uid }) {
   return { plate, lib: wallLib(uid) }
 }
 
-/** The last note (the hit at 3:23.1 rings to about 3:24.3): 3:24.0 was a smidge late. */
-const END_CARD = 203.8
+/** The last note, the hit at 3:23.54 (the loudest onset of the ending): 3:23.8, as it rang, was a fraction late. */
+const END_CARD = 203.54
 
 /** The film: the opening, then the album's cover sheet, the plate, the lyric in the margin. */
 export function mazeFrame({ time, score, lockup = '', uid = 'maze' }) {
