@@ -264,11 +264,11 @@ export const ALBUM_SONGS: AlbumSong[] = [
     second: SECOND_INK['ivory']!,
     journey: 'A red thread through a naturalist\'s plate, pulled by an etching needle from specimen to specimen — and every "Ivory" it reaches for her pin and stops a finger\'s width short. The one journey on the album that does not arrive.',
     premise: 'A natural-history copperplate: etched line and cross-hatch, hand-coloured in one blue. The song is the moment you see somebody and are speechless for how electric they make you feel, and so do not act, and miss the chance. The plate tries to catalogue her by the things she is compared to and cannot: she is never inked. Ivory is the colour of the paper, so she is the one thing the etcher leaves bare, seen only where the hatching is laid round her.',
-    moves: 'One naturalist\'s plate the camera drifts along for the whole song — a shore at dawn with her far off on the beach, open ocean, a butterfly whose wings open with eyespots for eyes, a stage where light cracks out of her on "sings", a cypress, a mockingbird, a drawer with one empty slot, a portrait with no face and flowers in its hair, the universe stopping to stare, an empty spotlight beside hers, her face looking straight out of the darkest plate, a keyboard of ebony and ivory, a locket that shuts, Eden and the flood on "forgot how to breathe", a forest she walks away into, and the specimen case with her empty pin. The acid bites deeper whenever she does something. The whole film is at /music-videos/ivory.',
+    moves: 'One naturalist\'s plate the camera drifts along for the whole song — a shore at dawn with her far off on the beach, open ocean, a butterfly whose wings open with eyespots for eyes, a stage where light cracks out of her on "sings", a cypress, a mockingbird, a drawer with one empty slot, a portrait with no face and flowers in its hair, the universe stopping to stare, an empty spotlight beside hers, her face looking straight out of the darkest plate, a keyboard of ebony and ivory, a locket that shuts, Eden and the flood on "forgot how to breathe", a forest she walks away into, and the specimen case with her empty pin. The acid bites deeper whenever she does something. The whole film is at /music-videos/ivory-print.',
     heroLine: 'Her eyes are open ocean and blue butterfly wings',
     still: '/video-styles/album/ivory.svg',
     status: 'motion test',
-    page: '/music-videos/ivory',
+    page: '/music-videos/ivory-print',
   },
   {
     slug: 'andalusia',

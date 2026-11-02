@@ -135,7 +135,8 @@ useHead({
 const IN_WORK: Record<string, string> = {
   'into-the-wild': 'The maze: the motion test',
   'conman': 'The heist: five jobs on a blueprint, three ways',
-  'goodbye-norma-jeane': 'The marquee: the motion test',
+  'goodbye-norma-jeane': 'The marquee: the whole film',
+  'ivory': 'Five blanks: the first cut',
   'meet-me-at-the-horizon': 'Lying awake: constellations, nightmares, monkey brain',
 }
 

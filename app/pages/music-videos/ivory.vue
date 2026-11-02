@@ -1,45 +1,44 @@
 <template>
   <div class="page-container section-space">
-    <div class="mx-auto max-w-5xl space-y-12">
+    <div class="mx-auto max-w-5xl space-y-10">
       <header class="space-y-4">
         <p class="label-text muted-text">
-          Unlisted / for review
+          Unlisted / first cut
         </p>
         <h1 class="display-heading">
-          Ivory — the etching
+          Ivory — five blanks
         </h1>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          Three minutes eight of "Ivory" as a hand-coloured naturalist's plate,
-          track four of ten in the
-          <NuxtLink to="/music-videos/album" class="underline">album's</NuxtLink>
-          printmaking: etched line in black, one blue laid on by hand, and one
-          red thread. The song is the moment you see somebody and cannot speak
-          for how electric they make you feel, and so do not act, and the chance
-          goes. The plate tries to catalogue her by the only things he can name
-          — open ocean, butterfly wings, California, Tennessee, flowers in her
-          hair, Alaska in the snow — and cannot. She is never inked: Ivory is the
-          colour of the paper, so she is the one thing the etcher leaves bare,
-          seen only because of the hatching round her. The red thread is his eye
-          going from one comparison to the next. It reaches every specimen on
-          its word, and every "Ivory" it reaches for her pin and stops a finger's
-          width short.
+          He is in the crowd, she is on stage, and he falls for her in an
+          instant; after the show he goes to talk to her and misses his chance.
+          The film is a guessing game played for her name, five letters, six
+          tries, three boards on one sheet. The guesses are the five-letter
+          words he sings, typed in as he sings them and turned over to show how
+          close they come: black for the right letter in the right place, blue
+          for the right letter in the wrong place, pencil for a letter that is
+          not in her name. Between guesses the row he is on spins through
+          letters, looking for words for her. The red cursor is the one thing
+          that travels.
         </p>
         <p class="max-w-3xl text-base leading-relaxed muted-text">
-          No video file anywhere. Every frame is SVG drawn from the song's own
-          clock and cut to a measured score, so things land where they are sung.
+          The song plays the game by itself: SHORE gets two letters, ASKED —
+          both times he asks her name — gets nothing, and AVOID ("to avoid the
+          heartache") comes closest of any real word. He wins the first two
+          boards only in his head, by calling her Ivory. On the third he
+          forgets how to breathe, a row goes by with nothing in it, and he runs
+          out of tries. Only then does the answer come up, and on the last
+          "Ivory" it leaves five blanks: her real name, which he never learned.
         </p>
       </header>
 
-      <!-- ── The film ───────────────────────────────────────────────── -->
       <section class="space-y-5">
         <div
           ref="stage"
           class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
           :style="{ aspectRatio: '16 / 9' }"
         >
-          <MusicVideoSvgFilm :film="etchingFrame" name="Etching" :score="score" :t="frameTime" uid="film" />
+          <MusicVideoSvgFilm :film="blanksFrame" name="Five Blanks" :score="score" :t="frameTime" uid="film" />
 
-          <!-- The whole frame is the play button until it is playing. -->
           <button
             v-if="!player.playing.value"
             type="button"
@@ -72,179 +71,124 @@
           @fullscreen="toggleFullscreen"
         />
 
-        <p class="text-sm leading-relaxed muted-text">
-          Space plays and pauses, the arrow keys jump five seconds (hold shift
-          for fifteen), <kbd>M</kbd> mutes and <kbd>F</kbd> fills the screen.
-          When something is wrong, the most useful note is a time and what you
-          saw — "around 1:30 the eyes open before the word" — since the song's
-          seconds are the film's clock.
+        <p class="text-sm muted-text">
+          Now: {{ clock(player.time.value) }} · {{ currentSection.label }}
         </p>
       </section>
 
-      <!-- ── What happens, section by section ───────────────────────── -->
       <section class="space-y-4">
         <h2 class="section-heading text-[1.35rem]">
-          One plate, left to right
+          Jump to
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
-          Every part of the song is a stretch of the same plate. Click a section
-          to jump to it.
+          Tap a moment to start the film there. When something is off, the most
+          useful note is a time and what you saw: "at 1:28 ASKED turns over
+          before he sings it".
         </p>
         <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
-          <li v-for="beat in BEATS" :key="beat.id">
+          <li v-for="beat in BEATS" :key="beat.at">
             <button
               type="button"
               class="flex w-full cursor-pointer items-baseline gap-4 py-3 text-left transition-colors duration-150 hover:text-[color:var(--color-accent)]"
-              :class="beat.id === currentSection.id ? 'text-[color:var(--color-accent)]' : ''"
-              @click="player.seek(sectionFrom(beat.id))"
+              @click="jump(beat.at)"
             >
-              <span class="w-14 shrink-0 font-mono text-xs muted-text">
-                {{ clock(sectionFrom(beat.id)) }}
-              </span>
-              <span class="label-text w-28 shrink-0 text-[0.55rem]">
-                {{ beat.label }}
-              </span>
-              <span class="min-w-0 flex-1 text-sm leading-relaxed muted-text">
-                {{ beat.note }}
+              <span class="w-12 shrink-0 font-mono text-xs muted-text">{{ clock(beat.at) }}</span>
+              <span class="min-w-0 flex-1 text-sm leading-relaxed">
+                <span class="label-text mr-2 text-[0.55rem]" :class="beat.key ? 'text-[color:var(--color-accent)]' : ''">{{ beat.label }}</span>
+                <span class="muted-text">{{ beat.note }}</span>
               </span>
             </button>
           </li>
         </ol>
       </section>
 
-      <!-- ── The cut ────────────────────────────────────────────────── -->
       <section class="space-y-4">
         <h2 class="section-heading text-[1.35rem]">
-          The cut
+          The guesses
         </h2>
         <p class="max-w-3xl text-sm leading-relaxed muted-text">
-          {{ score.lines.length }} lines and {{ wordCount }} measured words.
-          Everything that arrives on the plate lands on one of these times.
-          Click a line to jump to it.
+          Every row, as the film plays it, scored against IVORY. A dash is the
+          row he loses on "I forgot how to breathe".
         </p>
-        <ol class="divide-y divide-[color:var(--theme-border)] border-y border-theme">
-          <li v-for="line in score.lines" :key="line.index">
-            <button
-              type="button"
-              class="flex w-full cursor-pointer items-baseline gap-4 py-2 text-left transition-colors duration-150 hover:text-[color:var(--color-accent)]"
-              :class="line.index === currentLine?.index ? 'text-[color:var(--color-accent)]' : ''"
-              @click="player.seek(line.start - 0.35)"
-            >
-              <span class="w-14 shrink-0 font-mono text-xs muted-text">
-                {{ stamp(line.start) }}
-              </span>
-              <span class="label-text w-24 shrink-0 text-[0.55rem] muted-text">
-                {{ sectionLabel(line.section) }}
-              </span>
-              <span class="min-w-0 flex-1 text-sm">
-                {{ line.text }}
-              </span>
-            </button>
-          </li>
-        </ol>
+        <div class="grid gap-6 sm:grid-cols-3">
+          <div v-for="game in GAMES" :key="game.name" class="space-y-2">
+            <p class="label-text text-[0.55rem]">
+              {{ game.name }} · {{ game.won ? 'won, in his head' : 'lost' }}
+            </p>
+            <ol class="space-y-1 font-mono text-sm">
+              <li v-for="(row, i) in game.rows" :key="i" class="flex gap-3">
+                <span class="w-12 muted-text">{{ clock(row.at) }}</span>
+                <span class="w-16">{{ row.word ?? '— — —' }}</span>
+                <span class="muted-text">{{ row.marks }}</span>
+              </li>
+            </ol>
+          </div>
+        </div>
       </section>
 
-      <section class="surface-card space-y-4 p-6">
-        <p class="label-text muted-text">
-          Nothing on the plate is hand-placed
-        </p>
-        <ul class="space-y-3 text-sm leading-relaxed muted-text">
-          <li v-for="note in NOTES" :key="note" class="flex gap-3">
-            <span aria-hidden="true" class="text-[color:var(--color-accent)]">—</span>
-            <span>{{ note }}</span>
-          </li>
-        </ul>
-      </section>
-
-      <section class="space-y-3">
-        <h2 class="section-heading text-[1.35rem]">
-          Elsewhere
-        </h2>
-        <ul class="space-y-2 text-sm leading-relaxed muted-text">
-          <li>
-            <NuxtLink to="/music-videos/album" class="underline">/music-videos/album</NuxtLink>
-            — the album's art direction: the sheet, inks and motion all ten songs share.
-          </li>
-          <li>
-            <NuxtLink to="/music-videos/into-the-wild-print" class="underline">/music-videos/into-the-wild-print</NuxtLink>
-            — track one, the woodcut.
-          </li>
-          <li>
-            <NuxtLink to="/music-videos/conman-print" class="underline">/music-videos/conman-print</NuxtLink>
-            — track two, the torn gallery.
-          </li>
-          <li>
-            <NuxtLink to="/music-videos/goodbye-norma-jeane-print" class="underline">/music-videos/goodbye-norma-jeane-print</NuxtLink>
-            — track three, the screenprint.
-          </li>
-          <li>
-            <NuxtLink to="/music-videos/andalusia" class="underline">/music-videos/andalusia</NuxtLink>
-            — track five, the engraved chart.
-          </li>
-          <li>
-            <NuxtLink to="/music-videos/ship-to-stockholm" class="underline">/music-videos/ship-to-stockholm</NuxtLink>
-            — track nine, the wood engraving.
-          </li>
-        </ul>
-      </section>
+      <p class="text-sm leading-relaxed muted-text">
+        <NuxtLink to="/music-videos/ideas#ivory" class="underline">← All the ideas</NuxtLink>
+        · The printmaking film (the etching) is at
+        <NuxtLink to="/music-videos/ivory-print" class="underline">/music-videos/ivory-print</NuxtLink>.
+        · <NuxtLink to="/music-videos/conman" class="underline">Conman, the city →</NuxtLink>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 /*
- * /music-videos/ivory — the whole song, as the album's hand-coloured etching
- * (shared/video/films/etching.mjs, app/config/albumStyle.ts).
- *
- * Unlisted and noindexed like everything under /music-videos: it restates a
- * published song's lyric in full and exists to be shared by link for a
- * decision. Shaped like /music-videos/goodbye-norma-jeane-print: the page owns the
- * projector and the furniture, MusicVideoSvgFilm runs the film, and
- * app/config/ivoryScore.ts is the cut.
+ * /music-videos/ivory — Ivory as five blanks, a guessing game for her name
+ * (shared/video/films/blanks.mjs), the whole song with a projector. The
+ * etching that was here is at /music-videos/ivory-print. Unlisted and
+ * noindexed like everything under /music-videos.
  */
-import { IVORY_SCORE, lineAt, sectionAt } from '~/config/ivoryScore'
+import { IVORY_SCORE, sectionAt } from '~/config/ivoryScore'
 import { useMusicVideoPlayer } from '~/composables/useMusicVideoPlayer'
-import { etchingFrame } from '~~/shared/video/films/etching.mjs'
+import { blanksFrame, blanksGames } from '~~/shared/video/films/blanks.mjs'
 
 definePageMeta({ layout: 'default' })
 
 useHead({
-  title: 'Ivory — the etching',
+  title: 'Ivory — five blanks',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 
 const score = IVORY_SCORE
-
-/* No analyser: the album's films are a function of the clock and nothing else. */
 const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
-/*
- * The poster frame: the title in the margin under the first scratch — the
- * horizon and the far sky laid in, the thread coming in from the left — after
- * the black has lifted and before the title fades (7.9 s), and what the film is
- * at rest before anyone presses play.
- */
-const POSTER_AT = 7.6
+/* At rest, before anyone presses play: the first board, just solved. */
+const POSTER_AT = 44
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
 )
-
 const currentSection = computed(() => sectionAt(player.time.value))
-const currentLine = computed(() => lineAt(player.time.value))
-const wordCount = score.lines.reduce((n, line) => n + line.words.length, 0)
 
-const sectionFrom = (id: string): number =>
-  (score.sections.find((section) => section.id === id)?.from ?? 0) + 0.01
+const GAMES = blanksGames(score)
 
-const sectionLabel = (id: string): string =>
-  score.sections.find((section) => section.id === id)?.label ?? ''
+const BEATS = [
+  { at: 0, label: 'Opening', note: 'The mark drawn on, then the title, then the black lifts off an empty board.' },
+  { at: 9, label: 'First sight', note: 'WOMAN, SHORE (two letters right), OCEAN, WINGS, STAGE. The row he is on spins between guesses while he sings.' },
+  { at: 40, label: 'Ivory', note: 'He types IVORY on the last row and it turns over solved: named, in his head, in an instant.', key: true },
+  { at: 50, label: 'My mystery', note: 'The letters lift off and only the colours stay; "Oh, Ivory" brings the name back for a breath.' },
+  { at: 58, label: 'Getting close', note: 'Across to the second board: MOVES, STARE, RIGHT, WHERE.' },
+  { at: 87, label: 'Her name', note: 'He asks her name: ASKED turns over with nothing right. Then IVORY again, on the last row.', key: true },
+  { at: 105, label: 'Just for me', note: 'On "I\'ll keep this one just for me" the letters lift again.' },
+  { at: 112.6, label: 'Interlude', note: 'Back over the sheet: two boards in colours only, and the third, empty.' },
+  { at: 128, label: 'The last chance', note: 'COULD, LOVES, and ASKED once more — she asks his name.' },
+  { at: 136, label: 'Breathe', note: 'On "I forgot how to breathe" the row stops spinning and nothing is typed. The row turns over empty: a try lost.', key: true },
+  { at: 150, label: 'Walks', note: 'WALKS (she walks away), then AVOID on the last row — the closest any word gets, and not it.' },
+  { at: 164, label: 'The answer', note: 'Only now the game is lost does IVORY come up under the board.', key: true },
+  { at: 173, label: 'Five blanks', note: 'On the last "Ivory" its letters lift off and five blanks are left. The camera goes in on them to the end card.', key: true },
+]
 
-const clock = (seconds: number): string =>
-  `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`
+const jump = (at: number) => {
+  player.seek(at)
+  if (!player.playing.value) player.toggle()
+}
 
-const stamp = (seconds: number): string =>
-  `${Math.floor(seconds / 60)}:${(seconds % 60).toFixed(1).padStart(4, '0')}`
+const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
 const toggleFullscreen = () => {
   const element = stage.value
@@ -253,7 +197,6 @@ const toggleFullscreen = () => {
   else void element.requestFullscreen?.()
 }
 
-/* Keyboard on the window, as on /music-videos/andalusia: the thing being reviewed is the film. */
 const onKeydown = (event: KeyboardEvent) => {
   const target = event.target as HTMLElement | null
   if (target && /^(?:INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return
@@ -281,80 +224,6 @@ const onKeydown = (event: KeyboardEvent) => {
   }
   event.preventDefault()
 }
-
 onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
-
-/* What each section does, keyed by the score's section ids. */
-const BEATS = [
-  {
-    id: 'intro',
-    label: 'Intro',
-    note: 'The album\'s opening: the title big on black, dropped to the margin as the paper border comes in. The black lifts off the plate as the horizon and the far sky are scratched in, then the border rules, and the red thread comes in from the left on its needle. The title and 4/10 in the margin underneath.',
-  },
-  {
-    id: 'verse-1',
-    label: 'Verse 1',
-    note: 'fig. 1, a shore at dawn. The hatching sweeps across the plate on "That there\'s a woman" and leaves her standing on the beach in bare paper, far off. The sun rises on "sunrise"; a swell rolls in on "waves" and breaks in foam on "shore", where the thread takes its first pin. The blue goes on after the line.',
-  },
-  {
-    id: 'her-eyes',
-    label: 'Her eyes',
-    note: 'fig. 2, open ocean, etched row by row and washed. fig. 3, a blue butterfly, whose wings open on "wings" with an eyespot on each — her eyes. fig. 4, a stage: the curtains are drawn aside on "when she gets on stage", a spotlight comes on and she is in it, and on "sings" light cracks out of her in paper across the dark and the blue floods the backdrop. On "Ivory" the thread reaches for her pin and stops a finger\'s width short.',
-  },
-  {
-    id: 'california',
-    label: 'California',
-    note: 'fig. 5, a Monterey cypress on a headland over the Pacific. fig. 6, a mockingbird among blue flags, which sings on "Tennessee". fig. 7, a drawer of pinned moths, one pinned a word on "I want to get to know her", and one slot empty. A lens slides over it on "she remains my mystery" and finds only the bare shape of her. "Oh, Ivory": the thread reaches for the empty slot, and stops.',
-  },
-  {
-    id: 'verse-2',
-    label: 'Verse 2',
-    note: 'fig. 8, an engraved portrait medallion: a profile with no face, only the hatching round the back of her head, and cornflowers coming into her hair one after another from "flowers" to "hair". fig. 9, the universe at night: an orrery wheeling over a hill, and she is standing on it. On "stop" the planets stop and the camera very nearly does; on "stare" every star in the sky turns a ray on her.',
-  },
-  {
-    id: 'beside-her',
-    label: 'Her name',
-    note: 'fig. 10, a stage seen from the crowd: her spotlight, and on "beside" a second one comes on, empty, which the thread pins on "where I want to be". fig. 11: the plate at its darkest, and on "When I asked her for her name" she is wiped out of it in paper, face on — and on "looked" her eyes open, blue. On "straight back at me" the plate burns: light round her, the blue flooding, cracks of paper out of the dark. "Ivory": the thread comes up from below, and stops short.',
-  },
-  {
-    id: 'paradise',
-    label: 'Paradise',
-    note: 'fig. 12, a keyboard of ebony and ivory. Its lid lifts on "paradise" to show a paradise painted inside it — palms, a fountain, birds — and the keys play on "play a melody", the notes rising off them. fig. 13, a locket: the thread pins the heart on "heartache" and a crack runs down it; on "keep this one just for me" the locket shuts with her inside, over the pin. "Oh, Ivory": the thread reaches for the place where she was.',
-  },
-  {
-    id: 'interlude',
-    label: 'Interlude',
-    note: 'A long pan along a border of wild flowers coming up out of the plate a beat at a time — ferns, wild roses, cornflowers, reeds — with a small blue butterfly flitting ahead. The tree of Eden grows out of the end of it: the trunk, the branches, the leaves on the beat, the apples, the serpent.',
-  },
-  {
-    id: 'bridge',
-    label: 'My name',
-    note: 'fig. 14. Eve, in paper, comes into the plate on "the one she loves", holding an apple; the thread pins the tree on "Adam", on the side where nobody is standing. On "when she asked me for my name" she holds the apple out to the empty place. On "I forgot how to breathe" the plate floods with blue from the foot up, the camera almost stops, and the bubbles of a breath go up — and stop on "breathe". This "Ivory" the thread does not reach at all. When the water drains she is gone, and the apple lies where he should have been.',
-  },
-  {
-    id: 'alaska',
-    label: 'Alaska',
-    note: 'fig. 15, the sun going down over the Pacific where it came up over the shore. fig. 16, the mockingbird, which flies on "Tennessee". fig. 17, a spruce forest in snowfall, and on "Walks just like Alaska" she walks away up the path into the trees, smaller and smaller, her footprints behind her, and is gone on "trees". fig. 18, the keyboard again, in the snow, its lid lifting and its keys playing for nobody. Then the specimen case: everything the thread pinned, lettered a label a word on "keep this one just for me" — all but hers.',
-  },
-  {
-    id: 'last',
-    label: 'Ivory',
-    note: 'The camera settles on her pin in the case: an empty pin and a blank label. On the last "Ivory" the thread makes one more reach, closer than ever, and stops; and the blue butterfly beside it comes off its pin and flies up and out of the plate.',
-  },
-  {
-    id: 'outro',
-    label: 'Outro',
-    note: 'The case, the slack thread, the empty pin. The cut to the end card is the last hit of the record.',
-  },
-]
-
-const NOTES = [
-  'She is drawn in the album\'s paper, a shade lighter than the plate tone and never outlined — so she is visible only where there is hatching round her. That is why she is a hint at the shore and in the spotlight, and plain only in fig. 11, where the plate is at its darkest.',
-  'Tone is built the way an etcher builds it: layers of parallel lines at different angles, each laid only where the tone passes its threshold. The lines sit on a lattice fixed to the plate, so two fields that meet carry the same lines through the join, and every field is computed once and moved by the camera.',
-  'Where each figure is drawn is solved from where the camera will be when its word is sung: the lens is where the camera is on "mystery", the face where it is on "looked". Retime the score and the plate rearranges itself to match.',
-  'The camera never stops: a drift, plus half-cosine moves between figures, never faster than forty units a frame. Twice it slows to a hush of a few units a second — when the universe stops to stare, and when he forgets how to breathe.',
-  'The score was measured, not tapped in: the voice separated from the mix, the words placed by a speech model and then moved onto the vocal\'s own onsets, the repeated lines solved once on their pooled evidence. The band played to a click at 105 BPM, and the wild flowers of the interlude come up on it.',
-  'One function draws all of it: etchingFrame(t). The same file renders this page sixty times a second, draws the album still on /music-videos/album, and can be walked frame by frame under node to write an mp4.',
-]
 </script>

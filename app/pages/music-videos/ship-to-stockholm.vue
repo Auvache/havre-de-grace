@@ -179,7 +179,7 @@
             — track three, the screenprint.
           </li>
           <li>
-            <NuxtLink to="/music-videos/ivory" class="underline">/music-videos/ivory</NuxtLink>
+            <NuxtLink to="/music-videos/ivory-print" class="underline">/music-videos/ivory-print</NuxtLink>
             — track four, the etching.
           </li>
           <li>
@@ -199,7 +199,7 @@
  *
  * Unlisted and noindexed like everything under /music-videos: it restates a
  * published song's lyric in full and exists to be shared by link for a
- * decision. Shaped like /music-videos/ivory: the page owns the projector and
+ * decision. Shaped like /music-videos/ivory-print: the page owns the projector and
  * the furniture, MusicVideoSvgFilm runs the film, and
  * app/config/shipToStockholmScore.ts is the cut.
  */

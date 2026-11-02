@@ -56,6 +56,7 @@ const FILMS = {
   marquee: ['marquee.mjs', 'marqueeFrame'],
   screenprint: ['screenprint.mjs', 'screenprintFrame'],
   etching: ['etching.mjs', 'etchingFrame'],
+  blanks: ['blanks.mjs', 'blanksFrame'],
   engraving: ['engraving.mjs', 'engravingFrame'],
   gallery: ['gallery.mjs', 'galleryFrame'],
   wall: ['conman-wall.mjs', 'wallFrame'],

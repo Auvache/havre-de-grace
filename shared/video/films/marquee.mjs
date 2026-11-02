@@ -1,32 +1,60 @@
 /*
  * The Marquee — "Goodbye, Norma Jeane" as a picture-house letter board.
  *
- * One sign for the whole song, never cut away from. The board starts empty
- * and dark, turns over into NORMA JEANE as the voice comes in, then flips
- * through every film she made, in release order, one landing every three
- * bars — twenty-nine titles, then Something's Got to Give, which never
- * finishes spelling. The letters keep spinning and die out one by one, and
- * the last tile goes blank on the record's last hit.
+ * One sign for the whole song, never cut away from. The film opens the way
+ * Into the Wild's does: the band's mark drawn on black, then the title drawn
+ * on in the live videos' Hairline capitals, then the black lifts off a dark
+ * marquee. It turns over into NORMA JEANE as the voice comes in, then flips
+ * through every film she made, in release order, cut to the song's sections,
+ * and after the last one starts on Something's Got to Give, which never
+ * finishes spelling. The letters keep spinning and die out one by one, and on
+ * the record's last hit there is a hard cut to the mark on black.
+ *
+ * THE SCHEDULE (2026-11-02, as asked: "the board does more")
+ *   - Verses: a title every four bars, landing on each sung phrase. NORMA
+ *     JEANE holds the first four bars of verse 1.
+ *   - Pre-choruses and breaks: a title every two bars.
+ *   - The bar before each chorus (and before the first break) is where the
+ *     record drops nearly out: the board flips blank and the bulbs go out.
+ *     After the first pre-chorus the next title slams down all at once on the
+ *     downbeat; before a chorus, the hook does.
+ *   - Choruses answer the hook. GOODBYE turns over on "Goodbye", NORMA on
+ *     "Norma", JEANE on "Jean"; a title on "I've been in love"; on "more,
+ *     more, more" the board turns to MORE a row at a time, one row per word;
+ *     a title on "I wanted you".
+ *   - The third clue runs straight into the last chorus's GOODBYE.
+ * These were placed from the score's words and from the record measured bar
+ * by bar: the drop bars (19, 39, 69) are the quietest and least busy of their
+ * sections, and the breaks are quieter than the verses.
  *
  * THE RULES
- *   - Every landing is on a downbeat. 95 BPM to a click; the score's beat is at
- *     0.066, and the bar's strongest accent is the beat after it, so the bar
- *     starts at 0.698. That puts NORMA JEANE on 20.91 ("Silver screen says
- *     Norma Jeane" at 20.92) and the last chorus's downbeat (217.96) on a title.
- *   - Red, on a title that has landed: at most one MARILYN MONROE's worth of
+ *   - Every title lands on a downbeat. 95 BPM to a click; the score's beat is
+ *     at 0.066, and the bar's strongest accent is the beat after it, so the bar
+ *     starts at 0.698. NORMA JEANE lands on bar 8 (20.91, "Silver screen says
+ *     Norma Jeane" at 20.92).
+ *   - Red, on a board that has landed: at most one MARILYN MONROE's worth of
  *     letters (two M, N, O, R; one A, I, L, Y, E), letters in her hidden place
  *     first, then reading order.
  *   - Red, while the board is turning over: only a letter that sits in her
  *     hidden place — MARILYN on the top row and MONROE under it, from column 4.
  *     Three times the scramble lets the name show through: 3 letters, then 6,
- *     then 9, for a beat and a half each. Never all thirteen.
- *   - Lights follow the song's sections, and flash on every landing.
+ *     then 9, for a beat and a half each. Never all thirteen (confirmed
+ *     2026-11-02: her name is never spelled).
+ *   - Lights follow the song's sections, flash on every landing, and go out
+ *     in the drop bars.
  *
  * The frame contract is the one every film here keeps:
- * marqueeFrame({ time, score, uid }) → { svg, label }, pure, no DOM. The plan
- * is built once per score and cached.
+ * marqueeFrame({ time, score, lockup, uid }) → { svg, label }, pure, no DOM.
+ * The plan is built once per score and cached.
+ *
+ * Two other motions (slot-machine reels, letters hung by hand) were tried on
+ * 2026-11-02 against these flaps; the flaps won.
  */
-import { rng } from '../kit.mjs'
+import { rng, r, ramp, easeInOut } from '../kit.mjs'
+import { INK as SHEET_INK, PAPER as SHEET_PAPER, markDrawnAt, MARK_DRAW } from '../album.mjs'
+import { drawLines } from '../hairline-draw.mjs'
+import { TITLES } from '../titles.mjs'
+import { END_BLACK, END_INK } from '../ending.mjs'
 
 const PAPER = '#ece4d2'
 const INK = '#1b1915'
@@ -78,8 +106,10 @@ export const MARQUEE_FILMS = [
   ['1961', ['', 'THE MISFITS', '']],
 ].map(([year, rows]) => ({ year, rows, title: rows.filter(Boolean).join(' ') }))
 
-/* Before title n (1-based), the scramble lets these of her 13 letters show through. */
-const CLUES = { 8: [0, 5, 8], 17: [0, 1, 3, 5, 7, 10], 26: [0, 1, 2, 4, 5, 7, 8, 9, 12] }
+/* The three clues: which of her 13 letters the scramble lets show through. */
+const CLUE_1 = [0, 5, 8]
+const CLUE_2 = [0, 1, 3, 5, 7, 10]
+const CLUE_3 = [0, 1, 2, 4, 5, 7, 8, 9, 12]
 
 const layout = (rows) => {
   const grid = []
@@ -107,6 +137,12 @@ function redOf(grid) {
   return out
 }
 
+/* The first word of a line that matches, sung after `after` seconds. */
+function wordAt(score, re, after) {
+  for (const l of score.lines) for (const w of l.words) if (w.t > after && re.test(w.text)) return w.t
+  throw new Error(`marquee: no word ${re} after ${after}`)
+}
+
 /* ── The plan: every flap of every tile, worked out once ─────────────────── */
 
 const cache = new WeakMap()
@@ -122,73 +158,186 @@ function planFor(score) {
   const bar = (m) => D0 + m * BAR
   const LAST = score.endCardAt ?? score.duration - 6
 
-  const NJ = layout(['', 'NORMA JEANE', ''])
   const EMPTY = layout(['', '', ''])
-  const SGTG = layout(["SOMETHING'S", 'GOT TO', 'GIVE'])
-
-  const boards = [{ at: bar(8), grid: NJ, title: 'NORMA JEANE', red: redOf(NJ) }]
-  MARQUEE_FILMS.forEach((f, i) => {
-    const grid = layout(f.rows)
-    boards.push({ at: bar(8 + 3 * (i + 1)), grid, title: `${f.title} (${f.year})`, red: redOf(grid) })
-  })
-  const sgtgAt = bar(98)
-
   const events = Array.from({ length: N }, () => [[-9, ' ']])
   const twitches = Array.from({ length: N }, () => [])
-  const holds = [] // [from, to, board]
+  const boards = [] // every board that lands: { at, S (when the next change starts), grid, red, title, kind }
   const clues = [] // [from, to] — for the label
+  const flashes = [] // the bulbs flash on every landing
+  const darks = [] // [from, to] — the bulbs out
+  let cur = EMPTY
+  let seed = 100
 
-  function scramble(prev, next, S, L, clue, seed, final = true) {
-    const rand = rng(seed)
+  /*
+   * Turn the board from what it shows to `next`. `land(i)` is when tile i's
+   * flap finishes on its new letter. From `S` until then the tile may flip
+   * through noise on the eighths (a scramble); a slam has no noise and only
+   * turns the tiles that change. With `quiet`, the noise stops for every
+   * tile then, and a tile that lands later waits blank.
+   */
+  function turn(next, { S, land, clue = null, noise = true, final = true, quiet = Infinity }) {
+    const prev = cur
+    const rand = rng(seed++)
     const pick = (s) => s[Math.floor(rand() * s.length)]
     const slots = []
-    for (let k = 0; k < Math.round((L - S) / EIGHTH); k++) slots.push(S + k * EIGHTH)
+    for (let k = 0; k < Math.round((Math.max(...Array.from({ length: N }, (_, i) => land(i))) - S) / EIGHTH); k++) slots.push(S + k * EIGHTH)
     const ct = S + 2.5 * BEAT
     const ce = ct + 1.5 * BEAT
     if (clue) clues.push([ct, ce])
     for (let i = 0; i < N; i++) {
       const col = i % COLS
       const inHid = HID.has(i)
-      const active = prev[i] !== ' ' || next[i] !== ' ' || (col >= 1 && col <= 11 && rand() < 0.3) || (clue && inHid)
+      const active = noise
+        ? prev[i] !== ' ' || next[i] !== ' ' || (col >= 1 && col <= 11 && rand() < 0.3) || (clue && inHid)
+        : prev[i] !== next[i]
       if (!active) continue
-      // A ripple left to right: the last tile settles on the downbeat.
-      const fin = L - FLIP - (1 - col / 12) * BEAT * 0.9
+      const fin = land(i) - FLIP
       const k = inHid ? HKEYS.indexOf(i) : -1
-      for (const t of slots) {
-        if (t >= fin - EIGHTH || rand() >= 0.5) continue
-        if (clue && k >= 0 && t > ct - EIGHTH && t < ce) continue
-        let c = rand() > 0.2 ? pick(ALPHA) : ' '
-        if (k >= 0 && c === HID.get(i)) c = pick(NOISE)
-        events[i].push([t, c])
-      }
-      if (clue && k >= 0 && clue.includes(k)) {
-        events[i].push([ct, HID.get(i)])
-        events[i].push([ce, pick(NOISE)])
+      if (noise) {
+        const stop = Math.min(fin, quiet - FLIP)
+        for (const t of slots) {
+          if (t >= stop - EIGHTH || rand() >= 0.5) continue
+          if (clue && k >= 0 && t > ct - EIGHTH && t < ce) continue
+          let c = rand() > 0.2 ? pick(ALPHA) : ' '
+          if (k >= 0 && c === HID.get(i)) c = pick(NOISE)
+          events[i].push([t, c])
+        }
+        if (clue && k >= 0 && clue.includes(k)) {
+          events[i].push([ct, HID.get(i)])
+          events[i].push([ce, pick(NOISE)])
+        }
+        if (fin > quiet) events[i].push([quiet - FLIP, ' '])
       }
       if (final || rand() < 0.6) events[i].push([fin, next[i]])
     }
+    cur = next
   }
 
-  function hold(grid, L, E, seed) {
-    const rand = rng(seed)
-    const lit = []
-    grid.forEach((c, i) => { if (c !== ' ') lit.push(i) })
-    for (let m = L + BEAT; m < E - BEAT; m += 2 * BEAT) {
-      if (lit.length && rand() < 0.8) twitches[lit[Math.floor(rand() * lit.length)]].push(m)
+  /* The landings. */
+  const ripple = (L) => (i) => L - (1 - (i % COLS) / 12) * BEAT * 0.9
+  const slam = (L) => () => L
+  let films = 0
+  const board = (grid, at, title, kind) => {
+    boards.push({ at, grid, red: redOf(grid), title, kind })
+    flashes.push(at)
+  }
+  /* A film title on bar m, its scramble `lead` beats long. */
+  const title = (m, lead, extra = {}) => {
+    const f = MARQUEE_FILMS[films++]
+    const grid = layout(f.rows)
+    const L = bar(m)
+    boards.at(-1).S = L - lead * BEAT
+    turn(grid, { S: L - lead * BEAT, land: lead ? ripple(L) : slam(L), noise: lead > 0, ...extra })
+    board(grid, L, `${f.title} (${f.year})`, 'film')
+  }
+  /* The drop bar: everything flips blank on the downbeat, a quick ripple, and the bulbs go out. */
+  const drop = (m) => {
+    const D = bar(m)
+    boards.at(-1).S = D
+    turn(EMPTY, { S: D, land: (i) => D + FLIP + ((i % COLS) / 12) * BEAT * 0.4, noise: false })
+    darks.push([D, bar(m + 1)])
+    boards.push({ at: D, grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'dark' })
+  }
+  /* The hook: GOODBYE on "Goodbye", NORMA on "Norma", JEANE on "Jean". */
+  const HOOK = layout(['GOODBYE', 'NORMA JEANE', ''])
+  const hook = (C, extra = {}) => {
+    const g = wordAt(score, /^Goodbye/, C - 1)
+    const n = wordAt(score, /^Norma/, g)
+    const j = wordAt(score, /^Jean/, n)
+    const land = (i) => {
+      const row = Math.floor(i / COLS)
+      const col = i % COLS
+      return row === 1 && HOOK[i] !== ' ' ? (col <= 5 ? n : j) : g
     }
+    if (boards.at(-1).kind !== 'dark') boards.at(-1).S = extra.S
+    turn(HOOK, { S: extra.S ?? g - FLIP, land, noise: !!extra.S, quiet: g, ...extra })
+    board(HOOK, j, 'GOODBYE, NORMA JEANE', 'hook')
+    flashes.push(g, n)
+  }
+  /* "more, more, more": a row to MORE on each word. */
+  const MORE = layout(['MORE', 'MORE', 'MORE'])
+  const more = (C) => {
+    const m1 = wordAt(score, /^more/, bar(C + 4))
+    const m2 = wordAt(score, /^more/, m1)
+    const m3 = wordAt(score, /^more/, m2)
+    const at = [m1, m2, m3]
+    boards.at(-1).S = m1 - FLIP
+    turn(MORE, { S: m1 - FLIP, land: (i) => at[Math.floor(i / COLS)] + (i % COLS) * 0.012, noise: false })
+    board(MORE, m3, 'MORE MORE MORE', 'more')
+    flashes.push(m1, m2)
   }
 
-  // The opening: dark, the board starts turning over at bar 4, NORMA JEANE on bar 8.
-  scramble(EMPTY, NJ, bar(4), bar(8), null, 1)
-  boards.forEach((b, idx) => {
-    const nextAt = idx + 1 < boards.length ? boards[idx + 1].at : sgtgAt
-    const S = nextAt - 6 * BEAT
-    holds.push([b.at, S, b])
-    hold(b.grid, b.at, S, idx + 10)
-    if (idx + 1 < boards.length) scramble(b.grid, boards[idx + 1].grid, S, nextAt, CLUES[idx + 1], 100 + idx + 1)
-  })
+  // The opening: the board starts turning over as the black lifts, NORMA JEANE on bar 8.
+  const NJ = layout(['', 'NORMA JEANE', ''])
+  turn(NJ, { S: bar(5), land: ripple(bar(8)) })
+  board(NJ, bar(8), 'NORMA JEANE', 'name')
+
+  // Verse 1 and the first pre-chorus.
+  title(12, 6)
+  title(16, 4)
+  title(18, 4)
+  drop(19)
+  // Break 1: the next title slams down on the downbeat, then one every two bars.
+  title(20, 0)
+  title(22, 4)
+  title(24, 4)
+  title(26, 4)
+  // Verse 2, the first clue, pre-chorus 2.
+  title(28, 4)
+  title(32, 6, { clue: CLUE_1 })
+  title(36, 4)
+  title(38, 4)
+  drop(39)
+  // Chorus 1.
+  hook(bar(40))
+  title(42, 2)
+  more(40)
+  title(47, 4)
+  // Break 2.
+  title(50, 6)
+  title(52, 4)
+  title(54, 4)
+  title(56, 4)
+  // Verse 3, the second clue, pre-chorus 3.
+  title(58, 4)
+  title(62, 6, { clue: CLUE_2 })
+  title(66, 6)
+  title(68, 4)
+  drop(69)
+  // Chorus 2.
+  hook(bar(70))
+  title(72, 2)
+  more(70)
+  title(77, 4)
+  // Break 3, and the third clue straight into the last chorus.
+  title(80, 6)
+  title(82, 4)
+  title(84, 4)
+  hook(bar(86), { S: bar(86) - 6 * BEAT, clue: CLUE_3 })
+  title(88, 2)
+  more(86)
+  title(93, 4)
+  title(95, 4)
+  if (films !== MARQUEE_FILMS.length) throw new Error(`marquee: ${films} of ${MARQUEE_FILMS.length} films scheduled`)
+
   // Something's Got to Give: it starts to spell and never finishes.
-  scramble(boards.at(-1).grid, SGTG, sgtgAt - 6 * BEAT, sgtgAt, null, 999, false)
+  const sgtgAt = bar(98)
+  boards.at(-1).S = sgtgAt - 6 * BEAT
+  turn(layout(["SOMETHING'S", 'GOT TO', 'GIVE']), { S: sgtgAt - 6 * BEAT, land: ripple(sgtgAt), final: false })
+
+  // The holds, and a tile twitching half a flip on the backbeat in each.
+  const holds = []
+  boards.forEach((b, idx) => {
+    const until = b.S ?? sgtgAt - 6 * BEAT
+    if (b.kind === 'dark') return
+    holds.push([b.at, until, b])
+    const rand = rng(10 + idx)
+    const lit = []
+    b.grid.forEach((c, i) => { if (c !== ' ') lit.push(i) })
+    for (let k = Math.ceil((b.at - D0) / BEAT + 0.5); D0 + k * BEAT < until - BEAT; k++) {
+      if (k % 2 === 1 && lit.length && rand() < 0.8) twitches[lit[Math.floor(rand() * lit.length)]].push(D0 + k * BEAT)
+    }
+  })
 
   // The ending: the board keeps spinning and the tiles die out until the last hit.
   const rand = rng(42)
@@ -218,7 +367,7 @@ function planFor(score) {
   const bulbDeath = bulbs.map(() => sgtgAt + (LAST - sgtgAt) * rb() ** 0.7)
   bulbDeath[Math.floor(rb() * bulbs.length)] = LAST
 
-  const plan = { BEAT, BAR, D0, EIGHTH, bar, LAST, boards, sgtgAt, events, twitches, holds, clues, bulbs, bulbDeath }
+  const plan = { BEAT, BAR, D0, EIGHTH, bar, LAST, boards, sgtgAt, events, twitches, holds, clues, flashes, darks, bulbs, bulbDeath }
   cache.set(score, plan)
   return plan
 }
@@ -264,12 +413,15 @@ const sectionKind = (score, t) => {
 function lightsAt(plan, score, t) {
   const kind = sectionKind(score, t)
   const beatI = Math.floor((t - plan.D0) / plan.BEAT)
-  const flash = plan.boards.some((b) => t - b.at >= 0 && t - b.at < plan.BEAT)
+  const dark = plan.darks.some(([a, b]) => t >= a && t < b)
+  const flash = plan.flashes.some((f) => t - f >= 0 && t - f < plan.BEAT)
   const pulse = Math.exp(-(((t - plan.D0) % plan.BEAT + plan.BEAT) % plan.BEAT) * 5)
   return plan.bulbs.map((_, k) => {
     if (t >= plan.bulbDeath[k]) return { state: 'dead' }
+    if (dark && !flash) return { state: 'off' }
     if (kind === 'intro') {
-      const w = Math.max(0, Math.min(1, (t - plan.bar(2)) / (plan.bar(8) - plan.bar(2))))
+      // They come on as the black lifts off the opening, the last of them by NORMA JEANE.
+      const w = Math.max(0, Math.min(1, (t - plan.bar(4.5)) / (plan.bar(8) - plan.bar(4.5))))
       const lit = hash(k) < w && ((Math.floor(k / 2) + beatI) % 2 === 0 || t > plan.bar(7))
       return { state: lit ? 'lit' : 'off', color: PINK, glow: 0 }
     }
@@ -295,9 +447,42 @@ function lyricAt(score, t) {
   return ''
 }
 
-export function marqueeFrame({ time, score }) {
+/* ── The opening ─────────────────────────────────────────────────────────── */
+
+/*
+ * Into the Wild's opening (maze.mjs MAZE_OPENING), on the live videos' clock
+ * (live-cards.mjs openingClock, approved 2026-10-27): the mark from 0.5 s,
+ * faded over 5.0–5.7; the title drawn over 6.2–8.9; then the black lifts,
+ * here off the marquee as its bulbs start to come on.
+ */
+export const MARQUEE_OPENING = { mark: 0.5, markOut: [5.0, 5.7], title: [6.2, 8.9], reveal: [10.6, 12.0] }
+
+function openingSvg(time, uid) {
+  const O = MARQUEE_OPENING
+  const black = 1 - ramp(time, ...O.reveal)
+  if (black <= 0.001) return ''
+  const markOn = 1 - ramp(time, ...O.markOut)
+  const mark = time >= O.mark && markOn > 0.001
+    ? `<g transform="translate(800 450) scale(${r(520 / 918, 5)}) translate(-459 -309.5)" style="color:${SHEET_PAPER}" opacity="${r(easeInOut(markOn), 3)}">${markDrawnAt(Math.min(time - O.mark, MARK_DRAW.done), `${uid}-mark`)}</g>`
+    : ''
+  const title = time >= O.title[0] ? drawLines(TITLES['goodbye-norma-jeane'], easeInOut(ramp(time, ...O.title)), SHEET_PAPER, `${uid}-title`) : ''
+  return `<g opacity="${r(easeInOut(black), 4)}"><rect width="1600" height="900" fill="${SHEET_INK}"/>${mark}${title}</g>`
+}
+
+/* ── The frame ───────────────────────────────────────────────────────────── */
+
+export function marqueeFrame({ time, score, lockup = '', uid = 'marquee' }) {
   const plan = planFor(score)
   const t = time
+
+  // The last hit: a hard cut to the band's mark on black, held past the record's end.
+  if (t >= plan.LAST) {
+    return {
+      label: 'End card',
+      svg: `<rect width="1600" height="900" fill="${END_BLACK}"/><g transform="translate(800 450) scale(${r(500 / 918, 5)}) translate(-459 -309.5)" style="color:${END_INK}">${lockup}</g>`,
+    }
+  }
+
   const held = plan.holds.find(([a, b]) => t >= a && t < b)?.[2] ?? null
 
   // Tiles.
@@ -306,8 +491,8 @@ export function marqueeFrame({ time, score }) {
   const fs = Math.round(th * 0.7)
   const tiles = []
   for (let i = 0; i < N; i++) {
-    const r = Math.floor(i / COLS); const c = i % COLS
-    const x = x0 + c * pitch + 4; const y = y0 + r * rh + 7
+    const row = Math.floor(i / COLS); const c = i % COLS
+    const x = x0 + c * pitch + 4; const y = y0 + row * rh + 7
     const { letter, sy, moving } = tileAt(plan, i, t)
     let red = false
     if (letter !== ' ') red = held && held.grid[i] === letter ? held.red[i] : HID.get(i) === letter
@@ -334,7 +519,7 @@ export function marqueeFrame({ time, score }) {
   })
 
   const kind = sectionKind(score, t)
-  const dark = t < plan.bar(6) || t >= plan.LAST
+  const dark = t < plan.bar(6) || plan.darks.some(([a, b]) => t >= a && t < b) && !plan.flashes.some((f) => t >= f && t - f < plan.BEAT)
   const band = dark ? '#cfc3ad' : kind === 'break' ? GOLD : PINK
   const bandText = dark ? '' : 'NOW SHOWING · SILVER SCREEN'
   const lyric = esc(lyricAt(score, t).toUpperCase())
@@ -349,23 +534,32 @@ export function marqueeFrame({ time, score }) {
 <rect x="230" y="180" width="1140" height="46" fill="${band}"/>
 <text x="800" y="215" font-size="28" font-weight="700" fill="${INK}" text-anchor="middle" letter-spacing="6">${bandText}</text>
 ${tiles.join('')}${bulbs.join('')}</g>
-<text x="800" y="867" font-size="33" font-weight="700" fill="${INK}" text-anchor="middle">${lyric}</text>`
+<text x="800" y="867" font-size="33" font-weight="700" fill="${INK}" text-anchor="middle">${lyric}</text>
+${openingSvg(t, uid)}`
 
   const clue = plan.clues.some(([a, b]) => t >= a && t < b)
-  const label = t < plan.boards[0].at ? 'An empty marquee, turning over'
-    : held ? `The marquee reads ${held.title}`
-      : t >= plan.LAST ? 'An empty, dark marquee'
+  const out = plan.darks.some(([a, b]) => t >= a && t < b)
+  const label = t < MARQUEE_OPENING.reveal[1] ? 'Opening'
+    : t < plan.boards[0].at ? 'An empty marquee, turning over'
+      : held ? `The marquee reads ${held.title}`
         : t >= plan.sgtgAt ? "Something's Got to Give, never finished, the letters dying out"
-          : clue ? 'The letters turning over, her name showing through in red' : 'The letters turning over'
+          : clue ? 'The letters turning over, her name showing through in red'
+            : out ? 'The marquee goes dark' : 'The letters turning over'
   return { svg, label }
 }
+
+/** Seconds of silence an export holds on the end card after the record (mp4.mjs reads it). */
+marqueeFrame.hold = 4
 
 /** When things happen, for the page's jump list. */
 export function marqueeMoments(score) {
   const p = planFor(score)
   return {
     nj: p.boards[0].at,
-    titles: p.boards.slice(1).map((b) => ({ at: b.at, title: b.title })),
+    titles: p.boards.filter((b) => b.kind === 'film').map((b) => ({ at: b.at, title: b.title })),
+    hooks: p.boards.filter((b) => b.kind === 'hook').map((b) => b.at),
+    mores: p.boards.filter((b) => b.kind === 'more').map((b) => b.at),
+    drops: p.darks.map(([a]) => a),
     clues: p.clues.map(([a]) => a),
     sgtg: p.sgtgAt,
     last: p.LAST,

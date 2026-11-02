@@ -175,7 +175,7 @@
             — track nine, the wood engraving, the album's other night.
           </li>
           <li>
-            <NuxtLink to="/music-videos/ivory" class="underline">/music-videos/ivory</NuxtLink>
+            <NuxtLink to="/music-videos/ivory-print" class="underline">/music-videos/ivory-print</NuxtLink>
             — track four, the etching, where she is left in the paper too.
           </li>
         </ul>

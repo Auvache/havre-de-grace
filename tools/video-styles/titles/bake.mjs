@@ -16,6 +16,9 @@ import { loadFaces, setLine } from '../hairline.mjs'
 
 const TITLES = {
   'into-the-wild': { text: 'Into the Wild', size: 54 },
+  'goodbye-norma-jeane': { text: 'Goodbye, Norma Jeane', size: 54 },
+  conman: { text: 'Conman', size: 54 },
+  ivory: { text: 'Ivory', size: 54 },
 }
 
 await loadFaces()

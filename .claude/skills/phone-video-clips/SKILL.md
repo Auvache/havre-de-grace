@@ -69,6 +69,7 @@ Insane, Okay, 27 Oct 2026 (5 clips); see "The first inbox run" below.
    Hairline captions. Its header has the details.
    ```sh
    node tools/captions/short.mjs --video inbox/<take> --timed $W/timed.json \
+     --vocals $W/vocals.wav --from-voice \
      --start 18.82 --end 59.53 --fade-out 0.3 --top 760 --scrim \
      --out "$HOME/stefan/videos/ready/youtube/<Song> - verse 1.mp4"
    ```
@@ -259,14 +260,25 @@ Do this for every live take, and for any take where `align` flagged many
 lines. The user's own lyrics are the starting point, not proof of what was
 sung.
 
-### Captions: the Hairline style (chosen 27 Oct 2026)
+### Captions: the Hairline style (chosen 27 Oct 2026, heavier and steady since 30 Oct)
 
-One line at a time, centred: small (34 px) thin Inter capitals, widely
-spaced, white with a soft shadow. Words are dim until sung. The line stays up
-1.6 s after its last word, then fades, unless the next line comes in sooner and
-takes over. The user found 0.6 s "too difficult to read all of the text before it
-disappears". Everything in `ready/` was re-rendered in it on
-27 Oct. The user picked it from ten mock-ups running from minimal to maximal
+One line at a time, centred: Inter Medium capitals (38 px), widely spaced,
+white with a soft shadow. On 30 Oct the user chose option "D" from four
+weights (the 34 px Light was hard to read) and dropped the fill-in: the whole
+line is white from the start. The line stays up 1.6 s after the singing of it
+stops (pass `--vocals <work dir>/vocals.wav` so held notes count; the user
+doesn't want text gone before a long hold ends), then fades, unless the next
+line comes in sooner and takes over. The user found 0.6 s "too difficult to
+read all of the text before it disappears".
+
+**Start on the voice (30 Oct 2026).** Every lyric clip opens on the frame the
+singing comes in, with its first line already up: render with
+`--from-voice` (it needs `--timed` and `--vocals`; a frame late, never early).
+Keep an intro that's talking or extensive noodling (the user's call: "use your
+judgement"). Instrumental clips and clips with burned-in captions are left as
+they are. Everything in `ready/` was re-rendered this way on 30 Oct (27 Oct in
+the original Hairline). The lyrics, timings and cut lists are backed up in
+`~/stefan/videos/.captions/sessions/`. The user picked it from ten mock-ups running from minimal to maximal
 (hairline, serif whisper, typewriter, cinema bar, karaoke, highlighter tabs,
 poster stack, giant outline, ransom collage, maximal). **Don't re-open the
 choice or add colour, emphasis or size play unless asked.** Before it, a bold

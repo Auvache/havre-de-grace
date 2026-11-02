@@ -171,7 +171,7 @@
             — track two, the torn gallery.
           </li>
           <li>
-            <NuxtLink to="/music-videos/ivory" class="underline">/music-videos/ivory</NuxtLink>
+            <NuxtLink to="/music-videos/ivory-print" class="underline">/music-videos/ivory-print</NuxtLink>
             — track four, the etching.
           </li>
           <li>

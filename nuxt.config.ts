@@ -424,6 +424,7 @@ export default defineNuxtConfig({
         '/music-videos/conman-print',
         '/music-videos/goodbye-norma-jeane-print',
         '/music-videos/meet-me-at-the-horizon-print',
+        '/music-videos/ivory-print',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
       ],

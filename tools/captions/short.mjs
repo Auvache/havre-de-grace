@@ -63,6 +63,7 @@ const { values: opt } = parseArgs({
     video: { type: 'string' },
     timed: { type: 'string' },
     vocals: { type: 'string' }, // the take's vocal stem, to hold each line until its singing stops
+    'from-voice': { type: 'boolean', default: false }, // start on the frame the voice comes in (needs --timed, --vocals)
     out: { type: 'string' },
     start: { type: 'string' },
     end: { type: 'string' },
@@ -88,19 +89,43 @@ const W = 1080, H = 1920
 // the caption jumps with the cut, to the next plain dark band under the chin
 const TOPS = opt.top.split(',').map((k) => (k.includes(':') ? k.split(':').map(Number) : [-Infinity, Number(k)]))
 const LEFT = 90, RIGHT = 150, TOP = TOPS[0][1]
-const topAt = (t) => TOPS.findLast(([at]) => at <= t + Number(opt.start))?.[1] ?? TOP
+const topAt = (t) => TOPS.findLast(([at]) => at <= t + start)?.[1] ?? TOP
 // TAIL: a line stays up 1.6 s after its singing stops, so there's time to finish reading it (0.6 was too
 // quick to read, 27 Oct 2026); a line that's followed straight away still hands off to the next
 const LEAD = 0.35, TAIL = 1.6, FADE = 0.3, HANDOFF = 0.12
 
-const start = Math.round(Number(opt.start) * FPS) / FPS
+const timed = opt.timed ? JSON.parse(readFileSync(opt.timed, 'utf8')) : []
+let start = Math.round(Number(opt.start) * FPS) / FPS
+// --from-voice (30 Oct 2026: every lyric clip opens on its singing, with the line already up): from the first
+// line at or after --start, find where the stem first rises within 25 dB of that line's loudest and stays there
+// 30 ms, and start on the next frame (a frame late, never early); that line's words can't start before it
+if (opt['from-voice']) {
+  if (!opt.timed || !opt.vocals) throw new Error('--from-voice needs --timed and --vocals')
+  const w0 = timed.find((w, i) => w.s >= start - 0.05 && timed[i - 1]?.line !== w.line) // a line's first word
+  const from = Math.max(start, w0.s - 0.3), step = 0.01
+  const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', from.toFixed(6), '-t', '3', '-i', opt.vocals,
+    '-ac', '1', '-ar', '8000', '-f', 'f32le', '-'], { maxBuffer: 1 << 26 })
+  const x = new Float32Array(pcm.buffer, pcm.byteOffset, pcm.length >> 2), n = 8000 * step
+  const db = Array.from({ length: Math.floor(x.length / n) }, (_, k) => {
+    let s = 0
+    for (let j = k * n; j < (k + 1) * n; j++) s += x[j] * x[j]
+    return 10 * Math.log10(s / n + 1e-12)
+  })
+  const thr = Math.max(...db) - 25
+  const k = db.findIndex((_, i) => db.slice(i, i + 3).length === 3 && db.slice(i, i + 3).every((v) => v > thr))
+  // already singing when the search starts (an uncaptioned half line sung straight into the first line, as on
+  // Scarecrow): no rise to find, so start on the first word itself
+  start = Math.ceil((k > 0 ? from + k * step : w0.s) * FPS - 1e-6) / FPS
+  for (const w of timed) if (w.line === w0.line && w.s < start) w.s = start
+  console.log(`from voice: ${Number(opt.start).toFixed(2)} -> ${start.toFixed(3)} (first word "${w0.w}" at ${w0.s.toFixed(2)})`)
+}
 const end = Math.round(Number(opt.end) * FPS) / FPS
 const dur = end - start
 const fadeOut = Number(opt['fade-out'])
 
 // the lines that start inside the clip, in clip time
 const lines = []
-for (const w of opt.timed ? JSON.parse(readFileSync(opt.timed, 'utf8')) : []) {
+for (const w of timed) {
   ;(lines[w.line] ??= []).push({ text: w.w.replace(/[^\p{L}\p{N}'’-]/gu, '').toUpperCase(), s: w.s - start, e: w.e - start })
 }
 const shown = lines.filter((l) => l && l[0].s >= -0.05 && l[0].s < dur)
@@ -136,6 +161,7 @@ for (const [i, l] of shown.entries()) {
   l.in = Math.max(0, l[0].s - LEAD)
   l.out = Math.min(l.sung + TAIL, dur - FADE - 0.05) // gone before the clip ends: Shorts loop
   l.fi = l.fo = FADE
+  if (l.in === 0) l.fi = 0 // the clip opens on this line: it's already up on the first frame
   const prev = shown[i - 1]
   // never two lines at once: when lines run back to back, a quick handoff just before the new line's first word,
   // but not before the old line has been sung out
