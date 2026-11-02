@@ -116,11 +116,14 @@ function look() {
   scrolled.value = window.scrollY > 4
 
   // What sits just inside the nav's bottom edge, across its middle, not
-  // counting the nav itself. A picture that ends partway under the nav
-  // already counts as text, so the strip arrives before the words do.
+  // counting the nav itself, or an overlay that isn't the page (the splash
+  // screen is black and on top on first load; reading it left the nav a
+  // black strip until the first scroll). A picture that ends partway under
+  // the nav already counts as text, so the strip arrives before the words do.
   const rect = header.getBoundingClientRect()
   const y = Math.max(0, rect.bottom - 2)
-  const under = document.elementsFromPoint(window.innerWidth / 2, y).find((node) => !header.contains(node)) ?? null
+  const under = document.elementsFromPoint(window.innerWidth / 2, y)
+    .find((node) => !header.contains(node) && !node.closest('[data-nav-ignore]')) ?? null
 
   if (under?.closest('[data-nav-over]')) {
     clear.value = true

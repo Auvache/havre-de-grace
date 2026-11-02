@@ -2,6 +2,7 @@
   <div
     v-if="isVisible"
     class="splash-screen"
+    data-nav-ignore
     :class="{ 'is-exiting': isExiting }"
     :style="{ '--exit-duration': `${OVERLAY_FADE_OUT_MS}ms` }"
     aria-hidden="true"
