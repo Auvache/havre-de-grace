@@ -15,7 +15,16 @@ description: Turn raw performance videos in ~/stefan/videos/inbox into ready-to-
   posted/       youtube/, tiktok/, instagram/: versions that are up or scheduled
                 (moved only when the user asks)
   originals/    raw takes Claude has processed (move them here from inbox/ when done)
+  held-back/    youtube/, tiktok/: clips not to post because they repeat or share
+                footage with a Short already on YouTube (reasons.txt says which)
 ```
+
+**No reposts (the user's rule, 3 Nov 2026; err on the side of caution).** Before
+a clip is scheduled, check that it isn't already on the channel and doesn't share
+footage with a Short that's posted or scheduled. If in doubt, move it to
+`held-back/`; more clips can always be made. Each title must also differ from
+every earlier Short's title, not just the song name: `Havre De Grace - <a line
+sung in the clip> (<Song>)`.
 
 **Each clip has one file per platform, with the same name** (the TikTok one
 always `.mp4`). Set up 29 Oct 2026. After rendering into `ready/youtube/`, run
