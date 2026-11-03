@@ -39,6 +39,8 @@ import {
 } from '../kit.mjs'
 import { motifAt } from '../motifs.mjs'
 import * as A from '../album.mjs'
+import { drawLines } from '../hairline-draw.mjs'
+import { TITLES } from '../titles.mjs'
 import { LAND_FINE, LAND_COARSE, LAKES } from '../geo/earth.mjs'
 
 /* ── The palette. Five colours, and only one of them is saturated. ──── */
@@ -1312,8 +1314,9 @@ function drawFrame({ time, score, lockup = '', uid = 'carto', edition = 'origina
         '</g>',
         furniture.join('\n'),
         lyric,
+        intro === 'live' ? liveOpening(now, score, uid) : '',
       ].join('\n'),
-      label: activeLine?.text ?? section.label,
+      label: intro === 'live' && now < LIVE_OPENING.reveal[1] ? 'Opening' : activeLine?.text ?? section.label,
     }
   }
   return {
@@ -1426,6 +1429,8 @@ function straightLyric({ now, line: lyric, from = lyric.start, scope, uid, low =
  * lead, and gone with its section. The same rule as every other album film.
  */
 function marginLyric({ now, score, section, uid, intro }) {
+  // The live opening is laid over the whole sheet (liveOpening); the margin waits for the first line.
+  if (section.kind === 'intro' && intro === 'live') return ''
   if (section.kind === 'intro') {
     // The cover sheet's opening: the title big on black, dropped to the margin,
     // the black drawn in to the plate and lifted off the chart — or, with
@@ -1564,12 +1569,45 @@ export const CARTOGRAPHY = {
   palette: { CHART, SEA, INK, ROUTE, NEAT },
 }
 
+/*
+ * The live opening (2026-11-03), as Into the Wild's maze, Conman's city and
+ * Ivory's blanks have it: the band's mark drawn on black, then the title drawn
+ * on in the live videos' Hairline capitals (baked in shared/video/titles.mjs),
+ * then the black lifts off the chart. On the live videos' clock (live-cards.mjs
+ * openingClock, approved 2026-10-27), the maze's numbers exactly; Andalusia's
+ * intro runs to 18.2 s, so the chart has six seconds before the first line.
+ *
+ * It replaced the porthole 'draw' opening, whose title faded from both ends in
+ * and so read, for a moment, as ANDALUSI, NDALUSI, DALUS: a reviewer took it
+ * for a misspelling. Whatever leaves the screen next, leave it whole.
+ */
+export const LIVE_OPENING = { mark: 0.5, markOut: [5.0, 5.7], title: [6.2, 8.9], reveal: [10.6, 12.0] }
+
+const titleSlug = (title) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
+function liveOpening(time, score, uid) {
+  const O = LIVE_OPENING
+  const black = 1 - ramp(time, ...O.reveal)
+  if (black <= 0.001) return ''
+  const markOn = 1 - ramp(time, ...O.markOut)
+  const mark = time >= O.mark && markOn > 0.001
+    ? `<g transform="translate(800 450) scale(${r(520 / 918, 5)}) translate(-459 -309.5)" style="color:${A.PAPER}" opacity="${r(easeInOut(markOn), 3)}">${A.markDrawnAt(Math.min(time - O.mark, A.MARK_DRAW.done), `${uid}-mark`)}</g>`
+    : ''
+  const lines = TITLES[titleSlug(score.title)]
+  if (!lines) throw new Error(`No baked title for "${score.title}": add it to tools/video-styles/titles/bake.mjs`)
+  const title = time >= O.title[0] ? drawLines(lines, easeInOut(ramp(time, ...O.title)), A.PAPER, `${uid}-title`) : ''
+  return `<g opacity="${r(easeInOut(black), 4)}"><rect width="1600" height="900" fill="${A.INK}"/>${mark}${title}</g>`
+}
+
 /**
  * The album edition: the same film on the album's paper, inks, sheet and title
- * card (app/config/albumStyle.ts). /music-videos/andalusia runs it; the
- * original edition is kept for the still sheet on /music-videos/styles.
+ * card (app/config/albumStyle.ts), with the live opening. /music-videos/andalusia
+ * runs it; the original edition is kept for the still sheet on /music-videos/styles.
  */
-export const cartographyAlbumFrame = (o) => cartographyFrame({ ...o, edition: 'album', intro: 'draw' })
+export const cartographyAlbumFrame = (o) => cartographyFrame({ ...o, edition: 'album', intro: 'live' })
+
+/* The porthole 'draw' opening it had until 2026-11-03 (opening() in album.mjs). */
+export const cartographyDrawFrame = (o) => cartographyFrame({ ...o, edition: 'album', intro: 'draw' })
 
 /*
  * The hard porthole opening ('stamp', opening() in album.mjs), kept for

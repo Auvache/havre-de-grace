@@ -219,13 +219,13 @@ const player = useMusicVideoPlayer(score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')
 
 /*
- * The poster frame. The film opens on black — the title, the band's anchor
- * drawn on, and the dive through its ring onto the chart by eleven seconds —
- * so before anyone presses play the frame is held on the finished mark, just
- * before the dive. A video that looks like an empty rectangle until you play
- * it does not get played.
+ * The poster frame. The film opens on black — the band's mark drawn on, then
+ * the title drawn on, then the black lifting off the chart by twelve seconds —
+ * so before anyone presses play the frame is held on the finished title, just
+ * before the black lifts. A video that looks like an empty rectangle until you
+ * play it does not get played.
  */
-const POSTER_AT = 8.7
+const POSTER_AT = 9.8
 
 const frameTime = computed(() =>
   !player.playing.value && player.time.value < 0.05 ? POSTER_AT : player.time.value,
@@ -298,9 +298,9 @@ const BEATS = [
   {
     id: 'intro',
     label: 'Intro',
-    note: 'The title on black breathes out, the band\'s anchor is drawn on, '
-      + 'and the camera dives through its ring onto Andalusia at province '
-      + 'scale, pushing in slowly. As the intro ends, the dot appears.',
+    note: 'The band\'s mark is drawn on black, then the title, as the live '
+      + 'videos open; the black lifts off Andalusia at province scale. As the '
+      + 'intro ends, the dot appears.',
   },
   {
     id: 'verse-1',

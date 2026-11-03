@@ -212,7 +212,9 @@ async function runWorker(browser, index, start, end, onFrame) {
 
 /* ── Run ──────────────────────────────────────────────────────────── */
 const workers = Math.min(Number(opt.workers), total)
-const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-gpu', '--hide-scrollbars'] })
+// The window as big as the viewport: since Chrome ~156 headless clips the surface
+// capture to its default window, and a 3840×2160 viewport came back 3840×2073.
+const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-gpu', '--hide-scrollbars', '--window-size=3840,2160'] })
 const began = Date.now()
 let drawn = 0
 const tick = () => {
