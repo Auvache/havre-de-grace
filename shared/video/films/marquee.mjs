@@ -487,12 +487,14 @@ export function marqueeFrame({ time, score, lockup = '', uid = 'marquee' }) {
 
   // Tiles.
   const x0 = 230; const y0 = 236; const w = 1140; const h = 420
-  const pitch = w / COLS; const tw = pitch - 8; const rh = h / ROWS; const th = rh - 14
-  const fs = Math.round(th * 0.7)
+  // A tile is as wide as the board allows (4 between tiles), and the type is set
+  // so the widest glyph, Jost Bold's W at 1.06 em, clears both edges of one.
+  const pitch = w / COLS; const tw = pitch - 4; const rh = h / ROWS; const th = rh - 14
+  const fs = Math.floor((tw - 6) / 1.06)
   const tiles = []
   for (let i = 0; i < N; i++) {
     const row = Math.floor(i / COLS); const c = i % COLS
-    const x = x0 + c * pitch + 4; const y = y0 + row * rh + 7
+    const x = x0 + c * pitch + 2; const y = y0 + row * rh + 7
     const { letter, sy, moving } = tileAt(plan, i, t)
     let red = false
     if (letter !== ' ') red = held && held.grid[i] === letter ? held.red[i] : HID.get(i) === letter
@@ -501,7 +503,7 @@ export function marqueeFrame({ time, score, lockup = '', uid = 'marquee' }) {
       const cy = y + th / 2
       tiles.push(`<g transform="translate(0 ${f1(cy)}) scale(1 ${Math.max(sy, 0.02).toFixed(3)}) translate(0 ${f1(-cy)})">`)
       if (moving) tiles.push(`<rect x="${f1(x + 1)}" y="${f1(y + 1)}" width="${f1(tw - 2)}" height="${f1(th - 2)}" fill="${FLAP}"/>`)
-      if (letter !== ' ') tiles.push(`<text x="${f1(x + tw / 2)}" y="${f1(y + th * 0.76)}" font-size="${fs}" font-weight="700" fill="${red ? RED : INK}" text-anchor="middle">${esc(letter)}</text>`)
+      if (letter !== ' ') tiles.push(`<text x="${f1(x + tw / 2)}" y="${f1(y + th / 2 + 0.35 * fs)}" font-size="${fs}" font-weight="700" fill="${red ? RED : INK}" text-anchor="middle">${esc(letter)}</text>`)
       tiles.push('</g>')
       if (moving && sy < 0.98) tiles.push(`<line x1="${f1(x - 2)}" y1="${f1(cy)}" x2="${f1(x + tw + 2)}" y2="${f1(cy)}" stroke="${INK}" stroke-width="1.6"/>`)
     }
@@ -521,7 +523,7 @@ export function marqueeFrame({ time, score, lockup = '', uid = 'marquee' }) {
   const kind = sectionKind(score, t)
   const dark = t < plan.bar(6) || plan.darks.some(([a, b]) => t >= a && t < b) && !plan.flashes.some((f) => t >= f && t - f < plan.BEAT)
   const band = dark ? '#cfc3ad' : kind === 'break' ? GOLD : PINK
-  const bandText = dark ? '' : 'NOW SHOWING · SILVER SCREEN'
+  const bandText = dark ? '' : 'NOW SHOWING'
   const lyric = esc(lyricAt(score, t).toUpperCase())
 
   const svg = `<rect width="1600" height="900" fill="${PAPER}"/>

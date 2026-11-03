@@ -188,9 +188,11 @@ export const GOODBYE_NORMA_JEANE_SCORE = {
   /**
    * The last hit: the final strong onset of the arrangement, after which the
    * chord rings down to silence over six seconds — so the end card's logo and
-   * credits run under the ring-out. Absolute song time; not moved by TRIM.
+   * credits run under the ring-out. 275.76: the last guitar/piano note, an
+   * eighth after the beat at 275.44 (measured onset 275.77; was 275.3, the note
+   * before it, which the ear heard as early). Absolute song time; not moved by TRIM.
    */
-  endCardAt: 275.3,
+  endCardAt: 275.76,
   /** 95.0 BPM, a beat at 0.066. Measured, and steady — the band played to a click. */
   bpm: 95,
   beatPhase: 0.066,
