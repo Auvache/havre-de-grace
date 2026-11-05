@@ -28,7 +28,7 @@ How to build or change one is the `music-video-creation` skill.
 | # | Song | State | Film |
 | --- | --- | --- | --- |
 | 1 | [Into the Wild](into-the-wild.md) | **Final** (2026-11-03), exported | `maze.mjs` |
-| 2 | [Conman](conman.md) | Film, v1 | `conman-city.mjs` |
+| 2 | [Conman](conman.md) | Film, v2 (pinned) | `conman-heists.mjs` |
 | 3 | [Goodbye, Norma Jeane](goodbye-norma-jeane.md) | Film | `marquee.mjs` |
 | 4 | [Ivory](ivory.md) | Film, v1 | `blanks.mjs` |
 | 5 | [Andalusia](andalusia.md) | Film, with the new opening; mp4 to re-render | `cartography.mjs` (album edition) |
@@ -45,9 +45,15 @@ How to build or change one is the `music-video-creation` skill.
 - Proposed stills: drawn by `tools/video-styles/visualizers/<song>.mjs`,
   published to `public/visualizers/<song>/` with
   `SITE=1 node tools/video-styles/visualizers/build.mjs`.
-- Review frames: `node tools/video-styles/frames.mjs` (`FILM=`, `SONG=`).
+- Review frames: `node tools/video-styles/frames.mjs` (`FILM=`, `SONG=`), for
+  Claude's own checking only.
+- **Everything the user is shown goes on the song's page** (decided 2026-11-05):
+  mock-ups, stills and motion tests are `tests` on `VisualizerPlayer`, switched
+  with the Test row or `?test=<key>` on `/visualizers/<song>`, never separate
+  mp4s, sheets or screenshots. When one is picked it becomes the film and the
+  rest are deleted.
 - Export: `FILM=<film> SONG=<song> node tools/video-styles/mp4.mjs` into
-  `exports/` (gitignored).
+  `exports/` (gitignored), for a finished film only.
 
 The older printmaking films, the style suite, the kinetic film and every
 `/music-videos` page were deleted on 2026-11-05. They are still in git at

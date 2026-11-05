@@ -10,30 +10,16 @@
         </h1>
       </header>
 
-      <VisualizerPlayer :film="conmanCityFrame" name="The City" :score="CONMAN_SCORE" :poster-at="66" :beats="BEATS" />
+      <VisualizerPlayer :film="conmanHeistsFrame" name="The Heists" :score="CONMAN_SCORE" :poster-at="66" :beats="CONMAN_HEISTS_BEATS" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/* Conman: the city (shared/video/films/conman-city.mjs). Notes: docs/visualizers/conman.md. */
+/* Conman: the heists (shared/video/films/conman-heists.mjs). Notes: docs/visualizers/conman.md. */
 import { CONMAN_SCORE } from '~/config/conmanScore'
-import { conmanCityFrame } from '~~/shared/video/films/conman-city.mjs'
+import { conmanHeistsFrame, CONMAN_HEISTS_BEATS } from '~~/shared/video/films/conman-heists.mjs'
 
 definePageMeta({ layout: 'default' })
 useHead({ title: 'Conman — visualizer', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
-
-const BEATS = [
-  { at: 0, label: 'Opening' },
-  { at: 12, label: 'The record shop' },
-  { at: 42, label: 'First getaway' },
-  { at: 50, label: 'The counting house' },
-  { at: 77, label: 'Chorus' },
-  { at: 91, label: 'The studio' },
-  { at: 122, label: 'Chorus' },
-  { at: 135, label: 'The museum', key: true },
-  { at: 160, label: 'To the hall' },
-  { at: 165, label: 'The concert hall', key: true },
-  { at: 188, label: 'The anchor', key: true },
-]
 </script>

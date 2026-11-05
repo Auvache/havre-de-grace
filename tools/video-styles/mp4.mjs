@@ -52,6 +52,7 @@ const FILMS = {
   'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
   maze: ['maze.mjs', 'mazeFrame'],
   'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
+  'conman-heists': ['conman-heists.mjs', 'conmanHeistsFrame'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
 }
@@ -80,10 +81,14 @@ const { values: opt } = parseArgs({
 
 const filmName = process.env.FILM ?? 'cartography-album'
 const songName = process.env.SONG ?? 'andalusia'
-const [filmFile, filmExport] = FILMS[filmName] ?? []
+// FILM_MODULE + FILM_EXPORT run any film function not in the registry (explorations).
+const [filmFile, filmExport] = process.env.FILM_MODULE
+  ? [resolve(process.env.FILM_MODULE), process.env.FILM_EXPORT]
+  : FILMS[filmName] ?? []
 const score = SCORES[songName]
 if (!filmFile || !score) throw new Error(`Unknown FILM "${filmName}" or SONG "${songName}"`)
 const film = (await import(resolve(root, 'shared/video/films', filmFile)))[filmExport]
+if (typeof film !== 'function') throw new Error(`No film function "${filmExport}" in ${filmFile}`)
 
 /* The mark, prepared exactly as MusicVideoSvgFilm prepares it. */
 const lockup = readFileSync(resolve(root, 'public/logos/suite/a4-lockup-stacked.svg'), 'utf8')
