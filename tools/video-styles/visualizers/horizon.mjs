@@ -1,6 +1,7 @@
 /*
- * Meet Me at the Horizon · Lying awake — the stills on
- * /music-videos/meet-me-at-the-horizon, three directions.
+ * Meet Me at the Horizon · Lying awake — three directions, as stills on
+ * /visualizers/meet-me-at-the-horizon (built by build.mjs, words in
+ * docs/visualizers/meet-me-at-the-horizon.md).
  *
  * The film is shared/video/films/horizon.mjs; this only adapts its plate to
  * the concept contract (a plate-only frame for sheet.mjs's still()) and picks

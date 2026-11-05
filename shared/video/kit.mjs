@@ -6,10 +6,9 @@
  * all of them instead of seven slightly different ones.
  *
  * It lives in shared/ rather than in tools/ because two different things draw
- * the same frames: `node tools/video-styles/build.mjs` renders the still
- * reference sheets, and the film components render the same style sixty times a
- * second in a browser. A primitive that existed twice would drift, and a style
- * whose sheet and whose film disagree is worse than no sheet at all.
+ * the same frames: `node` renders review sheets, stills and mp4s from them
+ * (tools/video-styles/), and the film components render the same film sixty
+ * times a second in a browser. A primitive that existed twice would drift.
  *
  * Plain .mjs on purpose. Node imports it without a loader, Vite imports it
  * without a plugin, and a frame renderer that needs neither is one that can be

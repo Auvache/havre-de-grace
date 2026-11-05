@@ -83,9 +83,9 @@ let P = ORIGINAL_INKS
 
 /* ══ CHART FURNITURE ══════════════════════════════════════════════════
  *
- * Exported because tools/video-styles/styles/b2-cartography.mjs draws its
- * reference sheet with these same four functions. A style whose still and whose
- * film disagree about what a sounding looks like is worse than no still at all.
+ * Exported so that anything drawing a still of the chart draws it with these
+ * same four functions: a still and a film that disagree about what a sounding
+ * looks like is worse than no still at all.
  */
 
 /** The 100-unit grid, optionally shifted and scaled by a view. */
@@ -1103,7 +1103,7 @@ function sungRow({ id, x, y, size, text, len, through, fill, accent, opacity = 1
  *                          page share a document, and `url(#x)` resolves to
  *                          whichever one is first in it.
  * @param {'original'|'album'} [o.edition] The album edition draws the same
- *                          film on the album's sheet — see albumStyle.ts.
+ *                          film on the album's sheet.
  * @returns {{ svg: string, label: string }}
  */
 export function cartographyFrame(o) {
@@ -1601,8 +1601,8 @@ function liveOpening(time, score, uid) {
 
 /**
  * The album edition: the same film on the album's paper, inks, sheet and title
- * card (app/config/albumStyle.ts), with the live opening. /music-videos/andalusia
- * runs it; the original edition is kept for the still sheet on /music-videos/styles.
+ * card, with the live opening. /visualizers/andalusia runs it; the original
+ * edition is the film this one was made from, kept byte-identical.
  */
 export const cartographyAlbumFrame = (o) => cartographyFrame({ ...o, edition: 'album', intro: 'live' })
 

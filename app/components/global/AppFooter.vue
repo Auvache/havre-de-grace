@@ -32,7 +32,7 @@ withDefaults(defineProps<{
 
 const siteProfile = useSiteProfile()
 
-// The music, then the person. /music-videos and /influences are left out:
+// The music, then the person. /visualizers and /influences are left out:
 // they stay built, but nothing visible links to them for now (2026-10-30).
 const FOOTER_COLUMNS = [
   [

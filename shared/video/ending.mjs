@@ -1,7 +1,7 @@
 /*
  * The shared ending — the same two screens at the end of every film.
  *
- * Not a style decision (see END_CARD in app/config/videoStyles.ts). The mark
+ * Not a style decision: every film ends this way. The mark
  * alone on pure black from the score's `endCardAt`, hard cut, held three
  * seconds; then a hard cut to the credits on the same black. Cartography keeps
  * its own copy from before this file existed; films after it call this.

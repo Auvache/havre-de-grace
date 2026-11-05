@@ -44,9 +44,9 @@
       <p><RichText :text="album.description" /></p>
     </div>
 
-    <SongJourney v-if="!isUpcoming" :album="album" />
+    <SongJourney v-if="!isUpcoming && !introOnly" :album="album" />
 
-    <div v-if="!isUpcoming" class="credits">
+    <div v-if="!isUpcoming && !introOnly" class="credits">
       <p class="eyebrow">Credits</p>
       <dl>
         <div v-for="credit in album.credits ?? []" :key="credit.role + credit.name" class="credits__row">
@@ -60,7 +60,7 @@
       </nav>
     </div>
 
-    <NuxtLink v-for="other in otherRecords" :key="other.slug" :to="`/music/${other.slug}`" class="next">
+    <NuxtLink v-for="other in introOnly ? [] : otherRecords" :key="other.slug" :to="`/music/${other.slug}`" class="next">
       <img :src="lookFor(other.slug)?.thumb ?? other.coverImage" alt="" width="110" height="110" loading="lazy">
       <span>
         <span class="eyebrow">{{ otherLabel(other) }}</span>
@@ -145,6 +145,11 @@ const parseIsoDate = (value?: string | null) => {
 
 // An album whose release date is still in the future shows a "coming soon"
 // placeholder instead of its (not-yet-public) track, lyric, and credit details.
+// Records whose page stops at the intro paragraph: the screen, the title and
+// the description, then nothing (the user's call for Into the Wild, 2026-11-05).
+const INTRO_ONLY = new Set(['into-the-wild'])
+const introOnly = computed(() => INTRO_ONLY.has(slug.value))
+
 const isUpcoming = computed(() => {
   const date = parseIsoDate(album.value?.releaseDate)
   return date ? date.getTime() > Date.now() : false

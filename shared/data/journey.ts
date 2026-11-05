@@ -10,11 +10,12 @@
  * Per song, all optional:
  *   - snippet: one to four lines, word for word from the published lyric.
  *     DRAFTS, chosen by Claude on 2026-10-29 for Stefan to approve.
- *   - image:   a still. Into the Wild's are the album film's own stills
- *              (public/video-styles/album/, drawn in code, no AI).
+ *   - image:   a still.
  *   - motif:   a line drawing from shared/video/motifs.mjs, drawn on as the
  *              scene scrolls in.
  *   - film:    the song's finished film, when there is one.
+ *
+ * Into the Wild has none: its album page stops at the intro paragraph.
  * A story is never written here. The album page shows a song's own
  * `writingStory` from the content file, which is Stefan's words, when it has one.
  *
@@ -40,72 +41,6 @@ export interface JourneySong {
 
 /** album slug → song slug → the song's material. */
 export const journeys: Record<string, Record<string, JourneySong>> = {
-  'into-the-wild': {
-    'into-the-wild': {
-      snippet: [
-        'Oh, I\'m headed out on an adventure',
-        'To see if I can\'t lose my way',
-        'And stumble upon all the splendorous things',
-        'The gods hid about when they made',
-      ],
-      image: { src: '/video-styles/album/into-the-wild.svg', alt: 'A red sun over black mountains and pines, a figure running', caption: 'Into the Wild · still from the album film' },
-    },
-    'conman': {
-      snippet: [
-        'I\'m a conman and I\'m here to steal your sound',
-        'I stick to the shadows when I follow you around',
-      ],
-      image: { src: '/video-styles/album/conman.svg', alt: 'A wall of pasted pictures: a portrait, a pair of hands, a window', caption: 'Conman · the wall' },
-    },
-    'goodbye-norma-jeane': {
-      tag: 'The single',
-      snippet: [
-        'Silver screen says Norma Jeane, oh',
-        'Something bigger\'s meant for me',
-        'With a silhouette like Juliet, oh',
-        'Someone else could cut your checks',
-      ],
-      motif: 'heart',
-    },
-    'ivory': {
-      snippet: [
-        'Her eyes are open ocean and blue butterfly wings',
-        'She\'s got some way about her when she gets on stage and sings, oh',
-      ],
-      image: { src: '/video-styles/album/ivory.svg', alt: 'A hand-coloured etching of a blue butterfly beside an ocean chart', caption: 'Ivory · hand-coloured etching' },
-    },
-    'andalusia': {
-      snippet: [
-        'Oh, I think that I could live in Andalusia',
-        'Walk until my boots are breaking through',
-      ],
-      image: { src: '/video-styles/album/andalusia.svg', alt: 'An engraved chart of the globe with a red route across it', caption: 'Andalusia · cartography' },
-      film: { href: '/music-videos/andalusia', label: 'Watch the film' },
-    },
-    'new-york': {
-      snippet: ['They say love when lost upon the rocks is best left burning out the coals'],
-    },
-    'meet-me-at-the-horizon': {
-      snippet: ['Some nights the darkness is sweeter than others'],
-    },
-    'rocks-in-the-sea': {
-      snippet: [
-        'When the road slims down and the trees hide the sound',
-        'Of hearts leaving home, there you\'re free',
-      ],
-      image: { src: '/video-styles/album/rocks-in-the-sea.svg', alt: 'Pale rocks in a blue sea, a red line running up the shore', caption: 'Rocks in the Sea · still from the album film' },
-    },
-    'ship-to-stockholm': {
-      snippet: [
-        'Oh, away with the land and away with the light',
-        'Tomorrow I will be a\' sailing',
-      ],
-      image: { src: '/video-styles/album/ship-to-stockholm.svg', alt: 'A tall ship at a night quay, a lit window up the hill', caption: 'Ship to Stockholm · wood engraving' },
-    },
-    'ghost': {
-      snippet: ['The city burns and I\'m a ghost'],
-    },
-  },
   'i-want-to-be-yours-and-other-songs': {
     'i-want-to-be-yours': {
       snippet: [

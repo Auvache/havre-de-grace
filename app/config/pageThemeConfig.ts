@@ -118,7 +118,7 @@ const PAGE_THEME_RULES: PageThemeRule[] = [
     // 16:9 films that paint their own frames — ink and bone and red, or chart
     // and route red. The page around them gets out of the way entirely,
     // because the only colour anyone should be judging is the film's.
-    match: /^\/music-videos(?:\/|$)/,
+    match: /^\/visualizers(?:\/|$)/,
     config: {
       theme: 'dark',
       gradient: 'blackout',

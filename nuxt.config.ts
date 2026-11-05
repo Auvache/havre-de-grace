@@ -122,8 +122,8 @@ export default defineNuxtConfig({
       // Left to itself the module emits one @font-face per family at weight
       // 400, so every `font-weight` in the stylesheets — 350 on the display
       // heading, 450 on section headings, 500 on labels — has been matching
-      // that one file and rendering at 400. The music video at
-      // /music-videos needs a real bold, and a family with no bold in it
+      // that one file and rendering at 400. The films under
+      // /visualizers need a real bold, and a family with no bold in it
       // does not get synthesised: the browser matches the 400 face and draws
       // 400.
       //
@@ -330,13 +330,12 @@ export default defineNuxtConfig({
     '/logo': {
       robots: 'noindex, nofollow',
     },
-    // The music-video workbench: the style suite, the song pages, and the
-    // kinetic-typography cut of "Andalusia". Shared by link for a decision, and
-    // every page under here restates a published song's entire lyric — so
+    // The visualizers: one page per album song, shared by link for a
+    // decision, and every page under here restates a published song's entire lyric — so
     // `nofollow` as well as `noindex`, like the /music/itw-* mockups. Covered
     // as a subtree so a new song's page arrives noindexed rather than
     // remembering to add a rule for it.
-    '/music-videos/**': {
+    '/visualizers/**': {
       robots: 'noindex, nofollow',
     },
     // The mailing list's welcome gift (pages/seven-inch.vue). Reached from the
@@ -402,29 +401,19 @@ export default defineNuxtConfig({
         // Unlisted and noindexed by the route rule above, but a static host
         // serves keys — a route that was never prerendered 404s however
         // private it is, and nothing links to these, so nothing crawls to them
-        // either. Every page added under app/pages/music-videos/ needs a line
+        // either. Every page added under app/pages/visualizers/ needs a line
         // here.
-        '/music-videos',
-        '/music-videos/styles',
-        '/music-videos/andalusia',
-        '/music-videos/kinetic',
-        '/music-videos/into-the-wild',
-        '/music-videos/conman',
-        '/music-videos/goodbye-norma-jeane',
-        '/music-videos/ivory',
-        '/music-videos/new-york',
-        '/music-videos/ship-to-stockholm',
-        '/music-videos/meet-me-at-the-horizon',
-        '/music-videos/rocks-in-the-sea',
-        '/music-videos/into-the-wild-styles',
-        '/music-videos/album',
-        '/music-videos/ideas',
-        '/music-videos/off-the-grid',
-        '/music-videos/into-the-wild-print',
-        '/music-videos/conman-print',
-        '/music-videos/goodbye-norma-jeane-print',
-        '/music-videos/meet-me-at-the-horizon-print',
-        '/music-videos/ivory-print',
+        '/visualizers',
+        '/visualizers/into-the-wild',
+        '/visualizers/conman',
+        '/visualizers/goodbye-norma-jeane',
+        '/visualizers/ivory',
+        '/visualizers/andalusia',
+        '/visualizers/new-york',
+        '/visualizers/meet-me-at-the-horizon',
+        '/visualizers/rocks-in-the-sea',
+        '/visualizers/ship-to-stockholm',
+        '/visualizers/ghost',
         '/music/i-want-to-be-yours-and-other-songs',
         '/music/into-the-wild',
       ],

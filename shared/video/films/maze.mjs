@@ -45,8 +45,8 @@
  * frame <use>s the chunks already drawn and draws only the runs being drawn
  * at that moment, each with its own dash.
  *
- * The concept stills on /music-videos/off-the-grid draw from this same file
- * (tools/video-styles/visualizers/maze.mjs).
+ * /visualizers/into-the-wild runs it; docs/visualizers/into-the-wild.md has
+ * what it does and what may not change.
  */
 import { rng, r, clamp01, lerp, easeInOut, ramp } from '../kit.mjs'
 import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric, markDrawnAt, MARK_DRAW } from '../album.mjs'

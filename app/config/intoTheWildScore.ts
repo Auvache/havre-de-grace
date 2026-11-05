@@ -2,7 +2,7 @@
  * 'Into the Wild', 3:25, timed word by word — the score its films are cut to.
  *
  * GENERATED, then read by hand. Do not reformat it by machine again: the
- * choruses and the two lines under the /music-videos/into-the-wild-styles window were
+ * choruses and the two lines under the old five-style test's window were
  * set by eye against the measurement, not by the solver.
  *
  * HOW THE TIMES WERE MEASURED

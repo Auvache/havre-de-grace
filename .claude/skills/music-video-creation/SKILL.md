@@ -1,6 +1,6 @@
 ---
 name: music-video-creation
-description: Build or change a music video for a song on this site — a style's film module under shared/video/films/, the style suite at /music-videos/styles, a song's clips page under /music-videos/, the measured score a film is cut to, or the still reference sheets in public/video-styles/. Load this before touching anything in shared/video/, tools/video-styles/, app/config/*Score.ts, app/config/videoStyles.ts, app/components/musicvideo/ or app/pages/music-videos/, and before agreeing to "make a video for <song>".
+description: Build or change a visualizer (music video) for a song on this site — a film module under shared/video/films/, a song's page under /visualizers/, the proposed stills for a song with no film yet, or the measured score a film is cut to. Load this before touching anything in shared/video/, tools/video-styles/, app/config/*Score.ts, app/components/musicvideo/, app/components/visualizer/, app/pages/visualizers/ or docs/visualizers/, and before agreeing to "make a video for <song>".
 ---
 
 # Music videos
@@ -31,10 +31,9 @@ Four things depend on this and all four break if it is bent:
    most of the cost saving in this document. A style written as a Vue template
    can only be sampled by driving a browser: three tool calls per frame instead
    of one call for twelve.
-2. **One source draws the still and the motion.** `tools/video-styles/styles/`
-   builds the reference sheets on `/music-videos/styles`; the components under
-   `app/components/musicvideo/` run the same file sixty times a second. A style
-   whose sheet and whose film disagree is worse than having no sheet.
+2. **One source draws the still and the motion.** The review sheets, any
+   stills and the mp4 come from the same function the page runs sixty times a
+   second. A still and a film that disagree are worse than no still.
 3. **Frames can be walked off-line for an mp4** without rewriting the style.
 4. **It is seekable and scrub-proof.** No animation state means nothing is left
    half-transitioned when a clip is scrubbed, and frame 4000 costs what frame 1
@@ -47,8 +46,8 @@ per frame that needed something new. `MusicVideoSvgFilm` mounts each chunk once
 in its own keyed `v-html`, so only `svg` is re-parsed sixty times a second;
 `frames.mjs` and `mp4.mjs` put `lib` in front of `svg`. Every def id must then
 say everything its content depends on (a near and a far drawing of one print are
-two ids). `conman-board-film.mjs` is the example: it took the board from 12
-frames a second to 60.
+two ids). `maze.mjs` (the walls) and `conman-city.mjs` (the town) are the
+examples; `lib` once took a board film from 12 frames a second to 60.
 
 Inside a style module, never:
 
@@ -75,43 +74,39 @@ Inside a style module, never:
 | `app/config/shipToStockholmScore.ts` | Track nine's cut, the same method. Verses 2–4 are verse 1 at +52/+144/+260 beats; verse 5 is its own faster tune. Verse 4's line starts before its first word (the sung "Oh" is not in the published lyric). |
 | `app/config/newYorkScore.ts` | Track six's cut, the same method, 98.5 BPM on a click. Every "No" measured on its own; the last three "No, no, no, no" lines are the first plus 112/120/128 beats, and "York" is held ten seconds to the voice letting go at 206.44 (the end card). |
 | `app/config/meetMeAtTheHorizonScore.ts` | Track seven's cut, the same method, 55 BPM (felt at 110) on a click. Choruses 2 and 3 are the first at +50/+98 beats, the last verse the first at +114, the second hook the first at +48 — pooled and shifted. The voice runs almost unbroken from 17.3 to 194.9, so there is no break section; the end card is the last strike at 211.86, seventeen seconds after the voice. |
-| `app/config/albumStyle.ts` | **The album decision.** Every Into the Wild song gets its own film; all ten are printmaking on one paper, ink and red, on one sheet layout, moving like Cartography. Constants, motion rules, per-song technique. **Read this before starting any song on the album.** |
-| `shared/video/album.mjs` | The album's inks, **`COVER_SHEET`** (the sheet every film is on: a paper border with a plate mark, a 1532 × 776 plate, the lyric in the album's black on one row in a 90-unit margin — pass it to `paper()`, `plateClip()`, `marginLyric()`), **`opening()`** (the shared title-on-black opening), the old paper `SHEET` and `titleCard()`, and the smoothness helpers `glide()` / `easeCamera` / `land()` / `presence()`. |
-| `shared/video/films/relief.mjs` | The album's woodcut for Into the Wild, whole song — the smooth rework of `woodcut.mjs`. The reference for a film with a **followed figure**: the runner as an integrated velocity schedule, and every cue placed from where the camera is on its word (`planFor`). |
-| `shared/video/films/screenprint.mjs` | Goodbye, Norma Jeane, whole song — the album's screenprint. The reference for **printing in screens**: every prop returns `{ back, pink, key, red }` and the frame pulls them in that order, the pink shifted off register by `registerAt(t)`. Also the reference for a film that goes to **night** (ink zones with drawn halftone seams, pools of light) and for a red line that is not a function of x (the signature, a prolate cycloid). |
-| `shared/video/films/etching.mjs` | Ivory, whole song — the album's hand-coloured etching. The reference for **tone by hatching** (`hatchD`: layers of lines on a world-fixed lattice, each laid past a threshold), for **a figure in reserve** (her, in the paper, built from parts, seen only where tone surrounds her), for **a camera hush** (an integrated drift speed that slows without stopping), and for a red line that **reaches and does not arrive** (the thread: pins on nouns, and reaches that stop short). |
-| `shared/video/films/engraving.mjs` | Conman, whole song — the album's line engraving. The reference for **a world of repeated things** (an uncut sheet of notes from one layout, rows as `<use>`s), for **a zoom in the transform** (a loupe), for **a camera from one speed curve** (moves and runs integrated, `runSlot` picking where a run ends), for **printing on arrival** (each note swept on as it enters, on the eighths), for **assembly** (a note built from flying pieces of earlier ones), and for **a red journey that hops and stamps** (an odometer serial that leaves a copy on every note). |
-| `shared/video/films/wood-engraving.mjs` | Ship to Stockholm, whole song — the album's wood engraving, white line on black. The reference for **a story told by one walking figure** (a signed speed schedule, so he can stop and walk back; a camera that follows the actual gap with a floor at the drift), for **a destination in perspective** (the ship drawn at s = A/(d + A), growing all song), for **exact glows** (`glowRows`), for **baked fields in pieces** (`baked` / `inView`), for **a figure cut in parts** (`person`), and for **a red journey held back** until the last sixteen seconds. |
-| `shared/video/films/letterpress.mjs` | New York, whole song — the album's letterpress, a flyposted wall wrecked. The reference for **destroying things** (six pure functions of time since the word: `burn`, `tearStrips`, `shatter`, `meltWarp`/`bendWarp` on polygon artifacts, `squash`, `pied` type), for **a film that shakes without cutting** (`shakeAt`, a bank into whips, a punch on every beat), for **wood type** (`woodType`, `specks`), for **scenes pasted in layers** (one burns or tears away to show the next), and for **a red line set square** (`plan.head`: rail, up, across, down). No figure. |
-| `shared/video/films/conman-board-film.mjs` | Conman, whole song — two boards: theirs walked section by section and torn off in the break, mine pasted up out of the scraps and torn in turn. The furniture (formats, board, how a cell draws) is `conman-board.mjs`; the stills the plan was decided on are `conman-board-stills.mjs`. The reference for **a board of repeated sheets at 60 fps** (a `<pattern>` per section, only touched sheets drawn singly, flat holes from far off), for **`lib`** (defs mounted once), and for **pasting up** (scraps flying in, the print pulled over them). Measure a film like it with a real rAF loop in a visible page: a background tab reports nothing true. |
-| `shared/video/films/mezzotint.mjs` | Meet Me at the Horizon, whole song — the album's mezzotint, one night from black to dawn. The reference for **a world of planes at depth** (`scaleAt` = F / (d + D), `layerT`, and a lens shift `sy`: the camera passes through a window, rises through a ceiling and travels to the horizon with no cut), for **people placed by depth relative to the camera** (`outsidePeople`), for **a horizon kept on the eye line** (`crest`, `laneLift`, `ridgeTop`: figures stand on it against the sky however near it comes), for **tone on one burnished ramp** (`toneOf`, and `ctx.c(v, kb)` burnishing out of black at the start and towards paper at the end), for **re-rocking** (a band of burr sweeping the plate back to black, `rockSweep`; ink flooding down, `inkFlood`), for **a camera as a monotone cubic through keys** (`pchipAt`: velocity continuous, no overshoot) and for **tapered-limb figures** (`figureParts`, `limb`). |
+| `shared/video/album.mjs` | The album's inks, **`COVER_SHEET`** (the sheet every film is on: a paper border with a plate mark, a 1532 × 776 plate, the lyric in the album's black on one row in a 90-unit margin — pass it to `paper()`, `plateClip()`, `marginLyric()`), **`opening()`** (the shared title-on-black opening), and the smoothness helpers `glide()` / `easeCamera` / `land()` / `presence()`. |
 | `shared/video/films/maze.mjs` | Into the Wild's visualizer (v2, 2026-11-02). The reference for **a figure that decides** (a walker simulated once at load: line of sight down corridors, memory, backtracking, moods that set speed/hesitation/sight, constant-acceleration steps so he slows into corners), for **walls drawn on like a pen** (runs in drawing order, chunked into `lib`, only the strokes in progress inline with their own dash), for **a trail that fades with age**, and for **the live videos' opening in a film** (mark, then a Hairline title from `shared/video/titles.mjs`, baked by `node tools/video-styles/titles/bake.mjs` because setting the type needs fontkit; drawn with `shared/video/hairline-draw.mjs`). |
 | `shared/video/films/conman-city.mjs` | Conman's visualizer (v1, 2026-11-02): five heist plans, each drawn into an empty lot of one town, the getaways driving the town's anchor-shaped streets (stock and shank are the grid's main streets; a circus, two roundabouts and a crescent for the ring, balls and arms), and a steady pull back to the whole anchor in the last chorus. The reference for **a plan drawn on like a pen in projection** (`job.strokes`, each wall with its own window by length), for **a town as `lib` tiles under one transform** (non-scaling strokes; boulevards cut through with an ink stroke under a paper one, so kerbs come free and lots trim themselves), for **shots** (held or moving views, eased between in log scale; `follow()` averages a car over two seconds), and for **the shared opening with its own baked title** (`TITLES.conman`). |
+| `shared/video/films/marquee.mjs` | Goodbye, Norma Jeane's visualizer (2026-11-02): a picture-house letter board in split flaps, a film title on every phrase, a dark drop bar before each chorus, the chorus answering its own words. The reference for **split flaps timed to the record** (`marqueeMoments` reads every board event off the score) and for **a fixed frame** that does more by section rather than moving the camera. |
 | `shared/video/films/blanks.mjs` | Ivory's visualizer (v1, 2026-11-02): a five-letter guessing game for her name, three boards on one sheet, the guesses being the five-letter words he sings, scored against IVORY (`marksFor`). The reference for **tiles that turn over** (`flipped`: scaleY by \|cos\|, the face swapping at half), for **split-flap spinning** (`spinning`: two letters rolling through a per-tile clip, only while he sings), for **letters lifting off and coming back for a breath**, and for **the shared opening on a short intro** (first word at 9.4 s: the title fades before the black lifts). Never name the newspaper game or use its colours, keyboard or messages. |
-| `tools/video-styles/album.mjs` | Builds `public/video-styles/album/<slug>.svg` from `tools/video-styles/album/<slug>.mjs`, and the ten-up `album-sheet.svg`. `node tools/video-styles/album.mjs [slug …]`. |
-| `app/config/videoStyles.ts` | **The written spec** for all seven styles — premise, palette, type rules, what each driver does, what each section does, and `avoid`. This is the file to hand an agent, not the styles page. |
 | `shared/video/kit.mjs` | Drawing primitives (`t`, `rect`, `line`, `path`, `circle`, `fit`, `block`, `sung`, `rng`, `r`, `esc`) and timing (`ramp`, `fall`, `easeOut`, `easeInOut`, `easeOutBack`, `decay`, `lerp`, `clamp01`). |
 | `shared/video/motifs.mjs` | The motif library — line drawings of the nouns the song sings, each in a 100×100 box. `motif()` / `motifAt()`, and `motifBody()` for drawing a motif on with `pathLength`. |
 | `shared/video/score.mjs` | Score reading for films: `sectionAt`, `lineAt`, `cutIn`/`shownLineAt`, `splitLine`, `bankWords`, `throughRow`, `wordHit`, `sizeToMeasure`. Cartography keeps private copies; new films import these. |
-| `shared/video/cues.mjs` | Lyric → drawing, per song, in plain JS (`INTO_THE_WILD_CUES`, `cueFor`, `cuesIn`). Andalusia's list is still `MOTIF_CUES` in `videoStyles.ts`. |
-| `shared/video/figure.mjs` | A person as joints: `POSES`, the six-pose `RUN` cycle, `joints()`, `strokes()`. The style supplies the pen. |
 | `shared/video/ending.mjs` | The shared end card, for films after Cartography. |
-| `shared/video/films/cartography.mjs` | **The worked example.** Style B2, all ten sections. Read this before writing a second style. Two editions of one function: `cartographyFrame` (the original, kept byte-identical for its still sheet) and `cartographyAlbumFrame` (the album sheet — approved, and what `/music-videos/andalusia` runs). |
+| `shared/video/films/cartography.mjs` | Andalusia's film (the chart). The first film built and the most thoroughly commented — the reference for type on a path, a projected globe and a camera that rides a line. Two editions of one function: `cartographyFrame` (the original, kept byte-identical) and `cartographyAlbumFrame` (on the album's sheet with the live opening — what `/visualizers/andalusia` runs). |
 | `tools/video-styles/frames.mjs` | **The review loop.** Contact sheet of N frames. |
 | `tools/video-styles/mp4.mjs` | **The export.** A whole film (or `--from`/`--to`) as a 4K60 and a 1080p60 mp4 with the record under it, into `exports/` (gitignored). `FILM`/`SONG` as for `frames.mjs`. |
 | `tools/video-styles/live.mjs`, `live-align.py`, **`LIVE.md`** | **Live videos**: real camera footage cut to a mixed WAV, with the album opening and Andalusia's end card laid over it. Not SVG films. Read `LIVE.md` first: its status, file locations, per-song offsets, verification steps and the traps (one put the picture 9 s off with no error). |
-| `tools/video-styles/build.mjs` | Renders every still sheet to `public/video-styles/*.svg`. |
-| `tools/video-styles/kit.mjs` | Re-exports the shared kit, plus the Node-only helpers that read the lockup off disk (`mark`, `logoScreen`, `creditsScreen`). |
-| `tools/video-styles/styles/*.mjs` | One still reference sheet per style: a hero frame plus five thumbnails. |
-| `app/components/musicvideo/MusicVideoCartography.vue` | Four lines: hand the clock to the style module, `v-html` the result. Hard-wired to the original edition; now only `MusicVideoClip`'s default film. |
-| `app/components/musicvideo/MusicVideoSvgFilm.vue` | The same four lines with the frame function as a prop. Use this for a new style rather than copying the Cartography component. `/music-videos/andalusia` and `/music-videos/album` both use it. |
-| `app/pages/music-videos/into-the-wild.vue` | Into the Wild whole, in `relief.mjs` — the same shape as the Andalusia page. The five-style test that was at this address is `into-the-wild-styles.vue`. |
-| `app/pages/music-videos/andalusia.vue` | **The finished film.** Andalusia whole, album edition, with its own projector (`useMusicVideoPlayer`), transport, section list and cut. The shape for a song whose film is done. |
-| `app/components/musicvideo/MusicVideoClip.vue` | One snippet — stage, transport, caption. The film is a `#film="{ t, uid }"` slot (Cartography if none) and `src` picks the record. |
-| `app/composables/useFilmClip.ts` | Windowed player: `from`/`to` in song seconds, one clip at a time across the page. |
-| `app/components/musicvideo/MusicVideoFilm.vue` | The kinetic-typography film, whole song, at `/music-videos/kinetic`. **Legacy shape** — a 675-line Vue template. Do not copy it; it is the thing the contract above exists to replace. |
 | `app/utils/clipTiming.ts` | The typed twin of the kit's timing functions, for Vue components. |
-| `app/utils/typeLayout.ts` | Line-breaking and per-word reveal for the kinetic film only. |
+| `shared/video/films/horizon.mjs` | Meet Me at the Horizon's Lying Awake plate (`horizonPlate`, `horizonGaps`). Not a film yet: it draws the three directions' stills. |
+| `app/components/musicvideo/MusicVideoSvgFilm.vue` | Hand the clock to a film module, `v-html` the result (and its `lib`). |
+| `app/components/visualizer/VisualizerPlayer.vue` | **A song page with a film**: the film, `MusicVideoTransport`, the "Now" line and a jump-to list (labels only). Props: `film`, `name`, `score`, `posterAt`, `beats`, optional `status`. |
+| `app/components/visualizer/VisualizerStills.vue`, `VisualizerStill.vue` | **A song page with no film**: its proposed stills, grouped by idea, fetched and inlined when near the viewport. |
+| `app/pages/visualizers/` | `index.vue` (the ten songs, links only) and one page per song. Pages carry a title and the player or stills — **no prose**. |
+| `docs/visualizers/` | **The words.** `README.md` (the standard, the list, how to work) and one `<song>.md` per song: what the film does, its jump-to moments explained, decisions the user made, what not to change; or, for a song with no film, every proposed idea. |
+| `tools/video-styles/visualizers/` | The proposed stills for the songs with no film: a concept module per song (`CONCEPTS`), `horizon.mjs`, `sheet.mjs`, and `build.mjs` (`SITE=1` writes `public/visualizers/<song>/` and `app/config/visualizerStills.ts`). |
+| `tools/video-styles/titles/bake.mjs` | Bakes each film's Hairline title into `shared/video/titles.mjs` (setting the type needs fontkit). |
+
+**Deleted 2026-11-05.** The printmaking films (relief, screenprint, etching,
+engraving, wood-engraving, letterpress, mezzotint, cyanotype, gallery, the
+Conman boards and wall, and the twelve-style suite: contour, field-journal,
+flipbook, trailhead, woodcut), the style sheets, `albumStyle.ts`,
+`videoStyles.ts`, the kinetic film and every `/music-videos` page are gone; the
+maze-style visualizer is the standard. They are still in git at `2e46d3c` when
+a technique is worth borrowing — e.g. `git show 2e46d3c:shared/video/films/etching.mjs`
+for tone by hatching, `letterpress.mjs` for destroying things, `mezzotint.mjs`
+for planes at depth, `wood-engraving.mjs` for a walking figure,
+`conman-board-film.mjs` for a board of repeated sheets at 60 fps.
 
 ---
 
@@ -212,22 +207,24 @@ scratchpad takes a minute.
 **Deliverable:** `shared/video/films/<style>.mjs`, reviewed to completion with
 `frames.mjs`. Still no page, no component, no route.
 
-Read `app/config/videoStyles.ts` for that style's entry first — premise,
-palette, type rules, the ten `sections`, and `avoid`. That entry is the brief.
-If you find something it does not say, **put it back into the entry** at the end
-of the session; that file is the compounding asset and the reason the next style
-is cheaper than this one.
+Read `docs/visualizers/README.md` and the song's own `docs/visualizers/<song>.md`
+first: the standard every film keeps, and (for a song with no film yet) the
+proposals and which one the user chose. That file is the brief. If you learn
+something it does not say, **put it back into the file** at the end of the
+session; the docs are the compounding asset and the reason the next film is
+cheaper than this one.
 
-Then read `shared/video/films/cartography.mjs` end to end. It is the reference
-implementation of everything below.
+Then read `shared/video/films/maze.mjs`, the standard, and whichever kept film
+is closest to the new one (`conman-city.mjs` for a plan drawn on, `marquee.mjs`
+and `blanks.mjs` for type that flips, `cartography.mjs` for type on a path).
 
 Budget: **6–10 review rounds for a genuinely new style, 2–3 for an existing
 style pointed at a new song.**
 
 ### Session 3 — the page and the wiring
 
-**Deliverable:** a route under `/music-videos/`, the component, the config, a
-passing `npm run generate`. See "Wiring a page" below.
+**Deliverable:** `app/pages/visualizers/<song>.vue` switched from stills to
+`VisualizerPlayer`, the song's md updated, a passing `npm run generate`. See "Wiring a page" below.
 
 ### Session 4 — mp4, if it is wanted
 
@@ -334,8 +331,6 @@ server, no audio and no clock — two commands and one image read per six moment
   would misreport all of them.
 - **Write the PNG to the session scratchpad**, never the repo. It is review
   apparatus; nothing reads it twice.
-- `tools/video-styles/preview.sh` already does this for the **still sheets** in
-  `public/video-styles/`. Different artefact, same trick.
 
 ---
 
@@ -380,8 +375,8 @@ faster to look at than to have described.
 | How a section behaves | 2–3 rounds |
 | A word's timing | a different session — the score is measured, not tapped in |
 
-And every fix that comes out of one of these rounds goes back into the style's
-`videoStyles.ts` entry, especially `avoid`. A complaint from the person watching
+And every fix that comes out of one of these rounds goes back into the song's
+`docs/visualizers/<song>.md`, especially what not to do. A complaint from the person watching
 is the highest-grade finding there is: it is the only one that did not come from
 reading our own code.
 
@@ -476,47 +471,44 @@ These are general. They cost rounds; none of them is obvious from a spec.
 
 ## Wiring a page
 
-Don't write a component: pass the frame function to `MusicVideoSvgFilm.vue`
-(`:film`, `:name`, `:score`, `:t`, `:uid`), the way `/music-videos/andalusia`
-does. It inlines the lockup with Vite's `?raw` and `v-html`s the frame.
-(`MusicVideoCartography.vue` is the same four lines with the original
-Cartography edition baked in, from before there was a second film.) `v-html` is correct here: every byte is built by our own
-code from our own score, and the only outside string (the lyric) is escaped by
-the kit's `esc` on the way in.
+Every song already has a page at `/visualizers/<song>`. A song gets a film by
+switching its page from `VisualizerStills` to `VisualizerPlayer`, the way
+`app/pages/visualizers/into-the-wild.vue` does: a title, then
+`<VisualizerPlayer :film :name :score :poster-at :beats />`. Nothing else goes
+on the page — **no descriptions, notes or captions**. The words (what the film
+does, what each jump-to moment is, what was decided) go in
+`docs/visualizers/<song>.md`; jump-to beats on the page are a time, a label and
+`key: true` for the moments that carry the film.
 
-Snippets use `MusicVideoClip` + `useFilmClip`. `from`/`to` are **song seconds,
-not clip seconds** — the film is handed the master's clock untranslated, which
-is what makes "synced to the song" true by construction rather than by
-adjustment. Give each clip a distinct `uid` and a `posterAt` inside its window;
-a clip that opens on the first frame of its window usually opens on nothing, and
-a video that looks like a blank rectangle does not get played.
+`MusicVideoSvgFilm` (inside the player) inlines the lockup with Vite's `?raw`
+and `v-html`s the frame. `v-html` is correct here: every byte is built by our
+own code from our own score, and the only outside string (the lyric) is escaped
+by the kit's `esc` on the way in. Pick a `posterAt` that shows the film at its
+best: a video that looks like a blank rectangle does not get played.
 
-Four places must be updated, and a static host punishes forgetting any of them:
+Already in place, and a static host punishes breaking any of them:
 
-1. **`nuxt.config.ts` → `routeRules`** — `/music-videos/**` is already covered
-   with `robots: 'noindex, nofollow'`. These pages restate a published lyric in
+1. **`nuxt.config.ts` → `routeRules`** — `/visualizers/**` is
+   `robots: 'noindex, nofollow'`. These pages restate a published lyric in
    full, so `nofollow` as well as `noindex`.
-2. **`nuxt.config.ts` → `nitro.prerender.routes`** — add the route explicitly.
+2. **`nuxt.config.ts` → `nitro.prerender.routes`** — every page is listed.
    Nothing links to these pages, so nothing crawls to them, and **a route that
-   was never prerendered 404s on S3 however correct the component is.**
-3. **`app/config/pageThemeConfig.ts`** — `/music-videos` is matched as a subtree
-   and set to dark/blackout, because the only colour anyone should be judging is
-   the film's.
-4. **Links** — `/music-videos/styles`, `/music-videos/andalusia` and
-   `/music-videos/kinetic` cross-link. The build runs a link checker; it will
-   fail on a typo.
+   was never prerendered 404s on S3 however correct the component is.** A new
+   page needs a line.
+3. **`app/config/pageThemeConfig.ts`** and **`app/config/player.ts`** —
+   `/visualizers` is dark/blackout and stops the site's music bar.
 
 Finish with `npm run generate`. It prerenders, runs the link checker, and is the
 only real proof the page exists. Then confirm:
 
 ```sh
-grep -o 'name="robots" content="[^"]*"' .output/public/music-videos/<page>/index.html
-grep -c "music-video" .output/public/sitemap.xml .output/public/llms.txt   # both 0
+grep -o 'name="robots" content="[^"]*"' .output/public/visualizers/<song>/index.html
+grep -c "visualizers" .output/public/sitemap.xml .output/public/llms.txt   # both 0
 ```
 
-If the still sheets changed, `node tools/video-styles/build.mjs` and look at the
-affected sheet on `/music-videos/styles` — the sheets are checked in, and a
-change to a look belongs in a module, never in a `.svg`.
+Proposed stills for a song with no film are regenerated with
+`SITE=1 node tools/video-styles/visualizers/build.mjs` — they are checked in,
+and a change to a look belongs in a concept module, never in a `.svg`.
 
 ---
 
@@ -532,20 +524,18 @@ change to a look belongs in a module, never in a `.svg`.
       geometry**: different words mean different leg lengths, and every
       size/fallback decision in the module depends on them.
 - [ ] Register the song in `frames.mjs` if it needs its own entry.
-- [ ] Page, config, `npm run generate`.
+- [ ] Page, `npm run generate`.
 
 **New style** (6–10 review rounds)
 
-- [ ] Its `app/config/videoStyles.ts` entry read in full; it is the brief.
-- [ ] `shared/video/films/<style>.mjs`, contract above.
-- [ ] Its still sheet in `tools/video-styles/styles/` **imports its furniture
-      from the film module** so the two cannot drift. `node tools/video-styles/build.mjs`.
-- [ ] `FILMS` entry in `frames.mjs`.
+- [ ] `docs/visualizers/README.md` and the song's md read in full; they are the brief.
+- [ ] `shared/video/films/<film>.mjs`, contract above, with the shared opening
+      (a title baked by `tools/video-styles/titles/bake.mjs`) and end card.
+- [ ] `FILMS` entry in `frames.mjs` and `mp4.mjs`.
 - [ ] Every trap above checked against the new style deliberately — most of them
       apply to any style that sets type over a drawing.
-- [ ] Findings written back into the style's `videoStyles.ts` entry, especially
-      `avoid`.
-- [ ] Component, page, config, `npm run generate`.
+- [ ] Findings written back into `docs/visualizers/<song>.md`.
+- [ ] The song's page switched to `VisualizerPlayer`, `npm run generate`.
 
 ---
 
@@ -557,19 +547,11 @@ change to a look belongs in a module, never in a `.svg`.
   style bugs and get debugged as style bugs.
 - **Re-checking geometry on a new song.** The lyric changes the measurements
   that every layout decision was tuned against.
-- **Writing findings back into `videoStyles.ts`.** It is the only reason session
-  N+1 is cheaper than session N.
+- **Writing findings back into `docs/visualizers/`.** It is the only reason
+  session N+1 is cheaper than session N.
 
 And a note on scope when taking the brief: ask for **specific windows**, not
 "the whole video". Three fifteen-second snippets — the beginning, something from
 the middle, and the end — bound the review to the three places a film fails
-differently. `/music-videos/andalusia` was built that way, as three snippets,
-and became the whole film only once the style had shown it had somewhere to go.
-
-**Editions.** A film made before the album joins it as an edition of the same
-frame function (`edition: 'album'`), not a rewrite. The original stays
-byte-identical while the edition is a motion test. Once the person watching
-approves it, the song's page switches to the edition and the original survives
-only as its still sheet. Andalusia went through this on 2026-09-23. When the
-lyric moves off the image into the margin, check any furniture that used to
-stand down for type: it needs a new reason to stand down (see `ALBUM_NOTES`).
+differently. Andalusia was built that way, as three snippets, and became the
+whole film only once the style had shown it had somewhere to go.

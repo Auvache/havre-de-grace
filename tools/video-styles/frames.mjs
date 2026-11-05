@@ -4,11 +4,11 @@
  *   node tools/video-styles/frames.mjs 73 88 12      # 12 frames across verse 3
  *   node tools/video-styles/frames.mjs 0 15          # 8 frames, the default
  *   node tools/video-styles/frames.mjs @6 @14 @16.2  # exactly those seconds
- *   FILM=cartography SONG=andalusia node ... 0 173 12
- *   FILM=woodcut SONG=into-the-wild node ... 175.7 190.7 6
+ *   FILM=cartography-album SONG=andalusia node ... 0 173 12
+ *   FILM=maze SONG=into-the-wild node ... 175.7 190.7 6
  *
- * Writes .frames.html and opens it. FILM and SONG default to cartography and
- * andalusia; both registries are a few lines below.
+ * Writes .frames.html and opens it. FILM and SONG default to cartography-album
+ * and andalusia; both registries are a few lines below.
  *
  * WHY THIS EXISTS
  *
@@ -51,7 +51,7 @@ const root = resolve(here, '../..')
  * top rather than resolved from a path at runtime, so a typo is an error here
  * and not a blank page later.
  *
- *   FILM=cartography SONG=andalusia node tools/video-styles/frames.mjs 0 173 12
+ *   FILM=cartography-album SONG=andalusia node tools/video-styles/frames.mjs 0 173 12
  */
 /*
  * Films are [module, export] and imported lazily — only the one asked for.
@@ -60,34 +60,11 @@ const root = resolve(here, '../..')
  * were built at once.
  */
 const FILMS = {
-  cartography: ['cartography.mjs', 'cartographyFrame'],
   'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
-  'open-stamp': ['cartography.mjs', 'cartographyStampFrame'],
-  trailhead: ['trailhead.mjs', 'trailheadFrame'],
-  contour: ['contour.mjs', 'contourFrame'],
-  woodcut: ['woodcut.mjs', 'woodcutFrame'],
-  relief: ['relief.mjs', 'reliefFrame'],
   maze: ['maze.mjs', 'mazeFrame'],
   'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
-  screenprint: ['screenprint.mjs', 'screenprintFrame'],
-  etching: ['etching.mjs', 'etchingFrame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
-  engraving: ['engraving.mjs', 'engravingFrame'],
-  gallery: ['gallery.mjs', 'galleryFrame'],
-  wall: ['conman-wall.mjs', 'wallFrame'],
-  board: ['conman-board-film.mjs', 'boardFrame'],
-  'board-pan-1': ['conman-board-film.mjs', 'boardPan1'],
-  'board-pan-2': ['conman-board-film.mjs', 'boardPan2'],
-  'board-pan-3': ['conman-board-film.mjs', 'boardPan3'],
-  'board-pan-4': ['conman-board-film.mjs', 'boardPan4'],
-  'board-pan-5': ['conman-board-film.mjs', 'boardPan5'],
-  'wood-engraving': ['wood-engraving.mjs', 'woodEngravingFrame'],
-  letterpress: ['letterpress.mjs', 'letterpressFrame'],
-  cyanotype: ['cyanotype.mjs', 'cyanotypeFrame'],
-  mezzotint: ['mezzotint.mjs', 'mezzotintFrame'],
-  'field-journal': ['field-journal.mjs', 'fieldJournalFrame'],
-  flipbook: ['flipbook.mjs', 'flipbookFrame'],
 }
 
 const SCORES = {
@@ -108,7 +85,7 @@ const pick = (table, key, what) => {
   return found
 }
 
-const [filmFile, filmExport] = pick(FILMS, process.env.FILM ?? 'cartography', 'film')
+const [filmFile, filmExport] = pick(FILMS, process.env.FILM ?? 'cartography-album', 'film')
 const film = (await import(resolve(root, 'shared/video/films', filmFile)))[filmExport]
 if (typeof film !== 'function') throw new Error(`${filmFile} has no export ${filmExport}`)
 const score = pick(SCORES, process.env.SONG ?? 'andalusia', 'song')

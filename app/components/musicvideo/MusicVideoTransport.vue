@@ -101,7 +101,8 @@
  * The controls under the film. A transport rather than a play button, because
  * what this page is for is watching one part of a cut over and over.
  */
-import type { ScoreSection } from '~/config/andalusiaScore'
+/* Only these fields are read, so any song's sections will do. */
+export interface TransportSection { id: string, label: string, from: number, to: number }
 
 const props = defineProps<{
   time: number
@@ -109,8 +110,8 @@ const props = defineProps<{
   progress: number
   playing: boolean
   muted: boolean
-  sections: readonly ScoreSection[]
-  current: ScoreSection
+  sections: readonly TransportSection[]
+  current: TransportSection
 }>()
 
 const emit = defineEmits<{

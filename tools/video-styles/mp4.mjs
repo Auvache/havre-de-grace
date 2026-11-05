@@ -49,26 +49,11 @@ const root = resolve(here, '../..')
 
 /* The same registries as frames.mjs. */
 const FILMS = {
-  cartography: ['cartography.mjs', 'cartographyFrame'],
   'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
-  relief: ['relief.mjs', 'reliefFrame'],
   maze: ['maze.mjs', 'mazeFrame'],
+  'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
-  screenprint: ['screenprint.mjs', 'screenprintFrame'],
-  etching: ['etching.mjs', 'etchingFrame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
-  engraving: ['engraving.mjs', 'engravingFrame'],
-  gallery: ['gallery.mjs', 'galleryFrame'],
-  wall: ['conman-wall.mjs', 'wallFrame'],
-  board: ['conman-board-film.mjs', 'boardFrame'],
-  'board-pan-1': ['conman-board-film.mjs', 'boardPan1'],
-  'board-pan-2': ['conman-board-film.mjs', 'boardPan2'],
-  'board-pan-3': ['conman-board-film.mjs', 'boardPan3'],
-  'board-pan-4': ['conman-board-film.mjs', 'boardPan4'],
-  'board-pan-5': ['conman-board-film.mjs', 'boardPan5'],
-  'wood-engraving': ['wood-engraving.mjs', 'woodEngravingFrame'],
-  letterpress: ['letterpress.mjs', 'letterpressFrame'],
-  mezzotint: ['mezzotint.mjs', 'mezzotintFrame'],
 }
 const SCORES = {
   andalusia: ANDALUSIA_SCORE,

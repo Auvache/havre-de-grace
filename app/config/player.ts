@@ -24,7 +24,7 @@ export const LISTEN_FADE_MS = 2000
 export const STOP_ROUTES: RegExp[] = [
   /^\/listen(?:\/|$)/,
   /^\/seven-inch(?:\/|$)/,
-  /^\/music-videos(?:\/|$)/,
+  /^\/visualizers(?:\/|$)/,
   /^\/tools(?:\/|$)/,
 ]
 

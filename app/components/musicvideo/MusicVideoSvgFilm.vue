@@ -7,9 +7,9 @@
     :aria-label="`${name} music video for ${score.title} by ${score.artist}. Currently: ${frame.label}`"
   >
     <!-- A film's `lib`: defs that only ever grow, each chunk mounted once and never re-parsed. -->
-    <!-- eslint-disable-next-line vue/no-v-html -- the markup is ours; see MusicVideoCartography.vue -->
+    <!-- eslint-disable-next-line vue/no-v-html -- the markup is ours: built by our own film modules from our own score -->
     <g v-for="(chunk, i) in frame.lib ?? []" :key="i" v-html="chunk" />
-    <!-- eslint-disable-next-line vue/no-v-html -- the markup is ours; see MusicVideoCartography.vue -->
+    <!-- eslint-disable-next-line vue/no-v-html -- the markup is ours: built by our own film modules from our own score -->
     <g v-html="frame.svg" />
   </svg>
 </template>
@@ -18,11 +18,10 @@
 /*
  * Any style module, running.
  *
- * MusicVideoCartography.vue is this component with one film baked in, and it
- * explains at length why a film is a string of SVG rather than a template. Once
- * there was more than one film, a copy of those four lines per style was five
- * files that could only differ by an import — so the frame function is a prop
- * instead. The contract is the one every module in shared/video/films/ keeps:
+ * A film is a string of SVG rather than a template so that one pure function
+ * draws the page, the review sheets and the mp4 alike (see the
+ * music-video-creation skill). The frame function is a prop; the contract is
+ * the one every module in shared/video/films/ keeps:
  * `frame({ time, score, lockup, uid }) → { svg, label }`, pure, no DOM.
  *
  * A film whose defs are heavy and steady may also return `lib`: an array of
@@ -51,7 +50,7 @@ const props = defineProps<{
   uid: string
 }>()
 
-/* The splash screen's mark, prepared the way MusicVideoCartography prepares it. */
+/* The splash screen's mark, sized for the films' end card. */
 const LOCKUP = lockupRaw
   .replace('<svg ', '<svg width="918" height="619.07" ')
   .replace(/ color="[^"]*"/, '')
@@ -68,7 +67,7 @@ const frame = computed(() => props.film({
 </script>
 
 <style scoped>
-/* See MusicVideoCartography.vue: declaring the family in CSS is what gets @nuxt/fonts to serve Jost. */
+/* Declaring the family in CSS is what gets @nuxt/fonts to serve Jost: the films set their type in it. */
 .svg-film {
   font-family: "Jost", system-ui, sans-serif;
   font-variant-ligatures: none;

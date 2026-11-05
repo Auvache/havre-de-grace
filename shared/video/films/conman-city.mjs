@@ -39,8 +39,8 @@
  * weight at every scale), the town is one transform over `lib` tiles with
  * non-scaling strokes, so the whole town costs a few <use>s a frame.
  *
- * The plans began as tools/video-styles/visualizers/heist.mjs (the stills
- * on /music-videos/conman); this file is their film, and owns them now.
+ * The plans began as stills (tools/video-styles/visualizers/heist.mjs, deleted
+ * 2026-11-05); this file is their film, and owns them now.
  */
 import { rng, r, clamp01, lerp, easeInOut, ramp } from '../kit.mjs'
 import { COVER_SHEET, INK, PAPER, RED, SECOND_INK, paper, marginLyric, markDrawnAt, MARK_DRAW } from '../album.mjs'

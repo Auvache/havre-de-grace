@@ -1,11 +1,10 @@
 /*
  * The album — what every film for "Into the Wild" shares.
  *
- * Ten songs, ten printmaking techniques, one sheet of paper. Each film is an
- * impression pulled on the same stock with the same black and the same red;
- * what changes from song to song is the technique and one second ink. The
- * written rules are in app/config/albumStyle.ts. This file is the part a film
- * module imports, so that "the album's paper" is one constant and not ten
+ * Ten songs, one sheet of paper: every film is pulled on the same stock with
+ * the same black and the same red, and opens and ends the same way (the
+ * standard is the Into the Wild maze; see docs/visualizers/README.md). This
+ * file is the part a film module imports, so that "the album's paper" is one constant and not ten
  * slightly different creams.
  *
  * Plain .mjs, pure, no DOM — the same contract as everything in shared/video/.
@@ -592,8 +591,7 @@ function portholeOpening({ now, title, uid, sheet, intro }) {
 /* ── Smoothness ───────────────────────────────────────────────────────
  *
  * What Andalusia's chart does that nothing else in the suite did: it never
- * stops and it never cuts. These are the helpers for the album's motion rules
- * (albumStyle.ts, MOTION).
+ * stops and it never cuts. These are the helpers for the album's motion rules.
  */
 
 /*
