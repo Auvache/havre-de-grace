@@ -63,7 +63,11 @@ const FILMS = {
   'cartography-album': ['cartography.mjs', 'cartographyAlbumFrame'],
   maze: ['maze.mjs', 'mazeFrame'],
   'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
+  'conman-heists': ['conman-heists.mjs', 'conmanHeistsFrame'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
+  'marquee-measured': ['marquee.mjs', 'MARQUEE_TESTS.measured.frame'],
+  'marquee-sections': ['marquee.mjs', 'MARQUEE_TESTS.sections.frame'],
+  'marquee-pulse': ['marquee.mjs', 'MARQUEE_TESTS.pulse.frame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
 }
 
@@ -86,7 +90,8 @@ const pick = (table, key, what) => {
 }
 
 const [filmFile, filmExport] = pick(FILMS, process.env.FILM ?? 'cartography-album', 'film')
-const film = (await import(resolve(root, 'shared/video/films', filmFile)))[filmExport]
+// An export may be a path into it ('<FILM>_TESTS.<key>.frame'): a page's tests are reviewed the same way.
+const film = filmExport.split('.').reduce((o, k) => o?.[k], await import(resolve(root, 'shared/video/films', filmFile)))
 if (typeof film !== 'function') throw new Error(`${filmFile} has no export ${filmExport}`)
 const score = pick(SCORES, process.env.SONG ?? 'andalusia', 'song')
 

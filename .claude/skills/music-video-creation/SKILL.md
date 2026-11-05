@@ -77,6 +77,7 @@ Inside a style module, never:
 | `shared/video/album.mjs` | The album's inks, **`COVER_SHEET`** (the sheet every film is on: a paper border with a plate mark, a 1532 × 776 plate, the lyric in the album's black on one row in a 90-unit margin — pass it to `paper()`, `plateClip()`, `marginLyric()`), **`opening()`** (the shared title-on-black opening), and the smoothness helpers `glide()` / `easeCamera` / `land()` / `presence()`. |
 | `shared/video/films/maze.mjs` | Into the Wild's visualizer (v2, 2026-11-02). The reference for **a figure that decides** (a walker simulated once at load: line of sight down corridors, memory, backtracking, moods that set speed/hesitation/sight, constant-acceleration steps so he slows into corners), for **walls drawn on like a pen** (runs in drawing order, chunked into `lib`, only the strokes in progress inline with their own dash), for **a trail that fades with age**, and for **the live videos' opening in a film** (mark, then a Hairline title from `shared/video/titles.mjs`, baked by `node tools/video-styles/titles/bake.mjs` because setting the type needs fontkit; drawn with `shared/video/hairline-draw.mjs`). |
 | `shared/video/films/conman-city.mjs` | Conman's visualizer (v1, 2026-11-02): five heist plans, each drawn into an empty lot of one town, the getaways driving the town's anchor-shaped streets (stock and shank are the grid's main streets; a circus, two roundabouts and a crescent for the ring, balls and arms), and a steady pull back to the whole anchor in the last chorus. The reference for **a plan drawn on like a pen in projection** (`job.strokes`, each wall with its own window by length), for **a town as `lib` tiles under one transform** (non-scaling strokes; boulevards cut through with an ink stroke under a paper one, so kerbs come free and lots trim themselves), for **shots** (held or moving views, eased between in log scale; `follow()` averages a car over two seconds), and for **the shared opening with its own baked title** (`TITLES.conman`). |
+| `shared/video/films/conman-heists.mjs` (+ `conman-heists/`) | Conman's visualizer v2 (2026-11-05, on the page, pinned): five heist plans in the insurance-atlas style on a town whose streets are the anchor, police chases in the choruses, and a final chase whose red trails draw the anchor as the camera pulls out. The reference for **a whole film composed from segment modules** (`film.mjs` hands the clock to each piece in turn), **a procedurally built city** (`city.mjs`: districts, lots, a river with automatic bridges), **timed paths** (`job2.mjs` `timed()`: pin the times that must land on the record, the rest share by distance), **a turned camera** (`motion.mjs` `turnedCam`), and **alternatives on one clock** (`VisualizerMotionTests`). v1 is `conman-city.mjs` below. |
 | `shared/video/films/marquee.mjs` | Goodbye, Norma Jeane's visualizer (2026-11-02): a picture-house letter board in split flaps, a film title on every phrase, a dark drop bar before each chorus, the chorus answering its own words. The reference for **split flaps timed to the record** (`marqueeMoments` reads every board event off the score) and for **a fixed frame** that does more by section rather than moving the camera. |
 | `shared/video/films/blanks.mjs` | Ivory's visualizer (v1, 2026-11-02): a five-letter guessing game for her name, three boards on one sheet, the guesses being the five-letter words he sings, scored against IVORY (`marksFor`). The reference for **tiles that turn over** (`flipped`: scaleY by \|cos\|, the face swapping at half), for **split-flap spinning** (`spinning`: two letters rolling through a per-tile clip, only while he sings), for **letters lifting off and coming back for a breath**, and for **the shared opening on a short intro** (first word at 9.4 s: the title fades before the black lifts). Never name the newspaper game or use its colours, keyboard or messages. |
 | `shared/video/kit.mjs` | Drawing primitives (`t`, `rect`, `line`, `path`, `circle`, `fit`, `block`, `sung`, `rng`, `r`, `esc`) and timing (`ramp`, `fall`, `easeOut`, `easeInOut`, `easeOutBack`, `decay`, `lerp`, `clamp01`). |
@@ -323,14 +324,38 @@ server, no audio and no clock — two commands and one image read per six moment
   about 380 px a row, so `--window-size=1200,<380 * ceil(n/2) + 20>`. Six frames
   at 1200×1140 is comfortably legible: port labels, the caption strip and the
   set lyric all readable. Past six the shot is downscaled on the way in and type
-  stops being judgeable, which defeats the purpose. Sample twelve into the HTML
-  if the user will also look; rasterise them six at a time.
+  stops being judgeable, which defeats the purpose. Rasterise six at a time.
+  The sheet is for you; the user looks at the page (below).
 - **Keep `--virtual-time-budget=4000`.** It gives the Google-hosted Jost time to
   arrive before the shot is taken. Every sizing, crowding and overflow judgement
   in this document assumes real Jost metrics — a silent fallback to system-ui
   would misreport all of them.
 - **Write the PNG to the session scratchpad**, never the repo. It is review
   apparatus; nothing reads it twice.
+
+---
+
+## Showing the user: always on the page
+
+**Rule (the user, 2026-11-05): every screenshot, mock-up and motion test the
+user is shown goes on the song's own page, `/visualizers/<song>` on the dev
+server — never as separate mp4s, contact sheets or PNGs.** It is also the
+quicker route: one small wiring, then each alternative is live as soon as the
+module is saved, scrubbable, in sync with the record, over the whole song, and
+at the browser's real frame rate.
+
+- Build alternatives as options on the film (`marqueeFilm(options)` in
+  `marquee.mjs` is the pattern) or as extra frame functions; a static mock-up
+  is a frame function that ignores `time`.
+- Pass them to `VisualizerPlayer` as `tests: { key, label, film }[]`. The page
+  gets a Test row above the film ("Current" first) and `?test=<key>` selects
+  one; it is read after mount, so the prerendered page never hydrates a
+  different film.
+- Tell the user the URL (`http://localhost:3000/visualizers/<song>?test=a`)
+  and which seconds to watch. Start `npm run dev` if it is not already up.
+- When one is picked it becomes the film; delete the other options, the
+  `tests` and their `frames.mjs` entries. Render an mp4 only for a finished
+  film, and only when asked.
 
 ---
 

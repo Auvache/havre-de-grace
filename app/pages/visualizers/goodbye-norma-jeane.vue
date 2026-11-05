@@ -10,7 +10,7 @@
         </h1>
       </header>
 
-      <VisualizerPlayer :film="marqueeFrame" name="The Marquee" :score="GOODBYE_NORMA_JEANE_SCORE" :poster-at="moments.hooks[0]! + 0.6" :beats="BEATS" />
+      <VisualizerPlayer :film="marqueeFrame" name="The Marquee" :score="GOODBYE_NORMA_JEANE_SCORE" :poster-at="moments.hooks[0]! + 0.6" :beats="BEATS" :tests="TESTS" />
     </div>
   </div>
 </template>
@@ -18,13 +18,20 @@
 <script setup lang="ts">
 /* Goodbye, Norma Jeane: the marquee (shared/video/films/marquee.mjs). Notes: docs/visualizers/goodbye-norma-jeane.md. */
 import { GOODBYE_NORMA_JEANE_SCORE } from '~/config/goodbyeNormaJeaneScore'
-import { marqueeFrame, marqueeMoments } from '~~/shared/video/films/marquee.mjs'
+import { MARQUEE_TESTS, marqueeFrame, marqueeMoments } from '~~/shared/video/films/marquee.mjs'
 
 definePageMeta({ layout: 'default' })
 useHead({ title: 'Goodbye, Norma Jeane — visualizer', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 /* Every moment is read off the film, so a retimed board moves these with it. */
 const moments = marqueeMoments(GOODBYE_NORMA_JEANE_SCORE)
+
+/* The intensity tests of 2026-11-05, pending a pick (docs: "Intensity tests"). */
+const TESTS = [
+  { key: 'measured', label: 'Follows the record', film: MARQUEE_TESTS.measured.frame },
+  { key: 'sections', label: 'Set by section', film: MARQUEE_TESTS.sections.frame },
+  { key: 'pulse', label: 'Flashes on the beat', film: MARQUEE_TESTS.pulse.frame },
+]
 
 const BEATS = [
   { at: 0, label: 'Opening' },

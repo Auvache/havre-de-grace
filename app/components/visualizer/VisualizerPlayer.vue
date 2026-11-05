@@ -1,12 +1,28 @@
 <template>
   <div class="space-y-10">
     <section class="space-y-5">
+      <!-- Tests: alternatives under review, switched in place (?test=<key>). Gone once one is picked. -->
+      <div v-if="tests.length" class="flex flex-wrap items-baseline gap-x-4 gap-y-2" role="group" aria-label="Tests">
+        <span class="label-text text-[0.6rem] muted-text">Test</span>
+        <button
+          v-for="option in testOptions"
+          :key="option.key"
+          type="button"
+          class="label-text cursor-pointer text-[0.6rem] transition-colors duration-150 hover:text-[color:var(--color-accent)]"
+          :class="option.key === testKey ? 'text-[color:var(--color-accent)] underline underline-offset-4' : ''"
+          :aria-pressed="option.key === testKey"
+          @click="pickTest(option.key)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+
       <div
         ref="stage"
         class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
         :style="{ aspectRatio: '16 / 9' }"
       >
-        <MusicVideoSvgFilm :film="film" :name="name" :score="score" :t="frameTime" uid="film" />
+        <MusicVideoSvgFilm :key="testKey" :film="shownFilm" :name="name" :score="score" :t="frameTime" uid="film" />
 
         <button
           v-if="!player.playing.value"
@@ -82,6 +98,14 @@ import { useMusicVideoPlayer } from '~/composables/useMusicVideoPlayer'
 
 type FrameFn = (options: { time: number, score: any, lockup: string, uid: string }) => { svg: string, label: string, lib?: string[] }
 
+/** An alternative under review: a mock-up, still or motion test of the film. */
+export interface VisualizerTest {
+  /** The ?test= value, e.g. 'a'. */
+  key: string
+  label: string
+  film: FrameFn
+}
+
 export interface VisualizerBeat {
   /** Song seconds. */
   at: number
@@ -100,7 +124,34 @@ const props = withDefaults(defineProps<{
   beats?: VisualizerBeat[]
   /** Extra state for the "Now" line (the maze's mood). */
   status?: (time: number) => string
-}>(), { beats: () => [], status: undefined })
+  /** Alternatives to switch between in place; the film itself is listed first as "Current". */
+  tests?: VisualizerTest[]
+}>(), { beats: () => [], status: undefined, tests: () => [] })
+
+/*
+ * Tests are chosen after mount, from ?test=: the page is prerendered without a
+ * query, so reading it during hydration would draw one film on the server and
+ * another in the browser.
+ */
+const route = useRoute()
+const router = useRouter()
+const testKey = ref('')
+const testOptions = computed(() => [{ key: '', label: 'Current', film: props.film }, ...props.tests])
+const shownFilm = computed(() => testOptions.value.find((o) => o.key === testKey.value)?.film ?? props.film)
+const readTest = () => {
+  const q = route.query.test
+  const key = typeof q === 'string' ? q : ''
+  testKey.value = props.tests.some((o) => o.key === key) ? key : ''
+}
+const pickTest = (key: string) => {
+  testKey.value = key
+  const query = { ...route.query }
+  if (key) query.test = key
+  else delete query.test
+  void router.replace({ query })
+}
+onMounted(readTest)
+watch(() => route.query.test, readTest)
 
 const player = useMusicVideoPlayer(props.score, { analyse: false })
 const stage = useTemplateRef<HTMLElement>('stage')

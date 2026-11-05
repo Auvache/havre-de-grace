@@ -196,6 +196,21 @@ export const GOODBYE_NORMA_JEANE_SCORE = {
   /** 95.0 BPM, a beat at 0.066. Measured, and steady — the band played to a click. */
   bpm: 95,
   beatPhase: 0.066,
+  /**
+   * How bright each beat is, 0–9, a digit a beat from beatPhase: the energy
+   * above 1.8 kHz (trumpet, cymbals, the voice's edge), each beat averaged with
+   * its neighbours, 9 the brightest and 0 ten dB or more below it. Measured by
+   * tools/video-styles/brightness.mjs; the marquee's twinkle follows it.
+   */
+  brightness: (
+    '0011112221111111111122221111111024666777642111103577788775300012' +
+    '4688753246888765420111112232333332211222334334434577677774211110' +
+    '2477778775322213467775334677776667888776555778876677766556655454' +
+    '2000000001112223444444444321122334444443446666787777776312566776' +
+    '5332121246787643467877777899988766567887777888766776545667776555' +
+    '5566666420000123223310025688878776677888777888777887656667777777' +
+    '77766665555555444455444432321112333333334454211210000000000000'
+  ),
   sections: SECTIONS,
   lines: LINES,
 } as const
