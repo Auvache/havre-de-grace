@@ -83,6 +83,7 @@ const redTrail = (c, pts, style, op = 1) => {
 const head = (c, p, n, op = 1) => `<g${op < 1 ? ` opacity="${r(op, 3)}"` : ''}><circle cx="${r(c.X(p[0]))}" cy="${r(c.Y(p[1]))}" r="10.5" fill="${RED}"/><text x="${r(c.X(p[0]))}" y="${r(c.Y(p[1]) + 4.6)}" font-size="13" font-weight="700" fill="${PAPER}" text-anchor="middle">${n}</text></g>`
 const hiding = (c, p) => `<circle cx="${r(c.X(p[0]))}" cy="${r(c.Y(p[1]))}" r="7" fill="none" stroke="${RED}" stroke-width="1.6" stroke-dasharray="2 3"/>`
 const noHeads = (svg) => svg.replace(new RegExp(`<circle[^>]*r="10.5" fill="${RED}"/><text[^>]*>\\d</text>`, 'g'), '')
+const noHead = (svg, n) => svg.replace(new RegExp(`<circle[^>]*r="10.5" fill="${RED}"/><text[^>]*>${n}</text>`, 'g'), '')
 
 /** A ring round a head: caught. */
 const caughtRing = (c, p) => `<circle cx="${r(c.X(p[0]))}" cy="${r(c.Y(p[1]))}" r="16" fill="none" stroke="${INK}" stroke-width="2.2" stroke-dasharray="3 3"/>`
@@ -327,96 +328,60 @@ const SEARCH5 = [COP5A, COP5B, COP5C]
 
 /*
  * (The user, 2026-11-06.) The officer in the foyer sees the conman on stage
- * and the five scatter, each down one stroke of the anchor with an officer
- * after him, and keep going: the chase is still on when the end card comes.
- * The conman, out of the stage door and up High Street, goes round the ring
- * and keeps going round it; the auditor takes the west arm and fluke, up the
- * fluke road and away west over the Main Street bridge; the driver up the
- * shank, east along the stock, round the east ball and away east over the
- * bridge. Two are caught: the engineer at the tip of the east fluke (219.6),
- * the stagehand back at the west ball after going round it (221.4), each by
- * the officer on his heels. Their red still completes the anchor by 223.5.
+ * (188.0) and the chase is on, and still on when the end card comes. Three
+ * ways to run it are motion tests on the page (FINALES, below); C is the
+ * one on the film until one is picked.
  */
 const CROWN = [SHANK_X, ARMS.c[1] + ARMS.ry]
 const STAGE_DOOR = [HO[0], HO[1] + 2.3]
 const westArm = arcPts(ARMS.c, ARMS.rx, ARMS.ry, Math.PI / 2, Math.PI, 30)
 const eastArm = arcPts(ARMS.c, ARMS.rx, ARMS.ry, Math.PI / 2, 0, 30)
 const ringRound = arcPts(RING.c, RING.r, RING.r, Math.PI / 2, Math.PI / 2 + 2 * Math.PI, 12)
-const ballRound = (b, a0) => arcPts(b, BALL_R, BALL_R, a0, a0 + 2 * Math.PI, 8)
 const [F0, F1] = FINAL
 const RING_IN = [SHANK_X, RING.c[1] + RING.r]
 const WEST_YARD = [HO[0] - 25.7, HO[1] + 19]
 const EAST_YARD = [HO[0] + 25.7, HO[1] + 19]
-const FINAL_RUNS = [
-  { n: 1, style: 'solid', route: timed([[...hallEnd(1), F0], [...STAGE_DOOR, 189.0], [...CROWN, 189.4], [...RING_IN, 209.5], ...ringRound.slice(1, -1), [...RING_IN, 223.2], ...ringRound.slice(1, -1), [...RING_IN, 237]]) },
-  { n: 2, style: 'longdash', route: timed([[...hallEnd(2), F0], [HO[0] - 17, HO[1] + 7.6], [HO[0] - 22, HO[1] + 10], [...WEST_YARD, 190.2], [HO[0] - 40, HO[1] + 26], ...westArm.slice(3), [...FLUKES[0][1], 219.6], [FLUKES[0][1][0], STOCK_Y, 224.0], [60, STOCK_Y], [-150, STOCK_Y - 6, 232.0], [-330, STOCK_Y - 8, 240]]) },
-  { n: 3, style: 'dashdot', route: timed([[...hallEnd(3), F0], [HO[0] + 17, HO[1] + 7.6], [HO[0] + 22, HO[1] + 10], [...EAST_YARD, 190.2], [HO[0] + 40, HO[1] + 26], ...eastArm.slice(3), [...FLUKES[1][1], 219.6], [...FLUKES[1][1], 240]]), caught: 220.4 },
-  { n: 4, style: 'dash', route: timed([[...hallEnd(4), F0], [...STAGE_DOOR, 189.2], [...CROWN, 189.6], [SHANK_X, STOCK_Y, 204.4], [BALLS[0][0] + BALL_R, STOCK_Y, 210.4], ...ballRound(BALLS[0], 0).slice(1, -1), [BALLS[0][0] + BALL_R, STOCK_Y, 221.2], [BALLS[0][0] + BALL_R, STOCK_Y, 240]]), caught: 221.4 },
-  { n: 5, style: 'dot', route: timed([[...hallEnd(5), F0], [...CROWN, 189.0], [SHANK_X, STOCK_Y + 2, 201.0], [BALLS[1][0] - BALL_R, STOCK_Y + 2, 207.0], ...ballRound(BALLS[1], Math.PI).slice(1, -1), [BALLS[1][0] - BALL_R, STOCK_Y + 2, 215.0], [BALLS[1][0] + BALL_R, STOCK_Y + 2], [960, STOCK_Y + 2, 224.0], [1300, STOCK_Y + 2, 232.0], [1500, STOCK_Y + 2, 237]]) },
-]
-/** Five officers, one after each: two catch up, three fall behind and keep coming. */
-const COPS_F = [
-  // From the foyer, through the house and out of the stage door after the conman, round the ring behind him.
-  timed([[...H5(2, 46), F0 + 0.2], [...H5(0, 19.4), 189.6], [...STAGE_DOOR, 191.0], [...CROWN, 191.4], [...RING_IN, 217.0], ...ringRound.slice(1, -1), [...RING_IN, 231], ...ringRound.slice(1, 6), [...ringRound[6], 240]]),
-  // After the auditor down the west arm, on foot, further behind every block.
-  timed([[...H5(-38, 30), SEEN + 0.4], [HO[0] - 40, HO[1] + 26, 190.6], ...westArm.slice(3), [...FLUKES[0][1], 225.0], [FLUKES[0][1][0], STOCK_Y, 230.0], [-20, STOCK_Y, 240]]),
-  // After the engineer down the east arm, and on him at the tip of the fluke.
-  timed([[...H5(36, 2), SEEN + 0.4], [HO[0] + 40, HO[1] + 26, 190.8], ...eastArm.slice(3), [FLUKES[1][1][0] - 3, FLUKES[1][1][1] + 2, 220.4], [FLUKES[1][1][0] - 3, FLUKES[1][1][1] + 2, 240]]),
-  // A car down High Street that meets the three coming up it, turns, and goes after the stagehand west to the ball.
-  timed([[SHANK_X, 318, 186.0], [SHANK_X, 700, 190.0], [SHANK_X, 790, 191.6], [SHANK_X, 790, 192.6], [SHANK_X, STOCK_Y, 206.4], [BALLS[0][0] + BALL_R + 3, STOCK_Y - 2, 212.2], ...ballRound(BALLS[0], 0).slice(1, -1).map(([x, y]) => [x + 2, y - 2]), [BALLS[0][0] + BALL_R + 3, STOCK_Y - 2, 221.4], [BALLS[0][0] + BALL_R + 3, STOCK_Y - 2, 240]]),
-  // A car along the Crescent from the east after the driver: up the shank, east, round the ball and on, never closing.
-  timed([[520, 828, 187.0], [430, 862, 189.5], [...CROWN, 190.5], [SHANK_X, STOCK_Y + 2, 205.0], [BALLS[1][0] - BALL_R, STOCK_Y + 2, 212.0], ...ballRound(BALLS[1], Math.PI).slice(1, -1), [BALLS[1][0] - BALL_R, STOCK_Y + 2, 221.0], [BALLS[1][0] + BALL_R, STOCK_Y + 2], [960, STOCK_Y + 2, 230.0], [1150, STOCK_Y + 2, 240]]),
-]
 const KEY_F = { crew: hallCrew.map(({ n, role, style }) => ({ n, role, style })), figures: [{ label: 'The police', mark: 'P' }] }
 void SEARCH5
 
 /*
- * Three ways to run the end chaos, as motion tests on the page (the user,
- * 2026-11-06): the five split in different directions and the chase sprawls
- * across the map through to the end card.
+ * The end chaos, as motion tests on the page (the user, 2026-11-06): the
+ * five split in different directions and the chase sprawls across the map
+ * through to the end card.
  *
- *   A · Down the anchor    each down one stroke of the anchor and on; two caught
- *   B · Through the grid   zigzags through the streets and blocks (dotted where
- *                          they cut through a building), east, west, north, round
- *                          the hill, out to the far east bank; two caught
- *   C · Crossing paths     faster, and they double back: the conman turns from
- *                          the police car, the auditor from the officer at the
- *                          bridge and runs back through the hall itself, the
- *                          engineer rounds the whole downtown and is caught at
- *                          the stage door; the paths cross and recross
+ *   C · Crossing paths   (on the film) all five go at once on 188.2 and
+ *                        double back: the conman turns from the police car,
+ *                        the auditor from the officer at the bridge and runs
+ *                        back through the hall, the engineer rounds downtown
+ *                        and is caught at the stage door
+ *
+ * Then three more on the user's notes (the officers are already about and
+ * give chase as they see them; the five leave one by one at different
+ * speeds — a car with a police car tight behind it, one into the bushes and
+ * caught; they weave in and out between buildings, drawn thin and dotted):
+ *
+ *   D · One at a time    the driver first (187.0, the car), the stagehand to
+ *                        the bushes (caught), the engineer slowly over the
+ *                        roofs and through the blocks east, the auditor west
+ *                        and clean away, the conman last, east through
+ *                        downtown and the park, north round the ring and
+ *                        away east
+ *   E · Through the blocks  the same order, but nobody keeps to a street for
+ *                        long: through blocks all the way; the engineer caught
+ *                        in a dead-end yard; the conman ends at the garage
+ *   F · Double back      the same order, and they double back as in C: the
+ *                        conman from the police car, the auditor east again
+ *                        across Main Street and round the ring, the engineer
+ *                        weaving slowly north and round the ring to the end
  */
 const J = (x, y, t) => [x, y, t, 'jump']
 /** The same points, each later by a lag that grows (or shrinks) along the route: an officer behind. */
 const lag = (pts, l0, l1) => pts.map((p, i) => (p[2] == null ? p : [p[0], p[1], p[2] + lerp(l0, l1, i / Math.max(1, pts.length - 1)), p[3]]))
-const hillTop = arcPts([400, 104], 109, 117, -Math.PI / 2, 0, 4) // the hill ring road, top to east
+/** Only the street points of a route (an officer in a car cannot cut through a block). */
+const streets = (pts) => pts.filter((p) => p[3] !== 'jump')
 const ballTop = (b, east) => (east ? arcPts(b, BALL_R, BALL_R, Math.PI, 2 * Math.PI, 5) : arcPts(b, BALL_R, BALL_R, 0, -Math.PI, 5)).slice(1, -1)
 
-const B1 = [[...STAGE_DOOR, 189.0], [...CROWN, 189.3], [400, 718, 193.0], [480, 718], [480, 638, 196.0], J(520, 600, 196.8), [560, 558], [640, 558, 199.4], [640, 398], [720, 398, 202.0], [720, 318], [960, 318, 206.0],
-  [900, 500, 209.0], [960, 700, 212.0], [1180, 470, 216.0], [1400, 470, 220.0], [1170, 700, 225.0], [960, 760, 229.0], [960, 700], [900, 500, 236.0], [863, 400, 240]]
-const B2 = [[HO[0] - 17, HO[1] + 7.6], [HO[0] - 22, HO[1] + 10], [...WEST_YARD, 190.0], [HO[0] - 40, HO[1] + 26], ...westArm.slice(3), [56, 393, 204.0], J(40, 350, 205.2), [60, STOCK_Y, 206.0], [-150, 312, 210.5],
-  [-150, 520, 214.0], [-260, 560, 216.0], [-330, 470, 218.0], [-340, 300, 222.0], [-350, 150, 226.0], [-330, 40, 230.0], [-150, 95, 234.0], [95, 130, 240]]
-const B3 = [[HO[0] + 17, HO[1] + 7.6], [HO[0] + 22, HO[1] + 10], [...EAST_YARD, 190.0], [HO[0] + 40, HO[1] + 26], ...eastArm.slice(3), [739, 391, 204.0], J(760, 340, 205.0), [760, STOCK_Y], [960, STOCK_Y, 209.0],
-  [900, 500, 212.0], [863, 757, 215.5], [700, 757, 218.5], [625, 720, 220.4], [625, 720, 240]]
-const B4 = [[...STAGE_DOOR, 189.2], [...CROWN, 189.5], [400, 398, 197.0], [320, 398, 199.0], [320, STOCK_Y, 200.6], [198, STOCK_Y, 203.4], ...ballTop(BALLS[0], false), [138, STOCK_Y, 205.4], [60, STOCK_Y, 207.2], J(64, 370, 208.4), [56, 393, 209.0],
-  [126, 536, 213.0], ...westArm.slice(10, 17).reverse(), [...westArm[9], 221.6], [...westArm[9], 240]]
-const B5 = [[...CROWN, 189.0], [400, STOCK_Y, 198.0], [...RING_IN, 200.4], ...arcPts(RING.c, RING.r, RING.r, Math.PI / 2, -Math.PI / 2, 6).slice(1, -1), [400, 32, 204.0], J(400, -13, 205.0), ...hillTop.slice(1), [509, 104, 207.0], J(560, 150, 208.0),
-  [568, 201, 209.0], [690, 214, 211.0], [728, 120, 213.0], [930, 150, 216.5], [900, 400, 220.5], [960, 700, 224.5], [1180, 470, 228.5], [1300, 350, 232.0], [1400, 250, 236.0], [1450, 180, 240]]
-const RUNS_B = [
-  { n: 1, style: 'solid', route: timed([[...hallEnd(1), F0], ...B1]) },
-  { n: 2, style: 'longdash', route: timed([[...hallEnd(2), F0], ...B2]) },
-  { n: 3, style: 'dashdot', route: timed([[...hallEnd(3), F0], ...B3]), caught: 221.0 },
-  { n: 4, style: 'dash', route: timed([[...hallEnd(4), F0], ...B4]), caught: 222.0 },
-  { n: 5, style: 'dot', route: timed([[...hallEnd(5), F0], ...B5]) },
-]
-const COPS_B = [
-  timed([[...H5(2, 46), F0 + 0.2], [...H5(0, 19.4), 189.6], ...lag(B1, 2.2, 4.0)]),
-  timed([[...H5(-38, 30), SEEN + 0.4], ...lag(B2.slice(2), 2.0, 4.5)]),
-  // Down the east arm after the engineer, loses him at the studio, back along the arm — and there he is, coming back.
-  timed([[...H5(36, 2), SEEN + 0.4], [HO[0] + 40, HO[1] + 26, 191.0], ...eastArm.slice(3, -1), [...FLUKES[1][0], 203.5], [739, 391, 207.0], [739, 391, 209.0], [...FLUKES[1][0], 213.0], [625, 720, 221.0], [625, 720, 240]]),
-  // The car down High Street, turned, after the stagehand and closing on him.
-  timed([[SHANK_X, 318, 186.0], [SHANK_X, 700, 190.0], [SHANK_X, 790, 191.6], [SHANK_X, 790, 192.6], ...lag(B4.slice(2), 2.5, 0.4)]),
-  timed([[520, 828, 187.0], [430, 862, 189.5], ...lag(B5, 1.5, 4.0)]),
-]
+/* ── C · Crossing paths ──────────────────────────────────────────────── */
 
 const K1 = [[...STAGE_DOOR, 189.0], [...CROWN, 189.3], [400, 600, 191.8], [400, 600, 192.0], J(360, 620, 192.6), [320, 640, 193.0], [320, 718, 194.5], [400, 718, 196.0], [480, 718, 197.2], [480, 478, 200.5], [560, 478, 201.5], [560, STOCK_Y, 203.5],
   ...ballTop(BALLS[1], true), [662, STOCK_Y, 206.5], [735, STOCK_Y], [960, STOCK_Y, 210.0], [932, 152, 213.0], [728, 120, 216.0], [690, 214], [568, 201, 218.5], [546, 85, 220.0], J(500, 40, 221.5), [400, -13, 223.0],
@@ -449,10 +414,107 @@ const COPS_C = [
   timed([[520, 828, 187.0], [430, 862, 189.5], ...lag(K5, 1.5, 3.5)]),
 ]
 
+/* ── D, E, F: the officers already about, the five leaving one by one ── */
+
+/** The three searchers through the verse (as SEARCH5), and then on into the chase. */
+const SEARCH_A = [H5(0, -150, 170), H5(0, -110, 172.6), H5(0, -110, 174.2), H5(0, -70, 176.6), H5(0, -70, 178.2), H5(0, -4, 181.6), H5(0, -4, 182.4), ...ROUND_EAST.map(([x, y]) => H5(x, y)), H5(2, 46, SEEN)]
+const SEARCH_B = [H5(-120, laneAt(-120), 176), H5(-62, laneAt(-62), 180.4), H5(-50, 2, 182.4), H5(-42, 20, 184.0), H5(-26, 19.5, 185.2), H5(-26, 19.5, 186.6), H5(-38, 30, SEEN + 0.2)]
+const SEARCH_C = [H5(120, laneAt(120), 176.5), H5(62, laneAt(62), 181), H5(50, 2, 183), H5(42, 20, 184.6), H5(26, 19.5, 185.8), H5(26, 19.5, 187.2), H5(36, 2, SEEN + 0.2)]
+/** Two police cars, about since the verse: one down High Street trying doors, parked 50 m short of the stage door; one along the Crescent from the east, up to the getaway car. */
+const CAR_N = [[400, 318, 178], [400, 700, 184.5], [400, 760, 185.5], [400, 760, 186.6], [400, 800, 187.6]]
+const CAR_E = [H5(120, laneAt(120), 180), H5(70, laneAt(70), 184), H5(70, laneAt(70), 185.2), H5(30, laneAt(30), 186.6)]
+/** The driver sees the police car coming up behind his and goes (187.0): east along the Crescent, the fluke road, through the studio's yard, Main Street, over the bridge and round the east bank; the police car a length behind the whole way. */
+const DRIVE5 = [[...hallEnd(5), 187.0], ...eastArm.slice(2, -1), [...FLUKES[1][0], 194.5], [739, 391, 197.5], J(760, 340, 198.4), [760, STOCK_Y, 199.0], [960, STOCK_Y, 203.0], [900, 500, 206.0], [960, 700, 209.0], [1180, 470, 213.0], [1400, 250, 218.0],
+  [1180, 470, 222.0], [960, 700, 226.0], [900, 500, 229.0], [932, 152, 233.0], [728, 120, 237.0], [690, 214, 240]]
+const CHASE5 = [...CAR_E, ...lag(streets(DRIVE5).slice(1), 1.0, 1.6)]
+/** The stagehand: out of the stage door at 188.8, through the block west of it and into the trees, where he is found. */
+const BUSH = [310, 905]
+const RUN4 = [[...hallEnd(4), F0], [...STAGE_DOOR, 188.8], [360, 862, 189.8], J(330, 880, 190.6), [...BUSH, 191.4], [...BUSH, 240]]
+const FOUND4 = 195.4
+/** The conman holds the stage until the officer from the foyer is at its edge, then bolts out of the stage door (190.6). */
+const BOLT = [[...hallEnd(1), F0], [...hallEnd(1), 189.8], [...STAGE_DOOR, 190.6]]
+const CHASE_A = [...SEARCH_A, H5(0, 19.4, 190.0), H5(0, 19.4, 190.3), [...STAGE_DOOR, 191.6]]
+/** The auditor out through the green room into the west yard (190.2); the engineer up the fly tower, over the dressing-room roof, into the east yard (190.6). */
+const OUT2 = [[...hallEnd(2), F0], [HO[0] - 17, HO[1] + 7.6, 189.0], [HO[0] - 22, HO[1] + 9], [...WEST_YARD, 190.2]]
+const OUT3 = [[...hallEnd(3), F0], [...hallEnd(3), 189.2], J(HO[0] + 22, HO[1] + 9, 189.8), [...EAST_YARD, 190.6]]
+const hillE = arcPts([400, 104], 109, 117, Math.PI / 2, 0, 4) // the hill ring road from the south (400, 221) round the east to (509, 104)
+
+// D · One at a time
+const D1 = [...BOLT, [430, 858, 191.2], J(470, 820, 192.4), [480, 798, 192.8], [480, 718, 194.4], J(440, 678, 195.2), [400, 640, 196.0], [362, 652, 197.0], J(340, 600, 198.0), [320, 558, 199.0], J(360, 518, 200.0), [400, 478, 201.0], [400, 367, 203.5], [400, STOCK_Y, 204.5],
+  [...RING_IN, 207.5], [472, 104, 209.5], J(520, 60, 210.5), [546, 85, 211.5], [568, 201, 214.0], [690, 214, 217.0], [728, 120, 219.5], [930, 150, 224.0], [900, 400, 229.0], [960, 700, 234.0], [1180, 470, 240]]
+const D2 = [...OUT2, [HO[0] - 40, HO[1] + 26], ...westArm.slice(3, 9), [...westArm[9], 196.0], [126, 536, 201.0], J(100, 470, 203.0), J(64, 370, 205.0), [60, STOCK_Y, 206.0], [-150, 312, 210.0], J(-200, 400, 213.0), [-150, 520, 215.0], [-260, 560, 217.0], J(-300, 620, 219.0),
+  [-330, 470, 221.0], [-340, 300, 225.0], [-350, 150, 229.0], [-330, 40, 233.0], [-150, 95, 237.0], [95, 130, 242]]
+const D3 = [...OUT3, [460, 900, 192.0], J(520, 870, 194.0), [560, 830, 196.5], J(600, 780, 199.0), [...eastArm[10], 201.5], ...eastArm.slice(11, -1), [...FLUKES[1][0], 210.0], J(739, 370, 214.0), [760, STOCK_Y, 216.0], [735, STOCK_Y], J(700, 290, 218.0), [690, 214, 220.0], [568, 201, 223.0],
+  J(500, 150, 225.5), [458, 251, 227.5], [400, 221, 229.0], J(380, 180, 230.0), [...RING_IN, 231.0], [328, 104, 234.0], [400, 32, 237.0], [472, 104, 240]]
+const RUNS_D = [
+  { n: 1, style: 'solid', route: timed(D1) },
+  { n: 2, style: 'longdash', route: timed(D2) },
+  { n: 3, style: 'dashdot', route: timed(D3) },
+  { n: 4, style: 'dash', route: timed(RUN4), hide: [191.6, FOUND4], caught: FOUND4 },
+  { n: 5, style: 'dot', route: timed(DRIVE5) },
+]
+const COPS_D = [
+  timed([...CHASE_A, ...lag(streets(D1).slice(3), 1.5, 3.5)]),
+  timed([...SEARCH_B, [340, 900, 191.4], [...BUSH, FOUND4 - 0.2], [...BUSH, 240]]),
+  timed([...SEARCH_C, ...lag(streets(D3).slice(4), 2.5, 4.0)]),
+  // The car parked up the street sees him come out of the stage door, turns, and follows by the streets.
+  timed([...CAR_N, [400, 800, 190.8], [...CROWN, 191.8], [430, 858, 192.6], ...lag(streets(D1).slice(5), 2.0, 4.0)]),
+  timed(CHASE5),
+]
+
+// E · Through the blocks
+const E1 = [...BOLT, J(360, 830, 191.4), J(340, 790, 192.4), [320, 718, 194.0], J(360, 678, 195.0), [400, 640, 196.0], J(440, 598, 197.2), [480, 558, 198.5], J(520, 518, 199.8), [560, 478, 201.0], J(600, 438, 202.2), [640, 398, 203.5], J(680, 358, 204.8), [720, STOCK_Y, 206.0],
+  J(700, 260, 207.0), [690, 214, 208.0], [568, 201, 211.0], J(520, 150, 212.5), [546, 85, 213.0], J(480, 60, 214.5), [400, 32, 216.0], [328, 104, 218.0], [...RING_IN, 220.5], [400, STOCK_Y, 223.0], [198, STOCK_Y, 227.0], ...ballTop(BALLS[0], false), [138, STOCK_Y, 229.0],
+  J(100, 350, 230.0), [64, 380, 231.0], [56, 393, 231.6], [126, 536, 235.0], ...westArm.slice(10, 17).reverse(), [...westArm[9], 240]]
+const E2 = [...OUT2, J(340, 890, 191.4), [...westArm[4], 192.4], J(250, 790, 194.4), [...westArm[9], 196.4], J(160, 700, 198.4), [...westArm[13], 200.4], [126, 536, 202.0], J(90, 480, 204.0), [56, 393, 206.0], [60, STOCK_Y, 208.0], [-150, 312, 211.0], J(-200, 380, 213.0),
+  [-150, 520, 215.0], J(-220, 540, 216.0), [-260, 560, 217.0], J(-300, 500, 218.0), [-330, 470, 219.0], [-340, 300, 223.0], J(-300, 200, 225.0), [-150, 95, 229.0], [95, 130, 234.0], J(150, 110, 236.0), [211, 1, 238.0], [269, 20, 240]]
+const E3 = [...OUT3, J(460, 900, 192.0), [480, 930, 193.0], J(520, 880, 194.5), [560, 830, 196.5], [560, 830, 240]]
+const RUNS_E = [
+  { n: 1, style: 'solid', route: timed(E1) },
+  { n: 2, style: 'longdash', route: timed(E2) },
+  { n: 3, style: 'dashdot', route: timed(E3), caught: 197.4 },
+  { n: 4, style: 'dash', route: timed(RUN4), hide: [191.6, FOUND4], caught: FOUND4 },
+  { n: 5, style: 'dot', route: timed(DRIVE5) },
+]
+const COPS_E = [
+  timed([...CHASE_A, ...lag(streets(E1).slice(3), 2.0, 4.0)]),
+  timed([...SEARCH_B, [340, 900, 191.4], [...BUSH, FOUND4 - 0.2], [...BUSH, 240]]),
+  // Into the yard after the engineer and has him in the dead end.
+  timed([...SEARCH_C, [460, 900, 192.5], [520, 880, 195.0], [560, 830, 197.2], [560, 830, 240]]),
+  timed([...CAR_N, [400, 800, 190.8], [...CROWN, 191.8], [430, 858, 192.6], [480, 798, 194.0], [480, 718, 195.6], [400, 718, 197.4], [400, 640, 198.6], ...lag(streets(E1).slice(5), 3.0, 4.5)]),
+  timed(CHASE5),
+]
+
+// F · Double back
+const Z1 = [...BOLT, [400, 700, 193.0], [400, 640, 193.2], [400, 640, 193.6], J(360, 720, 194.6), [320, 718, 195.0], J(340, 680, 195.8), [362, 652, 196.5], [320, 640, 197.5], [320, 478, 201.0], J(360, 438, 202.0), [400, 398, 203.0], [400, STOCK_Y, 205.0],
+  [480, STOCK_Y, 207.0], J(520, 260, 208.5), [568, 201, 210.0], [690, 214, 213.0], J(700, 160, 214.5), [728, 120, 215.5], [930, 150, 220.0], [900, 400, 225.0], [960, 700, 231.0], [1180, 470, 237.0], [1400, 250, 242]]
+const Z2 = [...OUT2, [HO[0] - 40, HO[1] + 26], ...westArm.slice(3, 9), [...westArm[9], 197.0], [...westArm[13], 200.0], [126, 536, 203.0], [56, 393, 207.0], J(64, 370, 208.0), [60, STOCK_Y, 209.0], [138, STOCK_Y, 211.0], ...ballTop(BALLS[0], true), [198, STOCK_Y, 213.0],
+  [320, STOCK_Y, 216.0], J(360, 280, 217.0), [400, STOCK_Y, 218.0], [...RING_IN, 221.0], [328, 104, 223.5], [400, 32, 226.0], J(340, 14, 227.0), [269, 20, 229.0], J(150, 60, 232.0), [95, 130, 234.0], [-150, 95, 238.0], [-230, -20, 242]]
+const Z3 = [...OUT3, J(460, 900, 192.0), [480, 930, 193.0], J(520, 880, 194.5), [560, 830, 195.5], J(600, 780, 197.0), [...eastArm[10], 198.0], ...eastArm.slice(11, -1), [...FLUKES[1][0], 206.0], [739, 391, 210.0], J(760, 340, 211.0), [760, STOCK_Y, 212.0], [735, STOCK_Y],
+  J(700, 290, 214.0), [690, 214, 215.0], J(640, 170, 216.5), [568, 201, 218.0], J(520, 150, 219.5), [458, 251, 221.0], J(420, 200, 222.5), [...RING_IN, 223.5], [472, 104, 225.5], [400, 32, 227.5], [328, 104, 229.5], [...RING_IN, 231.5], [472, 104, 233.5], [400, 32, 235.5], [328, 104, 237.5], [...RING_IN, 240]]
+const RUNS_F = [
+  { n: 1, style: 'solid', route: timed(Z1) },
+  { n: 2, style: 'longdash', route: timed(Z2) },
+  { n: 3, style: 'dashdot', route: timed(Z3) },
+  { n: 4, style: 'dash', route: timed(RUN4), hide: [191.6, FOUND4], caught: FOUND4 },
+  { n: 5, style: 'dot', route: timed(DRIVE5) },
+]
+const COPS_F2 = [
+  timed([...CHASE_A, [400, 700, 194.6], [400, 718, 195.2], [320, 718, 197.0], ...lag(streets(Z1).slice(7), 2.4, 4.0)]),
+  // After the auditor, further behind every block.
+  timed([...SEARCH_B, [HO[0] - 40, HO[1] + 26, 190.8], ...lag(streets(Z2).slice(5), 2.0, 4.5)]),
+  // Round the front of the hall to the trees, and finds the stagehand.
+  timed([...SEARCH_C, H5(0, 60, 190.6), [340, 920, 193.2], [...BUSH, FOUND4 - 0.2], [...BUSH, 240]]),
+  // The car down High Street meets the conman head on at 193.2, turns, and is after him by the streets.
+  timed([...CAR_N, [400, 800, 190.8], [400, 640, 192.6], [400, 640, 193.8], [400, 718, 195.6], [320, 718, 197.4], ...lag(streets(Z1).slice(8), 2.0, 3.5)]),
+  timed(CHASE5),
+]
+
 const FINALES = {
-  a: { label: 'A · Down the anchor', runs: FINAL_RUNS, cops: COPS_F },
-  b: { label: 'B · Through the grid', runs: RUNS_B, cops: COPS_B },
   c: { label: 'C · Crossing paths', runs: RUNS_C, cops: COPS_C },
+  d: { label: 'D · One at a time', runs: RUNS_D, cops: COPS_D, full: true, early: 187.0 },
+  e: { label: 'E · Through the blocks', runs: RUNS_E, cops: COPS_E, full: true, early: 187.0 },
+  f: { label: 'F · Double back', runs: RUNS_F, cops: COPS_F2, full: true, early: 187.0 },
 }
 
 /* ── Cameras from heist 3 on ─────────────────────────────────────────── */
@@ -492,7 +554,7 @@ function camLater(t) {
 
 /* ── A frame from heist 3 on ─────────────────────────────────────────── */
 
-function later({ time: t, score, uid }, finale = FINALES.a) {
+function later({ time: t, score, uid }, finale = FINALES.c) {
   const c = camOf(camLater(t))
   let body = ''
   let top = ''
@@ -535,23 +597,28 @@ function later({ time: t, score, uid }, finale = FINALES.a) {
   // Heist 5, the hall drawn on as the camera lands; the police searching through the verse.
   if (t >= 162.4) {
     const j5 = plan(inked(HALL5, ease(ramp(t, 162.6, 164.6))), c, Math.min(t, F0), `${uid}-j5`)
-    body += t < F0 ? j5 : noHeads(j5)
-    const peering = (route, a, b) => (t >= a && t < b ? heading(route, a - 0.3) : undefined)
-    body += cop(c, COP5A, Math.min(t, SEEN), { reach: 14, show: t < SEEN, look: t >= SEEN - 0.4 ? -90 : undefined })
-    body += cop(c, COP5B, Math.min(t, SEEN + 0.2), { reach: 14, show: t < SEEN + 0.2, look: peering(COP5B, 185.2, 186.6) })
-    body += cop(c, COP5C, Math.min(t, SEEN + 0.2), { reach: 14, show: t < SEEN + 0.2, look: peering(COP5C, 185.8, 187.2) })
+    // A finale that starts early (the driver's car) takes his head over from the plan.
+    body += t < F0 ? (finale.early != null && t >= finale.early ? noHead(j5, 5) : j5) : noHeads(j5)
+    if (!finale.full) {
+      // The searchers hand over to the chase's officers without a gap: shown until each chase route has begun.
+      const peering = (route, a, b) => (t >= a && t < b ? heading(route, a - 0.3) : undefined)
+      body += cop(c, COP5A, Math.min(t, SEEN), { reach: 14, show: t < F0 + 0.2, look: t >= SEEN - 0.4 ? -90 : undefined })
+      body += cop(c, COP5B, Math.min(t, SEEN + 0.2), { reach: 14, show: t < SEEN + 0.4, look: peering(COP5B, 185.2, 186.6) })
+      body += cop(c, COP5C, Math.min(t, SEEN + 0.2), { reach: 14, show: t < SEEN + 0.4, look: peering(COP5C, 185.8, 187.2) })
+    }
   }
   // The final chase, still on when the end card comes.
-  if (t >= F0 - 0.2) {
+  if (t >= (finale.early ?? F0 - 0.2)) {
     for (const k of finale.runs) {
       const w = k.route.walked(t)
       body += redTrail(c, w, k.style)
       if (!w) continue
-      top += head(c, w.at(-1), k.n)
+      top += k.hide && t > k.hide[0] && t < k.hide[1] ? hiding(c, w.at(-1)) : head(c, w.at(-1), k.n)
       if (k.caught != null && t >= k.caught) top += caughtRing(c, w.at(-1))
     }
-    for (const route of finale.cops) body += cop(c, route, t, { trailOp: 0.8, reach: 20 })
   }
+  // A 'full' finale's officers are the searchers themselves, about since the verse, going on into the chase.
+  if (t >= (finale.full ? 170 : F0 - 0.2)) for (const route of finale.cops) body += cop(c, route, t, { trailOp: 0.8, reach: finale.full ? 16 : 20 })
 
   // Key and title, per stretch.
   let s
@@ -601,9 +668,9 @@ function filmWith(finale) {
   return film
 }
 /** The film on the page. */
-export const conmanFilm = filmWith(FINALES.a)
+export const conmanFilm = filmWith(FINALES.c)
 /** The end chaos three ways, for the page's motion tests: the last five seconds of the heist through to the end. */
-export const FINALE_TESTS = Object.entries(FINALES).map(([key, f]) => ({ key, label: f.label, film: filmWith(f) }))
+export const FINALE_TESTS = Object.entries(FINALES).filter(([key]) => key !== 'c').map(([key, f]) => ({ key, label: f.label, film: filmWith(f) }))
 export const FINALE_WINDOW = { from: 183, to: 236.1 }
 
 /** For the page: the moments to jump to. */

@@ -11,5 +11,6 @@
 export { conmanFilm as conmanHeistsFrame, FILM_BEATS as CONMAN_HEISTS_BEATS, FINALE_TESTS as CONMAN_FINALE_TESTS, FINALE_WINDOW as CONMAN_FINALE_WINDOW } from './conman-heists/film.mjs'
 /* The finale tests by name, for frames.mjs; gone once one is picked. */
 import { FINALE_TESTS } from './conman-heists/film.mjs'
-export const conmanFinaleB = FINALE_TESTS[1].film
-export const conmanFinaleC = FINALE_TESTS[2].film
+export const conmanFinaleD = FINALE_TESTS[0].film
+export const conmanFinaleE = FINALE_TESTS[1].film
+export const conmanFinaleF = FINALE_TESTS[2].film

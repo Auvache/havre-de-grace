@@ -116,32 +116,44 @@ The user's notes after the story round, and what was done:
   on the museum from 139.2 until the getaway. The same hatching crawls
   anywhere a plan is pushed slowly; the other jobs' pushes have not been
   complained of.
-- **The finale, three ways.** On the page under the film as motion tests
-  (`VisualizerMotionTests`, 183–236.1, one clock), each the whole film with a
-  different end chaos (`FINALES` in film.mjs; `filmWith(finale)`):
-  - **A · Down the anchor** — the one on the film: each down one stroke of
-    the anchor and on past its end; the engineer caught at the east fluke,
-    the stagehand at the west ball.
-  - **B · Through the grid** — zigzags through streets and blocks (a step
-    through a building is drawn thin and dotted, the `jump` flag on a
-    `timed` point): the conman east through downtown and out to the far east
-    bank's diagonals, the auditor west over the Main Street bridge and up the
-    far west side, the driver north round the hill and off north-east, the
-    stagehand north-west round the garage and back down the west arm into
-    the officer at the Crescent bridge (caught 222), the engineer east and
-    back along the arm into his (caught 221). Each officer runs the same
-    path a growing lag behind.
-  - **C · Crossing paths** — faster, and they double back: the conman meets
-    the police car head-on on High Street and turns into the park, round
-    downtown, east over the bridge and back west round the hill; the auditor
-    turns back from the officer standing at the Crescent bridge, runs back
-    through the hall itself and out of the front, east along the river and
-    up the east arm to the studio and away north-east; the engineer rounds
-    downtown and runs straight back into the stage door (caught 218.4); the
-    stagehand goes far west, doubles back and is caught at the bridge
-    (235.4) by the officer still standing there.
-  The user picks one; then it becomes the film, the other two go, and the
-  `conman-finale-b/c` entries in frames.mjs and the barrel's named exports
+- **The finale.** The user picked **C · Crossing paths** from the first three
+  (A down the anchor, B through the grid, C doubling back; A and B are gone),
+  so C is on the film, with two notes: the three officers seemed to appear
+  from nowhere in the hall at 188 (the searchers' heads were hidden a few
+  frames before the chase's officers began; now they hand over without a
+  gap), and the five all left at once. Three more alternatives are on the
+  page as motion tests (183–236.1) on the user's criteria: the officers are
+  already about and give chase as they see them (the three searchers go
+  straight on into the chase; two police cars are about from 178, one down
+  High Street trying doors and parked 50 m short of the stage door, one
+  along the Crescent from the east, up to the getaway car); the five leave
+  one by one at different speeds; they weave in and out between buildings
+  (a step through a block is drawn thin and dotted). Shared by all three:
+  the driver sees the police car behind his and goes at 187.0, east along
+  the Crescent, the fluke road, through the studio's yard, over the bridge
+  and round the east bank with the police car a length behind the whole
+  way; the stagehand is out of the stage door at 188.8, through the block
+  west of it into the trees, and found there at 195.4; the auditor goes out
+  through the green room at 189.0, the engineer up the fly tower and over
+  the dressing-room roof at 189.2; the conman holds the stage until the
+  officer from the foyer is at its edge and bolts out of the stage door at
+  190.6.
+  - **D · One at a time** — the conman east along the lane, through the
+    blocks and the park, north over the High Street bridge, round the ring
+    and away east over the river; the auditor west and clean away up the
+    far west side; the engineer slowly east through the blocks, up the arm
+    and north round the hill. One caught (the stagehand).
+  - **E · Through the blocks** — nobody keeps to a street for long: the
+    conman through block after block north-east, round the hill, back west
+    along Main Street and down to the garage; the auditor through the blocks
+    west; the engineer into a dead-end yard behind the hall and caught there
+    (197.4). Two caught.
+  - **F · Double back** — as C: the conman meets the police car head-on on
+    High Street (193.2) and turns through the park; the auditor goes west,
+    doubles back east along Main Street and round the ring; the engineer
+    weaves slowly north and circles the ring to the end. One caught.
+  When one is picked it becomes the film, the others go, and the
+  `conman-finale-d/e/f` entries in frames.mjs and the barrel's named exports
   go with them.
 
 ## Pinned (2026-11-05): where to pick up
