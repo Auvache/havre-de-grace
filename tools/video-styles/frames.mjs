@@ -64,6 +64,8 @@ const FILMS = {
   maze: ['maze.mjs', 'mazeFrame'],
   'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
   'conman-heists': ['conman-heists.mjs', 'conmanHeistsFrame'],
+  'conman-finale-b': ['conman-heists.mjs', 'conmanFinaleB'],
+  'conman-finale-c': ['conman-heists.mjs', 'conmanFinaleC'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
   'marquee-measured': ['marquee.mjs', 'MARQUEE_TESTS.measured.frame'],
   'marquee-sections': ['marquee.mjs', 'MARQUEE_TESTS.sections.frame'],

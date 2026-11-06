@@ -92,6 +92,58 @@ Decided by the user, after watching the timing round:
   Main Street bridge, the driver east over the other. The red still completes
   the anchor by 223.5 and the career's title block comes up as before.
 
+## Third round (2026-11-06, evening) — and the finale tests, pending
+
+The user's notes after the story round, and what was done:
+
+- **Heist 1, the arrival.** He comes up from straight below the turned frame
+  (a red line from off the sheet, 19.2–21.6) and stands where he stood
+  before, outside the shop, until the first line.
+- **Heist 1, the choreography.** The owner goes to the stock room for a box
+  first, on "Bottled lightning" (35.0); the conman waits at the counter until
+  the owner is at the stock-room door and about to turn in (36.6), then goes
+  round the counter at a run, grabs the masters (38.2–39.0) and is out of the
+  staff door by 41.4, waiting there for the car (42.3). The route is pinned
+  in shop.mjs; the owner's in motion.mjs.
+- **Chase 2.** The run to the garage is fast (6.8 s round the Crescent, in
+  by 129.4) so the stay reads: the engineer pulls the shutter down
+  (130.3–131.0, `SHUTTER` 130.6), the three wait among the cars while the
+  officer walks round (131.6–133.1) and gives up, and they go out of the
+  back door at 134.0, up to the museum by 139.2 as before. Each has his own
+  path inside the garage.
+- **The museum's walls.** The slow push through the job made the hatched
+  poché crawl ("the north wall is shaking"). The camera is held dead still
+  on the museum from 139.2 until the getaway. The same hatching crawls
+  anywhere a plan is pushed slowly; the other jobs' pushes have not been
+  complained of.
+- **The finale, three ways.** On the page under the film as motion tests
+  (`VisualizerMotionTests`, 183–236.1, one clock), each the whole film with a
+  different end chaos (`FINALES` in film.mjs; `filmWith(finale)`):
+  - **A · Down the anchor** — the one on the film: each down one stroke of
+    the anchor and on past its end; the engineer caught at the east fluke,
+    the stagehand at the west ball.
+  - **B · Through the grid** — zigzags through streets and blocks (a step
+    through a building is drawn thin and dotted, the `jump` flag on a
+    `timed` point): the conman east through downtown and out to the far east
+    bank's diagonals, the auditor west over the Main Street bridge and up the
+    far west side, the driver north round the hill and off north-east, the
+    stagehand north-west round the garage and back down the west arm into
+    the officer at the Crescent bridge (caught 222), the engineer east and
+    back along the arm into his (caught 221). Each officer runs the same
+    path a growing lag behind.
+  - **C · Crossing paths** — faster, and they double back: the conman meets
+    the police car head-on on High Street and turns into the park, round
+    downtown, east over the bridge and back west round the hill; the auditor
+    turns back from the officer standing at the Crescent bridge, runs back
+    through the hall itself and out of the front, east along the river and
+    up the east arm to the studio and away north-east; the engineer rounds
+    downtown and runs straight back into the stage door (caught 218.4); the
+    stagehand goes far west, doubles back and is caught at the bridge
+    (235.4) by the officer still standing there.
+  The user picks one; then it becomes the film, the other two go, and the
+  `conman-finale-b/c` entries in frames.mjs and the barrel's named exports
+  go with them.
+
 ## Pinned (2026-11-05): where to pick up
 
 The user put v2 on the page as the main film and paused the work. What it

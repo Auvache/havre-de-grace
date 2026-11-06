@@ -83,8 +83,12 @@ const toPolar = ([R, d]) => {
 }
 const OWNER_GO = [COUNTER, ...STOCK].map(toPolar)
 const OWNER_BACK = OWNER_GO.slice().reverse()
-const goT = timing(OWNER_GO.map((p, i) => (i === OWNER_GO.length - 1 ? [...p, 0] : p)), TALK_END + 0.4, TALK_END + 3.6)
+/** He goes to the stock room for a box on "Bottled lightning" (35.0), is at its door at 36.6 — the conman's cue — and in it by 37.6; back once the conman has gone. */
+const OWNER_GOES = 35.0
+const OWNER_AT = [null, 36.6, 37.2, 37.6]
+const goT = timing(OWNER_GO.map((p, i) => [p[0], p[1], 0, null, null, OWNER_AT[i]]), OWNER_GOES, 37.6)
 const backT = timing(OWNER_BACK, SAFE_OUT + 2.4, SAFE_OUT + 5.8)
+void TALK_END
 const ownerAt = (t) => (t < SAFE_OUT + 2.4 ? goT.at(t) : backT.at(t))
 
 /*
@@ -202,12 +206,23 @@ export function plan(job, c, t, uid) {
 }
 
 const EMPTY = { segs: [], doors: [], glass: [], panels: [] }
-/** When the conman is first seen, standing on the circle outside the shop, before he goes in on the first line. */
+/** He comes up from straight below the turned frame (the user, 2026-11-06), from 19.2, and stands outside the shop from 21.6 until he goes in on the first line. */
 export const WAIT1 = 21.6
+const APPROACH1 = 19.2
+const approach1 = () => {
+  const w0 = W(CONMAN.pts[0])
+  return [w0, [w0[0] + Math.sin(rad(LEVEL)) * 34, w0[1] + Math.cos(rad(LEVEL)) * 34]]
+}
+const redHead = (c, p, n) => `<circle cx="${r(c.X(p[0]))}" cy="${r(c.Y(p[1]))}" r="10.5" fill="${RED}"/><text x="${r(c.X(p[0]))}" y="${r(c.Y(p[1]) + 4.6)}" font-size="13" font-weight="700" fill="${PAPER}" text-anchor="middle">${n}</text>`
 /** Only the crew (route, notes, head), from the plan's own renderer. */
 export function crewSvg(c, t, uid) {
-  if (t < WAIT1) return ''
-  const svg = plan({ ...JOB, crew: JOB.crew.map((cr) => ({ ...cr, wait: WAIT1 })), foot: [], tone: [], walls: EMPTY, items: [], rooms: [], marks: [], storeys: [], dims: [], owner: null, owners: [], sheets: [] }, c, Math.min(t, CONMAN.to + 0.05), `${uid}-c`)
+  if (t < APPROACH1) return ''
+  const [w0, from] = approach1()
+  const u = easeOut(ramp(t, APPROACH1, WAIT1))
+  const p = [lerp(from[0], w0[0], u), lerp(from[1], w0[1], u)]
+  const line = t < 46 ? `<path d="M${r(c.X(from[0]))} ${r(c.Y(from[1]))}L${r(c.X(p[0]))} ${r(c.Y(p[1]))}" stroke="${RED}" stroke-width="3.4" stroke-linecap="round" fill="none"/>` : ''
+  if (t < WAIT1) return line + redHead(c, p, 1)
+  const svg = line + plan({ ...JOB, crew: JOB.crew.map((cr) => ({ ...cr, wait: WAIT1 })), foot: [], tone: [], walls: EMPTY, items: [], rooms: [], marks: [], storeys: [], dims: [], owner: null, owners: [], sheets: [] }, c, Math.min(t, CONMAN.to + 0.05), `${uid}-c`)
   // Once he is in the car, his mark goes with the car.
   return t < GET_FROM ? svg : svg.replace(new RegExp(`<circle[^>]*r="10.5" fill="${RED}"/><text[^>]*>1</text>`, 'g'), '')
 }

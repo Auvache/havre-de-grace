@@ -170,10 +170,13 @@ export const SHOPS = [
       storeys: [[...P(47, -63.2), '1']],
       dims: [],
       owner: { pts: [P(44, -45), P(44, -57.2), P(46.4, -57.2)], period: 12 },
+      // Pinned to the record (the user, 2026-11-06): he browses, talks shop until the owner is at the stock-room door
+      // (36.6, motion.mjs), then goes for the safe at a run, grabs the masters and is out of the staff door by 41.4.
       crew: [{ n: 1, role: 'The conman', style: 'solid', from: FROM, to: TO, pts: [
-        P(33.5, -45), P(38, -45), P(39, -52.5), P(39.2, -56.5), [...P(41.2, -56.5), 3, 'browses'], P(39.2, -56.5), P(39.4, -49), [...P(42.4, -46.5), 4, 'talks shop'], P(42.4, -38.4),
-        P(44, -38.4), P(44, -45.2), P(45.8, -45.2), [...P(47.5, -45.4), 3, 'opens the safe'], P(45.8, -45.2), P(44, -45.2),
-        P(44, -32.2), P(46.2, -32.2), P(46.2, -29.4), P(46.2, -24), [P(46.2, -24)[0], -8],
+        P(33.5, -45), P(38, -45), P(39, -52.5), P(39.2, -56.5), [...P(41.2, -56.5), 3, 'browses', null, 26.4], P(39.2, -56.5), P(39.4, -49), [...P(42.4, -46.5), 0, 'talks shop', null, 30.6],
+        [...P(42.4, -46.5), 0, null, null, 36.6], [...P(42.4, -38.4), 0, null, null, 37.2],
+        P(44, -38.4), P(44, -45.2), P(45.8, -45.2), [...P(47.5, -45.4), 0.8, 'opens the safe', null, 38.2], P(45.8, -45.2), P(44, -45.2),
+        P(44, -32.2), P(46.2, -32.2), P(46.2, -29.4), P(46.2, -24), [P(46.2, -24)[0], -8, 0, null, null, 41.4],
       ] }],
     }
   })(),

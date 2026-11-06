@@ -8,4 +8,8 @@
  *
  * Replaces conman-city.mjs (v1) on /visualizers/conman, which is kept for now.
  */
-export { conmanFilm as conmanHeistsFrame, FILM_BEATS as CONMAN_HEISTS_BEATS } from './conman-heists/film.mjs'
+export { conmanFilm as conmanHeistsFrame, FILM_BEATS as CONMAN_HEISTS_BEATS, FINALE_TESTS as CONMAN_FINALE_TESTS, FINALE_WINDOW as CONMAN_FINALE_WINDOW } from './conman-heists/film.mjs'
+/* The finale tests by name, for frames.mjs; gone once one is picked. */
+import { FINALE_TESTS } from './conman-heists/film.mjs'
+export const conmanFinaleB = FINALE_TESTS[1].film
+export const conmanFinaleC = FINALE_TESTS[2].film
