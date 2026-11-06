@@ -20,7 +20,7 @@
 import { RED, PAPER } from '../../album.mjs'
 import { TOWNS } from './styles.mjs'
 import {
-  JOB, PLAN, STREET, LEVEL, SHEET, GET_FROM, GET_TO, getawayAt, followAt, zoom, camOf, turnedCam, drawn, plan, ownerSvg, crewSvg, sheet, ease, ramp, lerp, r,
+  JOB, PLAN, STREET, LEVEL, SHEET, GET_FROM, GET_TO, getawayAt, followAt, zoom, camOf, turnedCam, upright, drawn, plan, ownerSvg, crewSvg, sheet, ease, ramp, lerp, r,
 } from './motion.mjs'
 import { O2, SHEET2, ARRIVE, EARTH_SHOOK, DX, CONMAN2, KEY2, overlay, twoFloors } from './job2.mjs'
 
@@ -97,7 +97,7 @@ function frame({ t, score, uid, v, rot = 0, job2, ink }) {
   const c = rot ? turnedCam(v) : camOf(v)
   const jobNow = job2(t)
   const second = ink > 0 ? plan(inked(jobNow, ink), c, t, `${uid}-q`) : ''
-  const inner = `${plan(drawn(1), c, t, `${uid}-p`)}${ownerSvg(c, t)}${crewSvg(c, t, uid)}${travel(c, t)}${second}`
+  const inner = `${plan(drawn(1), c, t, `${uid}-p`)}${ownerSvg(c, t)}${upright(crewSvg(c, t, uid) + travel(c, t) + second, rot)}`
   const body = rot
     ? `<g transform="rotate(${r(rot, 2)} ${800} ${422})"><rect x="-400" y="-800" width="2400" height="2400" fill="${PAPER}"/><g opacity="0.55">${TOWNS.atlas(c, `${uid}-t`)}</g>${inner}</g>`
     : inner

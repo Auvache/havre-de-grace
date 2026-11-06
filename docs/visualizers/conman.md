@@ -40,13 +40,65 @@ start of his route from then until `from`. `inked()` (sequence.mjs) now draws
 arc walls too, so the drum and the fan are drawn on like the others. Heist 4's
 times are written as before and shifted by `EARLY4` in film.mjs.
 
+## Story round (2026-11-06, later the same day)
+
+Decided by the user, after watching the timing round:
+
+- **Numbers upright.** In the two turned stretches (heist 1's level shop,
+  the bridge) the crew numbers and letter marks are turned back to read
+  upright (`upright()` in motion.mjs). Room labels still follow the sheet.
+- **Heist 2 makes sense now.** The partner's office is over the strongroom,
+  so he is the one who would hear the drilling. The auditor arrives on the
+  first line as before, goes straight up to him, and walks him out of the
+  front door and off east along Main Street (to lunch) at 62–66, before the
+  digging starts at 59.9 they are already on their way. They are off the
+  sheet until the conman is out, and the auditor brings him back to the door
+  at 77. The partner is an owner with a `route` (a timed path), not a pacing
+  loop.
+- **Heist 3: never seen.** You (Y) have a dotted sight fan (9 m, 30° either
+  side), ahead of you as you walk and where you look while you stand (the
+  mic, the piano, the desk). The conman trails you the whole way and is never
+  in it; the auditor takes the tapes by the back lane while you are in the
+  studio; the engineer rolls tape in the control room while you play and
+  waits in the offices as you pass, then leaves by the front. Every point is
+  pinned to the record (`schedule` in atlas-plan.mjs: a point may carry `at`
+  and `look`), and a scratch check sampled every 50 ms confirms no crew head
+  is ever inside the fan (nearest 10 m). The pair wait west of the entrance,
+  out of your path, not at the door.
+- **Chase 2 hides in a garage**, not the pressing plant: the car goes in
+  under the shutter, the shutter comes down behind it (131.9), the officer
+  walks round the building and they leave by the back door while he is round
+  the west side. Same spot, route and timing as before.
+- **Heist 5 is the swap.** The performer (S, a ringed S in ink; the police
+  keep their P) plays the first song. The stagehand, on the lighting board,
+  kills the lights between songs (176.0); S goes out of the stage door for
+  air; the auditor, up through the trap in the dark ("split the ground"),
+  bolts the door behind him; the engineer, down the fly tower ("pierce the
+  sky"), has the curtain down for the swap and up for the last line; the
+  conman, who bought a ticket and watched from the house, is centre stage
+  with the lights on him on "all the eyes" (182.3). S, locked out, walks
+  round to the front, meets an officer at the stage door on the way, and at
+  188.0 the officer sees the conman from the foyer.
+- **The police search through the verse**: one down High Street trying
+  doors (he meets S), one along the Crescent from each arm looking in at the
+  yard doors (short 14 m fans at that scale).
+- **The final chase never ends.** The five scatter down the anchor's strokes
+  with an officer after each (five officers: the three searchers and two
+  cars), the camera pulls out fast at first (`easeOut`) so nobody is ever
+  out of frame, and the chase is still on at the end card. The engineer is
+  caught at the tip of the east fluke (220.4) and the stagehand at the west
+  ball after going round it (221.4), each ringed in ink; the conman goes
+  round the ring and keeps going round, the auditor leaves west over the
+  Main Street bridge, the driver east over the other. The red still completes
+  the anchor by 223.5 and the career's title block comes up as before.
+
 ## Pinned (2026-11-05): where to pick up
 
 The user put v2 on the page as the main film and paused the work. What it
 does, section by section, is under "The whole film, end to end" below.
 
 Open when it resumes:
-- Whether they escape at the end (for now they vanish into the anchor).
+- (Settled 2026-11-06: the chase never ends; two are caught, never the conman.)
 - Every set of alternatives comes as three motion tests on the page
   (`VisualizerMotionTests`), never screenshots or mp4s.
 - The tools that drew the review sheets and stills are in
@@ -159,10 +211,11 @@ the partner's office.
 - He digs at the party wall, and the wall gives on "Until the Earth shook"
   (67.3).
 - He swaps the ledgers and is out and away east toward the studio by 76.
-- The auditor comes along Main Street once the digging is under way (61) and
-  sits down with the partner at 66.3, a second before the wall gives, reading
-  the books aloud over the noise until the conman is out (2026-11-06; before
-  that he was there from the first line and nothing moved during the dig).
+- The auditor arrives on the first line, goes up to the partner (whose
+  office is over the strongroom) and takes him out to lunch along Main Street
+  before the digging starts; both are back at 77 (the story round,
+  2026-11-06). Earlier that day he sat upstairs through the dig, which made
+  no sense: nothing kept the partner away from the drilling.
 - The partner and his staff are drawn in ink: the guard paces the banking
   hall and the clerks sit at their desks.
 
@@ -229,12 +282,12 @@ user followed all the suggestions for five heists:
 | 12–42.3 | Verse 1 | Heist 1, the record shop, D. |
 | 42.3–77 | Verse 2 | The drive over the bridge and heist 2, B. |
 | 77–99.95 | Chorus 1 | Chase 1, A. They slip out of the park behind the officer at 90.8 and stand at the studio's door from 98.4. |
-| 99.95–122 | Verse 3 | Heist 3, the studio (A, as drawn). The conman and the auditor are the shadow and the taker, the engineer joins, "you" in ink. |
-| 122–140.2 | Chorus 2 | Chase 2, filmed from above like chase 1. Out of the studio's back lane, round the whole Crescent, up the west fluke road into the pressing plant to hide among the presses. The camera dips to it while the officer circles the building, his sight sweeping; they slip out while he is round the far side. Along Main Street and up High Street to the museum, standing at its door from 139.2 while the drum is drawn. |
+| 99.95–122 | Verse 3 | Heist 3, the studio (A, as drawn). You walk in, sing, play and listen back, your sight a dotted fan; the conman trails you and is never in it; the auditor takes the tapes by the back lane; the engineer rolls tape and hides in the offices as you pass. |
+| 122–140.2 | Chorus 2 | Chase 2, filmed from above like chase 1. Out of the studio's back lane, round the whole Crescent, up the west fluke road into a garage, the shutter down behind them. The camera dips to it while the officer circles the building, his sight sweeping; they slip out of the back door while he is round the far side. Along Main Street and up High Street to the museum, standing at its door from 139.2 while the drum is drawn. |
 | 140.2–158.4 | The break | Heist 4, the drum. The police almost catch them: an officer up High Street and in at the front, through the rotunda to the bay a breath too late; a car round the Circus reaching the bay as the getaway pulls away. |
 | 158.4–164.5 | | The getaway down High Street to the crown, the police car lost at Main Street; the hall drawn as the camera lands. |
-| 165.45–188 | Last verse | Heist 5, the fan hall, five crew, in on the verse. |
-| 188–232.1 | Last chorus | The final chase. The five scatter, each down one stroke of the anchor (the shank and the ring; each arm and its fluke; the stock and each ball) with three officers falling behind. The camera pulls out to the whole town and their red completes the anchor; they fade into it, so they escape, just, and the career's title block comes up. |
+| 165.45–188 | Last verse | Heist 5, the fan hall: the conman takes the performer's place on stage between songs (lights out, S locked out of the stage door, curtain down and up); the police search the Crescent and High Street and an officer sees him from the foyer at 188. |
+| 188–232.1 | Last chorus | The final chase. The five scatter, each down one stroke of the anchor (the shank and the ring; each arm and its fluke; the stock and each ball) with an officer after each. The camera pulls out to the whole town and their red completes the anchor; two are caught (the engineer at the east fluke, the stagehand at the west ball), the rest keep running, and the chase is still on at the end card. The career's title block comes up at 223.5. |
 | 232.1 | | The end card on the last hit. |
 
 Earlier jobs stay as finished sheets with their routes. Chase 1's zigzag

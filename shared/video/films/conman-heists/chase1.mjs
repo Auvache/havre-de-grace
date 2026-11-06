@@ -58,10 +58,11 @@ const RUN = [
   [560, 318, SPOT], [560, 478], [480, 478], [480, 718], [400, 718], [400, 640], [392, 642], [362, 652, HIDE[0]],
   [362, 652, HIDE[1]], [392, 642], [400, 640], [640, 638], [640, 558], [674, 536], [706, 466], [731, 404, AT_DOOR - 0.6],
 ]
-/** Where each of them stands at the door: the studio crew's first points (film.mjs). */
+/** Where each of them waits, by the lobby window west of the door and out of the artist's way: the studio crew's first points (film.mjs). */
 const O3 = STUDIOS[0].o
-const DOOR1 = [O3[0] + 7, O3[1] + 35]
-const DOOR2 = [O3[0] + 7.6, O3[1] + 35.6]
+export const WAIT3 = [[-4, 34.4], [-3.4, 35.6]]
+const DOOR1 = [O3[0] + WAIT3[0][0], O3[1] + WAIT3[0][1]]
+const DOOR2 = [O3[0] + WAIT3[1][0], O3[1] + WAIT3[1][1]]
 export const ROUTE1 = timed([[...C1, 76.7], [C1[0] + 1.4, 318, 77.6], ...RUN, [...DOOR1, AT_DOOR]])
 export const ROUTE2 = timed([[...C2, 77], [562, 320, 78.2], ...RUN.map(([x, y, t]) => [x + 2.2, y + 2.2, t == null ? undefined : t + 0.45]), [...DOOR2, AT_DOOR + 0.45]])
 /** The officer: from the east circle, round it and after them, on past the park to the bridge, looking, then away over it. */

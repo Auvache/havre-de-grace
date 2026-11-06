@@ -19,7 +19,7 @@
  */
 import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric } from '../../album.mjs'
 import { TOWNS, CAMS, cam, titleBlock, north } from './styles.mjs'
-import { atlasPlan, legend } from './atlas-plan.mjs'
+import { atlasPlan, legend, schedule } from './atlas-plan.mjs'
 import { SHOPS } from './shop.mjs'
 import { STOCK_Y, BALLS, BALL_R } from './city.mjs'
 
@@ -51,17 +51,9 @@ export const camOf = (v) => cam(v.cx, v.cy, v.s)
 
 /* ── Where people are ────────────────────────────────────────────────── */
 
-/** The plan's walker, returning a position (job metres) and the arrival/leave times. */
+/** The plan's walker, returning a position (job metres) and the arrival/leave times (atlas-plan's `schedule`, so pins work). */
 export function timing(pts, from, to) {
-  const holds = pts.reduce((s, p) => s + (p[2] || 0), 0)
-  const lens = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]))
-  const pace = Math.max(0.01, to - from - holds) / (lens.reduce((a, b) => a + b, 0) || 1)
-  const arrive = [from]
-  const leave = [from + (pts[0][2] || 0)]
-  for (let i = 1; i < pts.length; i++) {
-    arrive.push(leave[i - 1] + lens[i - 1] * pace)
-    leave.push(arrive[i] + (pts[i][2] || 0))
-  }
+  const { arrive, leave } = schedule(pts, from, to)
   const at = (t) => {
     if (t <= from) return pts[0]
     const i = arrive.findLastIndex((a) => a <= t)
@@ -197,7 +189,8 @@ export function ownerSvg(c, t, opacity = 1) {
 const bare = (job) => ({
   ...job, rooms: [], marks: [], storeys: [],
   items: job.items.map((it) => ({ ...it, label: '' })),
-  crew: job.crew.map((cr) => ({ ...cr, pts: cr.pts.map((p) => [p[0], p[1], p[2], undefined, p[4]]) })),
+  crew: job.crew.map((cr) => ({ ...cr, pts: cr.pts.map((p) => [p[0], p[1], p[2], undefined, p[4], p[5], p[6]]) })),
+  figures: (job.figures ?? []).map((f) => ({ ...f, pts: f.pts.map((p) => [p[0], p[1], p[2], undefined, p[4], p[5], p[6]]) })),
 })
 /** Words fade out as the plan gets small on screen (under ~11 px a metre). */
 const wordsAt = (c) => ease(ramp(c.s, 8, 13))
@@ -337,6 +330,14 @@ export const LEVEL = -45
 const CX = PX + PW / 2
 const CY = PY + PH / 2
 /** A camera whose culling covers the whole plate however it is turned. */
+/** In a body turned by `rot`, the letters in the heads (crew numbers, the P and S marks) are turned back so they read upright. */
+export function upright(svg, rot) {
+  if (!rot) return svg
+  return svg.replace(/<text x="([\d.-]+)" y="([\d.-]+)" font-size="(1[123](?:\.5)?)" font-weight="700"([^>]*text-anchor="middle"[^>]*)>/g, (m, x, y, fs, rest) => {
+    const cy = Number(y) - (fs === '13' ? 4.6 : fs === '12' ? 4.4 : 4.2)
+    return `<text x="${x}" y="${y}" font-size="${fs}" font-weight="700"${rest} transform="rotate(${r(-rot, 2)} ${x} ${r(cy)})">`
+  })
+}
 export function turnedCam(v) {
   const c = camOf(v)
   const half = (Math.hypot(PW, PH) / 2 + 60) / v.s
@@ -374,7 +375,7 @@ export function motionOrbit({ time, score, uid = 'film' }) {
   const p = ease(ramp(t, ...DRAW1))
   const planned = p > 0 ? plan(drawn(p), c, t, `${uid}-p`) : ''
   const owner = ownerSvg(c, t, ramp(t, 21.0, 21.6))
-  const body = `<g transform="rotate(${r(rot, 2)} ${CX} ${CY})"><rect x="${CX - 1200}" y="${CY - 1200}" width="2400" height="2400" fill="${PAPER}"/><g opacity="0.55">${TOWNS.atlas(c, `${uid}-t`)}</g>${planned}${owner}${crewSvg(c, t, uid)}${getawaySvg(c, t)}</g>`
+  const body = `<g transform="rotate(${r(rot, 2)} ${CX} ${CY})"><rect x="${CX - 1200}" y="${CY - 1200}" width="2400" height="2400" fill="${PAPER}"/><g opacity="0.55">${TOWNS.atlas(c, `${uid}-t`)}</g>${planned}${owner}${upright(crewSvg(c, t, uid) + getawaySvg(c, t), rot)}</g>`
   return { svg: sheet({ c, uid, time: t, score, body, chrome: Math.min(ramp(t, 20.4, 21.4), 1 - ramp(t, 44.5, 46)), town: false }), label: 'Around the circle' }
 }
 

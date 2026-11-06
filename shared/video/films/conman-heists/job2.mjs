@@ -9,9 +9,9 @@
  * its cellar and digs at the party wall. The wall gives on "Until the Earth
  * shook" (67.3). He swaps the ledgers in the strongroom and is out of the
  * front door and away east down Main Street, to the studio, by 76. The
- * auditor arrives along Main Street once the digging has started (61) and
- * sits down with the partner a second before the wall gives, reading the
- * books aloud over the noise until the conman is out.
+ * auditor arrives on the first line and takes the partner, whose office is
+ * over the strongroom, out to lunch before the digging starts; they are back
+ * once the conman is out.
  *
  * Routes are timed paths: [x, y, t?, flag?] in job metres, t pinned where it
  * matters (unpinned points share the time between pins by distance), 'jump'
@@ -132,20 +132,31 @@ function conmanRoute(dx) {
   ]
 }
 /*
- * The auditor comes once the digging is under way (the user, 2026-11-06: the
- * drilling needed something happening over it): along Main Street from 61,
- * in at the front, through the banking hall and up to the partner's office,
- * where he sits down a second before the wall gives (67.35).
+ * The auditor's part (the user, 2026-11-06): the partner's office is over the
+ * strongroom, so he is the one who would hear the drilling. The auditor
+ * arrives on the first line, goes straight up to the partner, and walks him
+ * out of the front door and away east along Main Street (to lunch) before the
+ * digging starts at 59.9. They are off the sheet until the conman is out; the
+ * auditor brings him back to the door at 77 and goes on his way.
  */
+const THROUGH = [[26.2, 24], [26.2, 16], [19.9, 13.8], [19.9, 11], [21.3, 10], [21.3, 8.6]] // the banking hall to the partner's door
+const back = (pts) => pts.slice().reverse()
 const AUDITOR = timed([
-  [48, 36, 61.0], [26.2, 36], [26.2, 31, 63.2], [26.2, 24], [26.2, 16], [19.9, 13.8], [19.9, 11], [21.3, 10], [21.3, 8.6], [15.6, 5.8, 66.3],
-  [15.6, 5.8, 73.6], [21.3, 8.6], [21.3, 10], [19.9, 11], [19.9, 13.8], [26.6, 16], [26.6, 24], [26.6, 31, 76.6], [26.6, 36, 77],
+  [48, 36, START], [26.2, 36], [26.2, 31, 57.4], ...THROUGH, [15.6, 5.8, 59.0],
+  [15.6, 5.8, 59.4], ...back(THROUGH), [26.2, 31, 61.8], [26.2, 36, 62.4], [48, 36, 64.2], [76, 36, 66.4],
+  [76, 36, 73.8], [48, 36, 75.6], [26.6, 36, 77],
+])
+/** The partner: at his desk, then a step behind the auditor out and back, and back to his desk once the auditor has gone. */
+const DESK = [15, 2.4]
+const PARTNER = timed([
+  [...DESK, 59.3], [15.8, 5.4, 59.8], ...back(THROUGH).map(([x, y]) => [x + 0.7, y + 0.5]), [26.9, 31, 62.3], [26.9, 36.6, 62.9], [48, 36.6, 64.7], [76, 36.8, 66.9],
+  [76, 36.8, 73.4], [48, 36.6, 75.2], [26.9, 36.6, 76.8], [26.9, 31, 77.4], ...THROUGH.map(([x, y]) => [x + 0.7, y + 0.5]), [15.8, 5.4], [...DESK, 80.6],
 ])
 export const CONMAN2 = { overlay: timed(conmanRoute(0)), twoFloors: timed(conmanRoute(DX)) }
 
 const STILL = (p) => ({ pts: [p, [p[0] + 0.01, p[1]]], period: 1 })
 const OWNERS = [
-  STILL([15, 2.4]), // the partner, at his desk
+  { route: PARTNER }, // the partner, at his desk until the auditor takes him to lunch
   { pts: [[14.6, 15.4], [14.6, 21.6], [22, 21.6]], period: 9 }, // the guard
   STILL([27.8, 2.9]), STILL([33.8, 2.9]), STILL([27.8, 7.5]), STILL([33.8, 7.5]), // the clerks
 ]

@@ -27,21 +27,61 @@ const bulge = (a, b) => {
 }
 const quad = (a, c, b, u) => [0, 1].map((k) => (1 - u) ** 2 * a[k] + 2 * (1 - u) * u * c[k] + u * u * b[k])
 
-function walk(pts, from, to, time) {
-  const holds = pts.reduce((s, p) => s + (p[2] || 0), 0)
+/**
+ * When a route's points are reached and left. A point is [x, y, hold?, note?,
+ * flag?, at?, look?]: `at` pins its arrival to the record, and the points
+ * between pins share the time by distance (the first point is at `from`, the
+ * last reached at `to` less its hold, unless pinned). `look` is the direction
+ * (degrees, plan frame) a figure with a sight fan faces while it holds there.
+ */
+export function schedule(pts, from, to) {
+  const n = pts.length
+  const hold = (i) => pts[i][2] || 0
   const lens = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]))
-  const pace = Math.max(0.01, to - from - holds) / (lens.reduce((a, b) => a + b, 0) || 1)
-  const arrive = [from]
-  const leave = [from + (pts[0][2] || 0)]
-  for (let i = 1; i < pts.length; i++) {
-    arrive.push(leave[i - 1] + lens[i - 1] * pace)
-    leave.push(arrive[i] + (pts[i][2] || 0))
+  const arrive = pts.map((p, i) => (i === 0 ? from : p[5] ?? null))
+  if (arrive[n - 1] == null) arrive[n - 1] = to - hold(n - 1)
+  const leave = new Array(n)
+  let i = 0
+  while (i < n - 1) {
+    let j = i + 1
+    while (arrive[j] == null) j++
+    let L = 0
+    let H = 0
+    for (let k = i + 1; k <= j; k++) { L += lens[k - 1]; if (k < j) H += hold(k) }
+    leave[i] = arrive[i] + hold(i)
+    const span = Math.max(0.01, arrive[j] - leave[i] - H)
+    for (let k = i + 1; k < j; k++) {
+      arrive[k] = leave[k - 1] + (L ? (lens[k - 1] / L) * span : span / (j - i))
+      leave[k] = arrive[k] + hold(k)
+    }
+    i = j
   }
+  leave[n - 1] = arrive[n - 1] + hold(n - 1)
+  return { arrive, leave }
+}
+
+function walk(pts, from, to, time) {
+  const { arrive, leave } = schedule(pts, from, to)
   if (time < from) return null
   const i = arrive.findLastIndex((a) => a <= time)
   const moving = !(time < leave[i] || i === pts.length - 1)
   const u = moving ? clamp01((time - leave[i]) / (arrive[i + 1] - leave[i])) : 1
   return { i, u: moving ? u : null, notes: pts.slice(0, i + 1).filter((p) => p[3]) }
+}
+
+/** The direction (degrees, plan frame) a figure faces: along its step, or its hold's `look`, or the way it came. */
+export function figureLook(pts, w) {
+  const dirOf = (a, b) => (Math.hypot(b[0] - a[0], b[1] - a[1]) < 0.01 ? null : (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI)
+  if (w.u != null) return dirOf(pts[w.i], pts[w.i + 1])
+  if (pts[w.i][6] != null) return pts[w.i][6]
+  for (let k = w.i; k > 0; k--) { const d = dirOf(pts[k - 1], pts[k]); if (d != null) return d }
+  return null
+}
+/** A dotted fan of sight from screen point (x, y), facing `dir` degrees, `reach` px long, `spread` degrees either side. */
+export function sightFan(x, y, dir, reach, spread = 24) {
+  const q = (d) => [x + reach * Math.cos(rad(d)), y + reach * Math.sin(rad(d))]
+  const [q1, q2] = [q(dir - spread), q(dir + spread)]
+  return `<path d="M${r(x)} ${r(y)}L${r(q1[0])} ${r(q1[1])}A${r(reach)} ${r(reach)} 0 0 1 ${r(q2[0])} ${r(q2[1])}Z" fill="${INK}" fill-opacity="0.07" stroke="${INK}" stroke-width="0.9" stroke-dasharray="1 4" stroke-linecap="round"/>`
 }
 
 /* ── The plan ────────────────────────────────────────────────────────── */
@@ -243,8 +283,13 @@ export function atlasPlan(job, c, time, uid) {
     out += `<g transform="rotate(${r(rot > 90 ? rot - 180 : rot)} ${r(m[0])} ${r(m[1])})"><rect x="${r(m[0] - 30)}" y="${r(m[1] - 9)}" width="60" height="18" fill="${PAPER}"/>${txt(m[0], m[1] + 4.4, 12, label, { anchor: 'middle', spacing: 1 })}</g>`
   }
 
-  // The owners, guards, ushers: ink, dotted where they pace, a ring where they are.
+  // The owners, guards, ushers: ink, dotted where they pace, a ring where they are. One with a `route` (a timed path) is wherever it has got to.
   for (const g of job.owners ?? (job.owner ? [job.owner] : [])) {
+    if (g.route) {
+      const [gx, gy] = A(g.route.at(time))
+      out += `<circle cx="${r(gx)}" cy="${r(gy)}" r="7" fill="${PAPER}" stroke="${INK}" stroke-width="2"/><circle cx="${r(gx)}" cy="${r(gy)}" r="2.4" fill="${INK}"/>`
+      continue
+    }
     const loop = [...g.pts, ...g.pts.slice(0, -1).reverse()]
     const lens = loop.slice(1).map((p, i) => Math.hypot(p[0] - loop[i][0], p[1] - loop[i][1]))
     let d = ((time / g.period) % 1) * lens.reduce((a, b) => a + b, 0)
@@ -272,6 +317,11 @@ export function atlasPlan(job, c, time, uid) {
       d += `L${r(head[0])} ${r(head[1])}`
     }
     out += `<path d="${d}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" fill="none" opacity="0.75"/>`
+    // What he can see: a dotted fan ahead of him as he walks, or where he looks while he stands (the hold's `look`).
+    if (f.sight) {
+      const dir = figureLook(f.pts, w)
+      if (dir != null) out += sightFan(head[0], head[1], dir, (f.reach ?? 9) * s, f.spread ?? 30)
+    }
     for (const n of job.notes ? w.notes : []) {
       const [x, y] = A(n)
       top += `<path d="M${r(x + 6)} ${r(y - 5)}L${r(x + 14)} ${r(y - 11)}" stroke="${INK}" stroke-width="0.9"/>${txt(x + 16, y - 14, fs * 1.08, n[3], { italic: true, halo: PAPER })}`
