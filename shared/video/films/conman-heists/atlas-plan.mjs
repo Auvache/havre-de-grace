@@ -279,10 +279,16 @@ export function atlasPlan(job, c, time, uid) {
     top += `<circle cx="${r(head[0])}" cy="${r(head[1])}" r="9" fill="${PAPER}" stroke="${INK}" stroke-width="2.2"/>${txt(head[0], head[1] + 4.2, 11.5, f.mark ?? '', { anchor: 'middle', weight: 700 })}`
   }
 
-  // The crew.
+  // The crew. One with a `wait` stands at the start of his route from then until he goes.
   for (const cr of job.crew) {
     const w = walk(cr.pts, cr.from, cr.to, time)
-    if (!w) continue
+    if (!w) {
+      if (cr.wait != null && time >= cr.wait) {
+        const [hx, hy] = A(cr.pts[0])
+        top += `<circle cx="${r(hx)}" cy="${r(hy)}" r="10.5" fill="${RED}"/>${txt(hx, hy + 4.6, 13, String(cr.n), { fill: PAPER, anchor: 'middle', weight: 700 })}`
+      }
+      continue
+    }
     const pts = cr.pts.map((p) => A(p))
     let d = `M${r(pts[0][0])} ${r(pts[0][1])}`
     let jumps = ''

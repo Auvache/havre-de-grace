@@ -209,10 +209,12 @@ export function plan(job, c, t, uid) {
 }
 
 const EMPTY = { segs: [], doors: [], glass: [], panels: [] }
+/** When the conman is first seen, standing on the circle outside the shop, before he goes in on the first line. */
+export const WAIT1 = 21.6
 /** Only the crew (route, notes, head), from the plan's own renderer. */
 export function crewSvg(c, t, uid) {
-  if (t < CONMAN.from) return ''
-  const svg = plan({ ...JOB, foot: [], tone: [], walls: EMPTY, items: [], rooms: [], marks: [], storeys: [], dims: [], owner: null, owners: [], sheets: [] }, c, Math.min(t, CONMAN.to + 0.05), `${uid}-c`)
+  if (t < WAIT1) return ''
+  const svg = plan({ ...JOB, crew: JOB.crew.map((cr) => ({ ...cr, wait: WAIT1 })), foot: [], tone: [], walls: EMPTY, items: [], rooms: [], marks: [], storeys: [], dims: [], owner: null, owners: [], sheets: [] }, c, Math.min(t, CONMAN.to + 0.05), `${uid}-c`)
   // Once he is in the car, his mark goes with the car.
   return t < GET_FROM ? svg : svg.replace(new RegExp(`<circle[^>]*r="10.5" fill="${RED}"/><text[^>]*>1</text>`, 'g'), '')
 }
@@ -342,18 +344,26 @@ export function turnedCam(v) {
   return c
 }
 
+/*
+ * Timing (the user, 2026-11-06): the camera is already moving when the black
+ * lifts (12), the plan is drawn once it has landed, and everything is whole,
+ * with the conman standing outside, a second and a half before the first line
+ * (23.28). He goes in as the singing starts.
+ */
+const ZOOM1 = [11, 17.2]
+const DRAW1 = [14.4, 20.2]
 export function motionOrbit({ time, score, uid = 'film' }) {
   const t = time
   const circle = { cx: BALLS[0][0] + 12, cy: BALLS[0][1] - 10, s: 6.5 }
   const shop = { ...PLAN, s: PLAN.s * 1.05 }
   let v
   let rot
-  if (t < 23.3) {
-    const u = ease(ramp(t, 16, 23.3))
+  if (t < ZOOM1[1]) {
+    const u = ease(ramp(t, ...ZOOM1))
     v = zoom(circle, shop, u)
     rot = lerp(80, LEVEL, u)
   } else if (t < 42.6) {
-    v = zoom(shop, { ...shop, s: shop.s * 1.06 }, ramp(t, 23.3, 42.6))
+    v = zoom(shop, { ...shop, s: shop.s * 1.06 }, ramp(t, ZOOM1[1], 42.6))
     rot = LEVEL
   } else {
     const u = ease(ramp(t, 42.6, 50.8))
@@ -361,11 +371,11 @@ export function motionOrbit({ time, score, uid = 'film' }) {
     rot = lerp(LEVEL, 0, u)
   }
   const c = turnedCam(v)
-  const p = ease(ramp(t, 18.5, 23.3))
+  const p = ease(ramp(t, ...DRAW1))
   const planned = p > 0 ? plan(drawn(p), c, t, `${uid}-p`) : ''
-  const owner = ownerSvg(c, t, ramp(t, 22.6, 23.4))
+  const owner = ownerSvg(c, t, ramp(t, 21.0, 21.6))
   const body = `<g transform="rotate(${r(rot, 2)} ${CX} ${CY})"><rect x="${CX - 1200}" y="${CY - 1200}" width="2400" height="2400" fill="${PAPER}"/><g opacity="0.55">${TOWNS.atlas(c, `${uid}-t`)}</g>${planned}${owner}${crewSvg(c, t, uid)}${getawaySvg(c, t)}</g>`
-  return { svg: sheet({ c, uid, time: t, score, body, chrome: Math.min(ramp(t, 21.6, 23.2), 1 - ramp(t, 44.5, 46)), town: false }), label: 'Around the circle' }
+  return { svg: sheet({ c, uid, time: t, score, body, chrome: Math.min(ramp(t, 20.4, 21.4), 1 - ramp(t, 44.5, 46)), town: false }), label: 'Around the circle' }
 }
 
 /* ── E · Cut to the lines ────────────────────────────────────────────── */

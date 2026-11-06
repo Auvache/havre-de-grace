@@ -64,7 +64,7 @@ export function inked(job, p) {
     if (left <= 0) break
     const u = Math.min(1, left / segLen(q))
     left -= segLen(q)
-    segs.push({ ...q, b: [lerp(q.a[0], q.b[0], u), lerp(q.a[1], q.b[1], u)] })
+    segs.push(q.arc ? { ...q, arc: { ...q.arc, d1: q.arc.d0 + (q.arc.d1 - q.arc.d0) * u } } : { ...q, b: [lerp(q.a[0], q.b[0], u), lerp(q.a[1], q.b[1], u)] })
   }
   const pg = ramp(p, 0.55, 0.65)
   const take = (list, u) => list.slice(0, Math.floor(u * list.length + 0.001))

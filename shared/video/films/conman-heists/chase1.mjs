@@ -38,8 +38,16 @@ import { VARIANTS as STUDIOS } from './heists/studio.mjs'
 
 export const CHASE_WINDOW = { from: 74, to: 102 }
 const SPOT = 78.4
-const HIDE = [87.2, 92.4]
-const HEIST3 = 100.0
+/*
+ * They slip out of the park as soon as the officer has run past them up High
+ * Street with his back turned (the user, 2026-11-06), take the direct street
+ * east, and are standing at the studio's door by 98.4, a second and a half
+ * before verse 3 (99.95), when heist 3 starts. The run is at the chase's own
+ * pace, never faster, and eases to a stop.
+ */
+const HIDE = [87.2, 90.8]
+export const AT_DOOR = 98.4
+export const HEIST3 = 99.95
 
 /* ── Routes (town metres, timed) ─────────────────────────────────────── */
 
@@ -48,10 +56,14 @@ const C2 = [O2[0] + 26.6, O2[1] + 36]
 /** The two of them: the same streets, the auditor a step behind and a metre to the side. */
 const RUN = [
   [560, 318, SPOT], [560, 478], [480, 478], [480, 718], [400, 718], [400, 640], [392, 642], [362, 652, HIDE[0]],
-  [362, 652, HIDE[1]], [384, 706], [400, 718], [560, 718], [560, 638], [640, 638], [640, 558], [674, 536], [706, 466], [731, 404], [729, 390, 99.6], [729, 387, HEIST3],
+  [362, 652, HIDE[1]], [392, 642], [400, 640], [640, 638], [640, 558], [674, 536], [706, 466], [731, 404, AT_DOOR - 0.6],
 ]
-export const ROUTE1 = timed([[...C1, 76.7], [C1[0] + 1.4, 318, 77.6], ...RUN])
-export const ROUTE2 = timed([[...C2, 77], [562, 320, 78.2], ...RUN.map(([x, y, t]) => [x + 2.2, y + 2.2, t == null ? undefined : t + 0.45])])
+/** Where each of them stands at the door: the studio crew's first points (film.mjs). */
+const O3 = STUDIOS[0].o
+const DOOR1 = [O3[0] + 7, O3[1] + 35]
+const DOOR2 = [O3[0] + 7.6, O3[1] + 35.6]
+export const ROUTE1 = timed([[...C1, 76.7], [C1[0] + 1.4, 318, 77.6], ...RUN, [...DOOR1, AT_DOOR]])
+export const ROUTE2 = timed([[...C2, 77], [562, 320, 78.2], ...RUN.map(([x, y, t]) => [x + 2.2, y + 2.2, t == null ? undefined : t + 0.45]), [...DOOR2, AT_DOOR + 0.45]])
 /** The officer: from the east circle, round it and after them, on past the park to the bridge, looking, then away over it. */
 export const COP = timed([
   [632, 288, 77.6], [632, 288, SPOT], [612, 296], [602, 318], [560, 318, 80.4], [560, 478], [480, 478], [480, 718], [400, 718], [400, 640, 89.6],
@@ -123,11 +135,11 @@ function frame({ t, score, uid, v, studioInk }) {
   const studio = studioInk > 0 ? plan(inked(STUDIO, studioInk), c, t, `${uid}-s`) : ''
   const body = `${plan(drawn(1), c, t, `${uid}-p`)}${ownerSvg(c, t)}${crewSvg(c, t, uid)}${travel(c, t)}${t < 77 ? two : stripHeads(two)}${studio}${chaseSvg(c, t)}`
   const house = 1 - ramp(t, 77, 78.2)
-  const chase = Math.min(ramp(t, 78, 79.2), 1 - ramp(t, 98.6, 99.6))
-  const next = ramp(t, 99.4, 100.4)
+  const chase = Math.min(ramp(t, 78, 79.2), 1 - ramp(t, 97.4, 98.4))
+  const next = ramp(t, 98.4, 99.4)
   let svg
   if (t < 78) svg = sheet({ c, uid, time: t, score, body, chrome: house, job: KEY2, titles: SHEET2 })
-  else if (t < 99.5) svg = sheet({ c, uid, time: t, score, body, chrome: 0, key: chase, job: KEY_CHASE })
+  else if (t < 98.4) svg = sheet({ c, uid, time: t, score, body, chrome: 0, key: chase, job: KEY_CHASE })
   else svg = sheet({ c, uid, time: t, score, body, chrome: next, key: next, job: { crew: KEY2.crew, owners: [] }, titles: STUDIO.sheet })
   return { svg, label: 'Police chase 1' }
 }
@@ -138,11 +150,12 @@ const ABOVE = { cx: 548, cy: 526, s: 1.5 }
 export function chaseAbove({ time, score, uid = 'film' }) {
   const t = time
   let v
+  // Down onto the studio as they come up the fluke road, landed and inked before they reach its door.
   if (t < 77) v = HOUSE
   else if (t < 80.6) v = zoom(HOUSE, ABOVE, ease(ramp(t, 77, 80.6)))
-  else if (t < 95.6) v = zoom(ABOVE, { ...ABOVE, s: ABOVE.s * 1.05 }, ramp(t, 80.6, 95.6))
-  else v = zoom({ ...ABOVE, s: ABOVE.s * 1.05 }, STUDIO_VIEW, ease(ramp(t, 95.6, 99.8)))
-  return frame({ t, score, uid, v, studioInk: ease(ramp(t, 96.4, 99.6)) })
+  else if (t < 94.6) v = zoom(ABOVE, { ...ABOVE, s: ABOVE.s * 1.05 }, ramp(t, 80.6, 94.6))
+  else v = zoom({ ...ABOVE, s: ABOVE.s * 1.05 }, STUDIO_VIEW, ease(ramp(t, 94.6, AT_DOOR)))
+  return frame({ t, score, uid, v, studioInk: ease(ramp(t, 95.0, AT_DOOR - 0.4)) })
 }
 
 /* ── B · On their heels ──────────────────────────────────────────────── */

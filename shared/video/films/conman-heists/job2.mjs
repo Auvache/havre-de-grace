@@ -9,8 +9,9 @@
  * its cellar and digs at the party wall. The wall gives on "Until the Earth
  * shook" (67.3). He swaps the ledgers in the strongroom and is out of the
  * front door and away east down Main Street, to the studio, by 76. The
- * auditor sits upstairs with the partner the whole time, reading the books
- * aloud over the noise.
+ * auditor arrives along Main Street once the digging has started (61) and
+ * sits down with the partner a second before the wall gives, reading the
+ * books aloud over the noise until the conman is out.
  *
  * Routes are timed paths: [x, y, t?, flag?] in job metres, t pinned where it
  * matters (unpinned points share the time between pins by distance), 'jump'
@@ -130,8 +131,14 @@ function conmanRoute(dx) {
     [6.8, 7.4], [3.7, 9.4], [3.7, 11.2], [5.3, 14], [5.3, 24], [5.3, 31, 76.2], [5.3, 36, 76.7],
   ]
 }
+/*
+ * The auditor comes once the digging is under way (the user, 2026-11-06: the
+ * drilling needed something happening over it): along Main Street from 61,
+ * in at the front, through the banking hall and up to the partner's office,
+ * where he sits down a second before the wall gives (67.35).
+ */
 const AUDITOR = timed([
-  [48, 36, START], [26.2, 36], [26.2, 31, 57.4], [26.2, 24], [26.2, 16], [19.9, 13.8], [19.9, 11], [21.3, 10], [21.3, 8.6], [15.6, 5.8, 60.4],
+  [48, 36, 61.0], [26.2, 36], [26.2, 31, 63.2], [26.2, 24], [26.2, 16], [19.9, 13.8], [19.9, 11], [21.3, 10], [21.3, 8.6], [15.6, 5.8, 66.3],
   [15.6, 5.8, 73.6], [21.3, 8.6], [21.3, 10], [19.9, 11], [19.9, 13.8], [26.6, 16], [26.6, 24], [26.6, 31, 76.6], [26.6, 36, 77],
 ])
 export const CONMAN2 = { overlay: timed(conmanRoute(0)), twoFloors: timed(conmanRoute(DX)) }

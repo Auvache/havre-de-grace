@@ -9,6 +9,37 @@ Score: `app/config/conmanScore.ts`. v2, 2026-11-05, on the page and pinned
 v1, the city (`conman-city.mjs`, 2026-11-02), is described under "v1" below
 and is still in the repo, no longer on the page.
 
+## Timing round (2026-11-06)
+
+**The rule (the user):** the start of every heist — the plan whole, the crew
+standing outside — lands a second or so before the verse, and the dots go in
+as the singing starts. Heist 2 was the model (at the door 55.6, in on "Oh,
+I'm a conman" 55.75). The dots are controlled: they only run from the police
+or in long transit between heists, and even then they ease to a stop at a
+door; nothing rushes to start a heist.
+
+What changed:
+
+| Heist | Before | Now |
+|---|---|---|
+| 1 · shop (verse 23.28) | The black lifted onto a held, empty view until 16; zoom 16–23.3; plan drawn 18.5–23.3; he went in the instant it was whole. | The camera is already turning in when the black lifts (zoom 11–17.2); the plan is drawn 15.2–20.4 as the lot fills the frame; owner and title by 21.6; he stands on the circle from 21.6 and goes in at 23.3. |
+| 2 · counting house | The auditor arrived on the first line and sat upstairs through the whole dig; nothing moved during the drilling. | He comes along Main Street from 61, through the banking hall, and sits down with the partner at 66.3, a second before the wall gives (67.35). |
+| 3 · studio (verse 99.95) | They left the park at 92.4 after the officer passed and ran 650 m at 90 m/s (faster than the chase) to arrive at 100.0 while the plan was still inking. | They slip out at 90.8, as soon as he has run past them up High Street, take the direct street east at the chase's own pace (75 m/s), ease to a stop at the door by 98.4 (the auditor 98.85), and go in at 99.95. The studio inks 95–98 as the camera lands at 98.4. |
+| 4 · museum (break 140.2) | Arrived at 140.2 and went straight in; the museum popped in whole. | Into the plant by 131.4; the officer loops it 132.3–133.8 (the building on his left); they slip out at 133.2 while he is round the west side; at the museum door by 139.2 (the others 139.5, 139.8), easing in; the drum is drawn on 137.2–138.9 as the camera lands; in at 140.2. |
+| 5 · hall (verse 165.45) | The car was still on High Street when the verse began; the hall popped in whole at 165.8; crew went 166.3–166.8. | The whole museum job and the police near-miss play 1.6 s earlier; the car leaves at 158.4 and stops at the crown at 164.5 (where the crew start, not 6 m short); the hall is drawn 162.6–164.6 as the camera lands; the conman stands there until the verse; driver goes at 165.45, the others 165.55–165.95, the stagehand 167.2. |
+
+**Chase 2's speed.** The Crescent is the only way from the studio's bank to
+the plant's that does not retrace Main Street (the river is between them), so
+it stays. The two legs are evened out instead of 150 and 120 m/s: studio →
+plant 148 m/s, plant → museum 100 m/s with slow ends. Chase 1 runs at 75 m/s;
+the museum → hall drive at 150 m/s is the fastest thing left, with the police
+car right behind and the camera riding with it.
+
+**How it is built.** A crew member with `wait` (atlas-plan.mjs) stands at the
+start of his route from then until `from`. `inked()` (sequence.mjs) now draws
+arc walls too, so the drum and the fan are drawn on like the others. Heist 4's
+times are written as before and shifted by `EARLY4` in film.mjs.
+
 ## Pinned (2026-11-05): where to pick up
 
 The user put v2 on the page as the main film and paused the work. What it
@@ -128,8 +159,10 @@ the partner's office.
 - He digs at the party wall, and the wall gives on "Until the Earth shook"
   (67.3).
 - He swaps the ledgers and is out and away east toward the studio by 76.
-- The auditor sits upstairs with the partner the whole time, reading the
-  books aloud over the noise.
+- The auditor comes along Main Street once the digging is under way (61) and
+  sits down with the partner at 66.3, a second before the wall gives, reading
+  the books aloud over the noise until the conman is out (2026-11-06; before
+  that he was there from the first line and nothing moved during the dig).
 - The partner and his staff are drawn in ink: the guard paces the banking
   hall and the clerks sit at their desks.
 
@@ -144,8 +177,9 @@ the song, shown one by one or side by side. No separate screenshots or mp4s.
   bridge. It keeps turning as it comes down, so the shop's tilt unwinds onto
   the counting house.
 - His drive takes the whole landing. He reaches the empty shop's door as the
-  camera settles, and heist 2 starts on "Oh, I'm a conman" (55.75), the
-  auditor arriving on the same line.
+  camera settles, and heist 2 starts on "Oh, I'm a conman" (55.75). (The
+  auditor arrived on the same line until 2026-11-06; he now comes during the
+  dig, above.)
 - No shake. The conman from heist 1 is #1 in heist 2.
 
 **The years** follow the first six Led Zeppelin albums, with 1968 (the
@@ -194,12 +228,12 @@ user followed all the suggestions for five heists:
 | 0–12 | | The shared opening (lifted from conman-city.mjs). |
 | 12–42.3 | Verse 1 | Heist 1, the record shop, D. |
 | 42.3–77 | Verse 2 | The drive over the bridge and heist 2, B. |
-| 77–100 | Chorus 1 | Chase 1, A. |
-| 100–122 | Verse 3 | Heist 3, the studio (A, as drawn). The conman and the auditor are the shadow and the taker, the engineer joins, "you" in ink. |
-| 122–140.2 | Chorus 2 | Chase 2, filmed from above like chase 1. Out of the studio's back lane, round the whole Crescent, up the west fluke road into the pressing plant to hide among the presses. The camera dips to it while the officer circles the building, his sight sweeping, and gives up. They slip out by the dock, along Main Street and up High Street to the museum. |
-| 140.2–160 | The break | Heist 4, the drum. The police almost catch them: an officer up High Street and in at the front, through the rotunda to the bay a breath too late; a car round the Circus reaching the bay as the getaway pulls away. |
-| 160–166 | | The getaway down High Street to the crown, the police car lost at Main Street. |
-| 166–188 | Last verse | Heist 5, the fan hall, five crew. |
+| 77–99.95 | Chorus 1 | Chase 1, A. They slip out of the park behind the officer at 90.8 and stand at the studio's door from 98.4. |
+| 99.95–122 | Verse 3 | Heist 3, the studio (A, as drawn). The conman and the auditor are the shadow and the taker, the engineer joins, "you" in ink. |
+| 122–140.2 | Chorus 2 | Chase 2, filmed from above like chase 1. Out of the studio's back lane, round the whole Crescent, up the west fluke road into the pressing plant to hide among the presses. The camera dips to it while the officer circles the building, his sight sweeping; they slip out while he is round the far side. Along Main Street and up High Street to the museum, standing at its door from 139.2 while the drum is drawn. |
+| 140.2–158.4 | The break | Heist 4, the drum. The police almost catch them: an officer up High Street and in at the front, through the rotunda to the bay a breath too late; a car round the Circus reaching the bay as the getaway pulls away. |
+| 158.4–164.5 | | The getaway down High Street to the crown, the police car lost at Main Street; the hall drawn as the camera lands. |
+| 165.45–188 | Last verse | Heist 5, the fan hall, five crew, in on the verse. |
 | 188–232.1 | Last chorus | The final chase. The five scatter, each down one stroke of the anchor (the shank and the ring; each arm and its fluke; the stock and each ball) with three officers falling behind. The camera pulls out to the whole town and their red completes the anchor; they fade into it, so they escape, just, and the career's title block comes up. |
 | 232.1 | | The end card on the last hit. |
 
