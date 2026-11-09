@@ -3,81 +3,70 @@
  *
  * One sign for the whole song, never cut away from. The film opens the way
  * Into the Wild's does: the band's mark drawn on black, then the title drawn
- * on in the live videos' Hairline capitals, then the black lifts off a dark
- * marquee. It turns over into NORMA JEANE as the voice comes in, then flips
- * through every film she made, in release order, cut to the song's sections,
- * and after the last one starts on Something's Got to Give, which never
- * finishes spelling. The letters keep spinning and die out one by one, and on
- * the record's last hit there is a hard cut to the mark on black.
+ * on in the live videos' Hairline capitals, then the black lifts off a dark,
+ * empty marquee. A second later, on the downbeat, her ten tiles start to spin
+ * and settle into NORMA JEANE on the word; then every film she made surfaces
+ * in release order, one after another, each assembling out of spinning
+ * letters and coming apart again; the chorus puts its own words up on the
+ * words; and after The Misfits the board starts on Something's Got to Give,
+ * which never finishes spelling. The letters keep spinning and die out one by
+ * one, and on the record's last hit there is a hard cut to the mark on black.
  *
- * THE SCHEDULE (2026-11-02, as asked: "the board does more")
- *   - Verses: a title every four bars, landing on each sung phrase. NORMA
- *     JEANE holds the first four bars of verse 1.
- *   - Pre-choruses and breaks: a title every two bars.
- *   - The bar before each chorus (and before the first break) is where the
- *     record drops nearly out: the board flips blank and the bulbs go out.
- *     After the first pre-chorus the next title slams down all at once on the
- *     downbeat; before a chorus, the hook does.
- *   - Choruses answer the hook. GOODBYE turns over on "Goodbye", NORMA on
- *     "Norma", JEANE on "Jean", held two bars; a title surfacing through
- *     "I've been in love", whole on the bar before "more, more, more", when
- *     the board turns to MORE a row at a time, one row per word; a title on
- *     "I wanted you".
- *   - The third clue runs straight into the last chorus's GOODBYE.
- * These were placed from the score's words and from the record measured bar
- * by bar: the drop bars (19, 39, 69) are the quietest and least busy of their
- * sections, and the breaks are quieter than the verses.
- *
- * THE RULES
- *   - Every title lands on a downbeat. 95 BPM to a click; the score's beat is
- *     at 0.066, and the bar's strongest accent is the beat after it, so the bar
- *     starts at 0.698. NORMA JEANE lands on bar 8 (20.91, "Silver screen says
- *     Norma Jeane" at 20.92).
+ * THE RULES (2026-11-09, replacing the schedule of 2026-11-02/05)
+ *   1. After the black lifts (12.0) the board is blank for a second; the first
+ *      motion is on the next beat, the downbeat of bar 5 (13.33).
+ *   2. The only lyric on the board is NORMA JEANE at the start, whole on the
+ *      first "Norma" (22.49), and GOODBYE / NORMA / JEANE on three rows in each
+ *      chorus, each row turning over on its own word — no spin before them.
+ *      Everything else on the board is one of her twenty-nine films. (MORE,
+ *      key words and headlines are gone.)
+ *   3. Every board builds and breaks down over the same length, and is whole
+ *      and still for four beats between (the grid's answer to "2 seconds").
+ *      One title starts as the one before it goes: a continual stream, broken
+ *      only by the drop bars. Twenty-nine films have to fit between the fixed
+ *      events, so the pace is set stretch by stretch (see `stream`): a 2.2 s
+ *      build for the two before the first drop, 1.6 s through the middle,
+ *      1.9 s for the last three. The hook's breakdown is the one asymmetry:
+ *      it lands in 1.3 s and comes apart over ten beats, gone as "Know you
+ *      want the world" starts.
+ *   - Every change is on an eighth of the click. 95 BPM; the score's beat is
+ *     at 0.066, the bar's strongest accent the beat after it, so bar 0 starts
+ *     at 0.698. A measured word sits a few ms off the grid; the stream snaps
+ *     back to the nearest eighth after each one.
+ *   - The drop bars (19, 39, 69): the record drops nearly out, the board is
+ *     blank and the bulbs go out. Kept from 2026-11-02.
  *   - Red, on a board that has landed: at most one MARILYN MONROE's worth of
  *     letters (two M, N, O, R; one A, I, L, Y, E), letters in her hidden place
- *     first, then reading order.
- *   - Red, while the board is turning over: only a letter that sits in her
- *     hidden place — MARILYN on the top row and MONROE under it, from column 4.
- *     Three times the scramble lets the name show through: 3 letters, then 6,
- *     then 9, for a beat and a half each. Never all thirteen (confirmed
- *     2026-11-02: her name is never spelled).
+ *     first, then reading order. Red, while the board is turning over: only a
+ *     letter in her hidden place — MARILYN on the top row and MONROE under it,
+ *     from column 4. Three builds let the name show through: 3 letters (All
+ *     About Eve), then 6 (Niagara), then 9 (The Prince and the Showgirl), for a
+ *     beat each. Never all thirteen (confirmed 2026-11-02: her name is never
+ *     spelled).
  *   - Lights follow the song's sections, flash on every landing, and go out
  *     in the drop bars.
  *
- * THE TWINKLE (chosen 2026-11-05 from five motion tests: "A is the best")
- * While a board is held, letters blink on and off in the tiles it leaves
- * empty, each flip on an eighth, busier in pre-choruses and choruses; never
- * beside a lit letter, never in a turn or a drop bar. They are never red.
- *
- * STILL WHOLE, A CLEAR RING, THE TWINKLE AFTER THE FADE (2026-11-05). A
- * title is whole and completely still for three eighths (about a second)
- * before it comes apart. The twinkle starts on the downbeat at bar 5, about a
- * second after the fade, with NORMA JEANE surfacing out of spinning letters
- * like a title. Once a title is half locked, the tiles beside and directly
- * above and below its letters stay clear; once it has gone, its tiles are
- * free. The hook and MORE still turn over onto themselves now and then.
- *
- * THE INTENSITY TESTS (2026-11-05, on the page as ?test=measured, sections,
- * pulse: "more letters flashing in the intense parts, maybe filling the whole
- * board; fewer between singing"). The current film's twinkle is set by
- * section only. 'measured' follows the record's brightness a beat at a time
- * (score.brightness: energy above 1.8 kHz; loudness spans 5 dB on this master,
- * brightness 10); 'sections' is set by hand from the score; 'pulse' flashes a
- * share of the board on each beat, the share from the brightness. In all
- * three a surfacing title's spinning tiles follow the same level.
+ * THE TWINKLE (chosen 2026-11-05 from five motion tests: "A is the best";
+ * following the record chosen 2026-11-09 from three). While a board is up,
+ * letters blink on and off in the tiles it leaves empty, each flip on an
+ * eighth, following the record's brightness (score.brightness: the energy
+ * above 1.8 kHz, a digit a beat) — a few in the verse gaps, most of the free
+ * board in the choruses and the trumpet. Never beside a lit letter or
+ * directly above or below one once a title is half locked, never in her place
+ * while a clue shows, never in a drop bar, never red. It starts once NORMA
+ * JEANE is whole: nothing is on the board before her name. A surfacing
+ * title's spinning tiles follow the same level: soft, they turn over less and
+ * often come up blank; loud, they spin hard.
  *
  * THE SURFACING (decided 2026-11-05: "the title can slowly reveal itself by
  * letters slowly falling into place… it will more so bubble up to the
- * surface, than disappear as the letters flip away"). A title fills its whole
- * slot: its tiles start spinning through random letters, then lock onto the
- * right one a few at a time, in scattered order, on the eighths, the last on
- * the downbeat (about two-thirds of the slot); it is whole for a beat or two;
- * its letters flip away, scattered, on the sixteenths; and the board twinkles
- * empty for a moment before the next one starts. One at a time, never
- * overlapping. The only words on the board are the titles, NORMA JEANE at the
- * start and the chorus's own (GOODBYE / NORMA JEANE, MORE), which still land
- * on their words. Tried and dropped the same day: key words of the lyric,
- * half-length titles and headlines from her life ("don't fit the theme").
+ * surface, than disappear as the letters flip away"). A title's tiles start
+ * spinning through random letters in the first third of its build (the first
+ * on the build's first eighth), then lock onto the right one a few at a time,
+ * in scattered order, on the eighths, the last on the landing; whole and
+ * still for four beats; then its letters flip away, scattered, on the
+ * sixteenths. The name's and the hook's held letters still turn over onto
+ * themselves now and then (`dance`); a title, whole, is still.
  *
  * The frame contract is the one every film here keeps:
  * marqueeFrame({ time, score, lockup, uid }) → { svg, label }, pure, no DOM.
@@ -224,9 +213,8 @@ function openingSvg(time, uid) {
 /* ── The board ───────────────────────────────────────────────────────────── */
 
 const DEFAULTS = {
-  twinkle: 1, // letters blinking in the empty tiles while a board is held (0: none)
-  dance: true, // the chorus's held letters turn over onto themselves now and then
-  flash: 'flat', // how the twinkle follows the music: 'flat' (by section), or the tests 'measured', 'sections', 'pulse'
+  twinkle: 1, // letters blinking in the empty tiles, following the record (0: none)
+  dance: true, // the name's and the hook's held letters turn over onto themselves now and then
 }
 
 export function marqueeFilm(options = {}) {
@@ -296,32 +284,17 @@ export function marqueeFilm(options = {}) {
     }
 
     /*
-     * How hard the board flashes at t, 0–1, by the tests' three readings of the
-     * record. 'measured' is the record's brightness (score.brightness, a digit
-     * a beat); 'sections' is set by hand from the score: soft between sung
-     * lines, a step up in the pre-choruses, the choruses high, and full from
-     * each chorus's "you wanted (more)" for two bars and on the trumpet out of
-     * chorus 2.
+     * How hard the board flashes at t, 0–1: the record's brightness
+     * (score.brightness, a digit a beat — the energy above 1.8 kHz, which
+     * follows the voice and the brass; chosen 2026-11-09 over a level set by
+     * section and a flash on the beat: "follows the record").
      */
     const bright = score.brightness ?? ''
-    const measured = (t) => {
+    const level = (t) => {
       const k = Math.floor((t - (score.beatPhase ?? 0)) / BEAT)
       const d = Number(bright[Math.max(0, Math.min(bright.length - 1, k))] ?? 3)
       return Math.max(0, Math.min(1, (d - 1.5) / 7))
     }
-    const singing = (t) => score.lines.some((l) => t >= l.start - 0.3 && t < l.end + 0.5)
-    const FULL = [[bar(78), bar(82)]] // the trumpet, out of chorus 2 into break 3
-    for (const C of [40, 70, 86]) { const w = wordAt(score, /^wanted/, bar(C + 6)); FULL.push([w - 0.2, w + 2 * BAR]) }
-    const bySection = (t) => {
-      if (FULL.some(([a, z]) => t >= a && t < z)) return 1
-      const kind = sectionKind(score, t)
-      if (kind === 'chorus' || kind === 'chorus3') return 0.7
-      if (kind === 'prechorus') return singing(t) ? 0.45 : 0.3
-      if (kind === 'verse') return singing(t) ? 0.25 : 0.05
-      if (kind === 'break') return 0.3
-      return 0.15
-    }
-    const level = O.flash === 'sections' ? bySection : measured
 
     /*
      * Turn the board from what it shows to `next`. `land(i)` is when tile i's
@@ -369,16 +342,10 @@ export function marqueeFilm(options = {}) {
     }
 
     /*
-     * A title coming apart, `P` after it landed: whole for a beat or two
-     * (less if the next thing is close), then its letters flip away,
-     * scattered, on the sixteenths, over as long again. Returns when it is gone.
+     * A board coming apart: whole and still for `W`, then its letters flip
+     * away, scattered, on the sixteenths, over `K`. Returns when it is gone.
      */
-    function breakDown(b, P) {
-      // Whole and still for three eighths (just under a second), then a beat to
-      // come apart; squeezed in proportion when the next thing is close.
-      let W = 3 * EIGHTH
-      let K = BEAT
-      if (W + K > P - EIGHTH) { const f = Math.max(0.1, (P - EIGHTH) / (W + K)); W *= f; K *= f }
+    function breakDown(b, W, K) {
       const from = b.at + W
       const rand = rng(seed++)
       const SIX = EIGHTH / 2
@@ -386,16 +353,8 @@ export function marqueeFilm(options = {}) {
       b.grid.forEach((c, i) => { if (c !== ' ') events[i].push([from + Math.floor(rand() * steps) * SIX, ' ']) })
       b.whole = from
       b.gone = from + K
-      b.broken = true
       cur = EMPTY
-      return from + K
-    }
-
-    /* The board in front is about to turn over at X: a title comes apart first. */
-    function release(X) {
-      const b = boards.at(-1)
-      if (b.kind === 'film' && !b.broken) breakDown(b, X - b.at)
-      b.S = X
+      return b.gone
     }
 
     /* The eighth at or after t. */
@@ -424,10 +383,13 @@ export function marqueeFilm(options = {}) {
       let ct = null
       let ce = null
       if (clue) {
-        ct = onEighth(S + D / 3)
-        ce = ct + 1.5 * BEAT
+        // Her letters show through in red from the first eighth of the build,
+        // for a beat (a beat and a half when the build is long enough), and
+        // the title's letters lock after.
+        ct = onEighth(S)
+        ce = ct + (D >= 8 * EIGHTH ? 3 : 2) * EIGHTH
         clues.push([ct, ce])
-        lockFrom = Math.max(lockFrom, ce + 2 * EIGHTH)
+        lockFrom = Math.max(lockFrom, ce)
       }
       // The order they lock in, and when.
       for (let k = tiles.length - 1; k > 0; k--) { const j = Math.floor(rand() * (k + 1)); [tiles[k], tiles[j]] = [tiles[j], tiles[k]] }
@@ -435,19 +397,24 @@ export function marqueeFilm(options = {}) {
       tiles.forEach((i, k) => lock.set(i, k === tiles.length - 1 ? L : Math.min(L, onEighth(lockFrom + ((k + 1) / tiles.length) * (L - lockFrom)))))
       const spinners = new Set(tiles)
       if (clue) for (const i of HKEYS) spinners.add(i)
+      let first = true
       for (const i of spinners) {
-        const start = onEighth(ready + rand() * Math.max(0, S + D / 3 - ready))
+        const start = onEighth(first ? ready : ready + rand() * Math.max(0, S + D / 3 - ready))
+        first = false
         const end = lock.has(i) ? lock.get(i) - FLIP : ce + EIGHTH + Math.floor(rand() * 3) * EIGHTH
         const k = HKEYS.indexOf(i)
         for (let t = start; t <= end - 2 * EIGHTH + 1e-6; t += EIGHTH) {
           if (clue && k >= 0 && t > ct - EIGHTH && t <= ce + 1e-6) continue
-          // In the tests a spin follows the music: soft, it turns over less and
-          // often comes up blank; loud, it spins hard.
-          const I = O.flash === 'flat' ? 0.7 : level(t)
-          if (t > start && rand() >= (O.flash === 'flat' ? 0.7 : 0.3 + 0.6 * I)) continue
-          events[i].push([t, O.flash !== 'flat' && rand() < 0.6 * (1 - I) ? ' ' : pickFor(rand, i), 'x'])
+          // The spin follows the record: soft, it turns over less and often
+          // comes up blank; loud, it spins hard.
+          const I = level(t)
+          if (t > start && rand() >= 0.3 + 0.6 * I) continue
+          events[i].push([t, rand() < 0.6 * (1 - I) ? ' ' : pickFor(rand, i), 'x'])
         }
-        if (clue && k >= 0 && clue.includes(k)) events[i].push([ct, HID.get(i), 'red'], [ce, NOISE[Math.floor(rand() * NOISE.length)], 'x'])
+        if (clue && k >= 0 && clue.includes(k)) {
+          events[i].push([ct, HID.get(i), 'red'])
+          if (end > ce + 0.01) events[i].push([ce, NOISE[Math.floor(rand() * NOISE.length)], 'x'])
+        }
         events[i].push(lock.has(i) ? [end, grid[i]] : [end, ' '])
       }
       cur = grid
@@ -457,118 +424,114 @@ export function marqueeFilm(options = {}) {
 
     /* The landings. */
     const ripple = (L) => (i) => L - (1 - (i % COLS) / (COLS - 1)) * BEAT * 0.9
-    const slam = (L) => () => L
-    const board = (grid, at, title, kind) => {
-      boards.push({ at, grid, red: redOf(grid), title, kind })
+    const board = (grid, at, title, kind, extra = {}) => {
+      const b = { at, grid, red: redOf(grid), title, kind, ...extra }
+      boards.push(b)
       flashes.push(at)
+      return b
     }
+    /* The eighth nearest t (a measured word sits a few ms off the click). */
+    const nearEighth = (t) => D0 + Math.round((t - D0) / EIGHTH) * EIGHTH
+    /* Every board is whole and still for four beats (2026-11-09: "2 seconds" → the grid's 2.53). */
+    const HOLD = 4 * BEAT
+    let next // when the board is free again
+
+    // The name: her ten tiles start spinning on the downbeat after the fade
+    // (bar 5, a second after the black lifts) and are whole on "Norma"; nothing
+    // else is on the board before it, the twinkle starting once it is whole.
+    // It comes apart over as long as it took to arrive.
+    const NJ_S = bar(5)
+    const NJ_L = wordAt(score, /^Norma/, 0)
+    const NJ = layout(['', 'NORMA JEANE', ''])
+    const njRing = surface(NJ, NJ_S, NJ_L)
+    const nj = board(NJ, NJ_L, 'NORMA JEANE', 'name', { from: NJ_S, ringFrom: njRing, twinkleFrom: NJ_L })
+    next = breakDown(nj, HOLD, NJ_L - NJ_S)
+    nj.until = next
+
     /*
-     * A film title, whole on bar m. After another title it surfaces through
-     * the time that one leaves; after anything else, through `lead` beats.
-     * With no lead (after a drop bar) it slams down on the downbeat.
+     * A stretch of `n` film titles, one after another from `next`: each
+     * surfaces over `X` eighths, is whole for HOLD, comes apart over `X`, and
+     * the next starts as it goes. The stream runs to `until` (a drop bar, a
+     * chorus, the end), the board twinkling empty for whatever is left.
+     * `clues` maps a film's index to the letters its build lets show in red.
      */
     let films = 0
-    const title = (m, lead, extra = {}) => {
-      const L = bar(m)
-      const f = MARQUEE_FILMS[films++]
-      const grid = layout(f.rows)
-      const prev = boards.at(-1)
-      let S
-      if (prev.kind === 'film') {
-        const P = L - prev.at
-        S = breakDown(prev, P) + Math.max(EIGHTH, Math.round(P / 16 / EIGHTH) * EIGHTH)
-        prev.S = S
-      } else {
-        S = L - lead * BEAT
-        release(S)
+    const stream = (n, X, until, clues = {}) => {
+      for (let k = 0; k < n; k++) {
+        const S = nearEighth(next)
+        const L = S + X * EIGHTH
+        const f = MARQUEE_FILMS[films]
+        const grid = layout(f.rows)
+        const clue = clues[films] ?? null
+        const ringFrom = surface(grid, S, L, clue)
+        const b = board(grid, L, `${f.title} (${f.year})`, 'film', { from: S, clue: !!clue, ringFrom })
+        next = breakDown(b, HOLD, X * EIGHTH)
+        b.until = next
+        films++
       }
-      let ringFrom = L
-      if (L - S < BEAT) turn(grid, { S: L, land: slam(L), noise: false })
-      else ringFrom = surface(grid, S, L, extra.clue)
-      board(grid, L, `${f.title} (${f.year})`, 'film')
-      Object.assign(boards.at(-1), { from: S, clue: !!extra.clue, ringFrom })
+      boards.at(-1).until = until
+      next = until
     }
-    /* The drop bar: everything flips blank on the downbeat, a quick ripple, and the bulbs go out. */
+    /* The drop bar: the record drops nearly out, the board is blank and the bulbs go out. */
     const drop = (m) => {
-      const D = bar(m)
-      release(D)
-      turn(EMPTY, { S: D, land: (i) => D + FLIP + ((i % COLS) / (COLS - 1)) * BEAT * 0.4, noise: false })
-      darks.push([D, bar(m + 1)])
-      boards.push({ at: D, grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'dark' })
+      darks.push([bar(m), bar(m + 1)])
+      boards.push({ at: bar(m), grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'dark' })
+      next = bar(m + 1)
     }
-    /* The hook: GOODBYE on "Goodbye", NORMA on "Norma", JEANE on "Jean". */
-    const HOOK = layout(['GOODBYE', 'NORMA JEANE', ''])
-    const hook = (C, extra = {}) => {
-      const g = wordAt(score, /^Goodbye/, C - 1)
+    /*
+     * The hook, on three rows: GOODBYE turns over on "Goodbye", NORMA on
+     * "Norma", JEANE on "Jean" — no spin before them (2026-11-09: "show up in
+     * time with the lyrics") — whole for HOLD, then it comes apart slowly, over
+     * ten beats, so the name dissolves through "I've been in love with you
+     * since we were seventeen" and is gone as "Know you want the world" starts.
+     */
+    const HOOK = layout(['GOODBYE', 'NORMA', 'JEANE'])
+    const hook = (after) => {
+      const g = wordAt(score, /^Goodbye/, after)
       const n = wordAt(score, /^Norma/, g)
       const j = wordAt(score, /^Jean/, n)
-      const land = (i) => {
-        const row = Math.floor(i / COLS)
-        const col = i % COLS
-        return row === OFF + 1 && HOOK[i] !== ' ' ? (col <= (COLS - 1) / 2 - 1 ? n : j) : g
-      }
-      if (boards.at(-1).kind !== 'dark') release(extra.S)
-      turn(HOOK, { S: extra.S ?? g - FLIP, land, noise: !!extra.S, quiet: g, ...extra })
-      board(HOOK, j, 'GOODBYE, NORMA JEANE', 'hook')
+      const land = (i) => [g, n, j][Math.floor(i / COLS) - OFF] ?? g
+      turn(HOOK, { S: g - FLIP, land, noise: false })
       flashes.push(g, n)
-    }
-    /* "more, more, more": a row to MORE on each word. */
-    const MORE = layout(['MORE', 'MORE', 'MORE'])
-    const more = (C) => {
-      const m1 = wordAt(score, /^more/, bar(C + 4))
-      const m2 = wordAt(score, /^more/, m1)
-      const m3 = wordAt(score, /^more/, m2)
-      const at = [m1, m2, m3]
-      release(m1 - FLIP)
-      turn(MORE, { S: m1 - FLIP, land: (i) => at[Math.min(2, Math.max(0, Math.floor(i / COLS) - OFF))] + (i % COLS) * 0.012, noise: false })
-      board(MORE, m3, 'MORE MORE MORE', 'more')
-      flashes.push(m1, m2)
+      const b = board(HOOK, j, 'GOODBYE NORMA JEANE', 'hook', { from: g })
+      next = breakDown(b, HOLD, 20 * EIGHTH)
+      b.until = next
+      return g
     }
 
-    // The opening: the board starts turning over as the black lifts, NORMA JEANE on bar 8.
-    // The twinkle starts with it, on the downbeat a second after the fade.
-    const NJ = layout(['', 'NORMA JEANE', ''])
-    const njRing = surface(NJ, bar(5), bar(8))
-    board(NJ, bar(8), 'NORMA JEANE', 'name')
-    Object.assign(boards.at(-1), { from: bar(5), ringFrom: njRing })
+    /*
+     * The stream, 2026-11-09. Twenty-nine films have to fit between the fixed
+     * events, so the pace is set stretch by stretch: a 2.2 s build/break for
+     * the two before the first drop, 1.6 s from the first drop to the third
+     * pre-chorus and through the back of chorus 2, 1.9 s for the last three.
+     * The clues sit in the builds nearest where they were: All About Eve
+     * ("Say goodbye to all you know"), Niagara ("Different lines"), and The
+     * Prince and the Showgirl, the last title before the last chorus.
+     */
+    stream(2, 7, bar(19)); drop(19)
+    stream(8, 5, bar(39), { 7: CLUE_1 }); drop(39)
+    hook(bar(39)); stream(11, 5, bar(69), { 18: CLUE_2 }); drop(69)
+    hook(bar(69)); stream(5, 5, wordAt(score, /^Goodbye/, bar(85)), { 25: CLUE_3 })
+    hook(bar(85)); stream(3, 6, bar(98))
 
-    // A chorus: the hook on its words, held two bars; a title surfacing over the
-    // next two, whole on the bar before "more, more, more"; MORE; a title.
-    const chorus = (C, b) => { hook(bar(C)); title(C + 4, 8); more(C); title(b, 4) }
-
-    // Verses a title every four bars, pre-choruses and breaks every two.
-    title(12, 6); title(16, 4); title(18, 4); drop(19)
-    title(20, 0); title(22, 4); title(24, 4); title(26, 4)
-    title(28, 4); title(32, 6, { clue: CLUE_1 }); title(36, 4); title(38, 4); drop(39)
-    chorus(40, 47)
-    title(50, 6); title(52, 4); title(54, 4); title(56, 4)
-    title(58, 4); title(62, 6, { clue: CLUE_2 }); title(66, 6); title(68, 4); drop(69)
-    chorus(70, 77)
-    title(80, 6); title(82, 4); title(84, 4)
-    // Break 3's last title runs straight into the third clue and the last chorus.
-    hook(bar(86), { S: bar(86) - 6 * BEAT, clue: CLUE_3 })
-    title(90, 8)
-    more(86)
-    title(93, 4)
-    title(95, 4)
-
-    // Something's Got to Give: it starts to spell and never finishes.
-    const sgtgAt = bar(98)
-    release(sgtgAt - 6 * BEAT)
-    turn(layout(["SOMETHING'S", 'GOT TO', 'GIVE']), { S: sgtgAt - 6 * BEAT, land: ripple(sgtgAt), final: false })
+    // Something's Got to Give: from the downbeat where the voice leaves, the
+    // letters spin for two bars, most of them land, and it never finishes.
+    const sgtgS = bar(98)
+    const sgtgAt = bar(100)
+    turn(layout(["SOMETHING'S", 'GOT TO', 'GIVE']), { S: sgtgS, land: ripple(sgtgAt), final: false })
     if (films !== MARQUEE_FILMS.length) throw new Error(`marquee: ${films} of ${MARQUEE_FILMS.length} films scheduled`)
 
-    // The holds, and a tile twitching half a flip on the backbeat in each
-    // (not a title: whole, it is still).
+    // The holds: from a board's first spin (the name: from when it is whole)
+    // to the next event, and a tile twitching half a flip on the backbeat
+    // while the name or the hook is whole (a title, whole, is still).
     const holds = []
     boards.forEach((b, idx) => {
-      const until = b.S ?? sgtgAt - 6 * BEAT
       if (b.kind === 'dark') return
-      holds.push([b.from ?? b.at, until, b])
+      holds.push([b.twinkleFrom ?? b.from ?? b.at, b.until, b])
       const rand = rng(10 + idx)
       const lit = []
       b.grid.forEach((c, i) => { if (c !== ' ') lit.push(i) })
-      const whole = b.kind === 'film' ? -Infinity : until
+      const whole = b.kind === 'film' ? -Infinity : b.whole
       for (let k = Math.ceil((b.at - D0) / BEAT + 0.5); D0 + k * BEAT < whole - BEAT; k++) {
         if (k % 2 === 1 && lit.length && rand() < 0.8) {
           twitches[lit[Math.floor(rand() * lit.length)]].push(D0 + k * BEAT)
@@ -600,47 +563,7 @@ export function marqueeFilm(options = {}) {
       for (let k = Math.ceil((a - D0) / EIGHTH); D0 + k * EIGHTH < b; k++) out.push(D0 + k * EIGHTH)
       return out
     }
-    const DENSITY = { verse: 0.1, prechorus: 0.16, break: 0.12, chorus: 0.18, chorus3: 0.18 }
-
-
-    if (O.twinkle && O.flash === 'flat') {
-      // Letters blinking on and off in the empty tiles, each landing on an
-      // eighth, busier in pre-choruses and choruses (never in her place while a
-      // clue is surfacing, never in the ring round a lit letter).
-      holds.forEach(([at, until, b], idx) => {
-        const rand = rng(300 + idx)
-        const lo = at + 0.15
-        const hi = until - 0.3
-        for (const t of eighthsIn(lo + FLIP, hi)) {
-          const p = (DENSITY[sectionKind(score, t)] ?? 0.06) * O.twinkle
-          for (let i = 0; i < N; i++) {
-            if (blocked(b, i, t) || rand() >= p || t - FLIP < endAt[i] + 0.01) continue
-            const len = EIGHTH * (1 + Math.floor(rand() * 3))
-            if (t + len > hi || blocked(b, i, t + len)) continue
-            put(i, t, pickFor(rand, i))
-            put(i, t + len, ' ')
-          }
-        }
-      })
-    } else if (O.twinkle && O.flash === 'pulse') {
-      // Flashes on the beat: on each beat a share of the free tiles light for an
-      // eighth, the share set by the record (most of the board at the
-      // brightest, on the downbeats most of all); a few in between.
-      holds.forEach(([at, until, b], idx) => {
-        const rand = rng(300 + idx)
-        const hi = until - 0.3
-        for (const t of eighthsIn(at + 0.15 + FLIP, hi - EIGHTH)) {
-          const I = level(t)
-          const k = Math.round((t - D0) / EIGHTH)
-          const p = k % 8 === 0 ? 0.05 + 0.8 * I ** 1.3 : k % 2 === 0 ? 0.03 + 0.55 * I ** 1.5 : 0.01 + 0.06 * I
-          for (let i = 0; i < N; i++) {
-            if (blocked(b, i, t) || blocked(b, i, t + EIGHTH) || rand() >= p || t - FLIP < endAt[i] + 0.01) continue
-            put(i, t, pickFor(rand, i))
-            put(i, t + EIGHTH, ' ')
-          }
-        }
-      })
-    } else if (O.twinkle) {
+    if (O.twinkle) {
       // A tile at a time, on the eighths: off, it lights with a chance that
       // climbs with the music; lit, it changes letter or goes out. Quiet, a
       // few letters blink; at full, nearly every free tile is flashing.
@@ -673,7 +596,7 @@ export function marqueeFilm(options = {}) {
         const lit = []
         b.grid.forEach((c, i) => { if (c !== ' ') lit.push(i) })
         if (!lit.length || b.kind === 'film') return
-        for (const t of eighthsIn(b.at + FLIP + 0.15, until - 0.3)) {
+        for (const t of eighthsIn(b.at + FLIP + 0.15, Math.min(until, b.whole) - 0.3)) {
           for (const i of lit) if (rand() < 0.06 && t - FLIP >= endAt[i] + 0.01) put(i, t, b.grid[i], null)
         }
       })
@@ -707,7 +630,7 @@ export function marqueeFilm(options = {}) {
     const bulbDeath = bulbs.map(() => sgtgAt + (LAST - sgtgAt) * rb() ** 0.7)
     bulbDeath[Math.floor(rb() * bulbs.length)] = LAST
 
-    return { BEAT, BAR, D0, EIGHTH, bar, LAST, boards, sgtgAt, events, twitches, holds, clues, flashes, darks, bulbs, bulbDeath }
+    return { BEAT, BAR, D0, EIGHTH, bar, LAST, boards, sgtgS, sgtgAt, events, twitches, holds, clues, flashes, darks, bulbs, bulbDeath }
   }
 
   /* ── Drawing ─────────────────────────────────────────────────────────── */
@@ -814,14 +737,13 @@ ${openingSvg(t, uid)}`
     const clue = plan.clues.some(([a, b]) => t >= a && t < b)
     const out = plan.darks.some(([a, b]) => t >= a && t < b)
     const label = t < MARQUEE_OPENING.reveal[1] ? 'Opening'
-      : t < plan.boards[0].at ? 'An empty marquee, turning over'
-        : held?.kind === 'intro' ? 'An empty marquee, letters blinking'
-          : held?.kind === 'film' && t < held.at ? `The letters settling into ${held.title}`
-            : held?.kind === 'film' && t >= (held.whole ?? Infinity) ? `${held.title}, coming apart`
+      : t < plan.boards[0].at ? (t < plan.boards[0].from ? 'An empty marquee' : 'The letters settling into NORMA JEANE')
+        : held && t < held.at ? `The letters settling into ${held.title}${clue ? ', her name showing through in red' : ''}`
+          : held && t >= (held.gone ?? Infinity) ? 'An empty marquee, letters blinking'
+            : held && t >= (held.whole ?? Infinity) ? `${held.title}, coming apart`
               : held ? `The marquee reads ${held.title}`
-          : t >= plan.sgtgAt ? "Something's Got to Give, never finished, the letters dying out"
-            : clue ? 'The letters turning over, her name showing through in red'
-              : out ? 'The marquee goes dark' : 'The letters turning over'
+                : t >= plan.sgtgS ? "Something's Got to Give, never finished, the letters dying out"
+                  : out ? 'The marquee goes dark' : 'An empty marquee, letters blinking'
     return { svg, label }
   }
 
@@ -834,11 +756,10 @@ ${openingSvg(t, uid)}`
     return {
       nj: p.boards[0].at,
       titles: p.boards.filter((b) => b.kind === 'film').map((b) => ({ at: b.at, title: b.title })),
-      hooks: p.boards.filter((b) => b.kind === 'hook').map((b) => b.at),
-      mores: p.boards.filter((b) => b.kind === 'more').map((b) => b.at),
+      hooks: p.boards.filter((b) => b.kind === 'hook').map((b) => b.from),
       drops: p.darks.map(([a]) => a),
       clues: p.clues.map(([a]) => a),
-      sgtg: p.sgtgAt,
+      sgtg: p.sgtgS,
       last: p.LAST,
     }
   }
@@ -850,9 +771,3 @@ const BASE = marqueeFilm()
 export const marqueeFrame = BASE.frame
 export const marqueeMoments = BASE.moments
 
-/* The tests of 2026-11-05 (see the header), on the page as ?test=measured, sections, pulse. */
-export const MARQUEE_TESTS = {
-  measured: marqueeFilm({ flash: 'measured' }),
-  sections: marqueeFilm({ flash: 'sections' }),
-  pulse: marqueeFilm({ flash: 'pulse' }),
-}

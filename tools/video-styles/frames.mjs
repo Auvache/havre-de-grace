@@ -65,9 +65,6 @@ const FILMS = {
   'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
   'conman-heists': ['conman-heists.mjs', 'conmanHeistsFrame'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
-  'marquee-measured': ['marquee.mjs', 'MARQUEE_TESTS.measured.frame'],
-  'marquee-sections': ['marquee.mjs', 'MARQUEE_TESTS.sections.frame'],
-  'marquee-pulse': ['marquee.mjs', 'MARQUEE_TESTS.pulse.frame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
 }
 
