@@ -8,71 +8,81 @@ Score: `app/config/goodbyeNormaJeaneScore.ts`. The whole film from 2026-11-02.
 
 The mark drawn on, the title drawn on, then the black lifts off an empty
 picture-house letter board. A second later, on the downbeat, her ten tiles
-start to spin and settle into NORMA JEANE on the first "Norma". Then all
-twenty-nine of her films surface in release order, one after another, each
-assembling out of spinning letters, whole and still for four beats, and coming
-apart again as the next begins. In each chorus the board puts the song's own
-words up on three rows, GOODBYE / NORMA / JEANE, each row turning over on its
-word, and lets them dissolve slowly through "I've been in love with you". In
-the bar where the record drops out before a chorus the board is blank and the
-bulbs go out. After The Misfits it starts on Something's Got to Give, which
-never finishes; the letters keep spinning and die out one by one, and on the
-last hit, the mark. Her name is never spelled, but three times a build lets it
-show through in red.
+start to spin and settle into NORMA JEANE on the first "Norma". Then her
+films surface in release order, one after another, each assembling out of
+spinning letters, whole and still for three beats, and coming apart as the
+next begins. In each chorus the board puts the song's own words up, a row on
+each sung word: GOODBYE / NORMA / JEANE, then SEVENTEEN, then MORE / MORE /
+MORE, each dissolving slowly into the next. Under the piano before the last
+chorus there is no title, only the free board flashing on the piano's
+strikes. After YOU / WANTED / MORE the board flashes hard, NORMA JEANE pops
+up on the middle row where the voice leaves, and its letters turn one by one
+into MARILYN / MONROE in the places the red clues have used all along. Three
+letters never arrive; on the last hit, the mark. The board is never dark or
+still after the opening.
 
 ## The rules (2026-11-09)
 
-The user's three rules, replacing the phrase-by-phrase schedule of 2026-11-02:
+The user's rules, in two rounds, replacing the phrase-by-phrase schedule of
+2026-11-02:
 
 1. **A blank second, then the beat.** Once the opening fades (12.0) the board
    is blank for a second; the first motion is on the next beat, bar 5's
    downbeat at 13.33. Nothing is on the board before her name: the twinkle
-   starts once NORMA JEANE is whole.
-2. **Only two lyrics on the board.** NORMA JEANE at the start, whole on the
-   first "Norma" (22.49); GOODBYE / NORMA / JEANE in each chorus, covering the
-   three rows, each row landing on its word with no spin before it ("show up
-   in time with the lyrics"). JEANE, no comma. Everything else is a film
-   title. MORE / MORE / MORE is gone.
+   starts once NORMA JEANE is whole. After that the board is **never dark and
+   never still**: the drop bars are gone ("at 0:49 there is a weird pause
+   where lights are all off… I don't want that to happen ever after the
+   start"), the twinkle has a floor so a few letters always move to the beat,
+   and the bulbs stay on to the cut.
+2. **The lyric on the board.** NORMA JEANE at the start, whole on the first
+   "Norma" (22.49). In each chorus GOODBYE / NORMA / JEANE, SEVENTEEN, and
+   MORE / MORE / MORE, each row landing on its word with no spin before it
+   ("show up in time with the lyrics"), each coming apart slowly to the next
+   word. In the last chorus YOU / WANTED / MORE as well. **No film title in a
+   chorus.** JEANE, no comma. Everything else is a film title.
 3. **Build = break, hold between.** Every board builds and comes apart over
-   the same length and is whole and still for four beats (2.53 s, the grid's
-   answer to "2 seconds"; 2.00 is not on the click). One title starts as the
-   one before it goes.
+   the same length and is whole and still between. One title starts as the
+   one before it goes, with no gap ("it should feel like one movie title
+   transitions to the next"). The name alone holds four beats (as in the
+   schedule the user approved); everything else three.
+4. **The piano** (bars 82–86, 207.86–217.96, measured: three strikes on the
+   first three eighths of every bar, loudest on the third, lighter fill
+   between): no title until the chorus, the free board flashing near full on
+   the strikes. **After "you wanted more"**: no more titles, "just crazy
+   flashing letters as 'norma jeane' pops up in the middle and slowly changes
+   to 'marilyn monroe'", never totally formed ("maybe 'marslyn m nrom'"), cut
+   to the end just before.
 
-What follows from them: twenty-nine films must fit between the fixed events,
-so the pace is set stretch by stretch and the titles no longer land on the
-sung phrases. Every change is on an eighth of the click.
-
-| Stretch | Films | Build / break |
-| --- | --- | --- |
-| After NORMA JEANE to the first drop bar | 2 | 2.21 s |
-| First drop bar to the second | 8 | 1.58 s |
-| Chorus 1 to the third drop bar | 11 | 1.58 s |
-| Chorus 2 to the last chorus | 5 | 1.58 s |
-| Last chorus to Something's Got to Give | 3 | 1.89 s |
-
-The board is empty (twinkling) for 0.6 s before the first drop bar, 2.5 s
-before the second, 0.3 s before the third and 1.7 s before the last chorus;
-the user accepted these as "more or less continual".
+What follows from them: with words only in the choruses, none under the piano
+and none after "you wanted more", the twenty-nine films have 134 s. A
+four-beat hold alone would take 73 s of that and leave a 0.95 s build, so the
+**hold is three beats (1.89 s) and a title builds and breaks in four eighths
+(1.26 s)**, one every 4.42 s, which fits all twenty-nine exactly: 15 before the
+first chorus, 12 between the first two, 2 under the trumpet. The board is
+empty (twinkling) for 1.6 s before "Goodbye" in choruses 1 and 2 and nowhere
+else. Every change is on an eighth of the click.
 
 - **NORMA JEANE** spins from 13.33, is whole at 22.49, holds to 25.01 and is
   gone at 34.17, as long going as coming.
-- **The hook** lands GOODBYE on "Goodbye", NORMA on "Norma", JEANE on "Jean",
-  holds four beats and comes apart over ten (6.3 s), so it is gone exactly as
-  "Know you want the world" starts, in all three choruses (112.17, 187.98,
-  228.42). The one asymmetry, chosen because the user asked for the hook to
-  arrive on the words and "still break down slowly".
-- **The clues** sit in the builds nearest where they were: All About Eve
-  (79.64, before "Say goodbye to all you know"), Niagara (157.64, "Different
-  lines"), The Prince and the Showgirl (210.70, the last title before the last
-  chorus). Red for a beat from the build's first eighth, then the title locks.
-- **Something's Got to Give** starts spinning on bar 98 (248.28), the downbeat
-  where the voice leaves, lands most of its letters two bars later and never
-  all of them, and dies out to the last hit at 275.76. The ending pace was
-  left to me ("do what feels most natural"): the last three films ease off a
-  little, and the board is empty for a second before it.
+- **The words.** The hook holds three beats and comes apart over 4.4 s, gone
+  as "seventeen" is sung; SEVENTEEN slams onto the middle row on the word and
+  comes apart over 2.7 s to the first "more"; MORE lands a row on each "more"
+  and comes apart over nine beats (in the last chorus, to "you"). YOU / WANTED
+  / MORE lands on "you" (236.96), "wanted", "more" and comes apart over ten
+  beats.
+- **The clues** sit in the builds nearest where they were: Love Nest (82.80,
+  after "Say goodbye to all you know"), The Seven Year Itch (158.59, after
+  "Different lines"), The Misfits (203.43, the last title). Red for a beat from
+  the build's first eighth, then the title locks.
+- **The finale.** The flashing starts as YOU WANTED MORE is gone (246.38);
+  NORMA JEANE pops up at bar 98 (248.28); from bar 99 one letter changes every
+  two beats, scattered, into MARILYN (the row above) / MONROE (the middle row);
+  of the thirteen, two come up wrong and one never comes, never an initial;
+  the free board flashes on every eighth (most on the beats) to the cut at
+  275.76. Something's Got to Give is gone with the other titles.
 - **The twinkle follows the record** (`score.brightness`), the pick from the
-  three intensity tests of 2026-11-05 ("follows the record"). The other two
-  and the test row are deleted.
+  three intensity tests of 2026-11-05 ("follows the record"), with a floor of
+  a quarter so it never stops.
 
 ## Jump to
 
@@ -83,17 +93,18 @@ them with it.
 | --- | --- |
 | Opening | The mark drawn on, then the title, then the black lifts off the dark, empty marquee. |
 | **Norma Jeane** | A blank second, then her tiles spin from the downbeat and settle into NORMA JEANE on the word. |
-| The first film | Dangerous Years, the first of the stream. |
-| The first drop | The board empties, the record drops out, the bulbs go out; Ladies of the Chorus surfaces as it comes back. |
-| Clue 1 | M, Y and O in red, in her places, as All About Eve starts to build. |
-| **Chorus 1** | Dark for the drop bar, then GOODBYE / NORMA / JEANE on the words, dissolving through "I've been in love". |
-| Break 2 (2:04) | Gold lights; the stream runs on through the interlude. |
-| Clue 2 | Six of her letters, as Niagara starts to build. |
-| Chorus 2 | The drop, the hook, the stream. |
-| Clue 3 | Nine of her letters, as The Prince and the Showgirl starts to build. |
-| **Last goodbye** | No drop bar: the board empties for a breath and the hook lands on the words. |
-| Something's Got to Give | After The Misfits it starts to spell and never finishes; the letters keep spinning and die out one by one. |
-| The end | The last letters and bulbs go, and on the last hit the mark. |
+| The first film | Dangerous Years, the first of the stream; one every 4.4 s from here. |
+| Clue 1 | M, Y and O in red, in her places, as Love Nest starts to build. |
+| **Chorus 1** | GOODBYE / NORMA / JEANE on the words, SEVENTEEN, MORE / MORE / MORE; no titles. |
+| Break 2 | The stream resumes with Don't Bother to Knock as MORE goes. |
+| Clue 2 | Six of her letters, as The Seven Year Itch starts to build. |
+| Chorus 2 | The words again; Let's Make Love and The Misfits under the trumpet after. |
+| Clue 3 | Nine of her letters, as The Misfits starts to build. |
+| **The piano** | No title: the board flashes on the piano's three strikes a bar. |
+| Last goodbye | The words, then YOU / WANTED / MORE. |
+| You wanted more | The last lyric on the board. |
+| **Her name** | NORMA JEANE pops up where the voice leaves and turns, letter by letter, into MARILYN / MONROE; never finished. |
+| The end | The last hit cuts to the mark. |
 
 The poster frame (before play) is GOODBYE / NORMA / JEANE whole in the first
 chorus.
@@ -136,9 +147,14 @@ moved to 275.76, the last guitar/piano note (275.3 was heard as early).
 
 ### 2026-11-09
 
-The three rules above, and: the whole name on "Norma" (not "Jeane"); hold four
-beats; JEANE, no comma; keep the clues; the twinkle follows the record; the
-ending left to me; the gaps before the drop bars accepted.
+First round: the whole name on "Norma" (not "Jeane"); JEANE, no comma; keep
+the clues; the twinkle follows the record; the gaps before the drop bars
+accepted; hold four beats. Second round, after watching it: no dark pause
+ever after the start; words only in the choruses (SEVENTEEN and MORE / MORE /
+MORE timed like the hook); nothing but flashing under the piano; YOU WANTED
+MORE, then her name forming and never finishing; no breaks between titles.
+The hold went to three beats so all twenty-nine films still fit (offered as
+the trade-off and approved with "That is great").
 
 ## Measuring intensity
 
