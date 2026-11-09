@@ -28,7 +28,7 @@ How to build or change one is the `music-video-creation` skill.
 | # | Song | State | Film |
 | --- | --- | --- | --- |
 | 1 | [Into the Wild](into-the-wild.md) | **Final** (2026-11-03), exported | `maze.mjs` |
-| 2 | [Conman](conman.md) | Film, v2 (pinned) | `conman-heists.mjs` |
+| 2 | [Conman](conman.md) | Film, the Portland rebuild (in progress: heists only); the old film kept as a test | `conman-portland/heists.mjs` |
 | 3 | [Goodbye, Norma Jeane](goodbye-norma-jeane.md) | Film | `marquee.mjs` |
 | 4 | [Ivory](ivory.md) | Film, v1 | `blanks.mjs` |
 | 5 | [Andalusia](andalusia.md) | Film, with the new opening; mp4 to re-render | `cartography.mjs` (album edition) |

@@ -1,13 +1,183 @@
 # Conman — the heists
 
-Track 2. [/visualizers/conman](/visualizers/conman). Film:
-`shared/video/films/conman-heists.mjs` (`conmanHeistsFrame`; the modules are
-in `shared/video/films/conman-heists/`, the whole film in its `film.mjs`).
-Score: `app/config/conmanScore.ts`. v2, 2026-11-05, on the page and pinned
-(see "Pinned" below).
+Track 2. [/visualizers/conman](/visualizers/conman). **The film on the page
+is the Portland rebuild** (made the default 2026-11-09, in progress): `shared/video/films/conman-portland/heists.mjs`
+(`heistsFilm`), the five heists on the new map, with the drives, chases,
+police and countdown still to come. See "The Portland rebuild" below.
+Score: `app/config/conmanScore.ts`.
 
-v1, the city (`conman-city.mjs`, 2026-11-02), is described under "v1" below
-and is still in the repo, no longer on the page.
+**The old film is kept** (the user, 2026-11-09): v2, the anchor town,
+`shared/video/films/conman-heists.mjs` (`conmanHeistsFrame`, modules in
+`conman-heists/`), on the page as `?test=anchor`. The new film borrows its
+plans, people and timing from those modules, so they cannot be deleted
+anyway. Everything from "Timing round" down describes v2. v1, the city
+(`conman-city.mjs`, 2026-11-02), is still in the repo and off the page.
+
+## The Portland rebuild (2026-11-09) — rules agreed, sites pending
+
+The user likes the five heists as they are. What does not work is the map
+("the anchor outline just doesn't feel right") and the pacing of the police
+chases; the film should look cohesive. v2 stays on the page while a new film
+is built beside it on a new map.
+
+**What the profile of v2 found** (every chase route sampled every 50 ms):
+- Heists are drawn with the frame 60–180 m wide and chases with it 0.6–2 km
+  wide, jumped between in 2–3 s; each plan floats on nearly blank paper.
+- All five sites sit inside about 600 × 900 m.
+- Speeds are inconsistent: on foot 77 m/s (chase 1), up to 195 (chase 2),
+  34–53 (finale); a car 153 in the getaway and 64 in the finale.
+- The police only follow (each officer's route is the runner's, a few
+  seconds late): about 130 m back in chase 1, 250 m in chase 2.
+- Chase 1 has 7.6 s and chase 2 has 5 s of running with nobody behind them.
+- In the finale every officer, both police cars included, spends 1.7–2.6 s
+  inside buildings (dropping the dotted cut-through points from a runner's
+  route leaves a straight line across the block), and the chase 2 officer is
+  in the river for 0.4 s at 135.6.
+
+**Decided by the user (2026-11-09):**
+- **The map is "just based on Portland"**, north-up, not to exact scale, the
+  Willamette through it and its bridges on it. **Nothing is named**: it is
+  not revealed as Portland until the end.
+- **Sites are spread out, for map coverage**; one or two west of the river.
+  They need not be music venues or prominent places, though it is good if
+  each is a place of art or making (Powell's Books was the example). Heist 1
+  is by the Haymaker (1233 N Killingsworth); **heist 5, the concert hall, is
+  by Revolution Hall** (1300 SE Stark). The Moda Center is no longer the end.
+- Still five heists and three chases; chases run between the sites or
+  anywhere on the map.
+- **Hard rules for every route:** nobody ever goes into the water (bridges
+  only); nobody passes through a building, on foot or driving: streets,
+  alleys and parks only (this replaces "through buildings by their doors").
+  A chase works like a real one: they lose the police by hiding in a park or
+  behind a building.
+- The crew drive between sites and go on foot for the last blocks and the
+  hiding; the police have cars too.
+- Old trails fade after each section.
+- **The ending, after the last heist, counts down.** No. 5 is caught first
+  and is the central figure; the camera pans quickly to wherever No. 4 is,
+  running or driving, and a couple of seconds later he is caught; then 3;
+  then 2. It ends on No. 1 running while the camera pulls out to the whole
+  city and on to the region, drawn with less detail: the Columbia River,
+  maybe Mount Hood. No. 1 is never caught. That is the (soft) reveal that it
+  is Portland. This replaces "the chase never ends, two caught".
+
+**Rules proposed with the profile and not objected to:** one walking, one
+running and one driving speed for the whole film; police chase what they can
+see, and the crew are lost only after a few seconds out of every officer's
+sight with trees or a building between; every chase has at least three beats
+(spotted, a near miss or cut-off, the hide) and nobody runs unpursued for
+more than about 3 s; three camera distances only (plan, street, city), with
+the city drawn around each plan; a script checks every route against water
+and building footprints.
+
+**Sites: B, museum in the hills** (picked 2026-11-09 from three sketches;
+the labelled sketch is still on the page as `?test=sites-b` until the map is
+settled). North–south is squeezed outside the middle so the far north and
+south fit the frame.
+
+| | 1 Record shop | 2 Counting house | 3 Studio | 4 Museum | 5 Concert hall |
+|---|---|---|---|---|---|
+| **B (the pick)** | the Haymaker, N Killingsworth | Powell's Books, W Burnside | Alberta Rose, NE Alberta | Pittock Mansion, West Hills | Revolution Hall, SE Stark |
+| A · Museum downtown | the Haymaker | Powell's Books | Alberta Rose | the art museum, Park Blocks | Revolution Hall |
+| C · Four corners | the Haymaker | Alberta Rose | Powell's Books | Artichoke Music | Revolution Hall |
+
+The way between them in B: the drive 1→2 over the Broadway Bridge; chase 1
+(2→3) over the Steel Bridge and up through the north-east; chase 2 (3→4)
+back over the Fremont Bridge and up into the hills; the getaway 4→5 down
+Burnside and over its bridge. The east of the map has no site: No. 1's last
+run covers it.
+
+**Second round of answers (the user, 2026-11-09):**
+- **The record shop is redrawn to fit its corner** (an ordinary street
+  corner, not a traffic circle); the heist itself stays, fitted to the new
+  building.
+- The Moda Center is part of the general map and not marked out in any way
+  (the arena's footprint is one more building by the river).
+- The map is today's Portland (the Tilikum crossing is on it; drawn as a
+  footway, no cars, which is true of it).
+- **The countdown's clock:** a second more for each capture than first
+  proposed, leaving twelve seconds for No. 1 and the pull-out: No. 5 caught
+  by about 3:15, No. 4 by 3:23, No. 3 by 3:31, No. 2 by 3:40, then No. 1 to
+  the last hit at 3:52 (each to be landed on a beat). The only captures in
+  the film are these, after the last heist.
+- **Numbers are by when they joined**, so the last in is the first caught:
+  4 is the driver (joined at the museum), 5 the stagehand. (v2 has those two
+  swapped in the last heist.)
+- **Each is caught a different way**, and each further from the hall than
+  the last: 5 at the stage door or very close to the building, 4 boxed in on
+  a bridge by police cars from both ends, 3 found hiding in a park, 2
+  cornered at a dead end by the river, over the water from the hall.
+- **No. 1 has no destination**: on foot, at a dead sprint the whole time,
+  all over the city in a frenzy (north, then west, then south, zig-zagging)
+  with three police cars after him as the camera pulls out. He gets away
+  through parks and alleys and over the footbridge, where cars cannot follow
+  (the Tilikum crossing carries no cars; the user liked that detail).
+- **Nothing is written on the regional map**: no title block, no names.
+- **The two hides are different:** a park in chase 1; behind a building or
+  down an alley in chase 2. **The garage is gone**: hiding inside a building
+  is not allowed.
+- **Cars.** The crew in a car are one red car with no numbers; their dots
+  disappear as they get in and reappear as they get out. A police car is the
+  same in the police's own colour as it is now (the ink and paper of the
+  ringed P), not a new blue.
+- **The police escalate**: one car in chase 1, two in chase 2, many in the
+  finale.
+- The museum's near miss stays, and they get away.
+
+- **The map is approved** ("looks great"; the tour "is perfect"). **No
+  labels on it, ever:** no sites, bridges or roads named or numbered.
+
+**The heists on their lots** (`conman-portland/heists.mjs`; the film on the
+page since 2026-11-09). The five heists are v2's, with the same rooms, people and
+timing, each pinned to its verse; between them the camera crosses the town
+alone for now.
+- **The record shop is v2's plan unrolled** onto a straight corner building
+  (an arc of radius R at angle θ becomes x = (−28 − θ) × 0.7636, y = 49.5 −
+  R) and turned over left to right, so the staff door opens onto the side
+  street and not into the neighbour. Same bins, counter, office, safe and
+  route; the camera no longer turns. He comes up the side street from below
+  the frame, turns the corner and stands outside from 21.6.
+- The counting house, studio, museum and hall are moved as drawn (their own
+  origins are `O2`–`O5`). The studio's back lane is now the side street; the
+  museum sits inside the hilltop ring (72 m, as before); the hall's stage
+  door is on the street and its fan faces its own park.
+- Street and place names are taken off the plans; room names and the atlas's
+  construction marks stay. The police are out of the keys of jobs 4 and 5
+  until the chases are built.
+- A check samples every crew member and figure of every heist every 50 ms
+  against the river and the town's building footprints: all clear.
+- **Next:** the drive 1→2, chase 1, chase 2, the museum's near miss, the
+  getaway, the police in the last verse, and the countdown, each on routes
+  held to the rules (one walking, one running and one driving speed; streets,
+  alleys and parks only; water only by bridge), with the red car and the
+  police car.
+
+**The map, first pass** (`conman-portland/city.mjs`, `atlas.mjs`, `map.mjs`;
+on the page as `?test=map`, a tour on the song's clock that sits where each
+part of the film will happen, at the distance it will be seen from):
+- **A miniature.** Places are set from their real latitude and longitude,
+  north–south is squeezed outside the middle, and the plan is drawn at 300
+  film metres to a real kilometre, while buildings, streets and 80 m blocks
+  stay life-size. So a plan at 20 px a metre and the whole city at 0.4 px a
+  metre are one drawing, and the sites are 700–1,900 m apart (v2's were
+  190–800 m). The sheet is 3,830 × 1,940 m: about 820 blocks, 6,700 lots.
+- **What is on it:** the river and its nine bridges (Fremont, Broadway,
+  Steel, Burnside, Morrison, Hawthorne, Marquam, Tilikum, Ross Island); the
+  downtown grid turned twenty degrees to the river, the true-north grid
+  everywhere else; the West Hills with contours, forest and winding streets;
+  the hilltop ring for the museum; the freeway loop, the freeway up the
+  gulch, Sandy's diagonal; the park blocks, the waterfront, Ladd's X, Lone
+  Fir, Laurelhurst, Irving Park, Mount Tabor, Ross Island.
+- **Each lot has its neighbours**: the shop, the counting house and the
+  studio stand in a built-up block, hatched buildings against both sides;
+  the museum and the hall stand in their own grounds, among trees.
+- **Detail by distance.** Plan, street and city show every lot; past about
+  5 km across, blocks only, and what lies beyond the sheet: suburbs thinning
+  in patches, the Columbia across the north with the Willamette running up
+  to meet it, and the mountain in the east as contours (brought in to about
+  half its true distance).
+- Everything static is in `lib` (1.3 MB, mounted once); a frame is about
+  8 KB of `<use>`s. The numbers on the lots are for planning only.
 
 ## Timing round (2026-11-06)
 

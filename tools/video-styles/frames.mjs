@@ -64,6 +64,9 @@ const FILMS = {
   maze: ['maze.mjs', 'mazeFrame'],
   'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
   'conman-heists': ['conman-heists.mjs', 'conmanHeistsFrame'],
+  'conman-map': ['conman-portland/map.mjs', 'mapTour'],
+  'conman-portland': ['conman-portland/heists.mjs', 'heistsFilm'],
+  'conman-sites': ['conman-portland/sites.mjs', 'SITE_TESTS.0.film'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
 }

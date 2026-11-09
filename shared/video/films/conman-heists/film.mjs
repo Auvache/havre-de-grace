@@ -571,3 +571,6 @@ export const FILM_BEATS = [
 ]
 void COVER_SHEET
 void lerp
+
+/* For the Portland rebuild (conman-portland/heists.mjs): the same jobs, moved onto another town. */
+export { STUDIO3, MUSEUM4, HALL5, KEY3, KEY4, KEY5, openingSvg, END_CARD }
