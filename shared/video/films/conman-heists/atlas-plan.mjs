@@ -93,7 +93,9 @@ export function atlasPlan(job, c, time, uid) {
   const fs = 13
   const th = (kind) => Math.min(THICK[kind][2], Math.max(THICK[kind][1], THICK[kind][0] * s))
   const poly = (pts) => `M${pts.map((p) => A(p).map((v) => r(v)).join(' ')).join('L')}Z`
-  let out = `<defs>${hatchScreen(`${uid}-wl`, 3, 45, 0.8, 1, true)}${hatchScreen(`${uid}-tn`, 7, -45, 0.6, 0.35)}<pattern id="${uid}-take" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="1.6" fill="${GREEN}"/></pattern></defs>`
+  // A job with `hatch` ({ k, b, ox, oy }) has its brick ruled on the building, not on the screen (see conman-portland/atlas.mjs).
+  const brick = job.hatch ? (id, gap, ang, w, op, cross) => hatchFixed(id, gap, ang, w, op, cross, job.hatch) : hatchScreen
+  let out = `<defs>${brick(`${uid}-wl`, 3, 45, 0.8, 1, true)}${brick(`${uid}-tn`, 7, -45, 0.6, 0.35)}<pattern id="${uid}-take" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="1.6" fill="${GREEN}"/></pattern></defs>`
 
   // Sheets (a second floor drawn alongside), then the building's own ground.
   for (const sh of job.sheets ?? []) {
@@ -373,6 +375,13 @@ export function atlasPlan(job, c, time, uid) {
   }
   if (job.over) top += job.over(ctx)
   return out + top
+}
+
+/** hatchScreen, but about a screen point that travels with the plan, `k` times its usual gap, every other line at opacity `b`. */
+function hatchFixed(id, gap, ang, w, op, cross, { k, b, ox, oy }) {
+  const g = gap * k
+  const rule = (o, a) => `<line x1="0" y1="${r(o, 3)}" x2="${r(2 * g, 3)}" y2="${r(o, 3)}" stroke="${INK}" stroke-width="${w}" opacity="${r(op * a, 3)}"/>${cross ? `<line x1="${r(o, 3)}" y1="0" x2="${r(o, 3)}" y2="${r(2 * g, 3)}" stroke="${INK}" stroke-width="${w}" opacity="${r(op * a, 3)}"/>` : ''}`
+  return `<pattern id="${id}" width="${r(2 * g, 3)}" height="${r(2 * g, 3)}" patternUnits="userSpaceOnUse" patternTransform="translate(${r(ox, 2)} ${r(oy, 2)}) rotate(${ang})">${rule(0, 1)}${b > 0.004 ? rule(g, b) : ''}</pattern>`
 }
 
 /** An annular sector about screen point O, radii r0 < r1, degrees d0 < d1. */

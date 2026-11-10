@@ -1,10 +1,12 @@
 # Conman — the heists
 
 Track 2. [/visualizers/conman](/visualizers/conman). **The film on the page
-is the Portland rebuild** (made the default 2026-11-09, in progress): `shared/video/films/conman-portland/heists.mjs`
-(`heistsFilm`), the five heists on the new map, with the drives, chases,
-police and countdown still to come. See "The Portland rebuild" below.
-Score: `app/config/conmanScore.ts`.
+is the Portland rebuild** (made the default 2026-11-09; whole since
+2026-11-10): `shared/video/films/conman-portland/heists.mjs` (`heistsFilm`),
+the five heists on the new map with the red car, the two chases, the police
+and the ending. Read "The whole film" first; "The Portland rebuild" under
+it is how the map and the sites were settled, and some of what it says
+about the ending has been replaced. Score: `app/config/conmanScore.ts`.
 
 **The old film is kept** (the user, 2026-11-09): v2, the anchor town,
 `shared/video/films/conman-heists.mjs` (`conmanHeistsFrame`, modules in
@@ -13,7 +15,104 @@ plans, people and timing from those modules, so they cannot be deleted
 anyway. Everything from "Timing round" down describes v2. v1, the city
 (`conman-city.mjs`, 2026-11-02), is still in the repo and off the page.
 
-## The Portland rebuild (2026-11-09) — rules agreed, sites pending
+## The whole film (2026-11-10) — awaiting the user's look
+
+Built in one pass from the user's seven notes and their answers to a round
+of questions. Not yet watched by them; nothing here is approved until it is.
+
+**Where things are.** `conman-portland/camera.mjs` (the sites, the clock `T`,
+the views, the camera's holds), `story.mjs` (every route: who goes where and
+when), `travel.mjs` (legs, routes, the car, the officer, trails),
+`heists.mjs` (the plans and the frame). Change a time in `T`, not in a route.
+
+**The clock.**
+
+| When | What |
+|---|---|
+| 0:33 | The shop's owner walks off (was 0:35); the conman's dash, the safe and the way out are two seconds sooner. Out of the staff door 0:39.4, back down the side street to his car, off at 0:41.5. |
+| 0:41–0:54 | The red car: Broadway Bridge, down to the counting house, parked nose west by the door. He walks to the door by 0:55.4. |
+| 1:16–1:17 | A police car pulls up nose to nose with the red car as the pair step out. Two officers after them on foot from 1:18. |
+| 1:18–1:28 | Chase 1: east over the Burnside Bridge, north, east. The officers lose them at the last corner and run on east. |
+| 1:28–1:30 | The pair lie low in the park (dashed rings), then walk to the studio; at its corner 1:38.2. |
+| 2:01–2:03 | Heist 3's end: the conman out by the back door to the lane, the engineer into the street. A police car pulls up at the front 2:03.4. |
+| 2:03–2:16 | Chase 2: No. 1 north (the car after him, stopped by a park), No. 2 south, No. 3 east, an officer after each; over the Broadway, Steel and Burnside bridges. The camera leaves at 2:13.6; they are at the museum (below the frame, as before) at 2:19. |
+| 2:33–2:40 | The museum: a police car up the drive (2:36), two officers in at the front (2:38.5); the auditor walks round to the bay; the red car leaves the bay at 2:38.5, past the empty police car. |
+| 2:38–2:44 | The red car down Burnside to the hall, stopping at the stage door at 2:44.4. |
+| 2:55 | Two police cars: one down the street the red car came by, one along the lane from the east. |
+| 2:55–2:57 | No. 4, the driver, is taken at his car; he and the officer are gone by 2:57.1. He does not come back. |
+| 2:58–3:04 | Five officers walk round to the five doors (stage door, two yard doors, two front doors). The performer, locked out, reaches the officer at the front at 3:06. |
+| 3:08 | They go in. No. 1 up the middle of the house over the seats between the two officers coming down the aisles, and out of the door they came in by; 2 down the trap; 3 up the fly tower; 5 out of the stage door behind the officer. |
+| 3:14.4 | No. 5 caught in the trees east of the hall. |
+| 3:21.9 | No. 3, who hid among the trees, flushed out and boxed in on the south lawn. |
+| 3:26.7 | No. 2 cornered three blocks north, a police car across the street ahead. |
+| 3:08–3:45 | One even pull-out from the hall to the whole town; held there to the end card (3:52.1). No region. |
+| to 3:52 | No. 1: round the hall's blocks, north-east, over the Broadway Bridge, down the riverside park, over the footbridge, and across the east side, ten police cars in turn; still running, two behind him, at the end card. |
+
+Arrests are on beats (87.5 BPM, a beat at 0.31). 3 and 2 are four seconds
+later than the user's first times, as they allowed, so they happen inside
+the frame the even zoom gives.
+
+**Decided by the user (2026-11-10).**
+- The crew travel in **the red car** (1 → 2, and to the hall); the two
+  chases are on foot.
+- **Police cars whenever it suits**; it should be fun (a man on foot evading
+  police cars, a chase sprawling across the map).
+- **Red lines stay for the rest of the film** once drawn (travel lines; a
+  heist's own lines inside its plan still fade when the heist is over).
+- Chase 1 keeps the park hide "provided the pacing is natural".
+- Heist 3's exits may spill into the chorus.
+- The museum: the police **appear, but do not find or chase them**.
+- No. 4 is arrested at his car and fades on the spot with the officer.
+- The last zoom is **even, ends at 3:45 on the whole town, and goes no
+  further** (the region, the Columbia and the mountain are out of the film).
+- Nobody has to stay in frame in the ending, so long as they stay on the map.
+- These replace the countdown (5, 4, 3, 2 at 3:15 / 3:23 / 3:31 / 3:40) and
+  the earlier ways each was caught.
+
+**How it is made, and what to keep.**
+- **A trip's speed is set against the camera** (`trip` in story.mjs): even
+  on the ground, but never more than 260 px a second on the sheet. So a car
+  pulls away and pulls up gently where a metre is twenty pixels, and travels
+  on the wide view. Before this an arrival read at 500 px/s during the
+  zoom-in. On the sheet now: the drive 92 px/s, chase 1 110, chase 2 110,
+  arrivals 260 falling to a stop. **The drive to the hall is 359**: 1.8 km
+  in 5.9 s, between a museum exit and a hall arrival the user called
+  perfect. It is the one fast trip; say so if it is questioned.
+- **Chase 2 is seen at 131 m/s and finished unseen**: once the camera has
+  left (2:16) the three cover the rest at 450–500 m/s, so the line is whole
+  for the last pull-out and they are standing at the museum on time.
+- **No. 1's speed is the camera's**: 200 px/s on the sheet, so up to 420 m/s
+  by the time the whole town is in view. His route has a kilometre to spare
+  at the end card.
+- **The camera is still while anyone travels**: plan → a wide view that
+  holds the whole trip → plan (`HOLDS` in camera.mjs).
+- **Hatching is ruled on the ground** (`hatchAt` in heists.mjs; atlas.mjs
+  `hatch`, atlas-plan.mjs `hatchFixed`). The museum's north wall "shook" at
+  2:19 because brick was ruled on the screen and slid against the wall while
+  the camera settled. At every hold it is exactly as it was (checked: a line
+  every 3.2 px in the town, 3 px on a plan's walls); between holds it moves
+  and scales with the buildings and thins by halves. The old film and the map
+  tour are untouched (they pass no `hatch`).
+- **A driver's head rides on his car**: cars are drawn under the plans, so
+  No. 4's dot is on the red car while he waits with it.
+- **Parked cars shrink with the plan**; a moving one is never under 30 px.
+- **Dashes are fixed to the ground** (`trail`, `sRef`), so a dashed line
+  does not creep during the pull-out.
+
+**The check.** `node tools/video-styles/conman-explore/check-routes.mjs`
+samples all 43 movers every 20 ms: nobody in the water off a bridge, nobody
+in a building (a heist's own only by its doors: steps flagged `'in'` or
+`'jump'`), no car in a park or on the footbridge; it prints each one's
+speeds and whether those who must be seen are in frame (`MUST_SEE`). All
+clear on 2026-11-10. Run it after any change to a route or to the camera.
+
+**Not done / to ask.** The user has not watched it. Likely questions: the
+speed of the drive to the hall; whether No. 5's "park" (the trees in the
+hall's own grounds; the next park east is out of frame at 3:14) is what they
+meant; whether the two crew lines that share Burnside read. The dev server
+for this repo was on **port 3010** that day (3000 was another project).
+
+## The Portland rebuild (2026-11-09) — how the map and sites were settled
 
 The user likes the five heists as they are. What does not work is the map
 ("the anchor outline just doesn't feel right") and the pacing of the police

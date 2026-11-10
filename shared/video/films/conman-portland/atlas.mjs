@@ -111,8 +111,20 @@ function libFor(uid) {
 
 /* ── A frame of the town ─────────────────────────────────────────────── */
 
-/** A hatch whose lines are `gap` pixels apart at this camera. */
-const hatch = (id, c, { gap, ang, w, op = 1, cross = false }) => {
+/**
+ * A hatch whose lines are `gap` pixels apart at this camera. With `fixed`
+ * ({ m, b, ax, ay }, from the film) it is ruled on the ground instead: `m`
+ * metres to a nominal pixel, about (ax, ay), every other line at opacity
+ * `b`. The lines then move and scale with the buildings, and thin out by
+ * halves as the camera pulls back, so nothing creeps while the camera moves.
+ */
+const hatch = (id, c, { gap, ang, w, op = 1, cross = false }, fixed) => {
+  if (fixed) {
+    const g = gap * fixed.m
+    const sw = r(w / c.s, 4)
+    const rule = (o, k) => `<line x1="0" y1="${r(o, 4)}" x2="${r(2 * g, 4)}" y2="${r(o, 4)}" stroke="${INK}" stroke-width="${sw}" opacity="${r(op * k, 3)}"/>${cross ? `<line x1="${r(o, 4)}" y1="0" x2="${r(o, 4)}" y2="${r(2 * g, 4)}" stroke="${INK}" stroke-width="${sw}" opacity="${r(op * k, 3)}"/>` : ''}`
+    return `<pattern id="${id}" width="${r(2 * g, 4)}" height="${r(2 * g, 4)}" patternUnits="userSpaceOnUse" patternTransform="translate(${r(fixed.ax, 2)} ${r(fixed.ay, 2)}) rotate(${ang})">${rule(0, 1)}${fixed.b > 0.004 ? rule(g, fixed.b) : ''}</pattern>`
+  }
   const g = gap / c.s
   return `<pattern id="${id}" width="${r(g, 4)}" height="${r(g, 4)}" patternUnits="userSpaceOnUse" patternTransform="rotate(${ang})"><line x1="0" y1="0" x2="${r(g, 4)}" y2="0" stroke="${INK}" stroke-width="${r(w / c.s, 4)}" opacity="${op}"/>${cross ? `<line x1="0" y1="0" x2="0" y2="${r(g, 4)}" stroke="${INK}" stroke-width="${r(w / c.s, 4)}" opacity="${op}"/>` : ''}</pattern>`
 }
@@ -122,14 +134,14 @@ const use = (uid, k, extra = '') => `<use href="#${uid}-pt-${k}"${extra}/>`
  * The town at camera c. Returns { svg, lib }. `sites`: 'lots' (the empty
  * lots, dashed), 'numbers' (and their numbers, for planning) or false.
  */
-export function town(c, uid, { sites = 'lots' } = {}) {
+export function town(c, uid, { sites = 'lots', hatch: fixed } = {}) {
   const v = c.view
   const tiles = [...TILES.keys()].filter((key) => { const [x0, y0, x1, y1] = tileBox(key); return x1 > v.x0 && x0 < v.x1 && y1 > v.y0 && y0 < v.y1 })
   // Detail by distance: lots give way to plain blocks as the frame passes about 5 km across.
   const near = ramp(c.s, 0.22, 0.3)
   const far = 1 - ramp(c.s, 0.26, 0.36)
   const beyond = 1 - ramp(c.s, 0.37, 0.45)
-  let w = `<defs>${hatch(`${uid}-b`, c, { gap: 3.2, ang: 45, w: 0.7 })}${hatch(`${uid}-s`, c, { gap: 3.4, ang: 45, w: 0.7, cross: true })}${hatch(`${uid}-w`, c, { gap: 3.2, ang: 0, w: 0.6, op: 0.55 })}</defs>`
+  let w = `<defs>${hatch(`${uid}-b`, c, { gap: 3.2, ang: 45, w: 0.7 }, fixed)}${hatch(`${uid}-s`, c, { gap: 3.4, ang: 45, w: 0.7, cross: true }, fixed)}${hatch(`${uid}-w`, c, { gap: 3.2, ang: 0, w: 0.6, op: 0.55 }, fixed)}</defs>`
   if (beyond > 0) w += use(uid, 'region', ` opacity="${r(beyond, 3)}"`)
   w += use(uid, 'ground') + use(uid, 'water')
   if (far > 0) w += use(uid, 'far', ` opacity="${r(far, 3)}"`)
