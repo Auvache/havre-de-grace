@@ -20,6 +20,10 @@ const TITLES = {
   conman: { text: 'Conman', size: 54 },
   ivory: { text: 'Ivory', size: 54 },
   andalusia: { text: 'Andalusia', size: 54 },
+  'new-york': { text: 'New York', size: 54 },
+  'meet-me-at-the-horizon': { text: 'Meet Me at the Horizon', size: 54 },
+  'ship-to-stockholm': { text: 'Ship to Stockholm', size: 54 },
+  ghost: { text: 'Ghost', size: 54 },
 }
 
 await loadFaces()

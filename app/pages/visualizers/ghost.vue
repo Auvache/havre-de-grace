@@ -10,14 +10,15 @@
         </h1>
       </header>
 
-      <VisualizerStills :ideas="VISUALIZER_STILLS['ghost']!" />
+      <VisualizerPlayer :film="danceCardFrame" name="The Dance Card" :score="GHOST_SCORE" :poster-at="119.6" :beats="DANCE_CARD_BEATS" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/* Ghost: no film yet, only the proposed stills. Notes: docs/visualizers/ghost.md. */
-import { VISUALIZER_STILLS } from '~/config/visualizerStills'
+/* Ghost: the dance card (shared/video/films/dance-card.mjs). Notes: docs/visualizers/ghost.md. */
+import { GHOST_SCORE } from '~/config/ghostScore'
+import { danceCardFrame, DANCE_CARD_BEATS } from '~~/shared/video/films/dance-card.mjs'
 
 definePageMeta({ layout: 'default' })
 useHead({ title: 'Ghost — visualizer', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })

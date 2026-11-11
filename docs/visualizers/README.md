@@ -14,7 +14,8 @@ every visualizer follows:
   paper, black, one red thing travelling, and the lyric on one row in the margin.
 - **The opening**: the band's mark drawn on black, then the song's Hairline
   title, then the black lifts (the live videos' clock). Titles are baked by
-  `node tools/video-styles/titles/bake.mjs`.
+  `node tools/video-styles/titles/bake.mjs`; films from 2026-11-10 on draw it
+  with `filmOpening()` in `shared/video/opening.mjs`.
 - **The ending**: the end card on the last note or hit, then the mark.
 - **The page**: title, film, transport, the "Now" line, and a jump-to list of
   times with short labels (`VisualizerPlayer`). Nothing else on the page.
@@ -28,15 +29,15 @@ How to build or change one is the `music-video-creation` skill.
 | # | Song | State | Film |
 | --- | --- | --- | --- |
 | 1 | [Into the Wild](into-the-wild.md) | **Final** (2026-11-03), exported | `maze.mjs` |
-| 2 | [Conman](conman.md) | Film, the Portland rebuild (in progress: heists only); the old film kept as a test | `conman-portland/heists.mjs` |
+| 2 | [Conman](conman.md) | Film, the Portland rebuild (whole since 2026-11-10); the old film kept as a test | `conman-portland/heists.mjs` |
 | 3 | [Goodbye, Norma Jeane](goodbye-norma-jeane.md) | Film | `marquee.mjs` |
-| 4 | [Ivory](ivory.md) | Film, v1 | `blanks.mjs` |
+| 4 | [Ivory](ivory.md) | Back to the drawing board (2026-11-10): ten proposed stills, above the v1 film | `blanks.mjs` (kept until one is picked) |
 | 5 | [Andalusia](andalusia.md) | Film, with the new opening; mp4 to re-render | `cartography.mjs` (album edition) |
-| 6 | [New York](new-york.md) | Proposed stills | — |
-| 7 | [Meet Me at the Horizon](meet-me-at-the-horizon.md) | Proposed stills (Nightmares recommended) | — |
-| 8 | [Rocks in the Sea](rocks-in-the-sea.md) | Proposed stills | — |
-| 9 | [Ship to Stockholm](ship-to-stockholm.md) | Proposed stills | — |
-| 10 | [Ghost](ghost.md) | Proposed stills | — |
+| 6 | [New York](new-york.md) | Film, v1 (2026-11-10), not yet watched | `grain.mjs` |
+| 7 | [Meet Me at the Horizon](meet-me-at-the-horizon.md) | Two films, v1 (2026-11-10), not yet watched; one to be picked | `constellations.mjs`, `monkey-brain.mjs` |
+| 8 | [Rocks in the Sea](rocks-in-the-sea.md) | Proposed stills (left alone 2026-11-10) | — |
+| 9 | [Ship to Stockholm](ship-to-stockholm.md) | Film, v1 (2026-11-10), not yet watched | `road-trip.mjs` |
+| 10 | [Ghost](ghost.md) | Film, v1 (2026-11-10), not yet watched | `dance-card.mjs` |
 
 ## Where things are
 

@@ -10,14 +10,15 @@
         </h1>
       </header>
 
-      <VisualizerStills :ideas="VISUALIZER_STILLS['ship-to-stockholm']!" />
+      <VisualizerPlayer :film="roadTripFrame" name="The Road Trip" :score="SHIP_TO_STOCKHOLM_SCORE" :poster-at="ROAD_TRIP_POSTER" :beats="ROAD_TRIP_BEATS" :status="roadTripStatus" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/* Ship to Stockholm: no film yet, only the proposed stills. Notes: docs/visualizers/ship-to-stockholm.md. */
-import { VISUALIZER_STILLS } from '~/config/visualizerStills'
+/* Ship to Stockholm: the road trip (shared/video/films/road-trip.mjs). Notes: docs/visualizers/ship-to-stockholm.md. */
+import { SHIP_TO_STOCKHOLM_SCORE } from '~/config/shipToStockholmScore'
+import { roadTripFrame, roadTripStatus, ROAD_TRIP_BEATS, ROAD_TRIP_POSTER } from '~~/shared/video/films/road-trip.mjs'
 
 definePageMeta({ layout: 'default' })
 useHead({ title: 'Ship to Stockholm — visualizer', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })

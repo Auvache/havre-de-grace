@@ -10,15 +10,18 @@
         </h1>
       </header>
 
-      <VisualizerStills :ideas="VISUALIZER_STILLS['new-york']!" />
+      <VisualizerPlayer :film="grainFrame" name="Against the Grain" :score="NEW_YORK_SCORE" :poster-at="116.5" :beats="GRAIN_BEATS" :status="mood" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/* New York: no film yet, only the proposed stills. Notes: docs/visualizers/new-york.md. */
-import { VISUALIZER_STILLS } from '~/config/visualizerStills'
+/* New York: against the grain (shared/video/films/grain.mjs). Notes: docs/visualizers/new-york.md. */
+import { NEW_YORK_SCORE } from '~/config/newYorkScore'
+import { grainFrame, grainMood, GRAIN_BEATS } from '~~/shared/video/films/grain.mjs'
 
 definePageMeta({ layout: 'default' })
 useHead({ title: 'New York — visualizer', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
+
+const mood = (time: number) => grainMood(NEW_YORK_SCORE, time)
 </script>

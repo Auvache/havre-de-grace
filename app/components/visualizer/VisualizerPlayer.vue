@@ -57,7 +57,7 @@
       />
 
       <p class="text-sm muted-text">
-        Now: {{ clock(player.time.value) }} · {{ currentSection.label }}<template v-if="status">
+        Now: {{ clock(player.time.value) }} · {{ currentSection.label }}<template v-if="status && status(player.time.value)">
           · {{ status(player.time.value) }}
         </template>
       </p>

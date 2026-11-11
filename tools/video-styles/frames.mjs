@@ -42,6 +42,7 @@ import { SHIP_TO_STOCKHOLM_SCORE } from '../../app/config/shipToStockholmScore.t
 import { NEW_YORK_SCORE } from '../../app/config/newYorkScore.ts'
 import { ROCKS_IN_THE_SEA_SCORE } from '../../app/config/rocksInTheSeaScore.ts'
 import { MEET_ME_AT_THE_HORIZON_SCORE } from '../../app/config/meetMeAtTheHorizonScore.ts'
+import { GHOST_SCORE } from '../../app/config/ghostScore.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../..')
@@ -69,6 +70,11 @@ const FILMS = {
   'conman-sites': ['conman-portland/sites.mjs', 'SITE_TESTS.0.film'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
+  grain: ['grain.mjs', 'grainFrame'],
+  constellations: ['constellations.mjs', 'constellationsFrame'],
+  'monkey-brain': ['monkey-brain.mjs', 'monkeyBrainFrame'],
+  'road-trip': ['road-trip.mjs', 'roadTripFrame'],
+  'dance-card': ['dance-card.mjs', 'danceCardFrame'],
 }
 
 const SCORES = {
@@ -80,6 +86,7 @@ const SCORES = {
   'ship-to-stockholm': SHIP_TO_STOCKHOLM_SCORE,
   'new-york': NEW_YORK_SCORE,
   'meet-me-at-the-horizon': MEET_ME_AT_THE_HORIZON_SCORE,
+  ghost: GHOST_SCORE,
   'rocks-in-the-sea': ROCKS_IN_THE_SEA_SCORE,
 }
 

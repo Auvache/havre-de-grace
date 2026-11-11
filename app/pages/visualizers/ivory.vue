@@ -1,6 +1,6 @@
 <template>
   <div class="page-container section-space">
-    <div class="mx-auto max-w-5xl space-y-10">
+    <div class="mx-auto max-w-5xl space-y-14">
       <header class="space-y-3">
         <NuxtLink to="/visualizers" class="label-text muted-text hover:underline">
           Visualizers
@@ -10,14 +10,27 @@
         </h1>
       </header>
 
-      <VisualizerPlayer :film="blanksFrame" name="Five Blanks" :score="IVORY_SCORE" :poster-at="44" :beats="BEATS" />
+      <VisualizerStills :ideas="VISUALIZER_STILLS.ivory!" />
+
+      <section class="space-y-4">
+        <h2 class="section-heading text-[1.35rem]">
+          Five Blanks
+        </h2>
+        <VisualizerPlayer :film="blanksFrame" name="Five Blanks" :score="IVORY_SCORE" :poster-at="44" :beats="BEATS" />
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/* Ivory: five blanks (shared/video/films/blanks.mjs). Notes: docs/visualizers/ivory.md. */
+/*
+ * Ivory: back to the drawing board (2026-11-10). Ten proposed stills, one per
+ * idea (tools/video-styles/visualizers/ivory.mjs), and under them the first
+ * film, five blanks (shared/video/films/blanks.mjs), kept until one of the ten
+ * is chosen. Notes: docs/visualizers/ivory.md.
+ */
 import { IVORY_SCORE } from '~/config/ivoryScore'
+import { VISUALIZER_STILLS } from '~/config/visualizerStills'
 import { blanksFrame } from '~~/shared/video/films/blanks.mjs'
 
 definePageMeta({ layout: 'default' })

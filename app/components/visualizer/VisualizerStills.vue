@@ -1,5 +1,19 @@
 <template>
-  <div class="space-y-14">
+  <!-- One still an idea (Ivory's ten): the ideas themselves two-up, each under its name. -->
+  <div v-if="single" class="grid gap-x-3 gap-y-10 sm:grid-cols-2">
+    <section v-for="idea in ideas" :id="idea.id" :key="idea.id" class="min-w-0 scroll-mt-8 space-y-3">
+      <h2 class="section-heading text-[1.15rem]">
+        {{ idea.name }}
+      </h2>
+      <figure class="min-w-0 space-y-2">
+        <VisualizerStill :src="idea.stills[0]!.src" />
+        <figcaption class="font-mono text-xs muted-text">
+          {{ clock(idea.stills[0]!.time) }}
+        </figcaption>
+      </figure>
+    </section>
+  </div>
+  <div v-else class="space-y-14">
     <section v-for="idea in ideas" :id="idea.id" :key="idea.id" class="scroll-mt-8 space-y-4">
       <h2 class="section-heading text-[1.35rem]">
         {{ idea.name }}
@@ -25,7 +39,9 @@
  */
 import type { ProposedVisualizer } from '~/config/visualizerStills'
 
-defineProps<{ ideas: ProposedVisualizer[] }>()
+const props = defineProps<{ ideas: ProposedVisualizer[] }>()
+
+const single = computed(() => props.ideas.length > 0 && props.ideas.every((idea) => idea.stills.length === 1))
 
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 </script>

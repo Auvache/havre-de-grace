@@ -30,6 +30,22 @@
  *     106.40  'I'd play for you if I had hands' (the alignment guessed it; start snapped to the voice)
  *     134.53  'You're on fire. I'm a ghost' (the alignment guessed it; start snapped to the voice)
  *   - Not checked by ear yet. Stefan to listen through /tools/lyric-timing.
+ *
+ * FOR THE FILM (added 2026-11-10 by hand, for shared/video/films/dance-card.mjs:
+ * `album`, `artist`, `endCardAt`, `bpm`, `beatPhase`. No time above was
+ * changed. tools/captions/album-score.py does not write these: if this file is
+ * regenerated, put them back.)
+ *   - Tempo. 110 BPM, a beat at 0.25 s, and the band is on a click: a comb fit
+ *     of the onset flux gives the same tempo and the same phase (within about
+ *     20 ms) in the intro, each sung block, the break and the last block. In
+ *     four, not three: the onset autocorrelation peaks at 2, 4, 8 and 16 beats
+ *     (the lines of the first two blocks start 16 beats apart), and the 3- and
+ *     6-beat peaks are lower. Where the bar starts was not settled (the lines
+ *     of blocks 3 and 4 come 14 beats apart), so nothing should read a
+ *     downbeat off this; the film counts its own dances from where they start.
+ *   - The end card. The last strike of the guitar is at 191.30 (the last
+ *     onset above the ring-out; the voice's last word ends at 190.16), and
+ *     the chord then rings to the end of the file. Sure to about 50 ms.
  */
 
 import type { ScoreLine, ScoreSection } from './ivoryScore'
@@ -95,8 +111,18 @@ export const CHECK: number[] = [0, 3, 5, 7, 8, 12]
 
 export const GHOST_SCORE = {
   title: 'Ghost',
+  album: 'Into the Wild',
+  artist: 'Havre De Grace',
   src: '/albums/into-the-wild/music/ghost.mp3',
   duration: DURATION,
+  /**
+   * The last strike. The film cuts to the end card here and the chord rings
+   * out under the mark and the credits. Absolute song time; not moved by TRIM.
+   */
+  endCardAt: 191.3,
+  /** 110 BPM, a beat at 0.25. Measured, and steady: the band played to a click. In four. */
+  bpm: 110,
+  beatPhase: 0.25,
   sections: SECTIONS,
   lines: LINES,
 } as const

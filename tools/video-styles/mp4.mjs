@@ -43,6 +43,7 @@ import { CONMAN_SCORE } from '../../app/config/conmanScore.ts'
 import { SHIP_TO_STOCKHOLM_SCORE } from '../../app/config/shipToStockholmScore.ts'
 import { NEW_YORK_SCORE } from '../../app/config/newYorkScore.ts'
 import { MEET_ME_AT_THE_HORIZON_SCORE } from '../../app/config/meetMeAtTheHorizonScore.ts'
+import { GHOST_SCORE } from '../../app/config/ghostScore.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../..')
@@ -55,6 +56,11 @@ const FILMS = {
   'conman-heists': ['conman-heists.mjs', 'conmanHeistsFrame'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
   blanks: ['blanks.mjs', 'blanksFrame'],
+  grain: ['grain.mjs', 'grainFrame'],
+  constellations: ['constellations.mjs', 'constellationsFrame'],
+  'monkey-brain': ['monkey-brain.mjs', 'monkeyBrainFrame'],
+  'road-trip': ['road-trip.mjs', 'roadTripFrame'],
+  'dance-card': ['dance-card.mjs', 'danceCardFrame'],
 }
 const SCORES = {
   andalusia: ANDALUSIA_SCORE,
@@ -65,6 +71,7 @@ const SCORES = {
   'ship-to-stockholm': SHIP_TO_STOCKHOLM_SCORE,
   'new-york': NEW_YORK_SCORE,
   'meet-me-at-the-horizon': MEET_ME_AT_THE_HORIZON_SCORE,
+  ghost: GHOST_SCORE,
 }
 
 const { values: opt } = parseArgs({

@@ -1,11 +1,10 @@
 /*
- * The proposed stills for the songs that have no visualizer yet: each song's
- * CONCEPTS (and, for Meet Me at the Horizon, the three Lying Awake directions
- * in horizon.mjs), a few frames each.
+ * The proposed stills for the songs still choosing a visualizer: each song's
+ * CONCEPTS, a few frames each.
  *
  *   node tools/video-styles/visualizers/build.mjs                  # review grid → .visualizers.html
- *   node tools/video-styles/visualizers/build.mjs ghost            # one song
- *   CONCEPT=embers,smoke node ... ghost                             # only those concepts
+ *   node tools/video-styles/visualizers/build.mjs ivory            # one song
+ *   CONCEPT=room,crossword node ... ivory                           # only those concepts
  *   SITE=1 node tools/video-styles/visualizers/build.mjs           # the site's /visualizers/<song> pages
  *
  * SITE=1 writes every still to public/visualizers/<song>/<concept>-<n>.svg
@@ -28,13 +27,14 @@ import { still, fmt, sungAt } from './sheet.mjs'
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../../..')
 
-/* The songs without a film, in album order. */
+/*
+ * The songs with stills on their page, in album order: Ivory (ten new ideas,
+ * 2026-11-10, shown above its current film) and Rocks in the Sea (no film yet).
+ * `extra: [file, export]` adds a second round of concepts in front of CONCEPTS.
+ */
 const SONGS = [
-  { slug: 'new-york', score: ['newYorkScore.ts', 'NEW_YORK_SCORE'] },
-  { slug: 'meet-me-at-the-horizon', score: ['meetMeAtTheHorizonScore.ts', 'MEET_ME_AT_THE_HORIZON_SCORE'], extra: ['horizon.mjs', 'HORIZON_VARIANTS'] },
+  { slug: 'ivory', score: ['ivoryScore.ts', 'IVORY_SCORE'] },
   { slug: 'rocks-in-the-sea', score: ['rocksInTheSeaScore.ts', 'ROCKS_IN_THE_SEA_SCORE'] },
-  { slug: 'ship-to-stockholm', score: ['shipToStockholmScore.ts', 'SHIP_TO_STOCKHOLM_SCORE'] },
-  { slug: 'ghost', score: ['ghostScore.ts', 'GHOST_SCORE'] },
 ]
 
 const only = process.argv.slice(2)
@@ -47,7 +47,7 @@ for (const song of SONGS) {
   try {
     const score = (await import(resolve(root, 'app/config', song.score[0])))[song.score[1]]
     const { CONCEPTS } = await import(file)
-    // A later, deeper round (horizon.mjs) comes first: it is the newer proposal.
+    // A later, deeper round comes first: it is the newer proposal.
     const extra = song.extra ? (await import(resolve(here, song.extra[0])))[song.extra[1]] : []
     const all = [...extra.map((v) => ({ ...v, stills: v.moments })), ...CONCEPTS]
     const picked = process.env.CONCEPT ? all.filter((c) => process.env.CONCEPT.split(',').includes(c.id)) : all
