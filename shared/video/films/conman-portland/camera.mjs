@@ -30,10 +30,11 @@ export const O5 = [400, 88]
 
 export const T = {
   // Heist 1: the owner walks off at 0:33 (was 0:35); everything after it two seconds sooner.
-  ownerGoes: 33.0, shopOut: 39.4, inCar1: 41.2, drive12: [41.5, 54.2], atDoor2: 55.4,
+  atShop: 18.5, ownerGoes: 33.0, shopOut: 39.4, inCar1: 41.2, drive12: [41.5, 54.2], atDoor2: 55.4,
   chase1: 78.0, hide1: [88.5, 90.6], atStudio: 98.2,
   out3: 123.6, atMuseum: 139.0,
-  car45: [158.5, 164.4],
+  // They leave the museum a second sooner (the user, 2026-11-12; it was 158.5) and take that second on the way: the hall is as it was.
+  car45: [157.5, 164.4],
   police5: 175.0, arrest4: [175.9, 176.5, 177.1], posts: [178.0, 184.0], raid: 188.0,
   // Arrests, each on a beat (87.5 BPM, a beat at 0.31).
   arrest5: 194.37, arrest3: 201.91, arrest2: 206.71,
@@ -79,8 +80,9 @@ export const HOLDS = [
   [17.2, 40.4, V(1)],
   [44.4, 49.6, DRIVE_12], [54, 76.0, V(2)],
   [80.4, 92.6, CHASE_1], [98.4, 122.4, V(3)],
-  [125.8, 133.6, CHASE_2], [139.2, 158.4, V(4)],
-  [160.4, 162.6, both(4, 5)], [164.8, T.zoom[0], V(5)],
+  // The camera leaves the museum as they do, and is on the wide view two seconds later: so the second they gained is spent travelling, not pulling away.
+  [125.8, 133.6, CHASE_2], [139.2, T.car45[0] - 0.1, V(4)],
+  [T.car45[0] + 1.9, 162.6, both(4, 5)], [164.8, T.zoom[0], V(5)],
   [T.zoom[1], 999, CITY, 'even'],
 ]
 export function viewAt(t) {

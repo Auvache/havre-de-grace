@@ -4,6 +4,17 @@
  * the hall, the four arrests and No. 1's run. Routes and times only; the
  * machinery is travel.mjs and the picture is heists.mjs.
  *
+ * No car is drawn (the user, 2026-11-12: "replace all of the cars (conmen
+ * and police) with the original dots"). Whoever drives is his own dot, as in
+ * the old film: the red car is No. 1 on the first drive and No. 4, the
+ * driver, on the way to the hall; a police car is a ringed P. The routes and
+ * the times are the cars', so "car" below still says who keeps to the
+ * streets (the check holds them to it). A dot is on the sheet only while it
+ * is somebody: a parked car left nothing behind, so the red dot hands over
+ * to the plan's own No. 1 or No. 4 where it stops, and a police dot goes
+ * when its officers step away from it or, like any officer, a moment after
+ * it gives up.
+ *
  * What the user asked for (2026-11-10), as built:
  *
  *   1 → 2   the conman walks back to his car and drives over the Broadway
@@ -89,13 +100,11 @@ function trip(pts, t0, t1, { px = 260, a = 0.8, b = 0.7 } = {}) {
 
 /* ── The red car ─────────────────────────────────────────────────────── */
 
-const CAR1_PARK = S1(-10, 35.5) // on the side street, south of the corner
-const CAR1_AT_2 = [-311, -3] // by the counting house, nose west
+const CAR1_PARK = S1(-10, 33) // on the side street, south of the corner: where heist 1's own route for No. 1 begins and ends
+const CAR1_AT_2 = [-296.7, -3] // in the street at the counting house's door (the car ran on past it to park; a dot would only have to come back)
 const DRIVE12 = [CAR1_PARK, [-240, -562], [-80, -562], [-80, -305], [-205, -195], [-240, -160], [-240, -3], CAR1_AT_2]
-const car1 = route(
-  leg([[-240, -610], CAR1_PARK], 16.4, 18.4, 0.5, 1.2),
-  trip(DRIVE12, ...T.drive12, { a: 1.2, b: 1.0 }),
-)
+const car1in = route(leg([[-240, -610], CAR1_PARK], 16.4, 18.4, 0.5, 1.2))
+const car1 = route(trip(DRIVE12, ...T.drive12, { a: 1.2, b: 1.0 }))
 
 const BAY = M(58.4, 0)
 const HALL_STOP = H(0, -4.3) // where the driver's part in the hall begins
@@ -174,8 +183,9 @@ const cop4b = route(
 /* ── The hall: two cars, six officers, five doors ────────────────────── */
 
 // One down the street the red car came by, stopping behind it; one along the lane from the east.
-const pcA = route(leg([[400, -60], [400, 74], [393, 80.4], H(-28.6, -7.6)], 173.3, T.police5, 0.3, 1.0))
-const pcB = route(leg([[570, 79.4], H(66, -8.6)], 174.3, 175.8, 0.3, 1.0))
+const PCA_STOP = H(-28.6, -7.6)
+const pcA = route(leg([[400, -60], [400, 74], [393, 80.4], PCA_STOP], 173.3, T.police5, 0.3, 1.0)) // he waits there, and is the one who goes after No. 2 (copDriverA)
+const pcB = route(leg([[570, 79.4], H(66, -8.6)], 174.3, 175.8, 0.3, 1.0)) // he waits there, and is the one who goes looking down the east side (copDriverB)
 const [POST0, POST1] = T.posts
 const post = (pts, out, t1 = POST1) => leg(pts, POST0 + out, t1, 0.8, 1.0)
 /** The one who takes the driver. */
@@ -223,8 +233,9 @@ const flee3b = route(
   leg([HIDE3, [440, 206], [420, 210], CAUGHT3], HID3[1], T.arrest3 - 0.15, 0.3, 0.4),
 )
 // The second car's driver goes looking down the east side; the officer from the front-west door cuts him off.
+const PCB_STOP = H(66, -8.6)
 const copDriverB = route(
-  leg([H(63, -5.4), [468, 110], [470, 150], [463, 181]], R0 + 4.8, HID3[1] - 0.2, 0.6, 1.2),
+  leg([PCB_STOP, H(63, -5.4), [468, 110], [470, 150], [463, 181]], R0 + 4.8, HID3[1] - 0.2, 0.6, 1.2),
   leg([[463, 181], [452, 198], [430, 209], [412.6, 208.8]], HID3[1], T.arrest3, 0.3, 0.3),
 )
 const copFW = route(
@@ -244,7 +255,7 @@ const flee2b = route(
 /** The first car's driver after him on foot, and a car across the street ahead. */
 const copDriverA = (() => {
   const run = route(flee2b.legs[2])
-  return behind(run, { lag: (t) => Math.max(7, Math.min(26, 26 - 14 * (t - (T.arrest2 - 1.6)))), d0: line(RUN2).cum[2], lead: [[368, 83.8], RUN2[2]] })
+  return behind(run, { lag: (t) => Math.max(7, Math.min(26, 26 - 14 * (t - (T.arrest2 - 1.6)))), d0: line(RUN2).cum[2], lead: [PCA_STOP, [368, 83.8], RUN2[2]] })
 })()
 const pcD = route(leg([[640, -78], [318, -78]], T.arrest2 - 2.9, T.arrest2 - 0.4, 0.3, 1.2))
 
@@ -327,47 +338,50 @@ const copW = route(leg(W0, POST0 + 0.4, POST1, 0.8, 1.0), leg(W_IN, R0, R0 + 1.6
 /* ── Everyone, for the picture and for the checker ───────────────────── */
 
 /*
- * kind   'crew' (a numbered red head and a red trail), 'car' (the red car,
- *        with a trail), 'cop' (a ringed P), 'copcar'
- * show   [from, to]: when the head or the car is on the sheet
+ * kind   'crew' (a numbered red head and a red trail), 'car' (the red car:
+ *        its driver's numbered red head, with a trail), 'cop' (a ringed P),
+ *        'copcar' (a police car: a ringed P)
+ * show   [from, to]: when the head is on the sheet
  * fade   seconds it takes to come and go at those times: [in, out]
  * hide   [from, to]: lying low (a dashed ring instead of a head)
  * sRef   pixels a metre at which the trail's dashes are their usual length
- * small  from when a parked car is let shrink with the plan
  */
 const crew = (id, n, style, r, show, more = {}) => ({ id, kind: 'crew', n, style, route: r, show, sRef: 1, ...more })
 const cop = (id, r, show, more = {}) => ({ id, kind: 'cop', route: r, show, fade: [0.3, 0.8], ...more })
-const copcar = (id, r, show, more = {}) => ({ id, kind: 'copcar', route: r, show, fade: [0.2, 1.0], ...more })
+const copcar = (id, r, show, more = {}) => ({ id, kind: 'copcar', route: r, show, fade: [0.2, 0.8], ...more })
+/** A police dot whose officers step away from it at `out`: it goes as they come. */
+const dropsOff = (id, r, from, out) => copcar(id, r, [from, out + 0.3], { fade: [0.2, 0.3] })
 
-const walk12 = route(leg([[-308, -4.6], [-296.7, -7]], 54.5, T.atDoor2, 0.3, 0.4))
+const walk12 = route(leg([CAR1_AT_2, [-296.7, -7]], 54.5, T.atDoor2, 0.3, 0.4))
 const driverOut = route(leg([H(-40, -7.8), H(-40, -7.79)], T.arrest4[1], T.arrest4[2], 0, 0))
 
 export const MOVERS = [
-  // The first car: up the side street to heist 1, then to heist 2, where it stays.
-  { id: 'car1', kind: 'car', route: car1, show: [16.4, Infinity], small: 79 },
+  // The first drive: No. 1 up the side street to heist 1 (the plan's own No. 1 from there), then from heist 1 to heist 2.
+  { id: 'car1in', kind: 'car', n: 1, route: car1in, show: [16.4, T.atShop] },
+  { id: 'car1', kind: 'car', n: 1, route: car1, show: [T.inCar1, 54.5] },
   crew('walk12', 1, 'solid', walk12, [54.5, 55.6], { sRef: 19 }),
   // Chase 1.
-  copcar('pc1', pc1, [76.3, Infinity], { small: 79 }),
+  dropsOff('pc1', pc1, 76.3, 77.95),
   cop('cop1a', cop1a, [77.95, cop1a.to + 1.6]),
   cop('cop1b', cop1b, [77.95, cop1b.to + 1.6]),
   crew('run1', 1, 'solid', run1, [T.chase1, 98.4], { hide: T.hide1, sRef: 1.2 }),
   crew('run2', 2, 'dash', run2, [T.chase1, 98.4], { hide: [T.hide1[0] + 0.1, T.hide1[1] + 0.15], sRef: 1.2 }),
   // Chase 2.
-  copcar('pc2', pc2, [121.7, 134], { small: 128 }),
+  copcar('pc2', pc2, [121.7, pc2.to + 1.2]),
   cop('cop2a', cop2a, [123.45, cop2a.to + 1.2]),
   cop('cop2b', cop2b, [123.45, cop2b.to + 1.2]),
   crew('flee1', 1, 'solid', flee1, [T.out3 + 0.1, 139.2]),
   crew('flee2', 2, 'dash', flee2, [T.out3 + 0.15, 139.2]),
   crew('flee3', 3, 'dot', flee3, [T.out3 - 0.1, 139.2]),
   // The museum.
-  copcar('pc4', pc4, [153.6, 166], { small: 162 }),
+  dropsOff('pc4', pc4, 153.6, 156.5),
   cop('cop4a', cop4a, [156.3, 165]),
   cop('cop4b', cop4b, [156.5, 165]),
-  // The second car: from the museum's bay to the hall, where the driver is taken at it.
-  { id: 'car2', kind: 'car', route: car2, show: [T.car45[0] - 0.1, Infinity], small: 190 },
+  // The second drive: No. 4, the driver, from the museum's bay to the hall (the hall's own No. 4 from 165.45, where he is taken).
+  { id: 'car2', kind: 'car', n: 4, route: car2, show: [T.car45[0] - 0.1, 165.45] },
   // The hall.
-  copcar('pcA', pcA, [173.5, Infinity], { small: 192 }),
-  copcar('pcB', pcB, [174.3, Infinity], { small: 192 }),
+  copcar('pcA', pcA, [173.5, copDriverA.from], { fade: [0.2, 0] }),
+  copcar('pcB', pcB, [174.3, R0 + 4.8], { fade: [0.2, 0] }),
   cop('copArrest', copArrest, [175.2, T.arrest4[2]], { fade: [0.2, T.arrest4[2] - T.arrest4[1]] }),
   crew('driver', 4, 'dot', driverOut, [T.arrest4[1], T.arrest4[2]], { fade: [0, T.arrest4[2] - T.arrest4[1]], trail: false, sRef: HALL_S }),
   cop('copN', copN, [175.2, 199], { fade: [0.2, 2] }),
@@ -378,11 +392,11 @@ export const MOVERS = [
   // After 3:08.
   crew('flee5', 5, 'dash', flee5, [R0, T.arrest5 + 1.6], { fade: [0, 0.8], sRef: 5 }),
   crew('flee3b', 3, 'dashdot', flee3b, [R0, T.arrest3 + 1.6], { fade: [0, 0.8], hide: HID3, sRef: 4 }),
-  cop('copDriverB', copDriverB, [R0 + 4.6, T.arrest3 + 1.6]),
+  cop('copDriverB', copDriverB, [R0 + 4.8, T.arrest3 + 1.6], { fade: [0, 0.8] }),
   crew('flee2b', 2, 'longdash', flee2b, [R0, T.arrest2 + 1.6], { fade: [0, 0.8], sRef: 3 }),
-  cop('copDriverA', copDriverA, [copDriverA.from - 0.2, T.arrest2 + 1.6]),
-  copcar('pcD', pcD, [T.arrest2 - 2.9, Infinity], { small: T.arrest2 + 3 }),
+  cop('copDriverA', copDriverA, [copDriverA.from, T.arrest2 + 1.6], { fade: [0, 0.8] }),
+  copcar('pcD', pcD, [T.arrest2 - 2.9, T.arrest2 + 1.6]),
   crew('flee1b', 1, 'solid', flee1b, [R0, Infinity]),
-  ...TAILS.map((r, i) => copcar(`tail${i}`, r, [r.from, Infinity], { small: r.to + 2.5 })),
+  ...TAILS.map((r, i) => copcar(`tail${i}`, r, [r.from, r.to + 1.6])),
 ]
 

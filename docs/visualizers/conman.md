@@ -25,19 +25,60 @@ the views, the camera's holds), `story.mjs` (every route: who goes where and
 when), `travel.mjs` (legs, routes, the car, the officer, trails),
 `heists.mjs` (the plans and the frame). Change a time in `T`, not in a route.
 
+**Round of 2026-11-12 (the user's three notes; not yet watched).**
+- **No cars: "replace all of the cars (conmen and police) with the original
+  dots".** Whoever drives is his own dot, as in the old film: the red car is
+  No. 1 on the first drive and No. 4 (the driver) on the way to the hall; a
+  police car is a ringed P. Routes, times and red lines are the cars' (so
+  wherever this file says "car" below, read the dot). A dot is on the sheet
+  only while it is somebody: a parked car leaves nothing behind. The red dot
+  hands over to the plan's own No. 1 or No. 4 where it stops; a police dot
+  goes as its officers step away from it (heist 2, the museum), or 1.2–1.6 s
+  after it gives up, like any officer (chase 2, No. 1's ten pursuers, the one
+  across the street at No. 2's arrest). At the hall the two police dots wait
+  where the cars stood and are the two "drivers" who later go after No. 2
+  and No. 3. Three joins were moved so a dot never jumps: the side-street
+  spot at the shop is the first point of heist 1's own route (2.5 m north);
+  the first drive ends in the street at the counting house's door, not 14 m
+  past it (a car parked there; a dot would have had to walk back); the two
+  hall officers start from where their dots waited. `car()` is gone from
+  travel.mjs (it is in git at `b709b51`).
+- **They leave the museum a second sooner (2:37.5, was 2:38.5) and the drive
+  to the hall is a second longer**; the hall is exactly as it was (stage door
+  2:44.4). The camera leaves with them (2:37.4) and is on the wide view at
+  2:39.4, so the second is spent travelling: the drive is 288 px/s on the
+  sheet, was 359 (363 m/s, was 453). With the camera left where it was the
+  second went on creeping out of the bay and the drive was 2% slower, which
+  is not what was asked. Inside the museum the second comes out of standing
+  still, so nothing before it moves: the conman is 2 s at the bay's bolts
+  (was 3), the auditor 1.8 s at the substation (was 2.8), and the driver,
+  out of frame when he sets off, sets off a second sooner. The police at the
+  museum are as they were (in at the front 2:38.5), so the crew are now a
+  second clear of them.
+- **The museum's north wall still "shook" at 2:17–2:18.** Not the hatching
+  this time: the outer wall is one arc of 177°, and an SVG arc has no centre
+  of its own (the renderer finds it from the two ends and the radius). For
+  nearly half a turn the centre is 38 times as sensitive as those numbers,
+  and they were rounded to 0.1 px: measured, the top of the wall jumped 2–5
+  px from one frame to the next from 2:17.8 to 2:19.1, while the camera
+  crept in. `annulus`/`arc` in atlas-plan.mjs now write a quarter turn at
+  most to a piece, to 0.001 px (worst frame-to-frame error 0.002 px). **Any
+  arc of more than about 120° written by hand needs the same.** The old film
+  shares the fix.
+
 **The clock.**
 
 | When | What |
 |---|---|
 | 0:33 | The shop's owner walks off (was 0:35); the conman's dash, the safe and the way out are two seconds sooner. Out of the staff door 0:39.4, back down the side street to his car, off at 0:41.5. |
-| 0:41–0:54 | The red car: Broadway Bridge, down to the counting house, parked nose west by the door. He walks to the door by 0:55.4. |
-| 1:16–1:17 | A police car pulls up nose to nose with the red car as the pair step out. Two officers after them on foot from 1:18. |
+| 0:41–0:54 | The drive (No. 1's dot): Broadway Bridge, down to the counting house, stopping in the street at its door. He walks to the door by 0:55.4. |
+| 1:16–1:17 | The police (one P) pull up just west of the door as the pair step out. Two officers after them on foot from 1:18. |
 | 1:18–1:28 | Chase 1: east over the Burnside Bridge, north, east. The officers lose them at the last corner and run on east. |
 | 1:28–1:30 | The pair lie low in the park (dashed rings), then walk to the studio; at its corner 1:38.2. |
 | 2:01–2:03 | Heist 3's end: the conman out by the back door to the lane, the engineer into the street. A police car pulls up at the front 2:03.4. |
 | 2:03–2:16 | Chase 2: No. 1 north (the car after him, stopped by a park), No. 2 south, No. 3 east, an officer after each; over the Broadway, Steel and Burnside bridges. The camera leaves at 2:13.6; they are at the museum (below the frame, as before) at 2:19. |
-| 2:33–2:40 | The museum: a police car up the drive (2:36), two officers in at the front (2:38.5); the auditor walks round to the bay; the red car leaves the bay at 2:38.5, past the empty police car. |
-| 2:38–2:44 | The red car down Burnside to the hall, stopping at the stage door at 2:44.4. |
+| 2:33–2:40 | The museum: the police up the drive (2:36), two officers in at the front (2:38.5); the auditor walks round to the bay; No. 4 leaves the bay at 2:37.5 (was 2:38.5). |
+| 2:37–2:44 | No. 4 down Burnside to the hall, stopping at the stage door at 2:44.4. |
 | 2:55 | Two police cars: one down the street the red car came by, one along the lane from the east. |
 | 2:55–2:57 | No. 4, the driver, is taken at his car; he and the officer are gone by 2:57.1. He does not come back. |
 | 2:58–3:04 | Five officers walk round to the five doors (stage door, two yard doors, two front doors). The performer, locked out, reaches the officer at the front at 3:06. |
@@ -75,9 +116,9 @@ the frame the even zoom gives.
   pulls away and pulls up gently where a metre is twenty pixels, and travels
   on the wide view. Before this an arrival read at 500 px/s during the
   zoom-in. On the sheet now: the drive 92 px/s, chase 1 110, chase 2 110,
-  arrivals 260 falling to a stop. **The drive to the hall is 359**: 1.8 km
-  in 5.9 s, between a museum exit and a hall arrival the user called
-  perfect. It is the one fast trip; say so if it is questioned.
+  arrivals 260 falling to a stop. **The drive to the hall is 288** (was
+  359 until 2026-11-12, when the user gave it a second more): 1.8 km in
+  6.9 s. It is still the one fast trip.
 - **Chase 2 is seen at 131 m/s and finished unseen**: once the camera has
   left (2:16) the three cover the rest at 450–500 m/s, so the line is whole
   for the last pull-out and they are standing at the museum on time.
@@ -93,9 +134,6 @@ the frame the even zoom gives.
   every 3.2 px in the town, 3 px on a plan's walls); between holds it moves
   and scales with the buildings and thins by halves. The old film and the map
   tour are untouched (they pass no `hatch`).
-- **A driver's head rides on his car**: cars are drawn under the plans, so
-  No. 4's dot is on the red car while he waits with it.
-- **Parked cars shrink with the plan**; a moving one is never under 30 px.
 - **Dashes are fixed to the ground** (`trail`, `sRef`), so a dashed line
   does not creep during the pull-out.
 
@@ -106,8 +144,9 @@ in a building (a heist's own only by its doors: steps flagged `'in'` or
 speeds and whether those who must be seen are in frame (`MUST_SEE`). All
 clear on 2026-11-10. Run it after any change to a route or to the camera.
 
-**Not done / to ask.** The user has not watched it. Likely questions: the
-speed of the drive to the hall; whether No. 5's "park" (the trees in the
+**Not done / to ask.** The user has not watched it. Likely questions: whether
+one police dot arriving and its officers appearing beside it reads (at the
+hall four appear round the first); whether No. 5's "park" (the trees in the
 hall's own grounds; the next park east is out of frame at 3:14) is what they
 meant; whether the two crew lines that share Burnside read. The dev server
 for this repo was on **port 3010** that day (3000 was another project).

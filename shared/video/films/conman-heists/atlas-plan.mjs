@@ -384,17 +384,33 @@ function hatchFixed(id, gap, ang, w, op, cross, { k, b, ox, oy }) {
   return `<pattern id="${id}" width="${r(2 * g, 3)}" height="${r(2 * g, 3)}" patternUnits="userSpaceOnUse" patternTransform="translate(${r(ox, 2)} ${r(oy, 2)}) rotate(${ang})">${rule(0, 1)}${b > 0.004 ? rule(g, b) : ''}</pattern>`
 }
 
+/*
+ * Arc commands about screen point O at radius R, from d0 to d1 degrees: a
+ * quarter turn at most to a piece, written to a thousandth of a pixel. (The
+ * user, 2026-11-12: the museum's north wall still "shook" as the camera
+ * landed. Its outer wall is one arc of 177 degrees, and an SVG arc has no
+ * centre of its own: the renderer finds it from the two ends and the radius.
+ * For nearly half a turn that centre is 38 times as sensitive as the numbers
+ * it is found from, so ends rounded to a tenth of a pixel threw the top of
+ * the wall 2 to 5 px up and down from one frame to the next while the camera
+ * crept in. Still at a hold, hidden in a fast move.)
+ */
+function arcTo(O, R, d0, d1) {
+  const n = Math.max(1, Math.ceil(Math.abs(d1 - d0) / 90))
+  let s = ''
+  for (let i = 1; i <= n; i++) {
+    const d = rad(d0 + ((d1 - d0) * i) / n)
+    s += `A${r(R, 3)} ${r(R, 3)} 0 0 ${d1 > d0 ? 1 : 0} ${r(O[0] + R * Math.cos(d), 3)} ${r(O[1] + R * Math.sin(d), 3)}`
+  }
+  return s
+}
+const arcFrom = (O, R, d) => `${r(O[0] + R * Math.cos(rad(d)), 3)} ${r(O[1] + R * Math.sin(rad(d)), 3)}`
 /** An annular sector about screen point O, radii r0 < r1, degrees d0 < d1. */
 function annulus(O, r0, r1, d0, d1) {
-  const pt = (R, d) => [O[0] + R * Math.cos(rad(d)), O[1] + R * Math.sin(rad(d))]
-  const large = d1 - d0 > 180 ? 1 : 0
-  const [a, b, c, e] = [pt(r1, d0), pt(r1, d1), pt(r0, d1), pt(r0, d0)]
-  return `M${r(a[0])} ${r(a[1])}A${r(r1)} ${r(r1)} 0 ${large} 1 ${r(b[0])} ${r(b[1])}L${r(c[0])} ${r(c[1])}A${r(r0)} ${r(r0)} 0 ${large} 0 ${r(e[0])} ${r(e[1])}Z`
+  return `M${arcFrom(O, r1, d0)}${arcTo(O, r1, d0, d1)}L${arcFrom(O, r0, d1)}${arcTo(O, r0, d1, d0)}Z`
 }
 function arc(O, R, d0, d1) {
-  const pt = (d) => [O[0] + R * Math.cos(rad(d)), O[1] + R * Math.sin(rad(d))]
-  const [a, b] = [pt(d0), pt(d1)]
-  return `M${r(a[0])} ${r(a[1])}A${r(R)} ${r(R)} 0 0 1 ${r(b[0])} ${r(b[1])}`
+  return `M${arcFrom(O, R, d0)}${arcTo(O, R, d0, d1)}`
 }
 
 /* ── The legend and the frame ────────────────────────────────────────── */

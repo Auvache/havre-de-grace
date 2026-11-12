@@ -164,23 +164,3 @@ export const head = (c, p, n, op = 1) => grp(op, `<circle cx="${r(c.X(p[0]))}" c
 export const hiding = (c, p, op = 1) => grp(op, `<circle cx="${r(c.X(p[0]))}" cy="${r(c.Y(p[1]))}" r="8" fill="none" stroke="${RED}" stroke-width="1.8" stroke-dasharray="2 3"/>`)
 /** An officer: the ringed P. */
 export const officer = (c, p, op = 1) => grp(op, `<circle cx="${r(c.X(p[0]))}" cy="${r(c.Y(p[1]))}" r="10" fill="${PAPER}" stroke="${INK}" stroke-width="2.4"/><text x="${r(c.X(p[0]))}" y="${r(c.Y(p[1]) + 4.4)}" font-size="12" font-weight="700" fill="${INK}" text-anchor="middle">P</text>`)
-
-/**
- * A car from above, nose along `deg`: the crew's in red, no numbers (the
- * user, 2026-11-09); the police's in their own ink and paper. Life-size when
- * the plan is close; never smaller than `min` pixels long, so it can be
- * followed across the whole town (a parked one is let shrink away).
- */
-export function car(c, p, deg, { police = false, op = 1, min = 30 } = {}) {
-  const L = Math.max(min, 4.7 * c.s)
-  const W = L * 0.44
-  const [x, y] = [c.X(p[0]), c.Y(p[1])]
-  const body = police ? PAPER : RED
-  const line2 = police ? INK : PAPER
-  const sw = Math.max(1.2, Math.min(2.4, L * 0.07))
-  let s = `<rect x="${r(-L / 2)}" y="${r(-W / 2)}" width="${r(L)}" height="${r(W)}" rx="${r(W * 0.3)}" fill="${body}" stroke="${police ? INK : RED}" stroke-width="${r(sw, 2)}"/>`
-  // The windscreen and the back window; a police car carries a bar across its roof.
-  s += `<path d="M${r(L * 0.14)} ${r(-W * 0.32)}V${r(W * 0.32)}M${r(-L * 0.26)} ${r(-W * 0.3)}V${r(W * 0.3)}" stroke="${line2}" stroke-width="${r(sw, 2)}" stroke-linecap="round" fill="none"/>`
-  if (police) s += `<rect x="${r(-L * 0.1)}" y="${r(-W / 2)}" width="${r(L * 0.12)}" height="${r(W)}" fill="${INK}"/>`
-  return grp(op, `<g transform="translate(${r(x)} ${r(y)}) rotate(${r(deg)})">${s}</g>`)
-}
