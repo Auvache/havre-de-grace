@@ -2,8 +2,8 @@
  * Ivory · The Crossword — the film (2026-11-13).
  *
  * A large blank crossword on the album's paper, filled in as the song goes:
- * the key words he sings, as he sings them, and in the instrumental gaps words
- * of longing and missed chances, every letter drawn on stroke by stroke the
+ * the key words he sings, as he sings them, and in the interlude a block of
+ * her name jumbled (VORYI, YRIOV…), every letter drawn on stroke by stroke the
  * way the opening draws the title. The camera pans to one part of the puzzle,
  * holds still while a few words go in (never more than three at once), then
  * pans smoothly on to the next. Every "Ivory" writes an IVORY, in red, the
@@ -19,7 +19,7 @@
  *                            tools/video-styles/titles/bake-letters.mjs
  *   tools/video-styles/crossword/check.mjs   walks the film for the rules
  *
- * Tempo, 105 BPM: a sung word starts on its onset, a gap word on a beat, and
+ * Tempo, 105 BPM: a sung word starts on its onset, a jumble on a beat, and
  * every word, hers too, is written at 3.5 letters a second. Moves are
  * cosine-eased and last two to four seconds; between them the camera is still.
  *
@@ -31,7 +31,7 @@ import { filmOpening, inOpening } from '../opening.mjs'
 import { endCard } from '../ending.mjs'
 import { LETTERS } from './crossword/letters.mjs'
 import { LAYOUT } from './crossword/layout.mjs'
-import { STATIONS, CELL, assemble, shotsOf, boxOf, viewOf, key } from './crossword/stations.mjs'
+import { STATIONS, CELL, assemble, shotsOf, boxOf, viewOf, key, redAt } from './crossword/stations.mjs'
 
 const { x: PX, y: PY, w: PW, h: PH } = COVER_SHEET.plate
 const CX = PX + PW / 2
@@ -49,9 +49,7 @@ const GLYPH = CAP / 72.75
 export const LETTERS_PER_SECOND = 3.5
 const CLOCK = { mark: 0.3, markOut: [3.9, 4.5], title: [4.6, 6.9], titleOut: [7.1, 7.7], reveal: [7.5, 8.9] }
 
-const GRID = assemble(LAYOUT.map(([word, c, r, down, station, fill]) => ({ word, c, r, down, station, fill: fill ?? null })))
-/* The chain (the words the stations name), which the camera's shots are framed on; the fill words come after it. */
-const CORE = GRID.entries.filter((e) => e.fill == null)
+const GRID = assemble(LAYOUT.map(([word, c, r, down, station, jumble]) => ({ word, c, r, down, station, jumble: jumble === 1 })))
 const clean = (s) => s.replace(/[^a-z]/gi, '').toUpperCase()
 
 /* ── The plan ─────────────────────────────────────────────────────── */
@@ -63,12 +61,18 @@ function buildPlan(score) {
 
   // Every entry's write: when it starts, a letter how often.
   const used = new Set()
-  const writes = CORE.map((e, i) => {
-    const [, at, kind] = STATIONS[e.station].words.find(([w], j) => w === e.word && !used.has(`${e.station}:${j}`) && used.add(`${e.station}:${j}`))
+  const jumbled = new Map()
+  const writes = GRID.entries.map((e, i) => {
     let t0
     let step
-    if (kind === 'gap') t0 = nextBeat(at)
+    if (e.jumble) {
+      // Her name jumbled: one a beat, in the order they go into the grid.
+      const k = jumbled.get(e.station) ?? 0
+      jumbled.set(e.station, k + 1)
+      t0 = nextBeat(STATIONS[e.station].jumble.from) + k * beat
+    }
     else {
+      const [, at] = STATIONS[e.station].words.find(([w], j) => w === e.word && !used.has(`${e.station}:${j}`) && used.add(`${e.station}:${j}`))
       const hit = score.lines[at]?.words.find((w) => clean(w.text) === e.word)
       if (!hit) throw new Error(`crossword: no "${e.word}" in line ${at}`)
       t0 = hit.t
@@ -100,7 +104,7 @@ function buildPlan(score) {
   }
 
   // The camera: a held view per shot, cosine moves between them.
-  const shots = shotsOf(CORE).map((sh) => {
+  const shots = shotsOf(GRID.entries).map((sh) => {
     const ws = sh.entries.map((i) => writes[i])
     return { ...sh, from: Math.min(...ws.map((w) => w.start)), to: Math.max(...ws.map((w) => w.end)) }
   })
@@ -132,45 +136,14 @@ function buildPlan(score) {
   shots[0].arrive = CLOCK.reveal[1]
 
   /*
-   * The fill words: each on a beat while its shot is held, at most two words
-   * being written at any moment, none while her name is, and a beat apart from
-   * the last one started.
+   * Red: her name, and a jumble's letter where it stands in IVORY. Where two
+   * jumbles cross, red if it stands right in either (the user, 2026-11-13:
+   * "only red if they are in the right position in the word").
    */
-  const fills = GRID.entries.filter((e) => e.fill != null)
-  // A shot whose held frame has every square of `e` well inside it.
-  const holds = (sh, e) => e.cells.every(([c, rr]) => Math.abs((c + 0.5) * CELL - sh.view.x) * sh.view.s < PW / 2 - CELL * 0.6 * sh.view.s &&
-    Math.abs((rr + 0.5) * CELL - sh.view.y) * sh.view.s < PH / 2 - CELL * 0.6 * sh.view.s)
-  for (const e of fills) {
-    const dur = e.word.length / lps
-    // Its own shot first; when that has no room, the nearest other shot that holds it in frame.
-    const candidates = shots.map((sh, k) => k).filter((k) => k === e.fill || (!shots[k].ivory && holds(shots[k], e)))
-      .sort((a, b) => (a !== e.fill) - (b !== e.fill) || Math.abs(a - e.fill) - Math.abs(b - e.fill))
-    let t0 = null
-    for (const k of candidates) {
-    const sh = shots[k]
-    const from = sh.arrive + 0.2
-    const to = (sh.leave ?? sh.to + 0.8) - 0.2 - dur
-    // Busy: at some moment of [t, t + dur] `limit` words are already being written, or her name is near.
-    const busy = (t, limit) => {
-      if (writes.some((w) => w.hers && w.start < t + dur + 0.5 && w.end > t - 0.5)) return true
-      for (let u = t; u < t + dur; u += 0.05) if (writes.filter((w) => w.start <= u && w.end > u).length >= limit) return true
-      return false
-    }
-    // Two at once if it can, three if it must (the user's limit), a beat after the last fill word if it can.
-    for (const [limit, spaced] of [[1, true], [2, true], [2, false], [3, false]]) {
-      for (let t = nextBeat(from); t <= to && t0 == null; t += beat) {
-        if (busy(t, limit)) continue
-        if (spaced && writes.some((w) => w.fill && Math.abs(w.start - t) < beat * 0.99)) continue
-        t0 = t
-      }
-      if (t0 != null) break
-    }
-    if (t0 != null) break
-    }
-    if (t0 == null) throw new Error(`crossword: no room to write ${e.word} (shot ${e.fill})`)
-    writes.push({ i: writes.length, entry: e, start: t0, step: 1 / lps, end: t0 + dur, hers: false, fill: true })
+  const redSquare = (k) => {
+    const cell = GRID.cells.get(k)
+    return [cell.across, cell.down].some((i) => i !== -1 && redAt(GRID.entries[i], GRID.entries[i].cells.findIndex(([c, rr]) => key(c, rr) === k)))
   }
-
   // Letters: the first word to reach a square writes it, except that her squares wait for her, so her name goes in whole.
   const letters = new Map()
   const order = [...writes].sort((a, b) => a.start - b.start)
@@ -179,7 +152,7 @@ function buildPlan(score) {
       const k = key(c, rr)
       if (GRID.ivories.has(k) && !w.hers) return
       if (letters.has(k)) return
-      letters.set(k, { at: w.start + j * w.step, dur: w.step * 1.8, ch: w.entry.word[j], hers: w.hers })
+      letters.set(k, { at: w.start + j * w.step, dur: w.step * 1.8, ch: w.entry.word[j], red: redSquare(k) })
     })
   }
 
@@ -277,8 +250,8 @@ export function crosswordPlate({ time, score, ns }) {
   for (const [k, L] of plan.letters) {
     if (time < L.at) continue
     const [c, rr] = k.split(',').map(Number)
-    const s = letterSvg(c, rr, L.ch, clamp01((time - L.at) / L.dur), ns, L.hers ? RED : INK)
-    if (L.hers) red += s
+    const s = letterSvg(c, rr, L.ch, clamp01((time - L.at) / L.dur), ns, L.red ? RED : INK)
+    if (L.red) red += s
     else ink += s
   }
 
@@ -312,21 +285,20 @@ export const crosswordCamera = (score, time) => cameraAt(planFor(score), time)
 export const CROSSWORD_BEATS = [
   { at: 0, label: 'Opening' },
   { at: 9, label: 'First words' },
-  { at: 20, label: 'Longing' },
+  { at: 26.2, label: 'Her eyes' },
   { at: 40.2, label: 'Ivory', key: true },
   { at: 46, label: 'California' },
   { at: 54.8, label: 'Ivory again' },
-  { at: 61.8, label: 'Stranger' },
+  { at: 63.8, label: 'Flowers in her hair' },
   { at: 82, label: 'Beside her' },
   { at: 95.2, label: 'Ivory, third', key: true },
   { at: 101.5, label: 'Paradise' },
   { at: 109.5, label: 'Ivory, fourth' },
-  { at: 116.4, label: 'Missed chances' },
+  { at: 114.6, label: 'Her name, jumbled', key: true },
   { at: 129.2, label: 'Adam to her Eve' },
   { at: 140.8, label: 'Ivory, fifth' },
   { at: 147.6, label: 'Alaska' },
-  { at: 164.2, label: 'Ivory, sixth' },
-  { at: 169.9, label: 'Goodbye' },
-  { at: 173.2, label: 'The last Ivory', key: true },
+  { at: 159.6, label: 'Ivory, sixth' },
+  { at: 172.0, label: 'The last Ivory', key: true },
   { at: 175.6, label: 'The whole puzzle', key: true },
 ]

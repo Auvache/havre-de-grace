@@ -13,7 +13,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { rng } from '../../../shared/video/kit.mjs'
-import { buildBeam, judge, assemble, addFill } from '../../../shared/video/films/crossword/stations.mjs'
+import { buildBeam, judge, assemble } from '../../../shared/video/films/crossword/stations.mjs'
 
 const tries = Number(process.argv[2] ?? 12)
 let best = null
@@ -26,21 +26,19 @@ for (let seed = 1; seed <= tries; seed++) {
   }
 }
 if (!best) throw new Error('no grid built')
-// Then the frames are filled, for writing at the film's rate.
-const LPS = 3.5
-const list = addFill(best.list, LPS)
+const list = best.list
 const { bounds } = assemble(list)
-console.log(`${built}/${tries} built; best seed ${best.seed}, cost ${best.cost.toFixed(1)}; ${bounds.c1 - bounds.c0 + 1} × ${bounds.r1 - bounds.r0 + 1} cells; ${list.length - best.list.length} fill words`)
+console.log(`${built}/${tries} built; best seed ${best.seed}, cost ${best.cost.toFixed(1)}; ${bounds.c1 - bounds.c0 + 1} × ${bounds.r1 - bounds.r0 + 1} cells; ${list.filter((e) => e.jumble).length} jumbles`)
 for (const n of best.notes) console.log('  ', n)
 
 const file = resolve(dirname(fileURLToPath(import.meta.url)), '../../../shared/video/films/crossword/layout.mjs')
 writeFileSync(file, `/*
  * Ivory's crossword grid — GENERATED, do not edit.
- * \`node tools/video-styles/crossword/bake-layout.mjs ${tries}\`: seed ${best.seed}, cost ${best.cost.toFixed(1)}, filled for ${LPS} letters a second.
- * [word, column, row, down, station, fill shot (fill words only)]
+ * \`node tools/video-styles/crossword/bake-layout.mjs ${tries}\`: seed ${best.seed}, cost ${best.cost.toFixed(1)}.
+ * [word, column, row, down, station, 1 for a jumble of IVORY]
  */
 export const LAYOUT = [
-${list.map((e) => `  [${JSON.stringify(e.word)}, ${e.c}, ${e.r}, ${e.down}, ${e.station}${e.fill != null ? `, ${e.fill}` : ''}],`).join('\n')}
+${list.map((e) => `  [${JSON.stringify(e.word)}, ${e.c}, ${e.r}, ${e.down}, ${e.station}${e.jumble ? ', 1' : ''}],`).join('\n')}
 ]
 `)
 console.log('wrote', file)

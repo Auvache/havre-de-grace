@@ -7,37 +7,55 @@
  * next"). Each station heads the puzzle on by about `step` cells
  * (`headings`), so it crosses the sheet from one side to the other.
  *
- * A word is [WORD, line] (sung: written from its onset in that line of the
- * score) or [WORD, seconds, 'gap'] (an instrumental word, from the next beat).
+ * A word is [WORD, line]: sung, written from its onset in that line of the
+ * score. Only sung words go in (the user, 2026-11-13: the unsung ones came
+ * off), and in the interlude, her name jumbled (`jumble`).
  * A station's words are listed in the order they go into the grid, which need
  * not be the order they are written (that comes from the lyric).
  * `together`: the station's words overlap in time, so it is one held shot
  * rather than a shot of her name between its other words.
  *
- * The grid is searched for offline (`buildBeam`, scored by `judge`, then
- * `addFill`) by tools/video-styles/crossword/bake-layout.mjs and baked into
+ * The grid is searched for offline (`buildBeam`, scored by `judge`) by
+ * tools/video-styles/crossword/bake-layout.mjs and baked into
  * layout.mjs; the film only reads it. Why it is a search and not a greedy
  * build: docs/visualizers/ivory.md.
  */
 export const STATIONS = [
   { step: 0, pan: null, words: [['WOMAN', 0], ['SUNRISE', 1], ['SURE', 0], ['EYES', 1], ['WAVES', 1], ['SHORE', 1]] },
-  { step: 10, pan: [19.8, 23.0], words: [['LONGING', 23.1, 'gap'], ['ALMOST', 23.9, 'gap'], ['OCEAN', 2], ['BLUE', 2], ['BUTTERFLY', 2], ['WINGS', 2]] },
+  { step: 10, pan: [23.0, 26.2], words: [['OCEAN', 2], ['BLUE', 2], ['BUTTERFLY', 2], ['WINGS', 2]] },
   { step: 8, pan: [32.6, 34.8], words: [['STAGE', 3], ['SINGS', 3]] },
   { step: 8, pan: [37.0, 40.2], words: [['IVORY', 4]] },
   { step: 10, pan: [44.0, 46.6], words: [['CALIFORNIA', 5], ['TENNESSEE', 5]] },
   { step: 8, pan: [50.8, 53.3], together: true, words: [['MYSTERY', 6], ['IVORY', 7]] },
-  { step: 10, pan: [58.6, 61.8], words: [['STRANGER', 62.0, 'gap'], ['WISTFUL', 63.2, 'gap'], ['FLOWERS', 8], ['HAIR', 8], ['UNIVERSE', 9], ['STOP', 9], ['STARE', 9]] },
-  { step: 10, pan: [75.0, 78.2], words: [['ENCORE', 78.6, 'gap'], ['NEARLY', 79.8, 'gap'], ['RIGHT', 10], ['BESIDE', 10], ['WHERE', 10]] },
+  { step: 10, pan: [60.6, 63.8], words: [['FLOWERS', 8], ['HAIR', 8], ['UNIVERSE', 9], ['STOP', 9], ['STARE', 9]] },
+  { step: 10, pan: [77.6, 80.8], words: [['RIGHT', 10], ['BESIDE', 10], ['WHERE', 10]] },
   { step: 8, pan: [85.9, 87.8], words: [['ASKED', 11], ['NAME', 11], ['LOOKED', 11], ['STRAIGHT', 11]] },
   { step: 8, pan: [92.4, 95.2], words: [['IVORY', 12], ['WANTED', 13], ['PARADISE', 13], ['PLAY', 13], ['MELODY', 13]] },
   { step: 8, pan: [105.8, 109.5], words: [['IVORY', 15]] },
-  { step: 10, pan: [113.2, 116.4], words: [['MISSED', 116.6, 'gap'], ['CHANCE', 117.4, 'gap'], ['TOOLATE', 119.4, 'gap'], ['REGRET', 120.2, 'gap'], ['MAYBE', 122.2, 'gap'], ['SOMEDAY', 123.0, 'gap']] },
+  // The interlude: her name, jumbled, a word a beat (see JUMBLE below).
+  { step: 10, pan: [112.0, 114.6], words: [], jumble: { from: 114.8, count: 16 } },
   { step: 10, pan: [126.0, 129.2], words: [['LOVES', 16], ['ADAM', 16], ['EVE', 16], ['FORGOT', 17], ['BREATHE', 17]] },
   { step: 8, pan: [138.0, 140.8], words: [['IVORY', 18]] },
   { step: 10, pan: [144.6, 147.6], words: [['SOUNDS', 19], ['WALKS', 20], ['ALASKA', 20], ['SNOWFALL', 20], ['TREES', 20]] },
-  { step: 8, pan: [160.4, 164.2], words: [['IVORY', 23]] },
-  { step: 10, pan: [167.9, 169.9], words: [['GOODBYE', 169.95, 'gap'], ['YEARNING', 169.95, 'gap'], ['IVORY', 24]] },
+  // Her name first in the grid, then the words that lead away from it to the last one (sung before it: one held shot).
+  { step: 8, pan: [156.4, 159.6], together: true, words: [['IVORY', 23], ['HEARTACHE', 22], ['AVOID', 22], ['KEEP', 22]] },
+  { step: 10, pan: [169.0, 172.0], words: [['IVORY', 24]] },
 ]
+
+/*
+ * The interlude (the user, 2026-11-13): "a complex grid portion where every
+ * word is ivory, but the letters are mixed up." A station's `jumble` is
+ * `count` jumbles of IVORY (never IVORY itself, no two the same), packed as
+ * tightly as they will cross, written one a beat from `from`. A jumble's
+ * letter is red only where it stands where it does in IVORY.
+ */
+export const JUMBLE = '*'
+const IV = 'IVORY'
+const PERMS = (function perms(s) {
+  return s.length < 2 ? [s] : [...s].flatMap((ch, i) => perms(s.slice(0, i) + s.slice(i + 1)).map((p) => ch + p))
+})(IV).filter((p) => p !== IV)
+/** Whether letter j of a written entry is red: all of IVORY, and a jumble's letters where they stand in IVORY. */
+export const redAt = (e, j) => e.word === IV || (e.jumble === true && e.word[j] === IV[j])
 
 /* World and frame: a cell is 64 units; the plate is 1532 × 776. */
 export const CELL = 64
@@ -206,7 +224,7 @@ export function inView(v, cells, margin = 0) {
  */
 export function buildBeam(rand, width = 60, noise = 1.5) {
   const H = headings()
-  const words = STATIONS.flatMap((st, si) => st.words.map(([w]) => [w, si]))
+  const words = STATIONS.flatMap((st, si) => [...st.words.map(([w]) => [w, si]), ...Array.from({ length: st.jumble?.count ?? 0 }, () => [JUMBLE, si])])
   const centre = (e) => [e.c + (e.down ? 0.5 : e.word.length / 2), e.r + (e.down ? e.word.length / 2 : 0.5)]
 
   const fits = (cells, word, c, r, down) => {
@@ -228,7 +246,7 @@ export function buildBeam(rand, width = 60, noise = 1.5) {
     }
     return crossings
   }
-  const grow = (state, word, si, c, r, down, score, front) => {
+  const grow = (state, word, si, c, r, down, score, front, jumble = false) => {
     const cells = new Map(state.cells)
     const idx = state.entries.length
     for (let i = 0; i < word.length; i++) {
@@ -237,11 +255,65 @@ export function buildBeam(rand, width = 60, noise = 1.5) {
       cell[down ? 'down' : 'across'] = idx
       cells.set(k, cell)
     }
-    return { cells, entries: [...state.entries, { word, c, r, down, station: si }], score, front }
+    return { cells, entries: [...state.entries, { word, c, r, down, station: si, ...(jumble ? { jumble } : {}) }], score, front }
   }
 
   const [first] = words[0]
   let beam = [grow({ cells: new Map(), entries: [] }, first, 0, 0, 0, false, 0, [first.length, 0.5])]
+  /*
+   * Where `word` can go in grid `st`, crossing one of its last `reachBack`
+   * words: { word, c, r, down, back, crossings }. A JUMBLE may cross any word
+   * of its own station's block (and the two before it), and takes whichever
+   * jumbles of IVORY fit the squares it crosses (two of them, by `rand`).
+   */
+  function* placements(st, word, si, reachBack) {
+    const n = st.entries.length
+    const jumble = word === JUMBLE
+    const reach = jumble ? st.entries.filter((e) => e.station === si).length + 2 : reachBack
+    const done = new Set()
+    const used = jumble ? new Set(st.entries.map((e) => e.word)) : null
+    for (let back = n - 1; back >= Math.max(0, n - reach); back--) {
+      const e = st.entries[back]
+      const down = !e.down
+      const len = jumble ? IV.length : word.length
+      for (let ci = 0; ci < e.word.length; ci++) {
+        const cc = e.c + (e.down ? 0 : ci)
+        const rr = e.r + (e.down ? ci : 0)
+        for (let i = 0; i < len; i++) {
+          if (jumble ? !IV.includes(e.word[ci]) : word[i] !== e.word[ci]) continue
+          const c = cc - (down ? 0 : i)
+          const r = rr - (down ? i : 0)
+          if (!jumble) {
+            const crossings = fits(st.cells, word, c, r, down)
+            if (crossings >= 1) yield { word, c, r, down, back, crossings }
+            continue
+          }
+          const at = `${c},${r},${down}`
+          if (done.has(at)) continue
+          done.add(at)
+          // The letters it must have where it crosses; then every jumble that has them.
+          const letters = new Set()
+          let ok = !st.cells.has(key(c - (down ? 0 : 1), r - (down ? 1 : 0))) && !st.cells.has(key(c + (down ? 0 : len), r + (down ? len : 0)))
+          for (let j = 0; j < len && ok; j++) {
+            const x = c + (down ? 0 : j)
+            const y = r + (down ? j : 0)
+            const cell = st.cells.get(key(x, y))
+            if (cell) { ok = IV.includes(cell.ch) && cell[down ? 'down' : 'across'] === -1 && !letters.has(cell.ch); letters.add(cell.ch) }
+            else ok = !st.cells.has(key(x + (down ? 1 : 0), y + (down ? 0 : 1))) && !st.cells.has(key(x - (down ? 1 : 0), y - (down ? 0 : 1)))
+          }
+          if (!ok) continue
+          const fixed = [...Array(len)].map((_, j) => st.cells.get(key(c + (down ? 0 : j), r + (down ? j : 0)))?.ch)
+          const crossings = fixed.filter(Boolean).length
+          const options = PERMS.filter((p) => !used.has(p) && fixed.every((f, j) => !f || p[j] === f))
+          for (let k = 0; k < 2 && options.length; k++) {
+            const [pick] = options.splice(Math.floor(rand() * options.length), 1)
+            yield { word: pick, c, r, down, back, crossings, jumble: true }
+          }
+        }
+      }
+    }
+  }
+
   for (const [word, si] of words.slice(1)) {
     const [hx, hy] = H[si]
     let next = []
@@ -250,44 +322,35 @@ export function buildBeam(rand, width = 60, noise = 1.5) {
     if (next.length) break
     for (const st of beam) {
       const n = st.entries.length
-      for (let back = n - 1; back >= Math.max(0, n - reachBack); back--) {
-        const e = st.entries[back]
-        const down = !e.down
-        for (let ci = 0; ci < e.word.length; ci++) {
-          const cc = e.c + (e.down ? 0 : ci)
-          const rr = e.r + (e.down ? ci : 0)
-          for (let i = 0; i < word.length; i++) {
-            if (word[i] !== e.word[ci]) continue
-            const c = cc - (down ? 0 : i)
-            const r = rr - (down ? i : 0)
-            if (fits(st.cells, word, c, r, down) < 1) continue
+      for (const { word: w, c, r, down, back, crossings, jumble } of placements(st, word, si, reachBack)) {
             // The furthest square along the heading, and how far that moves the front.
             let far = null
             let reach = -Infinity
-            for (let j = 0; j < word.length; j++) {
+            for (let j = 0; j < w.length; j++) {
               const x = c + (down ? 0 : j) + 0.5
               const y = r + (down ? j : 0) + 0.5
               const a = (x - st.front[0]) * hx + (y - st.front[1]) * hy
               if (a > reach) { reach = a; far = [x, y] }
             }
-            const me = { word, c, r, down }
+            const me = { word: w, c, r, down }
             const [mx, my] = centre(me)
             // Off the line the chain is on.
             const off = Math.abs((mx - st.front[0]) * -hy + (my - st.front[1]) * hx)
             let near = 0
-            if (word === 'IVORY') {
+            if (w === 'IVORY') {
               for (const o of st.entries) {
                 if (o.word !== 'IVORY') continue
                 const [ox, oy] = centre(o)
                 near += Math.max(0, Math.min(IVORY_APART.x - Math.abs(ox - mx), (IVORY_APART.y - Math.abs(oy - my)) * 2))
               }
             }
+            if (near > 0) continue
             // Between two IVORYs the chain heads away from the last one, so the next has somewhere to go.
             // (Away from all of them: the nearest counts.)
             let away = 0
             const ivs = st.entries.filter((o) => o.word === 'IVORY').map(centre)
-            if (ivs.length && word !== 'IVORY') {
-              for (let j = 0; j < word.length; j++) {
+            if (ivs.length && w !== 'IVORY') {
+              for (let j = 0; j < w.length; j++) {
                 const x = c + (down ? 0 : j) + 0.5
                 const y = r + (down ? j : 0) + 0.5
                 let d = Infinity
@@ -296,18 +359,33 @@ export function buildBeam(rand, width = 60, noise = 1.5) {
               }
             }
             // Compact: the station's words should fill one frame (about 20 × 9 cells), not spread past it.
-            let c0 = c, c1 = c + (down ? 1 : word.length), r0 = r, r1 = r + (down ? word.length : 1)
-            for (const o of st.entries) {
-              if (o.station !== si) continue
+            let c0 = c, c1 = c + (down ? 1 : w.length), r0 = r, r1 = r + (down ? w.length : 1)
+            const mine = st.entries.filter((o) => o.station === si)
+            for (const o of mine) {
               c0 = Math.min(c0, o.c); c1 = Math.max(c1, o.c + (o.down ? 1 : o.word.length))
               r0 = Math.min(r0, o.r); r1 = Math.max(r1, o.r + (o.down ? o.word.length : 1))
             }
-            const spread = Math.max(0, c1 - c0 - 19) + Math.max(0, r1 - r0 - 9) * 2
-            const score = st.score + away * 2 + Math.max(reach, -3) * 1.5 - spread * 1.5 - Math.max(0, off - 5) * 0.4 - near * 3 - (back < n - 1 ? 0.6 : 0) + rand() * noise
-            if (near > 0) continue
-            next.push({ st, word, si, c, r, down, score, front: reach > 0 ? far : st.front })
-          }
-        }
+            let score
+            if (jumble) {
+              /*
+               * The block: as many crossings as it can, packed into about 15 × 7
+               * cells round where it began, edging on along the heading only a
+               * little.
+               */
+              const tight = Math.max(0, c1 - c0 - 15) + Math.max(0, r1 - r0 - 7) * 2
+              let gx = mx, gy = my
+              if (mine.length) {
+                gx = mine.reduce((t, o) => t + centre(o)[0], 0) / mine.length
+                gy = mine.reduce((t, o) => t + centre(o)[1], 0) / mine.length
+              }
+              const drift = Math.hypot(mx - gx, (my - gy) * 1.6)
+              score = st.score + crossings * 3 + away * 2 + Math.min(Math.max(reach, -3), 2) * 0.5 - tight * 3 - drift * 0.4 + rand() * noise
+            }
+            else {
+              const spread = Math.max(0, c1 - c0 - 19) + Math.max(0, r1 - r0 - 9) * 2
+              score = st.score + away * 2 + Math.max(reach, -3) * 1.5 - spread * 1.5 - Math.max(0, off - 5) * 0.4 - (back < n - 1 ? 0.6 : 0) + rand() * noise
+            }
+            next.push({ st, word: w, si, c, r, down, jumble, crossings, score, front: reach > 0 ? far : st.front })
       }
     }
     }
@@ -317,10 +395,10 @@ export function buildBeam(rand, width = 60, noise = 1.5) {
     const seen = new Set()
     beam = []
     for (const x of next) {
-      const sig = `${x.st.entries.length > 1 ? x.st.entries.slice(-2).map((e) => `${e.c},${e.r},${e.down}`).join('|') : ''}|${x.c},${x.r},${x.down}`
+      const sig = `${x.st.entries.length > 1 ? x.st.entries.slice(-2).map((e) => `${e.word}${e.c},${e.r},${e.down}`).join('|') : ''}|${x.word}${x.c},${x.r},${x.down}`
       if (seen.has(sig)) continue
       seen.add(sig)
-      beam.push(grow(x.st, x.word, x.si, x.c, x.r, x.down, x.score, x.front))
+      beam.push(grow(x.st, x.word, x.si, x.c, x.r, x.down, x.score, x.front, x.jumble))
       if (beam.length >= width) break
     }
   }
@@ -381,148 +459,4 @@ export function judge(list) {
     }
   })
   return { cost, notes }
-}
-
-/*
- * Filling the frames (2026-11-13: "I want the screen to be more full
- * always"). The chain that keeps the IVORYs a screen apart is sparse, so once
- * it is found more words are packed into each shot's frame, crossing what is
- * there, until about FULL of the frame is puzzle. They are written while the
- * camera holds on that shot, on beats between the sung words. The pool is the
- * lyric's other words and words of longing and missed chances.
- */
-export const FILL_POOL = [
-  'OPEN', 'MOVES', 'HELP', 'BACK', 'AVOID', 'HEARTACHE', 'COULD', 'KNOW', 'REMAINS', 'LOOKS', 'WAY', 'ABOUT',
-  'ECHO', 'DISTANCE', 'WAITING', 'NEVER', 'FADED', 'PERHAPS', 'ONCE', 'LOST', 'SILENCE', 'WONDER', 'SOMEONE',
-  'CROWD', 'SPOTLIGHT', 'CURTAIN', 'LIGHTS', 'NIGHT', 'ALONE', 'HOPE', 'WISH', 'DREAM', 'MEMORY', 'AFTER',
-  'EXIT', 'LATE', 'HEART', 'SIGH', 'GLANCE', 'TOMORROW', 'ALWAYS', 'FOREVER', 'AGAIN', 'BEFORE', 'GONE',
-  'STAY', 'LEAVE', 'SONG', 'SHOW', 'TICKET', 'APPLAUSE', 'HESITATE', 'UNSAID', 'WHISPER', 'FARAWAY',
-  'ROSES', 'STAR', 'MOMENT', 'LINGER', 'HOLD', 'DOOR',
-]
-export const FULL = 0.4
-
-/** `list` (the chain) plus fill words for writing at `lps` letters a second, each { …, fill: shot index } in the shot that writes it. */
-export function addFill(list, lps = 6) {
-  const { entries } = assemble(list)
-  const shots = shotsOf(entries)
-  const cells = new Map()
-  for (const k of assemble(list).cells.keys()) cells.set(k, { ...assemble(list).cells.get(k) })
-  const used = new Set(list.map((e) => e.word))
-  const out = list.map((e) => ({ ...e }))
-  const fits = (word, c, r, down) => {
-    const dc = down ? 0 : 1
-    const dr = down ? 1 : 0
-    if (cells.has(key(c - dc, r - dr))) return -1
-    if (cells.has(key(c + dc * word.length, r + dr * word.length))) return -1
-    let crossings = 0
-    for (let i = 0; i < word.length; i++) {
-      const cc = c + dc * i
-      const rr = r + dr * i
-      const cell = cells.get(key(cc, rr))
-      if (cell) {
-        if (cell.ch !== word[i]) return -1
-        if (cell[down ? 'down' : 'across'] !== -1) return -1
-        crossings++
-      }
-      else if (cells.has(key(cc + dr, rr + dc)) || cells.has(key(cc - dr, rr - dc))) return -1
-    }
-    return crossings
-  }
-  const box = (v) => {
-    const hw = PLATE.w / 2 / v.s / CELL
-    const hh = PLATE.h / 2 / v.s / CELL
-    const x0 = v.x / CELL - hw
-    const y0 = v.y / CELL - hh
-    return (c, r) => c >= x0 + 0.4 && c + 1 <= x0 + 2 * hw - 0.4 && r >= y0 + 0.4 && r + 1 <= y0 + 2 * hh - 0.4
-  }
-  const given = new Map()
-  /*
-   * How many fill words a station has time for: its hold (from arriving to
-   * leaving) less the time its own words take at `lps` letters a second, a
-   * word per 1.3 seconds of what is left at six (longer when slower), never
-   * more than four.
-   */
-  const budget = STATIONS.map((st, si) => {
-    const arrive = st.pan ? st.pan[1] : 9
-    const leave = STATIONS[si + 1]?.pan?.[0] ?? 177
-    // (Her name keeps a second either side of it clear.)
-    const own = st.words.reduce((t, [w]) => t + w.length / lps + (w === 'IVORY' ? 2 : 0), 0)
-    return Math.max(0, Math.min(4, Math.floor((leave - arrive - own) / 1.3)))
-  })
-  const spent = new Map()
-  // Her close shots first: they are the hardest to fill.
-  const order = shots.map((sh, k) => k).sort((a, b) => Number(shots[b].ivory) - Number(shots[a].ivory) || a - b)
-  const plainStation = (n) => shots[n] && !shots[n].ivory && !STATIONS[shots[n].station].words.some(([w]) => w === 'IVORY')
-  order.forEach((k) => {
-    const sh = shots[k]
-    const v = sh.view
-    const hw = PLATE.w / 2 / v.s / CELL
-    const hh = PLATE.h / 2 / v.s / CELL
-    const x0 = v.x / CELL - hw
-    const y0 = v.y / CELL - hh
-    /*
-     * Nothing else is written while her name is, so a close shot of IVORY is
-     * filled with words written after her name in that shot, or in a shot
-     * before it (or after) that has them in its frame too.
-     */
-    // (Only a station without an IVORY of its own: one with her has no hold to spare.)
-    // Her close shot writes after her name if it has the time, then a plain station's shot near it.
-    const writers = sh.ivory ? [k, ...[k - 1, k - 2, k - 3, k + 1].filter(plainStation)] : [k]
-    for (const writer of writers) {
-    const mine = box(v)
-    const theirs = box(shots[writer].view)
-    const inside = (c, r) => mine(c, r) && theirs(c, r)
-    const fullness = () => {
-      let n = 0
-      for (const kk of cells.keys()) {
-        const [c, r] = kk.split(',').map(Number)
-        if (c + 0.5 > x0 && c + 0.5 < x0 + 2 * hw && r + 0.5 > y0 && r + 0.5 < y0 + 2 * hh) n++
-      }
-      return n / (4 * hw * hh)
-    }
-    // Four words a shot at most, counting any it already writes for her shot.
-    const st = shots[writer].station
-    for (; (spent.get(st) ?? 0) < budget[st] && fullness() < FULL;) {
-      let best = null
-      for (const word of FILL_POOL) {
-        if (used.has(word)) continue
-        for (const [kk, cell] of cells) {
-          const [cc, rr] = kk.split(',').map(Number)
-          if (!inside(cc, rr)) continue
-          for (const down of [false, true]) {
-            if (cell[down ? 'down' : 'across'] !== -1) continue
-            for (let i = 0; i < word.length; i++) {
-              if (word[i] !== cell.ch) continue
-              const c = cc - (down ? 0 : i)
-              const r = rr - (down ? i : 0)
-              let all = true
-              for (let j = 0; j < word.length && all; j++) all = inside(c + (down ? 0 : j), r + (down ? j : 0))
-              if (!all) continue
-              const n = fits(word, c, r, down)
-              if (n < 1) continue
-              // New squares in frame and a bonus for every extra crossing; long words cost time to write.
-              const s = Math.min(word.length - n, 6) + n * 1.5 - Math.max(0, word.length - 6) * 0.8
-              if (!best || s > best.s) best = { s, word, c, r, down }
-            }
-          }
-        }
-      }
-      if (!best) break
-      const idx = out.length
-      for (let j = 0; j < best.word.length; j++) {
-        const kk = key(best.c + (best.down ? 0 : j), best.r + (best.down ? j : 0))
-        const cell = cells.get(kk) ?? { ch: best.word[j], across: -1, down: -1 }
-        cell[best.down ? 'down' : 'across'] = idx
-        cells.set(kk, cell)
-      }
-      used.add(best.word)
-      out.push({ word: best.word, c: best.c, r: best.r, down: best.down, station: shots[writer].station, fill: writer })
-      given.set(writer, (given.get(writer) ?? 0) + 1)
-      spent.set(st, (spent.get(st) ?? 0) + 1)
-    }
-    }
-  })
-  // In the order they will be written, shot by shot.
-  out.sort((a, b) => (a.fill == null) - (b.fill == null) || (a.fill ?? 0) - (b.fill ?? 0))
-  return out
 }
