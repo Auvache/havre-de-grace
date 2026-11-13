@@ -55,7 +55,7 @@ const FILMS = {
   'conman-city': ['conman-city.mjs', 'conmanCityFrame'],
   'conman-heists': ['conman-heists.mjs', 'conmanHeistsFrame'],
   marquee: ['marquee.mjs', 'marqueeFrame'],
-  blanks: ['blanks.mjs', 'blanksFrame'],
+  crossword: ['crossword.mjs', 'crosswordFrame'],
   grain: ['grain.mjs', 'grainFrame'],
   constellations: ['constellations.mjs', 'constellationsFrame'],
   'monkey-brain': ['monkey-brain.mjs', 'monkeyBrainFrame'],

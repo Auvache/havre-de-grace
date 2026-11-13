@@ -31,7 +31,7 @@ How to build or change one is the `music-video-creation` skill.
 | 1 | [Into the Wild](into-the-wild.md) | **Final** (2026-11-03), exported | `maze.mjs` |
 | 2 | [Conman](conman.md) | Film, the Portland rebuild (whole since 2026-11-10); the old film kept as a test | `conman-portland/heists.mjs` |
 | 3 | [Goodbye, Norma Jeane](goodbye-norma-jeane.md) | Film, the dance on the beat (2026-11-13) | `marquee.mjs` |
-| 4 | [Ivory](ivory.md) | Back to the drawing board (2026-11-10): ten proposed stills, above the v1 film | `blanks.mjs` (kept until one is picked) |
+| 4 | [Ivory](ivory.md) | Film, the crossword (whole song, 2026-11-13) | `crossword.mjs` |
 | 5 | [Andalusia](andalusia.md) | Film, with the new opening; mp4 to re-render | `cartography.mjs` (album edition) |
 | 6 | [New York](new-york.md) | Film, v1 (2026-11-10), not yet watched | `grain.mjs` |
 | 7 | [Meet Me at the Horizon](meet-me-at-the-horizon.md) | Two films, v1 (2026-11-10), not yet watched; one to be picked | `constellations.mjs`, `monkey-brain.mjs` |

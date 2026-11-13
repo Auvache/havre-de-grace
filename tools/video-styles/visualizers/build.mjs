@@ -3,8 +3,8 @@
  * CONCEPTS, a few frames each.
  *
  *   node tools/video-styles/visualizers/build.mjs                  # review grid → .visualizers.html
- *   node tools/video-styles/visualizers/build.mjs ivory            # one song
- *   CONCEPT=room,crossword node ... ivory                           # only those concepts
+ *   node tools/video-styles/visualizers/build.mjs rocks-in-the-sea # one song
+ *   CONCEPT=a,b node ... rocks-in-the-sea                           # only those concepts
  *   SITE=1 node tools/video-styles/visualizers/build.mjs           # the site's /visualizers/<song> pages
  *
  * SITE=1 writes every still to public/visualizers/<song>/<concept>-<n>.svg
@@ -28,12 +28,11 @@ const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '../../..')
 
 /*
- * The songs with stills on their page, in album order: Ivory (ten new ideas,
- * 2026-11-10, shown above its current film) and Rocks in the Sea (no film yet).
+ * The songs with stills on their page, in album order: Rocks in the Sea (no
+ * film yet). Ivory's ten went on 2026-11-13, when the crossword was chosen.
  * `extra: [file, export]` adds a second round of concepts in front of CONCEPTS.
  */
 const SONGS = [
-  { slug: 'ivory', score: ['ivoryScore.ts', 'IVORY_SCORE'] },
   { slug: 'rocks-in-the-sea', score: ['rocksInTheSeaScore.ts', 'ROCKS_IN_THE_SEA_SCORE'] },
 ]
 

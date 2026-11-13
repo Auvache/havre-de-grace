@@ -1,13 +1,16 @@
-# Ivory — back to the drawing board
+# Ivory — the crossword
 
-Track 4. [/visualizers/ivory](/visualizers/ivory) shows **ten proposed stills,
-one per idea**, and under them the first film, kept until one of the ten is
-chosen. Score: `app/config/ivoryScore.ts`.
+Track 4. [/visualizers/ivory](/visualizers/ivory) is **the crossword**, the
+whole song (2026-11-13). Score: `app/config/ivoryScore.ts`. Film:
+`shared/video/films/crossword.mjs` (`crosswordFrame`, `CROSSWORD_BEATS`).
 
-- The stills are drawn by `tools/video-styles/visualizers/ivory.mjs` and
-  published with `SITE=1 node tools/video-styles/visualizers/build.mjs`.
-- The first film is `shared/video/films/blanks.mjs` (`blanksFrame`), v1,
-  2026-11-02.
+| File | Owns |
+| --- | --- |
+| `shared/video/films/crossword.mjs` | The film: when every word is written, the camera, the drawing. |
+| `shared/video/films/crossword/stations.mjs` | `STATIONS` (where the camera goes and what is written there), the grid search (`buildBeam`), its score (`judge`), the camera's shots (`shotsOf`) and the extra words (`addFill`, `FILL_POOL`). |
+| `shared/video/films/crossword/layout.mjs` | The grid, **baked**: `node tools/video-styles/crossword/bake-layout.mjs 80` (about 20 s). |
+| `shared/video/films/crossword/letters.mjs` | The alphabet in the titles' Hairline type, **baked**: `node tools/video-styles/titles/bake-letters.mjs`. |
+| `tools/video-styles/crossword/check.mjs` | Walks the film at 30 fps for the rules below. Run it after any change. |
 
 ## The story (the user's, 2026-11-02)
 
@@ -15,234 +18,99 @@ He is in the crowd, she is on stage, and he falls for her in an instant. After
 the show he goes to talk to her and misses his chance. "Ivory" is his name for
 her; he never learns her real one.
 
-## Back to the drawing board (2026-11-10)
-
-The user, on the first film:
-
-> ivory: back to the drawing board. Give me 10 new screenshots for different
-> alternate ideas on for the video. I like the "simple" approach that we have
-> going for into the wild and conman. The game idea is great, but the execution
-> isn't my favorite.
-
-So the ten below are in the manner of the maze and the Conman map: seen from
-above or drawn as a diagram, paper and black line, one red thing that travels,
-people as dots, nothing explained in words. Butterfly blue is only ever hers.
-Four of them are **the guessing game again**, played in pencil on paper instead
-of on a tiled board (The Crossword; Five Blanks, in Pencil; The Letter Lock; A
-Stroke a Guess). Six are **new pictures of the story** (The Room, The Orbit,
-The Follow Spot, One Town Behind, The Flight Path, Written in Sand).
-
-Each idea has one still, at a real moment of the record. Every one is a
-function of the song's clock already (`frame({ time, score })`), so the still
-shows what would have happened by then, and a chosen idea can grow into
-`shared/video/films/` without being redrawn.
-
-**Recommended: The Room.** It is the closest to what the maze and Conman do: a
-plan, a crowd of dots, and one red dot with somewhere it wants to get to. The
-whole story is in where he goes: in at the back, to the front through the
-crowd, and the long way round to the stage door after she has left by it. It
-also has the most to do across three minutes (the crowd, the show ending, two
-ways out) and an ending that is one picture: him in the alley, nobody there.
-
-**If the game should stay: The Crossword.** It keeps what the first film had
-(his sung words tried against her name) and loses the board. The song supplies
-the grid: SUNRISE, SHORE and MYSTERY run down through her five squares at their
-I, O and Y, so the audience can read her name out of the words he does have,
-and he cannot write it. Five Blanks, in Pencil is the barest version of the
-same game and would be the quickest to build.
-
-The Orbit is the simplest picture of the ten and the one most likely to hold
-attention as pure motion.
-
-### The Room
-
-> Right up there beside her is where I want to be
-
-The venue from above, drawn as a plan: the stage, the bar, the desk, the doors.
-The crowd is ink dots, she is the blue dot on the stage, and he is the red dot
-who came in at the back.
-
-**Moves.** He works his way to the front through the crowd, a few steps on
-every line, and stands at the lip of the stage through the choruses. In the
-interlude the room empties. She leaves by the green room and the stage door
-while he goes the long way round, and he reaches the alley after she has gone.
-
-**Red.** Him, and the line of everywhere he has stood tonight.
-
-Still: 1:24 · "Right up there beside her is where I want to be"
-
-### The Crossword
-
-> When I asked her for her name, she looked straight back at me
-
-The guessing game as a crossword in pencil. The words he sings go into the grid
-where they cross: WOMAN, SINGS, OCEAN, SHE and WHERE across, SUNRISE, SHORE and
-MYSTERY down. The three down words run through her five squares, and those are
-the squares he cannot fill.
-
-**Moves.** Each word is written a letter at a time as it is sung, the red
-cursor moving with it, and between words the cursor waits on the first of her
-squares. On every "Ivory" his name for her is pencilled in and rubbed out. The
-grid ends complete but for her row.
-
-**Red.** The cursor: the square he is on.
-
-Still: 1:29 · "When I asked her for her name, she looked straight back at me, oh"
-
-### The Orbit
-
-> When she moves, the universe can't help but stop and stare
-
-She is the middle of everything: a blue dot, with the universe going round her
-in rings. He is the red dot falling in from the edge of the sheet.
-
-**Moves.** Everything turns, and on "stop and stare" everything stops. He
-spirals in for the whole song, quicker the closer he gets, and is nearest when
-she asks his name. He does not land: he goes round her and is thrown clear, off
-the sheet, by the last "Ivory".
-
-**Red.** Him and his way in: one line, wound round her.
-
-Still: 1:12 · "When she moves, the universe can't help but stop and stare, oh"
-
-### Five Blanks, in Pencil
-
-> But too avoid the heartache, I'll keep this one just for me
-
-The game with nothing but a pencil: five ruled blanks the width of the sheet.
-Every five-letter word he sings is written on them, and rubbed out for the next.
-
-**Moves.** Letters go down on their measured onsets. The rubbing out never
-quite takes, so the blanks fill with the grey of everything he has tried. IVORY
-is written like any other word and rubbed out like any other. The film ends on
-five blanks and a smudge.
-
-**Red.** The point of the pencil.
-
-Still: 2:41 · "But too avoid the heartache, I'll keep this one just for me"
-(AVOID, the nearest any real word comes, over the ghost of IVORY)
-
-### The Follow Spot
-
-> But when she asked me for my name, I forgot how to breathe
-
-The house lights are down, so the plate is black. One pool of light on the
-stage, with her in it. He is a red dot in the dark.
-
-**Moves.** The light follows her across the stage; the crowd is only just
-visible where it spills. He comes up through the dark, and when the room has
-emptied he climbs onto the stage and stops at the edge of her light. She walks
-out of it. The light stays where it was, he steps into it alone, and it goes
-out.
-
-**Red.** Him: the only colour in the dark.
-
-Still: 2:16 · "But when she asked me for my name, I forgot how to breathe, oh"
-
-### One Town Behind
-
-> Walks just like Alaska with the snowfall in the trees
-
-A map, in Andalusia's manner (the real coast, from the same data). She is on
-tour: California, across to Tennessee, north to Alaska. He gets to every town
-as she is leaving the next. The three places the song names are lettered, as a
-map letters them; nothing else is.
-
-**Moves.** Her dot goes town to town with a dotted line behind it; his follows
-one stop back and turns her dotted line into his solid one, so the blue left on
-the map is always exactly the distance between them. On "Alaska" she reaches
-the last town. Then her line runs off the edge of the sheet, and he arrives.
-
-**Red.** The road he has driven. The blue is what is still between them.
-
-Still: 2:32 · "Walks just like Alaska with the snowfall in the trees"
-
-### The Letter Lock
-
-> Ivory
-
-A five-ring letter lock, drawn in line. Every five-letter word he sings is
-dialled in, ring by ring. It stays shut, on his name for her as well.
-
-**Moves.** The rings turn on the sung words, one after another, and the pointer
-moves to the ring his hand is on. On every "Ivory" the rings line up, he tries
-the shackle twice, and it holds. After the last one he spins them off to
-blanks.
-
-**Red.** The pointer under the ring being turned.
-
-Still: 0:42 · "Ivory"
-
-### The Flight Path
-
-> Her eyes are open ocean and blue butterfly wings
-
-A butterfly's way across the page, all loops, from flower to flower, drawn
-dotted the way a flight is drawn. He follows on foot in a straight line.
-
-**Moves.** She goes on the sung words and rests on a flower in the gaps. Each
-time his line reaches the flower she is on, she lifts off. At the end her
-dotted line leaves the page and his stops at the last flower.
-
-**Red.** His line, straight through every place she looped.
-
-Still: 1:06 · "That there's a woman with flowers in her hair"
-
-### Written in Sand
-
-> Eyes that hit a sunrise like waves that hit a shore
-
-The beach from above. He writes in the sand at the water's edge: every word he
-has for her, small, and his name for her, large. The sea takes them. The sea is
-drawn in her blue ("her eyes are open ocean"), the one idea where her colour is
-a whole field.
-
-**Moves.** A wave comes up the beach on every line and cuts off whatever it
-reaches. He writes each five-letter word as he sings it, and traces IVORY again
-on every "Ivory". The tide is coming in; after the last "Ivory" one long wave
-takes the name and he does not write it again.
-
-**Red.** The point he writes with, and his steps along the beach.
-
-Still: 0:55 · "Oh, Ivory"
-
-### A Stroke a Guess
-
-> I could be the one she loves, the Adam to her Eve
-
-The oldest pencil-and-paper guessing game: five blanks, and every wrong guess
-costs a stroke of the drawing. The drawing is a butterfly, in her blue.
-
-**Moves.** Each five-letter word is written in the list, struck out, and paid
-for with one more stroke of the butterfly. His name for her is pencilled on the
-blanks on every "Ivory" and does not stay. The fifteenth wrong word, AVOID,
-finishes the drawing, and on the last "Ivory" it lifts off the page.
-
-**Red.** The point of the pencil, wherever it is writing.
-
-Still: 2:10 · "I could be the one she loves, the Adam to her Eve"
-
-## The first film: five blanks (v1, 2026-11-02)
-
-Still on the page, under the stills. A guessing game for her name, five
-letters, six tries, three boards on one sheet. The guesses are the five-letter
-words he sings, typed in as he sings them and turned over to show how close
-they come: black for the right letter in the right place, blue for the right
-letter in the wrong place, pencil for a letter that is not in her name. The row
-he is on spins through letters between guesses. He wins the first two boards
-only in his head, by calling her Ivory; on the third he forgets how to breathe,
-a row goes by empty, and he runs out of tries. Only then does the answer come
-up, and on the last "Ivory" it leaves five blanks. Every row as the film plays
-it is `blanksGames(score)`.
-
-Its jump-to moments: 0:00 Opening · 0:09 First sight · **0:40 Ivory** · 0:50 My
-mystery · 0:58 Getting close · **1:27 Her name** · 1:45 Just for me · 1:52
-Interlude · 2:08 The last chance · **2:16 Breathe** · 2:30 Walks · **2:44 The
-answer** · **2:53 Five blanks**. Poster frame 0:44.
-
-What the user said about it (2026-11-10): the game idea is great, the execution
-is not their favourite. When one of the ten is chosen and built, this film and
-`blanks.mjs` go.
+## What the film does
+
+A large blank crossword on the album's paper is filled in as the song goes.
+
+- **Words.** The key words he sings, each starting on its measured onset; in
+  the instrumental gaps, words of longing and missed chances (LONGING, ALMOST,
+  STRANGER, WISTFUL, ENCORE, NEARLY, MISSED, CHANCE, TOOLATE, REGRET, MAYBE,
+  SOMEDAY, GOODBYE, YEARNING), each from a beat; and five unsung **fill
+  words** packed in to fill sparse frames, written on free beats.
+- **Every letter is drawn on** stroke by stroke, the way the opening draws the
+  title (the Hairline skeleton masks; six skeletons were added to
+  `stroke-letters.mjs` for it: F J P Q X Z).
+- **One rate: 3.5 letters a second**, for every word, IVORY included.
+- **Never more than three words at once.** A sung word waits (from its onset)
+  when three are already being written; a fill word goes where there is room,
+  never while an IVORY is being written.
+- **Every "Ivory" writes an IVORY, in red**: seven in the grid, written exactly
+  like the other words, the red letters the only red in the film. A word that
+  crosses one of her squares leaves it blank until her name is written, so
+  her name always goes in whole.
+- **No frame ever holds two written IVORYs** (until the final pull-back,
+  which shows the whole finished puzzle).
+- **The camera** pans to a station, holds still while its words go in, then
+  pans on (cosine-eased, 2–4 s; at least 1.8 s, and late rather than quick
+  when the words before are still being written). Within a station an IVORY
+  gets its own shot, framed like any other. It moves for 52 s of the 182.
+- **The puzzle** is a winding chain that starts bottom left, crosses the sheet
+  and climbs, so the film moves from one side of it to the other and never
+  goes back. After the last "Ivory" the camera pulls back to the whole thing,
+  filled, and the end card comes on the last hit (182.42).
+
+Jump-to moments (`CROSSWORD_BEATS`): 0:00 Opening · 0:09 First words · 0:20
+Longing · **0:40 Ivory** · 0:46 California · 0:55 Ivory again · 1:02
+Stranger · 1:22 Beside her · **1:35 Ivory, third** · 1:41 Paradise · 1:49
+Ivory, fourth · 1:56 Missed chances · 2:09 Adam to her Eve · 2:21 Ivory,
+fifth · 2:28 Alaska · 2:44 Ivory, sixth · 2:50 Goodbye · **2:53 The last
+Ivory** · **2:56 The whole puzzle**. Poster 1:00.
+
+## How the grid is made, and why
+
+About seventy words cannot cover seven screens a frame apart if they are
+placed greedily: every greedy and randomised build tried bunched up, doubled
+back, or dead-ended between two close "Ivory"s. So:
+
+1. **`buildBeam`**: words go in in the stations' order, each crossing one of
+   the last four placed (never side by side). A partial grid is ranked by how
+   far its front has moved along each station's heading (rightwards, wandering
+   ±26°), how far it has moved away from every IVORY, and how compact each
+   station stays; 300 kept per word. An IVORY within 13 columns and 7 rows of
+   another is never allowed.
+2. **`judge`**: two written IVORYs in any shot or move (with half a square of
+   margin) costs 1000; frames wider than wanted, frames that are mostly bare
+   paper, pans that hardly move or cross half the sheet, and going back over
+   old ground cost less. The bake keeps the cheapest of 80 seeded beams.
+   (A full square of margin made every grid fail, and the search then traded
+   away everything else: shots at half zoom and a grid that wound back on
+   itself. Half a square is right; `check.mjs` is the real test.)
+3. **`addFill`**: fill words from `FILL_POOL` are packed into each shot's frame
+   until it is about 40% puzzle, as many as the station's hold has time for
+   at 3.5 letters a second. A close shot of IVORY can be filled by a word
+   written in a nearby plain station that also has it in frame.
+4. **Framing** (`shotsOf`): every shot frames its own words (1.4 cells of
+   margin, 1.05–1.5×, wider only when they will not fit), then slides at most
+   three cells across and one and a half down towards more puzzle.
+
+**Word choice is geometry.** Between two close "Ivory"s the linking words must
+be long and share letters with IVORY (TENNESSEE shares none; SOMEDAY was too
+short and became YEARNING). A station's words are listed in grid order, which
+need not be the order they are written (SURE cannot cross WOMAN, so SUNRISE is
+placed first). Changing a station's words means re-baking and re-checking.
+
+## How it got here (2026-11-13, one session)
+
+1. **First test**: one grid built round IVORY in the middle, a Gaussian camera
+   always moving, her name left blank until the last "Ivory". The user: "pretty
+   good", but the pacing a little fast and the panning jumpy; write IVORY on
+   every "Ivory", never twice on one screen; pan to an area, add a few words,
+   pan on; never more than two or three words at once.
+2. **Stations**: the chain grid and held shots. The user: "way better"; make
+   the screen fuller (closer, more words) and one fill rate ("think 6 letters
+   per second").
+3. **Fuller**: closer shots, more sung and gap words, fill words. The user:
+   "way better"; no red box on the other words, red only for her; three
+   speeds at 6 or slower.
+4. **Three speeds** (6, 4.5, 3.5 letters a second). The user chose **3.5**,
+   and: "remove the blue focus when filling in 'ivory.' Ivory should function
+   exactly like the other words but with red letters instead." Then the whole
+   song, and everything else off the page.
+
+What went: the first test's film, the ten stills of 2026-11-10 and their
+concept module (`tools/video-styles/visualizers/ivory.mjs`), and the first film
+(`shared/video/films/blanks.mjs`, five blanks). The stills and blanks are in
+git at `b709b51`.
 
 ## Decided by the user
 
@@ -250,19 +118,20 @@ is not their favourite. When one of the ten is chosen and built, this film and
 - **Legal guardrail** (2026-11-02): the newspaper word game is never named, in
   the video, titles, descriptions, tags, code or these notes, and its look is
   never used: no tiled board with coloured feedback rows, no keyboard, no
-  green/yellow/grey, no win messages. The four game ideas above are pencil
-  games that are older than it: a crossword, ruled blanks, a letter lock, a
-  stroke a guess.
+  green/yellow/grey, no win messages. A crossword is older than it and safe.
 - The simple approach of the maze and Conman is the one to follow (2026-11-10).
+- The crossword, filled with the lyric's key words and words of longing in the
+  gaps, every letter drawn on (2026-11-13).
+- An IVORY on every "Ivory", never two in one frame; pan, hold while a few
+  words go in, pan on; never more than two or three words at once
+  (2026-11-13).
+- One rate for every word, **3.5 letters a second** (2026-11-13).
+- **Red is only her name**, in its letters; no highlight, box or wash on any
+  word, hers included (2026-11-13).
+- A fuller screen: closer shots and more words (2026-11-13).
 
-## Notes for whoever builds the chosen one
+## Open
 
-- The five-letter words he sings, in order, are `GUESSES` in `ivory.mjs`.
-  No word in the song starts with V.
-- The crossword's grid is checked when the module loads (every crossing must
-  agree); the black squares outside the eight words are filled in by a fixed
-  hash, so the grid is the same every time.
-- The map uses `shared/video/geo/earth.mjs` (the coast Andalusia uses) in an
-  Albers projection; the tour's towns are real places but are not named.
-- These ten are stills: the motion described is what each function already
-  does roughly, not a reviewed film. Expect the usual rounds.
+- The final pull-back shows all seven IVORYs at once (asked, not answered).
+- The emptiest frames are the IVORY shots that hang off the grid's edge
+  (0:41, 1:50); their stations hold too briefly to fit fill words.

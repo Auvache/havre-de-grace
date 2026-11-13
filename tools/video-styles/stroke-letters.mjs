@@ -44,6 +44,17 @@ export const GLYPHS = {
   // Two of the V, the middle apex flat like the A's.
   W: { d: 'M2 0L25.5 96.5L31.5 96.5L51 4.5L57 4.5L76.5 96.5L82.5 96.5L106 0', w: 108 },
   Y: { d: 'M2 0L31 50.5L60 0M31 50.5V100', w: 62 },
+  /*
+   * Added 2026-11-13 for Ivory's crossword, whose letters are drawn on through
+   * these skeletons (hairline.mjs): the E without its foot, the R without its
+   * leg, the O with a tail, two diagonals, a hook.
+   */
+  F: { d: 'M6.5 0V100M6.5 6.5H51.5M6.5 50H48', w: 51.5 },
+  P: { d: 'M6.5 0V100M6.5 6.5H37.5a24 24 0 0 1 0 48H6.5', w: 64 },
+  J: { d: 'M44 0V68A21 30 0 0 1 2 72', w: 50 },
+  Q: { d: 'M6.5 50A33 43.5 0 1 0 72.5 50A33 43.5 0 1 0 6.5 50ZM46 72L76 100', w: 79 },
+  X: { d: 'M2 0L62 100M62 0L2 100', w: 64 },
+  Z: { d: 'M4 6.5H60L4 93.5H62', w: 64 },
 }
 const GAP = 26
 const SPACE = 82.5

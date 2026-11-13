@@ -10,45 +10,16 @@
         </h1>
       </header>
 
-      <VisualizerStills :ideas="VISUALIZER_STILLS.ivory!" />
-
-      <section class="space-y-4">
-        <h2 class="section-heading text-[1.35rem]">
-          Five Blanks
-        </h2>
-        <VisualizerPlayer :film="blanksFrame" name="Five Blanks" :score="IVORY_SCORE" :poster-at="44" :beats="BEATS" />
-      </section>
+      <VisualizerPlayer :film="crosswordFrame" name="The Crossword" :score="IVORY_SCORE" :poster-at="60" :beats="CROSSWORD_BEATS" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/*
- * Ivory: back to the drawing board (2026-11-10). Ten proposed stills, one per
- * idea (tools/video-styles/visualizers/ivory.mjs), and under them the first
- * film, five blanks (shared/video/films/blanks.mjs), kept until one of the ten
- * is chosen. Notes: docs/visualizers/ivory.md.
- */
+/* Ivory: the crossword (shared/video/films/crossword.mjs). Notes: docs/visualizers/ivory.md. */
 import { IVORY_SCORE } from '~/config/ivoryScore'
-import { VISUALIZER_STILLS } from '~/config/visualizerStills'
-import { blanksFrame } from '~~/shared/video/films/blanks.mjs'
+import { crosswordFrame, CROSSWORD_BEATS } from '~~/shared/video/films/crossword.mjs'
 
 definePageMeta({ layout: 'default' })
 useHead({ title: 'Ivory — visualizer', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
-
-const BEATS = [
-  { at: 0, label: 'Opening' },
-  { at: 9, label: 'First sight' },
-  { at: 40, label: 'Ivory', key: true },
-  { at: 50, label: 'My mystery' },
-  { at: 58, label: 'Getting close' },
-  { at: 87, label: 'Her name', key: true },
-  { at: 105, label: 'Just for me' },
-  { at: 112.6, label: 'Interlude' },
-  { at: 128, label: 'The last chance' },
-  { at: 136, label: 'Breathe', key: true },
-  { at: 150, label: 'Walks' },
-  { at: 164, label: 'The answer', key: true },
-  { at: 173, label: 'Five blanks', key: true },
-]
 </script>
