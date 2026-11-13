@@ -211,6 +211,31 @@ export const GOODBYE_NORMA_JEANE_SCORE = {
     '5566666420000123223310025688878776677888777888777887656667777777' +
     '77766665555555444455444432321112333333334454211210000000000000'
   ),
+  /**
+   * How loud the piano is on each beat, 0–9, a digit a beat from beatPhase
+   * like `brightness`: the piano stem of Demucs htdemucs_6s, each beat
+   * averaged with its neighbours, 9 the loudest and 0 at 27 dB or more below
+   * it. Measured 2026-11-13. It comes in at the end of verse 2 (about 1:30),
+   * drops out for the interlude after chorus 1, is back from verse 3 and is
+   * loudest in the solo and the outro. The marquee changes more tiles with it.
+   */
+  piano: (
+    '0000000000000000000000000000000000000000000000000000000000000000' +
+    '0000000000000000000000000000000000000000000000000000000000000000' +
+    '0000000000000000033354456433543000000000455665443101233465556650' +
+    '0000000000000000000000000000000320000000000000000012466653334556' +
+    '5434565420024322454321233333445566667788741002345665000000001232' +
+    '0000345677777778777740001000000000000000001355555566565656677888' +
+    '77777777766677887778888878888889888888888889866760000000000000'
+  ),
+  /**
+   * Where the trumpet and the piano are loud together: bars 78–81 (the end of
+   * chorus 2 into the piano solo, the loudest brass on the record) and bars
+   * 94–100 (the end of the last chorus into the outro). Measured on the
+   * htdemucs_6s "other" stem (the brass) against the piano stem; chosen by
+   * the user 2026-11-13. On the marquee almost every tile changes.
+   */
+  horns: [[197.750, 207.856], [238.171, 255.856]],
   sections: SECTIONS,
   lines: LINES,
 } as const

@@ -52,28 +52,30 @@
  *     (confirmed 2026-11-02: her name is never spelled).
  *   - Lights follow the song's sections and flash on every landing.
  *
- * THE TWINKLE (chosen 2026-11-05 from five motion tests: "A is the best";
- * following the record chosen 2026-11-09 from three). While a board is up,
- * letters blink on and off in the tiles it leaves empty, each flip on an
- * eighth, following the record's brightness (score.brightness: the energy
- * above 1.8 kHz, a digit a beat) — a few in the verse gaps, most of the free
- * board in the choruses and the trumpet, never below a floor that keeps a few
- * letters moving to the beat. Never beside a lit letter or directly above or
- * below one once a title is half locked, never in her place while a clue
- * shows, never red. It starts once NORMA JEANE is whole: nothing is on the
- * board before her name. A surfacing
- * title's spinning tiles follow the same level: soft, they turn over less and
- * often come up blank; loud, they spin hard.
+ * THE DANCE (2026-11-13, three rounds of a 30-second test, then the film:
+ * "you got it exactly right"). Everything is timed to the click on the
+ * eighth (half a beat): every flip's letter changes on an eighth, nothing
+ * between. The free tiles dance in layers, like a band — a kick on beats 1
+ * and 3, a snare on 2 and 4 (where the board's own letters, titles too, wink
+ * in place), hats on the offbeats once the song is up, and a move each bar
+ * (wave, burst, ripple through the title, stab, rest), never the same twice
+ * running. How much moves follows the drive: the energy (the song's shape
+ * by section, with the record's brightness averaged over seven beats) plus
+ * the piano's level (score.piano), so the board steps up where the piano
+ * comes in. Under the horns (score.horns: trumpet and piano loud together)
+ * almost every tile turns on every eighth; a title holds, winking, with only
+ * the gaps between its words kept blank. Never beside a title's letters
+ * otherwise, never in her place while a clue shows, never red. It starts once
+ * NORMA JEANE is whole: nothing is on the board before her name.
  *
  * THE SURFACING (decided 2026-11-05: "the title can slowly reveal itself by
  * letters slowly falling into place… it will more so bubble up to the
  * surface, than disappear as the letters flip away"). A title's tiles start
  * spinning through random letters in the first third of its build (the first
  * on the build's first eighth), then lock onto the right one a few at a time,
- * in scattered order, on the eighths, the last on the landing; whole and
- * still for four beats; then its letters flip away, scattered, on the
- * sixteenths. The name's and the words' held letters still turn over onto
- * themselves now and then (`dance`); a title, whole, is still.
+ * in scattered order, on the eighths, the last on the landing; whole for
+ * three beats, winking; then its letters flip away in groups on the eighths,
+ * most on the beats.
  *
  * The frame contract is the one every film here keeps:
  * marqueeFrame({ time, score, lockup, uid }) → { svg, label }, pure, no DOM.
@@ -166,16 +168,12 @@ function lastIndex(ev, t) {
  * One flap's state at t from its events ([time the flip starts, letter, tag]).
  * A tag marks a letter one of the alternatives put up: it is never red.
  */
-function flapAt(ev, twitches, t) {
+function flapAt(ev, t, flip = FLIP) {
   const k = lastIndex(ev, t)
   const [tc, cur, tag] = ev[k]
   const prev = k > 0 ? ev[k - 1][1] : ' '
-  const p = (t - tc) / FLIP
+  const p = (t - tc) / flip
   if (p >= 0 && p < 1) return { letter: p < 0.5 ? prev : cur, sy: Math.abs(1 - 2 * p), moving: true, tag: p < 0.5 ? ev[k - 1]?.[2] : tag }
-  for (const tw of twitches) {
-    const q = (t - tw) / 0.3
-    if (q >= 0 && q < 1) return { letter: cur, sy: 1 - 0.45 * Math.sin(q * Math.PI), moving: true, tag }
-  }
   return { letter: cur, sy: 1, moving: false, tag }
 }
 
@@ -220,12 +218,17 @@ function openingSvg(time, uid) {
 /* ── The board ───────────────────────────────────────────────────────────── */
 
 const DEFAULTS = {
-  twinkle: 1, // letters blinking in the empty tiles, following the record (0: none)
-  dance: true, // the name's and the hook's held letters turn over onto themselves now and then
+  twinkle: 1, // the dance on the free tiles (0: none)
 }
 
 export function marqueeFilm(options = {}) {
   const O = { ...DEFAULTS, ...options }
+  // Every flip is placed so its letter changes on the grid (2026-11-13: the
+  // old flips started or finished on an eighth, so every change was 100 ms
+  // off the click): SW moves a flip that started on an eighth back by half a
+  // flip, and one that finished on it forward by half.
+  const FLIP = 0.14
+  const SW = FLIP / 2
   const COLS = 13
   const ROWS = 3
   const N = COLS * ROWS
@@ -278,7 +281,6 @@ export function marqueeFilm(options = {}) {
 
     const EMPTY = layout(['', '', ''])
     const events = Array.from({ length: N }, () => [[-9, ' ']])
-    const twitches = Array.from({ length: N }, () => [])
     const boards = [] // every board that lands: { at, S (when the next change starts), grid, red, title, kind }
     const clues = [] // [from, to] — for the label
     const flashes = [] // the bulbs flash on every landing
@@ -305,6 +307,33 @@ export function marqueeFilm(options = {}) {
     // A floor, so some letters are always moving to the beat however quiet the
     // record (2026-11-09: "I don't want that to happen ever after the start").
     const level = (t) => Math.max(0.25, measured(t))
+    /*
+     * On the beat, the energy: the record's brightness averaged over seven
+     * beats (one beat's digit jumps 7, 4, 2, 1 in a bar), under the song's
+     * shape: low in the verses, climbing through each pre-chorus to the
+     * chorus, full in the choruses. It builds instead of flickering.
+     */
+    const SHAPE = { intro: 0.3, verse: 0.3, break: 0.55, chorus: 0.9, outro: 0.85 }
+    const energy = (t) => {
+      let sum = 0
+      for (let d = -3; d <= 3; d++) sum += measured(t + d * BEAT)
+      const s = score.sections.find((x) => t >= x.from && t < x.to) ?? score.sections.at(-1)
+      const p = Math.max(0, Math.min(1, (t - s.from) / (s.to - s.from)))
+      const shape = s.kind === 'prechorus' ? 0.35 + 0.6 * p ** 1.3 : s.id === 'chorus-3' ? 1 : SHAPE[s.kind] ?? 0.5
+      return Math.max(0.2, Math.min(1, 0.7 * shape + 0.3 * (sum / 7)))
+    }
+    /*
+     * The piano and the horns (2026-11-13: "when piano comes in, increase the
+     * number of the spaces that change; when there is piano and trumpet
+     * together during the big trumpet part, include almost every single
+     * space"). score.piano is the piano stem's level, a digit a beat; the
+     * dance's drive is the energy plus that, so the board steps up where the
+     * piano comes in and is busiest where it is loudest. score.horns are the
+     * two stretches where trumpet and piano are loud together.
+     */
+    const keys = (t) => Number((score.piano ?? '')[Math.floor((t - (score.beatPhase ?? 0)) / BEAT)] ?? 0) / 9
+    const horn = (t) => (score.horns ?? []).some(([a, b]) => t >= a && t < b)
+    const drive = (t) => Math.min(1, energy(t) + 0.45 * keys(t))
 
     /*
      * Turn the board from what it shows to `next`. `land(i)` is when tile i's
@@ -338,15 +367,15 @@ export function marqueeFilm(options = {}) {
             if (clue && k >= 0 && t > ct - EIGHTH && t < ce) continue
             let c = rand() > 0.2 ? pick(ALPHA) : ' '
             if (k >= 0 && c === HID.get(i)) c = pick(NOISE)
-            events[i].push([t, c])
+            events[i].push([t - SW, c])
           }
           if (clue && k >= 0 && clue.includes(k)) {
-            events[i].push([ct, HID.get(i)])
-            events[i].push([ce, pick(NOISE)])
+            events[i].push([ct - SW, HID.get(i)])
+            events[i].push([ce - SW, pick(NOISE)])
           }
-          if (fin > quiet) events[i].push([quiet - FLIP, ' '])
+          if (fin > quiet) events[i].push([quiet - FLIP + SW, ' '])
         }
-        if (final || rand() < 0.6) events[i].push([fin, next[i]])
+        if (final || rand() < 0.6) events[i].push([fin + SW, next[i]])
       }
       cur = next
     }
@@ -356,11 +385,17 @@ export function marqueeFilm(options = {}) {
      * away, scattered, on the sixteenths, over `K`. Returns when it is gone.
      */
     function breakDown(b, W, K) {
-      const from = b.at + W
+      const from = nearEighth(b.at + W)
       const rand = rng(seed++)
-      const SIX = EIGHTH / 2
-      const steps = Math.max(1, Math.floor((K - FLIP) / SIX))
-      b.grid.forEach((c, i) => { if (c !== ' ') events[i].push([from + Math.floor(rand() * steps) * SIX, ' ']) })
+      // The letters go in groups on the eighths, most on the beats.
+      const steps = Math.max(1, Math.floor((K - FLIP / 2) / EIGHTH) + 1)
+      b.grid.forEach((c, i) => {
+        if (c === ' ') return
+        let k = Math.floor(rand() * steps)
+        const onBeat = Math.round((from + k * EIGHTH - D0) / EIGHTH) % 2 === 0
+        if (!onBeat && rand() < 0.6) k = k + 1 < steps ? k + 1 : k - 1
+        events[i].push([from + Math.max(0, k) * EIGHTH - SW, ' '])
+      })
       b.whole = from
       b.gone = from + K
       cur = EMPTY
@@ -419,13 +454,13 @@ export function marqueeFilm(options = {}) {
           // comes up blank; loud, it spins hard.
           const I = level(t)
           if (t > start && rand() >= 0.3 + 0.6 * I) continue
-          events[i].push([t, rand() < 0.6 * (1 - I) ? ' ' : pickFor(rand, i), 'x'])
+          events[i].push([t - SW, rand() < 0.6 * (1 - I) ? ' ' : pickFor(rand, i), 'x'])
         }
         if (clue && k >= 0 && clue.includes(k)) {
-          events[i].push([ct, HID.get(i), 'red'])
-          if (end > ce + 0.01) events[i].push([ce, NOISE[Math.floor(rand() * NOISE.length)], 'x'])
+          events[i].push([ct - SW, HID.get(i), 'red'])
+          if (end > ce + 0.01) events[i].push([ce - SW, NOISE[Math.floor(rand() * NOISE.length)], 'x'])
         }
-        events[i].push(lock.has(i) ? [end, grid[i]] : [end, ' '])
+        events[i].push(lock.has(i) ? [end + SW, grid[i]] : [end - SW, ' '])
       }
       cur = grid
       const locks = [...lock.values()].sort((a, b) => a - b)
@@ -548,7 +583,7 @@ export function marqueeFilm(options = {}) {
      */
     const pianoAt = bar(82)
     const g3 = wordAt(score, /^Goodbye/, bar(85))
-    const PIANO = [0.7, 0.75, 0.95, 0.25, 0.3, 0.25, 0.3, 0.25]
+    const PIANO = [0.8, 0.85, 0.97, 0.45, 0.5, 0.45, 0.5, 0.45] // fuller since 2026-11-13: the piano is loud here
     boards.push({ at: pianoAt, from: pianoAt, until: g3, grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'pulse', share: (k) => PIANO[k] })
     next = g3
 
@@ -595,7 +630,7 @@ export function marqueeFilm(options = {}) {
         if (u === 2) { k++; continue } // still blank at the cut
         let c = NAME_GRID[i]
         if (u >= 0) c = NOISE[Math.floor(rand() * NOISE.length)]
-        events[i].push([at - FLIP, c])
+        events[i].push([at - FLIP + SW, c])
         k++
       }
       if (popAt + BAR + k * 2 * BEAT > LAST) throw new Error('marquee: the name does not have time to form')
@@ -603,28 +638,15 @@ export function marqueeFilm(options = {}) {
     boards.push({ at: popAt, from: finaleAt, until: LAST, grid: NAME_GRID, red: redOf(NAME_GRID), also, title: 'MARILYN MONROE', kind: 'finale', ring: 'row', share: (k) => (k === 0 ? 0.95 : k % 2 === 0 ? 0.85 : 0.65) })
 
     // The holds: from a board's first spin (the name: from when it is whole)
-    // to the next event, and a tile twitching half a flip on the backbeat
-    // while the name or a word is whole (a title, whole, is still).
+    // to the next event — where the dance runs.
     const holds = []
-    boards.forEach((b, idx) => {
-      holds.push([b.twinkleFrom ?? b.from ?? b.at, b.until, b])
-      if (b.share) return
-      const rand = rng(10 + idx)
-      const lit = []
-      b.grid.forEach((c, i) => { if (c !== ' ') lit.push(i) })
-      const whole = b.kind === 'film' ? -Infinity : b.whole
-      for (let k = Math.ceil((b.at - D0) / BEAT + 0.5); D0 + k * BEAT < whole - BEAT; k++) {
-        if (k % 2 === 1 && lit.length && rand() < 0.8) {
-          twitches[lit[Math.floor(rand() * lit.length)]].push(D0 + k * BEAT)
-        }
-      }
-    })
+    boards.forEach((b) => holds.push([b.twinkleFrom ?? b.from ?? b.at, b.until, b]))
 
     /* ── The twinkle, inside the holds ─────────────────────────────────── */
 
     const endAt = Array(N).fill(-9) // when each tile's last added flip finishes
     const put = (i, land, c, tag = 't') => {
-      const s = Math.max(land - FLIP, endAt[i] + 0.01)
+      const s = Math.max(land - FLIP + SW, endAt[i] + 0.01)
       events[i].push([s, c, tag])
       endAt[i] = s + FLIP
       return s + FLIP
@@ -641,11 +663,212 @@ export function marqueeFilm(options = {}) {
     // the name's, in the finale), her place while a clue surfaces, and the
     // ring once the title is half there.
     const blocked = (b, i, t) => t - FLIP < (b.gone ?? Infinity) + 0.01 && (b.grid[i] !== ' ' || b.also?.has(i) || (b.clue && HID.has(i)) || (t >= (b.ringFrom ?? -Infinity) && near(b, i)))
+    // Under the horns the ring is given up: only the board's own letters (and her place while a clue shows) are left alone.
+    // Her place is held only round the beat her red letters show.
+    const clueNear = (t) => clues.some(([a, z]) => t > a - EIGHTH - FLIP && t < z + EIGHTH)
+    // And the gaps between a title's words stay blank, so THE MISFITS never reads THENMISFITS.
+    const spans = new WeakMap()
+    const inSpan = (b, i) => {
+      if (!spans.has(b)) {
+        const out = new Set()
+        for (let r = 0; r < ROWS; r++) {
+          const cols = []
+          for (let c = 0; c < COLS; c++) if (b.grid[r * COLS + c] !== ' ') cols.push(c)
+          if (cols.length) for (let c = cols[0]; c <= cols.at(-1); c++) out.add(r * COLS + c)
+        }
+        spans.set(b, out)
+      }
+      return spans.get(b).has(i)
+    }
+    const blockedAt = (b, i, t) => horn(t)
+      ? t - FLIP < (b.gone ?? Infinity) + 0.01 && (inSpan(b, i) || b.also?.has(i) || (b.clue && HID.has(i) && clueNear(t)))
+      : blocked(b, i, t)
     const eighthsIn = (a, b) => {
       const out = []
       for (let k = Math.ceil((a - D0) / EIGHTH); D0 + k * EIGHTH < b; k++) out.push(D0 + k * EIGHTH)
       return out
     }
+
+    /*
+     * On the beat (2026-11-13). Three rounds with the user: "keep the beat…
+     * letters should always be dancing", then "the underlying main beat should
+     * synchronize all movements", then "twice as fast, with variance… not
+     * everything needs to change at that speed… everything should just be
+     * timed to the beat… an interesting dance the whole time".
+     *
+     * So the grid is the eighth (half a beat) and nothing moves off it: after
+     * the plan is built every flip — spins, locks, breakdowns, the sung words,
+     * the clues, the bulbs' flashes — is moved so its letter changes on the
+     * nearest eighth, and two flips of a tile that meet become the later. Run
+     * once before the dance (so it knows how full each eighth is) and once at
+     * the end.
+     */
+    const GRID = EIGHTH
+    const quantize = () => {
+      const snap = (x) => D0 + Math.round((x - D0) / GRID) * GRID
+      for (const e of events) e.sort((a, b) => a[0] - b[0])
+      for (const ev of events) {
+        const out = []
+        for (const e of ev) {
+          if (e[0] < -1) { out.push(e); continue }
+          const at = snap(e[0] + FLIP / 2) - FLIP / 2
+          const last = out.at(-1)
+          if (last && Math.abs(last[0] - at) < 1e-6) out[out.length - 1] = [at, e[1], e[2]]
+          else out.push([at, e[1], e[2]])
+        }
+        // A blank turning over onto a blank is no movement — unless a wave put it there.
+        const kept = out.filter((e, k) => k === 0 || e[2] === 'w' || !(e[1] === ' ' && out[k - 1][1] === ' '))
+        ev.splice(0, ev.length, ...kept)
+      }
+      for (let k = 0; k < flashes.length; k++) flashes[k] = snap(flashes[k])
+      for (const c of clues) { c[0] = snap(c[0]); c[1] = snap(c[1]) }
+    }
+    // How many tiles already turn over on eighth q (the builds, breakdowns and words).
+    const busy = new Map()
+    {
+      quantize()
+      for (const ev of events) for (const e of ev) if (e[0] > -1) { const q = Math.round((e[0] + FLIP / 2 - D0) / GRID); busy.set(q, (busy.get(q) ?? 0) + 1) }
+    }
+
+    /*
+     * The dance. Layers like a band's, each at its own speed, all on the grid:
+     *   - the kick: on beats 1 and 3 a group of free tiles light, change or go
+     *     out together, the biggest on the downbeat;
+     *   - the snare: a smaller group on 2 and 4, and the board's own letters
+     *     (titles too) wink in place — one to three;
+     *   - the hats: once the song is up, 0–3 tiles on the offbeat eighths,
+     *     never the same count twice running;
+     *   - a move, a different one each bar (never the same two bars running),
+     *     chosen by how much energy there is: a wave sweeping the columns, a
+     *     burst from the centre out, a ripple through the title's letters in
+     *     reading order, a stab (a whole free row lights on the downbeat and
+     *     goes out on the eighths after beat 3), or a rest. Quiet verses mostly
+     *     ripple and rest; the build adds waves and bursts; the chorus stabs.
+     * How many free tiles are lit follows the energy, so the board fills as
+     * the song builds. It runs straight through a change of title.
+     */
+    const twLit = Array(N).fill(false)
+    const canFlip = (i, t) => t - FLIP + SW >= endAt[i] + 0.01
+    const MOVES = [
+      [0.4, ['ripple', 'rest', 'wave', 'ripple', 'rest']],
+      [0.7, ['wave', 'ripple', 'burst', 'rest', 'wave']],
+      [9, ['wave', 'burst', 'stab', 'ripple', 'burst', 'stab']],
+    ]
+    const colsAt = (move, e, dir) => {
+      if (move === 'wave') {
+        const k = dir > 0 ? e : 7 - e
+        const out = []
+        for (let c = Math.floor((k * COLS) / 8); c < Math.floor(((k + 1) * COLS) / 8); c++) out.push(c)
+        return out
+      }
+      if (move === 'burst') return e < 7 ? [...new Set([6 - e, 6 + e])].filter((c) => c >= 0 && c < COLS) : []
+      return []
+    }
+    const dance = () => {
+      const on = holds.filter(([, , b]) => !b.share)
+      if (!on.length) return
+      const rand = rng(4242)
+      let lastMove = ''
+      let lastHats = -1
+      let move = 'rest'
+      let dir = 1
+      let stabRow = -1
+      let winked = new Set()
+      const startQ = Math.ceil((on[0][0] - D0) / GRID - 1e-6)
+      for (let q = startQ; D0 + q * GRID < on.at(-1)[1] - 1e-6; q++) {
+        const t = D0 + q * GRID
+        const h = on.find(([a, u]) => t >= a && t < u)
+        if (!h) continue
+        const b = h[2]
+        const e = ((q % 8) + 8) % 8 // the eighth of the bar
+        const E = drive(t)
+        const H = horn(t)
+        if (e === 0 || q === startQ) {
+          const pool = MOVES.find(([lim]) => E < lim)[1].filter((m) => m !== lastMove)
+          move = pool[Math.floor(rand() * pool.length)]
+          lastMove = move
+          dir = rand() < 0.5 ? 1 : -1
+          stabRow = -1
+        }
+
+        // The free tiles now; a lit one the board now needs goes out.
+        const free = []
+        for (let i = 0; i < N; i++) {
+          if (!canFlip(i, t)) continue
+          if (blockedAt(b, i, t) || blockedAt(b, i, t + GRID)) { if (twLit[i]) { put(i, t, ' '); twLit[i] = false } continue }
+          free.push(i)
+        }
+        const target = Math.round(free.length * (H ? 0.8 : 0.08 + 0.55 * E ** 1.4))
+        let litNow = free.filter((i) => twLit[i]).length
+        const shuffle = (a) => { for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(rand() * (k + 1)); [a[k], a[j]] = [a[j], a[k]] } return a }
+        const touched = new Set()
+        // One tile in the dance: lit, it changes or goes out; dark, it lights.
+        const step = (i, tag = 't', always = false) => {
+          if (touched.has(i) || !canFlip(i, t)) return false
+          touched.add(i)
+          if (twLit[i]) {
+            if (litNow > target || rand() < 0.35) { put(i, t, ' ', tag); twLit[i] = false; litNow-- }
+            else put(i, t, pickFor(rand, i), tag)
+            return true
+          }
+          if (litNow <= target || always) { put(i, t, pickFor(rand, i), tag); twLit[i] = true; litNow++; return true }
+          if (tag === 'w') { put(i, t, ' ', 'w'); return true } // a wave turns the dark ones over too
+          return false
+        }
+        const group = (n) => { let d = 0; for (const i of shuffle([...free])) { if (d >= n) break; if (step(i)) d++ } }
+
+        // The horns: almost every free tile turns over on every eighth, nearly
+        // all of them on the beats; the title holds, winking, and its ring
+        // goes with the rest.
+        if (H) {
+          const share = e % 2 === 0 ? 0.95 : 0.8
+          for (const i of free) if (rand() < share) step(i, 'w', true)
+        }
+
+        // The move of the bar.
+        if (!H) for (const c of colsAt(move, e, dir)) for (const i of free) if (i % COLS === c) step(i, 'w', rand() < 0.3 + 0.4 * E)
+        if (!H && move === 'stab') {
+          if (e === 0) {
+            const rows = [0, 1, 2].map((r) => free.filter((i) => Math.floor(i / COLS) === r))
+            stabRow = rows.reduce((best, r, k) => (r.length > rows[best].length ? k : best), 0)
+            for (const i of rows[stabRow]) step(i, 't', true)
+          } else if (e >= 4 && stabRow >= 0) {
+            for (const i of free) if (Math.floor(i / COLS) === stabRow && twLit[i] && rand() < 0.5) { put(i, t, ' '); twLit[i] = false; litNow--; touched.add(i) }
+          }
+        }
+
+        // The kick, the snare, the hats.
+        const busyHere = busy.get(q) ?? 0
+        if (H) { /* the horns have taken every tile already */ } else if (e === 0 || e === 4) group(Math.max(1, Math.round((e === 0 ? 1 : 0.8) * (3 + 9 * E)) - Math.floor(busyHere / 2)))
+        else if (e === 2 || e === 6) group(Math.max(1, Math.round(2 + 5 * E) - Math.floor(busyHere / 2)))
+        else if (E > 0.4) {
+          let n = Math.floor(rand() * (1 + 3 * E))
+          if (n === lastHats) n = (n + 1) % Math.max(2, Math.ceil(1 + 3 * E))
+          lastHats = n
+          group(n)
+        }
+
+        // The board's own letters, once it is whole and until it comes apart.
+        const lit = []
+        b.grid.forEach((c, i) => { if (c !== ' ') lit.push(i) })
+        const whole = t >= b.at + GRID - 1e-6 && t < (b.whole ?? b.until) - FLIP
+        if (lit.length && whole) {
+          if (move === 'ripple') {
+            // In reading order, a letter or two an eighth, through the bar.
+            const per = Math.max(1, Math.ceil(lit.length / 8))
+            for (const i of lit.slice(e * per, (e + 1) * per)) if (canFlip(i, t)) put(i, t, b.grid[i], null)
+          } else if (e % 2 === 0) {
+            const n = Math.min(3, lit.length, (e === 0 ? 2 : e === 4 ? 2 : 1) + (E > 0.65 ? 1 : 0))
+            const pool = shuffle(lit.filter((i) => !winked.has(i) && canFlip(i, t)))
+            winked = new Set(pool.slice(0, n))
+            for (const i of winked) put(i, t, b.grid[i], null)
+          }
+        }
+      }
+      for (let i = 0; i < N; i++) if (twLit[i]) put(i, D0 + Math.ceil((on.at(-1)[1] - D0) / GRID) * GRID, ' ')
+    }
+
+    if (O.twinkle) dance()
 
     if (O.twinkle) {
       holds.forEach(([at, until, b], idx) => {
@@ -657,9 +880,10 @@ export function marqueeFilm(options = {}) {
           const hi = b.kind === 'finale' ? until + 1 : until - 0.3
           const lit = Array(N).fill(false)
           for (const t of eighthsIn(at - 0.001, hi)) {
-            const p = b.share(((Math.round((t - D0) / EIGHTH) % 8) + 8) % 8, t)
+            const pos = ((Math.round((t - D0) / EIGHTH) % 8) + 8) % 8
+            const p = Math.max(b.share(pos, t), horn(t) ? (pos % 2 === 0 ? 0.97 : 0.88) : 0)
             for (let i = 0; i < N; i++) {
-              if (t - FLIP < endAt[i] + 0.01) continue
+              if (t - FLIP + SW < endAt[i] + 0.01) continue
               if (blocked(b, i, t)) { if (lit[i]) { put(i, t, ' '); lit[i] = false } continue }
               if (rand() < p) { put(i, t, pickFor(rand, i)); lit[i] = true }
               else if (lit[i]) { put(i, t, ' '); lit[i] = false }
@@ -668,43 +892,10 @@ export function marqueeFilm(options = {}) {
           if (b.kind !== 'finale') for (let i = 0; i < N; i++) if (lit[i]) put(i, hi, ' ')
           return
         }
-        // A tile at a time, on the eighths: off, it lights with a chance that
-        // climbs with the music; lit, it changes letter or goes out. Quiet, a
-        // few letters blink; at full, nearly every free tile is flashing.
-        const hi = until - 0.3
-        const ts = eighthsIn(at + 0.15 + FLIP, hi)
-        for (let i = 0; i < N; i++) {
-          let on = false
-          for (const t of ts) {
-            if (t - FLIP < endAt[i] + 0.01) continue
-            const I = level(t)
-            if (blocked(b, i, t) || blocked(b, i, t + EIGHTH)) { if (on) { put(i, t, ' '); on = false } continue }
-            if (!on) {
-              if (t + EIGHTH <= hi && rand() < 0.012 + 0.5 * I ** 1.6) { put(i, t, pickFor(rand, i)); on = true }
-            } else if (t + EIGHTH > hi || rand() < 0.6 - 0.45 * I) { put(i, t, ' '); on = false }
-            else if (rand() < 0.15 + 0.6 * I) put(i, t, pickFor(rand, i))
-          }
-          if (on) put(i, hi, ' ')
-        }
       })
     }
 
-    // With `dance`, the name's and the words' held letters turn over onto
-    // themselves on the eighths, a few at a time, so nothing on the sign is
-    // ever still. They keep their colour.
-    if (O.dance) {
-      holds.forEach(([at, until, b], idx) => {
-        const rand = rng(700 + idx)
-        const lit = []
-        b.grid.forEach((c, i) => { if (c !== ' ') lit.push(i) })
-        if (!lit.length || b.kind === 'film' || b.share) return
-        for (const t of eighthsIn(b.at + FLIP + 0.15, Math.min(until, b.whole) - 0.3)) {
-          for (const i of lit) if (rand() < 0.06 && t - FLIP >= endAt[i] + 0.01) put(i, t, b.grid[i], null)
-        }
-      })
-    }
-
-    for (const e of events) e.sort((a, b) => a[0] - b[0])
+    quantize()
 
     // The bulbs, clockwise from the top left, and when each one dies.
     const bulbs = []
@@ -714,7 +905,7 @@ export function marqueeFilm(options = {}) {
     for (let j = 13; j > 0; j--) bulbs.push([196, 146 + j * 39.1])
     const bulbDeath = bulbs.map(() => LAST)
 
-    return { BEAT, BAR, D0, EIGHTH, bar, LAST, boards, pianoAt, popAt, events, twitches, holds, clues, flashes, darks, bulbs, bulbDeath }
+    return { energy, drive, BEAT, BAR, D0, EIGHTH, bar, LAST, boards, pianoAt, popAt, events, holds, clues, flashes, darks, bulbs, bulbDeath }
   }
 
   /* ── Drawing ─────────────────────────────────────────────────────────── */
@@ -737,11 +928,11 @@ export function marqueeFilm(options = {}) {
       if (flash && kind !== 'outro') return { state: 'lit', color: kind.startsWith('chorus') ? WHITE : PINK, glow: 1 }
       switch (kind) {
         case 'verse': return { state: (Math.floor(k / 2) + beatI) % 2 === 0 ? 'lit' : 'off', color: PINK, glow: 0 }
-        case 'prechorus': return { state: (Math.floor(k / 2) + Math.floor((t - plan.D0) / plan.EIGHTH)) % 2 === 0 ? 'lit' : 'off', color: PINK, glow: 0 }
+        case 'prechorus': return { state: (Math.floor(k / 2) + Math.floor((t - plan.D0 + 1e-3) / plan.EIGHTH)) % 2 === 0 ? 'lit' : 'off', color: PINK, glow: 0 }
         case 'break': return { state: (Math.floor(k / 3) + Math.floor((t - plan.D0) / plan.BAR)) % 2 === 0 ? 'lit' : 'off', color: GOLD, glow: 0 }
         case 'chorus': return { state: 'lit', color: WHITE, glow: 0.6 + 0.4 * pulse }
         case 'chorus3': return { state: 'lit', color: WHITE, glow: 0.8 + 0.2 * pulse }
-        default: return { state: hash(k * 7 + Math.floor(t / plan.EIGHTH)) < 0.55 ? 'lit' : 'off', color: PINK, glow: 0 }
+        default: return { state: hash(k * 7 + Math.floor((t - plan.D0) / plan.EIGHTH)) < 0.55 ? 'lit' : 'off', color: PINK, glow: 0 }
       }
     })
   }
@@ -772,7 +963,7 @@ export function marqueeFilm(options = {}) {
     for (let i = 0; i < N; i++) {
       const row = Math.floor(i / COLS); const c = i % COLS
       const x = x0 + c * pitch + 2; const y = y0 + row * rh + 7
-      const st = flapAt(plan.events[i], plan.twitches[i], t)
+      const st = flapAt(plan.events[i], t, FLIP)
       const { letter, sy, moving, tag } = st
       let red = false
       if (letter !== ' ' && !tag) red = held && held.grid[i] === letter ? held.red[i] : HID.get(i) === letter
@@ -847,6 +1038,9 @@ ${openingSvg(t, uid)}`
       piano: p.pianoAt,
       finale: p.popAt,
       last: p.LAST,
+      // Where the piano comes in (its level first reaches 4 of 9) and the two horn stretches.
+      pianoIn: (() => { const k = [...(score.piano ?? '')].findIndex((d) => Number(d) >= 4); return k < 0 ? null : (score.beatPhase ?? 0) + k * p.BEAT })(),
+      horns: (score.horns ?? []).map(([a]) => a),
     }
   }
 
