@@ -30,10 +30,33 @@ when), `travel.mjs` (legs, routes, the car, the officer, trails),
   own `wait` (T3 − 0.1), which `waiting` does not override, so between the
   chase dot ending (98.4) and that wait he was nowhere. He now waits from
   98.4 like No. 1 (same spot the chase dot ends: no jump).
-- **The hall is inked from 2:41.6 (was 2:42.6)**, finishing at 2:44.6 as
+- **The hall is inked from 2:40.1 (was 2:42.6; 2:41.6, then 1.5 s more)**, finishing at 2:44.6 as
   before; camera, zoom and everything else unchanged.
 - Checked by rendering every frame (30 fps, 0–236 s) before and after: the
   SVG differs only at 98.40–99.83 and 161.60–164.43.
+- **The drive to the hall, made like chase 2 into the museum** (the user:
+  "the zoom goes over to heist 4 without fully tracking the conmen... the
+  main focus should be the animation of heist 5's building, with the conmen
+  arriving calmly as the animation finishes"). Before, the camera held the
+  wide view to 2:42.6 and zoomed in just as No. 4 raced in (760 px/s on
+  screen at 2:43.8). Now:
+  - The camera leaves the wide view at 2:40.1, as the hall starts to draw,
+    and still lands on it at 2:44.8: a slower zoom, with the building
+    drawing large from about 2:42.
+  - No. 4 (`unseen` in story.mjs) drives as before while he is in the frame
+    (288 px/s on the sheet, the departure within 3 px of what it was). The
+    zoom leaves him behind at 2:42.4. Out of sight he keeps just past the
+    frame's edge (at 2:42.8, when Burnside leaves the top of the frame, he
+    covers 320 m at once). He comes in at the top at 2:43.7–2:44.0 at
+    32 m/s (about 250 px/s) and eases to a stop at the stage door at
+    **2:45.1 (was 2:44.4)**. The hall's frame holds only the last 20 m of
+    the road, so that is about as gentle as an arrival there can be without
+    changing where he stops.
+  - The three he brings appear at the drop-off at 2:45.1 (was 2:44.5); they
+    set off when they did (2:45.55 on). Nothing else in the hall moves.
+  - `MUST_SEE` has car2 in frame 157.5–160.2 and 164.0–165.1; the check
+    is all clear. Compared frame by frame with the commit before, only
+    157.5–165.1 differ, and the only mover that changed is car2.
 
 **Round of 2026-11-12 (the user's three notes; not yet watched).**
 - **No cars: "replace all of the cars (conmen and police) with the original

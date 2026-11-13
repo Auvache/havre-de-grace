@@ -33,8 +33,8 @@ export const T = {
   atShop: 18.5, ownerGoes: 33.0, shopOut: 39.4, inCar1: 41.2, drive12: [41.5, 54.2], atDoor2: 55.4,
   chase1: 78.0, hide1: [88.5, 90.6], atStudio: 98.2,
   out3: 123.6, atMuseum: 139.0,
-  // They leave the museum a second sooner (the user, 2026-11-12; it was 158.5) and take that second on the way: the hall is as it was.
-  car45: [157.5, 164.4],
+  // They leave the museum a second sooner (the user, 2026-11-12; it was 158.5). The driver stops at the hall at 165.1 (was 164.4; the user, 2026-11-13), as the hall finishes drawing.
+  car45: [157.5, 165.1],
   police5: 175.0, arrest4: [175.9, 176.5, 177.1], posts: [178.0, 184.0], raid: 188.0,
   // Arrests, each on a beat (87.5 BPM, a beat at 0.31).
   arrest5: 194.37, arrest3: 201.91, arrest2: 206.71,
@@ -82,7 +82,8 @@ export const HOLDS = [
   [80.4, 92.6, CHASE_1], [98.4, 122.4, V(3)],
   // The camera leaves the museum as they do, and is on the wide view two seconds later: so the second they gained is spent travelling, not pulling away.
   [125.8, 133.6, CHASE_2], [139.2, T.car45[0] - 0.1, V(4)],
-  [T.car45[0] + 1.9, 162.6, both(4, 5)], [164.8, T.zoom[0], V(5)],
+  // On to the hall as it starts to draw (160.1; was 162.6), a slower zoom that leaves the driver behind, as chase 2's does at the museum (the user, 2026-11-13).
+  [T.car45[0] + 1.9, 160.1, both(4, 5)], [164.8, T.zoom[0], V(5)],
   [T.zoom[1], 999, CITY, 'even'],
 ]
 export function viewAt(t) {

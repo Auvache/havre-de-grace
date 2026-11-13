@@ -157,9 +157,10 @@ const renumber = (crew) => crew.map((cr) => (cr.n === 4 ? { ...cr, n: 5 } : cr.n
  * after. The performer, locked out, walks round to the front and stops at
  * the officer posted by the door (186.0); that is what sends them in.
  */
-const hallCrew = renumber(waiting(HALL5.crew, 164.5, [2, 3])).map((cr) => (cr.n === 4
+// The three he brings step out as he stops (165.1; it was 164.5), and set off when they did.
+const hallCrew = renumber(waiting(HALL5.crew, T.car45[1], [2, 3])).map((cr) => (cr.n === 4
   ? { ...cr, to: T.arrest4[1], pts: [cr.pts[0], [cr.pts[1][0], cr.pts[1][1], 0, null, null, 168.5]] }
-  : cr))
+  : cr.n === 1 ? { ...cr, wait: T.car45[1] } : cr))
 const performer = { ...HALL5.figures[0], pts: HALL5.figures[0].pts.slice(0, -3) }
 const HALL = moved({ ...HALL5, crew: hallCrew, figures: [performer] }, O5)
 const HALL_AFTER = { ...HALL, crew: HALL.crew.filter((cr) => cr.n !== 4) }
@@ -173,8 +174,8 @@ export const HEISTS = [
   { no: 2, ink: [48.4, 52.8], on: [ARRIVE, T.chase1], chrome: [56.2, 75.4], v: VIEWS[1], job: job2At, key: KEY2, sheet: SHEET2 },
   { no: 3, ink: [95, 98], on: [98.4, T.out3 + 0.1], chrome: [99.4, 121.8], v: VIEWS[2], job: () => STUDIO, key: KEYS[3], sheet: STUDIO.sheet },
   { no: 4, ink: [137.2, 138.9], on: [139.2, T.car45[0]], chrome: [140.2, T.car45[0] - 0.9], v: VIEWS[3], job: () => MUSEUM, key: KEYS[4], sheet: MUSEUM.sheet },
-  // The hall is drawn from a second sooner, finishing as before (the user, 2026-11-13: it felt rushed).
-  { no: 5, ink: [161.6, 164.6], on: [164.5, T.raid], chrome: [164.2, T.raid - 0.6], v: VIEWS[4], job: (t) => (t < T.arrest4[1] ? HALL : HALL_AFTER), key: KEYS[5], sheet: HALL.sheet },
+  // The hall is drawn from 2.5 s sooner (2:40.1, was 2:42.6), finishing as before (the user, 2026-11-13: it felt rushed).
+  { no: 5, ink: [160.1, 164.6], on: [164.5, T.raid], chrome: [164.2, T.raid - 0.6], v: VIEWS[4], job: (t) => (t < T.arrest4[1] ? HALL : HALL_AFTER), key: KEYS[5], sheet: HALL.sheet },
 ]
 /*
  * Hatching (the user, 2026-11-10: the museum's north wall "shakes" as the
@@ -237,7 +238,7 @@ function movers(c, t) {
 export const MUST_SEE = [
   ['car1', 42.4, 54.2], ['pc1', 77.6, 78.2], ['run1', 78, 98.2], ['run2', 78.2, 98.3], ['cop1a', 78.7, 90],
   ['pc2', 123.2, 125.7], ['flee1', 123.7, 133], ['flee2', 123.8, 133], ['flee3', 123.5, 133],
-  ['cop4a', 158.2, 160], ['car2', T.car45[0], 160.2], ['car2', 163.4, 164.4], ['pcA', 174.6, 177], ['copArrest', 175.3, 177], ['pcB', 175.8, 177],
+  ['cop4a', 158.2, 160], ['car2', T.car45[0], 160.2], ['car2', 164.0, T.car45[1]], ['pcA', 174.6, 177], ['copArrest', 175.3, 177], ['pcB', 175.8, 177],
   ['flee5', 190, 194.4], ['copE', 193.6, 194.4], ['flee3b', 199.6, 201.9], ['flee2b', 204.6, 206.7], ['pcD', 206.2, 206.7],
 ]
 

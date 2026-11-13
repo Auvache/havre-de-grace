@@ -45,7 +45,9 @@
  * a building (a heist's own building only by its doors, flagged 'in'); no
  * car in a park or on the footbridge.
  */
+import { COVER_SHEET } from '../../album.mjs'
 import * as C from './city.mjs'
+import { cam } from './atlas.mjs'
 import { leg, paced, route, behind, line } from './travel.mjs'
 import { O1, O3, O4, O5, T, zoomS, viewAt } from './camera.mjs'
 
@@ -109,8 +111,51 @@ const car1 = route(trip(DRIVE12, ...T.drive12, { a: 1.2, b: 1.0 }))
 const BAY = M(58.4, 0)
 const HALL_STOP = H(0, -4.3) // where the driver's part in the hall begins
 const DRIVE45 = [BAY, [...RING_E_TO_S[0], 'in'], ...RING_E_TO_S.slice(1), [O4[0] + 3, RING_S[1] + 4], [O4[0] + 3, 78], ...BURN_W.slice().reverse().map(([x, y]) => [x, y - 3]), [-770, -5], [396, -5], [400, 6], HALL_STOP]
+/*
+ * The drive to the hall (the user, 2026-11-13), made like chase 2 into the
+ * museum: the camera goes on to the hall without him, so the building being
+ * drawn is the thing to watch. While he is in the frame he drives as `trip`
+ * would (`px` on the sheet, never over `vmax`); once the zoom has left him
+ * behind he makes up the distance out of sight, just beyond the frame's
+ * edge, and comes into the hall's frame at `glide` m/s, easing to a stop
+ * over the last `ease` seconds. The hall's frame holds only the last 20 m of
+ * the road, so the glide is a little over a second on screen.
+ */
+const { x: PLATE_X, y: PLATE_Y, w: PLATE_W, h: PLATE_H } = COVER_SHEET.plate
+function unseen(pts, t0, t1, { px = 288, vmax = 363, a = 0.6, glide = 32, ease = 1.0, pad = 24 } = {}) {
+  const ln = line(pts)
+  const seen = (t, d) => {
+    const v = viewAt(t)
+    const c = cam(v.cx, v.cy, v.s)
+    const p = ln.at(d)
+    const [x, y] = [c.X(p[0]), c.Y(p[1])]
+    return x > PLATE_X - pad && x < PLATE_X + PLATE_W + pad && y > PLATE_Y - pad && y < PLATE_Y + PLATE_H + pad
+  }
+  const gliding = (t) => { const tau = t1 - t; return tau <= ease ? ln.L - (glide * tau * tau) / (2 * ease) : ln.L - glide * (tau - ease / 2) }
+  const dt = 0.02
+  const n = Math.round((t1 - t0) / dt)
+  const table = [0]
+  let phase = 'drive'
+  for (let i = 1; i <= n; i++) {
+    const t = t0 + i * dt
+    const d = table[i - 1]
+    if (phase === 'drive') {
+      const next = d + Math.min(vmax, px / viewAt(t).s) * Math.min(1, (t - t0) / a) * dt
+      if (seen(t, next)) { table.push(next); continue }
+      phase = 'behind'
+    }
+    if (phase === 'behind') {
+      let edge = d
+      while (edge + 1 < ln.L && !seen(t, edge + 1)) edge += 1
+      if (gliding(t) > edge) { table.push(edge); continue }
+      phase = 'glide'
+    }
+    table.push(Math.max(d, gliding(t)))
+  }
+  return paced(pts, t0, t1, (t) => { const x = Math.max(0, Math.min(n, (t - t0) / dt)); const i = Math.min(n - 1, Math.floor(x)); return table[i] + (table[i + 1] - table[i]) * (x - i) })
+}
 const car2 = route(
-  trip(DRIVE45, ...T.car45, { a: 0.6, b: 0.7 }),
+  unseen(DRIVE45, ...T.car45),
   // In the hall the driver moves it along the lane and waits with it (heist 5's own route for No. 4).
   paced([HALL_STOP, H(-40, -7.8)], 165.45, 168.5, (t) => ((t - 165.45) / 3.05) * 40.2),
 )
