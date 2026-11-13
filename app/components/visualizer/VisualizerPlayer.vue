@@ -17,10 +17,15 @@
         </button>
       </div>
 
+      <!-- Stand-in full screen (phones without the Fullscreen API): the film over everything, letterboxed. -->
+      <div v-if="pseudoFull" class="fixed inset-0 z-[999] bg-black" :style="{ margin: 0 }" aria-hidden="true" />
       <div
         ref="stage"
-        class="relative isolate overflow-hidden rounded-[var(--radius-md)] border border-theme bg-black"
-        :style="{ aspectRatio: '16 / 9' }"
+        class="isolate overflow-hidden bg-black"
+        :class="pseudoFull ? 'fixed inset-0 z-[1000]' : 'relative rounded-[var(--radius-md)] border border-theme'"
+        :style="pseudoFull
+          ? { margin: 'auto', width: 'min(100vw, calc(100dvh * 16 / 9))', height: 'min(100dvh, calc(100vw * 9 / 16))' }
+          : { aspectRatio: '16 / 9' }"
       >
         <MusicVideoSvgFilm :key="testKey" :film="shownFilm" :name="name" :score="score" :t="frameTime" uid="film" />
 
@@ -39,6 +44,16 @@
               {{ player.time.value > 0.5 ? 'Resume' : 'Play' }}
             </span>
           </span>
+        </button>
+
+        <button
+          v-if="pseudoFull"
+          type="button"
+          class="label-text absolute right-2 top-2 z-30 cursor-pointer rounded-full bg-black/55 px-4 py-2 text-[0.6rem] text-white backdrop-blur-sm"
+          aria-label="Exit full screen"
+          @click="pseudoFull = false"
+        >
+          Exit
         </button>
       </div>
 
@@ -173,11 +188,35 @@ const jump = (at: number) => {
   if (!player.playing.value) player.toggle()
 }
 
+/*
+ * Full screen. The Fullscreen API where there is one (desktop, Android, and
+ * the webkit-prefixed one on iPad), turning Android to landscape; on an
+ * iPhone, whose Safari only lets a <video> go full screen, the stage is laid
+ * over the whole page instead, and turning the phone sideways fills it.
+ */
+type WebkitElement = HTMLElement & { webkitRequestFullscreen?: () => void }
+type WebkitDocument = Document & { webkitFullscreenElement?: Element | null, webkitExitFullscreen?: () => void }
+const pseudoFull = ref(false)
+watch(pseudoFull, (on) => { document.documentElement.style.overflow = on ? 'hidden' : '' })
+onBeforeUnmount(() => { document.documentElement.style.overflow = '' })
+
 const toggleFullscreen = () => {
-  const element = stage.value
+  const element = stage.value as WebkitElement | null
   if (!element) return
-  if (document.fullscreenElement) void document.exitFullscreen()
-  else void element.requestFullscreen?.()
+  if (pseudoFull.value) { pseudoFull.value = false; return }
+  const doc = document as WebkitDocument
+  if (doc.fullscreenElement ?? doc.webkitFullscreenElement) {
+    if (doc.exitFullscreen) void doc.exitFullscreen()
+    else doc.webkitExitFullscreen?.()
+    return
+  }
+  if (element.requestFullscreen) {
+    element.requestFullscreen()
+      .then(() => (screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> }).lock?.('landscape').catch(() => {}))
+      .catch(() => { pseudoFull.value = true })
+  }
+  else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen()
+  else pseudoFull.value = true
 }
 
 /* Keyboard on the window: the thing being watched is the film. */
@@ -202,6 +241,10 @@ const onKeydown = (event: KeyboardEvent) => {
     case 'f':
     case 'F':
       toggleFullscreen()
+      break
+    case 'Escape':
+      if (!pseudoFull.value) return
+      pseudoFull.value = false
       break
     default:
       return
