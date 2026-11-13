@@ -121,8 +121,12 @@ const waiting = (crew, wait, who) => crew.map((cr) => (who.includes(cr.n) && cr.
  * come. The conman leaves the control-room door for the back door and joins
  * the auditor in the lane (123.5); the engineer, out at the front, steps
  * into the street.
+ * The auditor had his own wait from v2 (99.85), so `waiting` left him off
+ * the sheet from 98.4 to 99.85 (the user, 2026-11-13: "coman 2 disappears
+ * for a second"); he stands at the corner from 98.4 like the conman.
  */
 const studioCrew = waiting(STUDIO3.crew, 98.4, [1, 2]).map((cr) => {
+  if (cr.n === 2) return { ...cr, wait: 98.4 }
   if (cr.n === 1) return { ...cr, to: 123.5, pts: [...cr.pts, pin(30.8, 18.6, 121.9), pin(46, 18.5, 122.8), [50.2, 18.4], pin(57.6, 19.4, 123.5)] }
   if (cr.n === 3) return { ...cr, to: 122.2, pts: [...cr.pts, pin(7, 41, 122.2)] }
   return cr
@@ -169,7 +173,8 @@ export const HEISTS = [
   { no: 2, ink: [48.4, 52.8], on: [ARRIVE, T.chase1], chrome: [56.2, 75.4], v: VIEWS[1], job: job2At, key: KEY2, sheet: SHEET2 },
   { no: 3, ink: [95, 98], on: [98.4, T.out3 + 0.1], chrome: [99.4, 121.8], v: VIEWS[2], job: () => STUDIO, key: KEYS[3], sheet: STUDIO.sheet },
   { no: 4, ink: [137.2, 138.9], on: [139.2, T.car45[0]], chrome: [140.2, T.car45[0] - 0.9], v: VIEWS[3], job: () => MUSEUM, key: KEYS[4], sheet: MUSEUM.sheet },
-  { no: 5, ink: [162.6, 164.6], on: [164.5, T.raid], chrome: [164.2, T.raid - 0.6], v: VIEWS[4], job: (t) => (t < T.arrest4[1] ? HALL : HALL_AFTER), key: KEYS[5], sheet: HALL.sheet },
+  // The hall is drawn from a second sooner, finishing as before (the user, 2026-11-13: it felt rushed).
+  { no: 5, ink: [161.6, 164.6], on: [164.5, T.raid], chrome: [164.2, T.raid - 0.6], v: VIEWS[4], job: (t) => (t < T.arrest4[1] ? HALL : HALL_AFTER), key: KEYS[5], sheet: HALL.sheet },
 ]
 /*
  * Hatching (the user, 2026-11-10: the museum's north wall "shakes" as the

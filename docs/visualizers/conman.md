@@ -25,6 +25,16 @@ the views, the camera's holds), `story.mjs` (every route: who goes where and
 when), `travel.mjs` (legs, routes, the car, the officer, trails),
 `heists.mjs` (the plans and the frame). Change a time in `T`, not in a route.
 
+**Round of 2026-11-13 (the user's "last two changes").**
+- **No. 2 vanished at 1:38.4–1:39.85**: the studio plan's auditor kept v2's
+  own `wait` (T3 − 0.1), which `waiting` does not override, so between the
+  chase dot ending (98.4) and that wait he was nowhere. He now waits from
+  98.4 like No. 1 (same spot the chase dot ends: no jump).
+- **The hall is inked from 2:41.6 (was 2:42.6)**, finishing at 2:44.6 as
+  before; camera, zoom and everything else unchanged.
+- Checked by rendering every frame (30 fps, 0–236 s) before and after: the
+  SVG differs only at 98.40–99.83 and 161.60–164.43.
+
 **Round of 2026-11-12 (the user's three notes; not yet watched).**
 - **No cars: "replace all of the cars (conmen and police) with the original
   dots".** Whoever drives is his own dot, as in the old film: the red car is
