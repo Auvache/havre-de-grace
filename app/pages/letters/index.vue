@@ -14,7 +14,7 @@
 
     <div class="reading">
       <div class="intro">
-        <p class="lede">Something new to listen to and the story behind it: a demo, an idea I'm working on, or a song that isn't out yet.</p>
+        <p class="lede">{{ letter.offerDetail }}</p>
         <NewsletterSignup centred class="field" />
       </div>
 
@@ -104,7 +104,7 @@ const letters = computed(() => {
 
 usePageSeo({
   title: `${letter.name} | Havre De Grace`,
-  description: 'The monthly letter from Stefan Auvache Bradley of Havre De Grace: new demos and songs, and the stories behind them.',
+  description: 'The monthly newsletter from Stefan Auvache Bradley of Havre De Grace: what he\'s working on and why.',
 })
 </script>
 

@@ -6,9 +6,9 @@
   The choice is remembered on the device, so a returning visitor's button is
   already theirs.
 
-  Above it sits the mailing list, because its offer (unreleased songs and demos,
-  shared/data/letter.ts) is the stronger next step for someone who just heard a
-  clip, and the album is still one tap away for anyone who won't sign up. Then
+  Above it sits the mailing list (its offer is in shared/data/letter.ts),
+  because staying in touch is the stronger next step for someone who just heard
+  a clip, and the album is still one tap away for anyone who won't sign up. Then
   four doors to everything else.
 
   The server always renders Spotify. The saved choice (or Apple Music on iOS

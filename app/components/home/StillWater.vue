@@ -37,10 +37,10 @@
     <section class="block">
       <div class="wrap letter">
         <p class="eyebrow">Once a month</p>
-        <h2 class="letter__h">Something new to listen to</h2>
+        <h2 class="letter__h">What I'm working on, and why</h2>
         <p class="letter__text">
-          A demo, an idea I'm working on, or a song that isn't out yet, and the story behind it.
-          The first one is a 7-inch of two demos.
+          A monthly newsletter about the songs I'm making and the thinking behind them.
+          Sign up and I'll send you a 7-inch of two demos.
         </p>
         <NewsletterSignup label="Send it" centred class="letter__field" />
         <NuxtLink to="/letters" class="letter__more">the letters</NuxtLink>

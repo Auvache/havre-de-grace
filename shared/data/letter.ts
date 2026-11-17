@@ -1,21 +1,22 @@
 /**
  * What the mailing list offers, in one place, so every signup on the site
- * makes the same promise: /links, /subscribe, /letters, the banner and the
- * footer.
+ * makes the same promise: /links, /subscribe, /thank-you and the foot of each
+ * letter.
  *
- * The recordings are the offer, because they're what someone who just heard a
- * clip came for. Once a month there's something new to listen to, and a demo or
- * an idea in progress counts, so the promise holds even in a month without a
- * finished song. Never promise a finished song a month. (Until 29 Oct 2026 this
- * was The Productive Creative, a weekly letter on making songs around a full
- * life. It's shelved: people who came for the music got essays.)
+ * The promise is a monthly newsletter about what I'm working on and why. Keep
+ * it that small: no promise of a recording, a demo or a new song each month,
+ * so the promise holds in a month with nothing to play. A recording can turn
+ * up in a letter, but it's a bonus, never the offer. The one recording a
+ * subscriber is promised is the welcome 7-inch. (Until 29 Oct 2026 this was
+ * The Productive Creative, a weekly letter on making songs around a full life.
+ * It's shelved: people who came for the music got essays. Until 17 Nov 2026
+ * the offer was "something new to listen to every month", narrowed because
+ * that's a recording a month to keep up with.)
  */
 export const letter = {
   name: 'Letters',
   /** The promise, as a heading. */
-  offer: 'Unreleased songs and demos',
+  offer: 'Join the newsletter',
   /** The line under it. */
-  offerDetail: 'Every month, something new to listen to: a demo, an idea I\'m working on, or a song that isn\'t out yet, and the story behind it.',
-  /** For the one-line spaces: the banner, the footer label. */
-  offerShort: 'Unreleased songs and demos, something new every month.',
+  offerDetail: 'A monthly newsletter about what I\'m working on and why.',
 } as const

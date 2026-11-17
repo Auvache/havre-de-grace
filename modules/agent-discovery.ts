@@ -410,10 +410,10 @@ export default defineNuxtModule({
 
         await emit('/letters', {
           title: letterOffer.name,
-          description: 'The archive of a weekly letter on making songs around a full life.',
+          description: 'The archive of a monthly newsletter from Stefan Auvache Bradley on what he\'s working on and why.',
         }, blocks(
           `# ${letterOffer.name}`,
-          `_A weekly letter from Stefan Auvache Bradley of ${siteProfile.artistName}. Subscribe at ${siteUrl}/subscribe._`,
+          `_A monthly newsletter from Stefan Auvache Bradley of ${siteProfile.artistName} about what he's working on and why. Subscribe at ${siteUrl}/subscribe._`,
           letters.length
             ? letters
                 .map((item) => `- [${item.title}](${siteUrl}/letters/${item.slug})`

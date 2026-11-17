@@ -40,12 +40,12 @@ definePageMeta({ navOver: true })
 
 const expectations = [
   {
-    title: 'Unreleased recordings',
-    body: 'Something new every month: a demo, an idea I\'m working on, or a song that isn\'t out yet. The list hears it first.',
+    title: 'What I\'m working on',
+    body: 'One letter a month about the songs in progress and what I\'m trying to do with them.',
   },
   {
-    title: 'The story behind each one',
-    body: 'Where the song came from and how it got made.',
+    title: 'And why',
+    body: 'Where the songs come from and what they\'re about.',
   },
   {
     title: 'Shows and records',
@@ -53,7 +53,7 @@ const expectations = [
   },
 ]
 
-const pageDescription = 'Join the Havre De Grace mailing list: unreleased songs and demos from Stefan Auvache Bradley, something new every month.'
+const pageDescription = 'Join the Havre De Grace mailing list: a monthly newsletter from Stefan Auvache Bradley about what he\'s working on and why.'
 
 usePageSeo({
   title: `Mailing List | Havre De Grace`,

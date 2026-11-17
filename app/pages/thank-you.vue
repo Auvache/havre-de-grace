@@ -19,7 +19,7 @@
       <ol class="steps">
         <li>
           <div>
-            Your first 7-inch is on its way
+            Your 7-inch is on its way
             <small>Look for an email called "Your first 7-inch": two demos that aren't out anywhere else. Not there in a few minutes? Check spam or promotions, and drag it to your inbox so the next one lands there.</small>
           </div>
         </li>
