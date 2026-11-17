@@ -577,14 +577,23 @@ export function marqueeFilm(options = {}) {
     if (films !== MARQUEE_FILMS.length) throw new Error(`marquee: ${films} of ${MARQUEE_FILMS.length} films scheduled`)
 
     /*
-     * The piano, bars 82–86 (measured 2026-11-09: three strikes on the first
-     * three eighths of every bar, the loudest on the third, lighter fill
-     * between): no titles, the free board flashing near full on the strikes.
+     * The piano solo, bars 82–84 (2026-11-17: "start with the single wink,
+     * then make progressively more and more letters switch and flash along
+     * with the double beat until every single tile has a letter and is
+     * switching letters on the beat… on the very last beat all of the letters
+     * hold for a second, then everything goes blank"). The piano stops on the
+     * downbeat of bar 85 (the record drops 6 dB), 2.7 s before "Goodbye". One
+     * tile from bar 82, the rest joining outward from it, slowly and then
+     * faster, every lit tile changing on every eighth; the whole board from
+     * the last half of bar 84; the last change on its last eighth, held for
+     * three eighths, then all out on beat 2 of bar 85, blank to "Goodbye".
+     * Drawn by `pianoBuild()` below, after the dance.
      */
     const pianoAt = bar(82)
     const g3 = wordAt(score, /^Goodbye/, bar(85))
-    const PIANO = [0.8, 0.85, 0.97, 0.45, 0.5, 0.45, 0.5, 0.45] // fuller since 2026-11-13: the piano is loud here
-    boards.push({ at: pianoAt, from: pianoAt, until: g3, grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'pulse', share: (k) => PIANO[k] })
+    const freezeAt = bar(85) - EIGHTH
+    const blankAt = freezeAt + 3 * EIGHTH
+    boards.push({ at: pianoAt, from: pianoAt, until: g3, grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'pulse', freezeAt, blankAt })
     next = g3
 
     // The last chorus: the words, then YOU / WANTED / MORE on "you", "wanted",
@@ -765,7 +774,7 @@ export function marqueeFilm(options = {}) {
       return []
     }
     const dance = () => {
-      const on = holds.filter(([, , b]) => !b.share)
+      const on = holds.filter(([, , b]) => !b.share && b.kind !== 'pulse')
       if (!on.length) return
       const rand = rng(4242)
       let lastMove = ''
@@ -774,9 +783,12 @@ export function marqueeFilm(options = {}) {
       let dir = 1
       let stabRow = -1
       let winked = new Set()
+      let solo = boards.find((x) => x.kind === 'pulse')
       const startQ = Math.ceil((on[0][0] - D0) / GRID - 1e-6)
       for (let q = startQ; D0 + q * GRID < on.at(-1)[1] - 1e-6; q++) {
         const t = D0 + q * GRID
+        // The piano solo clears the board (pianoBuild), so the dance starts the last chorus dark.
+        if (solo && t >= solo.from) { twLit.fill(false); solo = null }
         const h = on.find(([a, u]) => t >= a && t < u)
         if (!h) continue
         const b = h[2]
@@ -869,6 +881,53 @@ export function marqueeFilm(options = {}) {
     }
 
     if (O.twinkle) dance()
+
+    /*
+     * The piano solo's build (see the plan above): whatever the dance left
+     * lit goes out on bar 82's downbeat but one tile, the centre; the others
+     * join by distance from it (a little ragged) on a curve that keeps the
+     * wink alone for three beats and fills the board by the last five
+     * eighths. Every joined tile changes letter on every eighth.
+     */
+    const pianoBuild = () => {
+      const b = boards.find((x) => x.kind === 'pulse')
+      const at = (c) => c - FLIP / 2 // a flip whose letter changes at c
+      const inside = (e) => e[0] + FLIP / 2 > b.from - 0.01 && e[0] + FLIP / 2 < b.until - 0.01
+      for (const ev of events) {
+        const kept = ev.filter((e) => !inside(e))
+        ev.splice(0, ev.length, ...kept)
+      }
+      const rand = rng(8285)
+      const pw = 1140 / COLS
+      const rh = 420 / ROWS
+      const seedTile = Math.floor(ROWS / 2) * COLS + Math.floor(COLS / 2)
+      const dist = (i) => Math.hypot(((i % COLS) - (seedTile % COLS)) * pw, (Math.floor(i / COLS) - Math.floor(seedTile / COLS)) * rh)
+      const order = Array.from({ length: N }, (_, i) => i)
+        .map((i) => [i, i === seedTile ? -1 : dist(i) + rand() * 160])
+        .sort((x, y) => x[1] - y[1])
+        .map(([i]) => i)
+      const steps = Math.round((b.freezeAt - b.from) / EIGHTH) // the eighths of the build, the freeze the last
+      const ALONE = 6 // the wink alone, three beats
+      const FULL = steps - 5 // the whole board for the last five eighths and the freeze
+      const count = (k) => (k <= ALONE ? 1 : k >= FULL ? N : Math.round(1 + (N - 1) * ((k - ALONE) / (FULL - ALONE)) ** 3))
+      const shown = Array(N).fill(' ')
+      for (let k = 0; k <= steps; k++) {
+        const c = b.from + k * EIGHTH
+        const n = count(k)
+        for (let j = 0; j < N; j++) {
+          const i = order[j]
+          if (j < n) {
+            let l = pickFor(rand, i)
+            while (l === shown[i]) l = pickFor(rand, i)
+            events[i].push([at(c), l, 't'])
+            shown[i] = l
+          } else if (k === 0) events[i].push([at(c), ' ', 't']) // the board clears for the wink
+        }
+      }
+      for (let i = 0; i < N; i++) events[i].push([at(b.blankAt), ' ', 't'])
+      flashes.push(b.freezeAt) // the bulbs flash as the whole board lands
+    }
+    if (O.twinkle) pianoBuild()
 
     if (O.twinkle) {
       holds.forEach(([at, until, b], idx) => {
@@ -1013,7 +1072,7 @@ ${openingSvg(t, uid)}`
     const out = plan.darks.some(([a, b]) => t >= a && t < b)
     const label = t < MARQUEE_OPENING.reveal[1] ? 'Opening'
       : t < plan.boards[0].at ? (t < plan.boards[0].from ? 'An empty marquee' : 'The letters settling into NORMA JEANE')
-        : held?.kind === 'pulse' ? 'The letters flashing with the piano'
+        : held?.kind === 'pulse' ? (t < held.freezeAt ? 'The letters joining the piano, one tile to the whole board' : t < held.blankAt ? 'Every letter holds' : 'The board goes blank')
           : held?.kind === 'finale' ? (t < held.at ? 'The letters flashing' : 'Her name forming out of NORMA JEANE, never finished')
             : held && t < held.at ? `The letters settling into ${held.title}${clue ? ', her name showing through in red' : ''}`
               : held && t >= (held.gone ?? Infinity) ? 'An empty marquee, letters blinking'
