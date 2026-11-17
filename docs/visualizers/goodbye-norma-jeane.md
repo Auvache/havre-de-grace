@@ -13,9 +13,10 @@ films surface in release order, one after another, each assembling out of
 spinning letters, whole and still for three beats, and coming apart as the
 next begins. In each chorus the board puts the song's own words up, a row on
 each sung word: GOODBYE / NORMA / JEANE, then SEVENTEEN, then MORE / MORE /
-MORE, each dissolving slowly into the next. Under the piano before the last
-chorus there is no title, only the free board flashing on the piano's
-strikes. After YOU / WANTED / MORE the board flashes hard, NORMA JEANE pops
+MORE, each dissolving slowly into the next. Under the piano solo before the last
+chorus there is no title: one tile winks, more and more join it on the
+eighths until every tile is changing, the whole board holds as the piano
+stops, and then it goes blank until "Goodbye". After YOU / WANTED / MORE the board flashes hard, NORMA JEANE pops
 up on the middle row where the voice leaves, and its letters turn one by one
 into MARILYN / MONROE in the places the red clues have used all along. Three
 letters never arrive; on the last hit, the mark. The board is never dark or
@@ -102,7 +103,7 @@ them with it.
 | Chorus 2 | The words again; Let's Make Love and The Misfits under the trumpet after. |
 | **The trumpet** | Trumpet and piano together: almost every tile turning on every eighth round Let's Make Love and The Misfits. |
 | Clue 3 | Nine of her letters, as The Misfits starts to build. |
-| **The piano solo** | No title: the board flashes on the piano's three strikes a bar. |
+| **The piano solo** | No title: one winking tile, then more and more on the eighths until the whole board changes; it holds as the piano stops, then goes blank until "Goodbye". |
 | Last goodbye | The words, then YOU / WANTED / MORE. |
 | You wanted more | The last lyric on the board. |
 | The trumpet again | The second stretch: near full round YOU WANTED MORE and into the finale. |
@@ -288,3 +289,34 @@ with layers at different speeds, like a band (`dance()` in `marquee.mjs`):
 - Bulbs chase on the eighths again in the pre-chorus.
 - Over the clip: ~25 changes a bar in verse 2, ~70 by the chorus, 24 tiles
   on the chorus downbeat; 6 of 96 eighths still (offbeats in the verse).
+
+## The piano solo — 2026-11-17
+
+The user: "start with the single wink, then make progressively more and
+more letters/tiles switch and flash along with the double beat until every
+single tile has a letter and is switching letters on the beat. On the very
+last beat of that piano section, all of the letters can hold for a second,
+then everything can go blank, then pick up with the rest of the animation as
+is."
+
+- **What was there was a bug.** The flashing planned on 2026-11-09/13 ran
+  after the dance, and it skipped any tile the dance had touched later in
+  the film. That was every tile but one (31), so the solo was a stationary
+  board with a single tile winking. `pianoBuild()` replaces it and runs
+  after the dance. It removes every flip inside the solo and draws its own.
+- **Measured:** the piano is bars 82–84 (207.86–215.43). On the downbeat of
+  bar 85 the record drops 6 dB and the piano stops, 2.7 s before "Goodbye"
+  (218.12).
+- **The build** (`pianoBuild` in `marquee.mjs`): on bar 82's downbeat the
+  board clears to one tile, the centre. It changes letter on every eighth
+  and is alone for about a bar. The others join by distance from it, a
+  little ragged, slowly and then faster (a cubic): 2 by 210.7, 9 by 212.0,
+  23 by 212.9, all 39 from 213.54. Every lit tile changes letter on every
+  eighth. The letters are twinkle letters, never red.
+- **The freeze:** the last change is on the last eighth of bar 84 (215.12),
+  the bulbs flash, and every letter holds for three eighths (0.95 s).
+- **Blank** on beat 2 of bar 85 (216.07), until GOODBYE lands. The dance
+  starts the last chorus from a dark board.
+- Frame labels: "The letters joining the piano…", "Every letter holds",
+  "The board goes blank".
+
