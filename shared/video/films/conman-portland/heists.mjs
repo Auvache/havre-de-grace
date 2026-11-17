@@ -131,7 +131,8 @@ const studioCrew = waiting(STUDIO3.crew, 98.4, [1, 2]).map((cr) => {
   if (cr.n === 3) return { ...cr, to: 122.2, pts: [...cr.pts, pin(7, 41, 122.2)] }
   return cr
 })
-const STUDIO = moved({ ...STUDIO3, crew: studioCrew }, O3)
+// You are a plain dot (like the ushers), and not in the key (the user, 2026-11-17).
+const STUDIO = moved({ ...STUDIO3, crew: studioCrew, figures: STUDIO3.figures.map((f) => ({ ...f, dot: true })) }, O3)
 /*
  * The museum: the auditor, who cut the power from the park, walks round to
  * the bay and the driver with the others. They leave a second sooner than
@@ -164,7 +165,7 @@ const hallCrew = renumber(waiting(HALL5.crew, T.car45[1], [2, 3])).map((cr) => (
 const performer = { ...HALL5.figures[0], pts: HALL5.figures[0].pts.slice(0, -3) }
 const HALL = moved({ ...HALL5, crew: hallCrew, figures: [performer] }, O5)
 const HALL_AFTER = { ...HALL, crew: HALL.crew.filter((cr) => cr.n !== 4) }
-const KEYS = { 3: KEY3, 4: KEY4, 5: { ...KEY5, crew: renumber(KEY5.crew) } }
+const KEYS = { 3: { ...KEY3, figures: [] }, 4: KEY4, 5: { ...KEY5, crew: renumber(KEY5.crew) } }
 
 /* ── When, and from where ────────────────────────────────────────────── */
 

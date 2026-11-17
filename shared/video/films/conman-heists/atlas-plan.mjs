@@ -328,7 +328,10 @@ export function atlasPlan(job, c, time, uid) {
       const [x, y] = A(n)
       top += `<path d="M${r(x + 6)} ${r(y - 5)}L${r(x + 14)} ${r(y - 11)}" stroke="${INK}" stroke-width="0.9"/>${txt(x + 16, y - 14, fs * 1.08, n[3], { italic: true, halo: PAPER })}`
     }
-    top += `<circle cx="${r(head[0])}" cy="${r(head[1])}" r="9" fill="${PAPER}" stroke="${INK}" stroke-width="2.2"/>${txt(head[0], head[1] + 4.2, 11.5, f.mark ?? '', { anchor: 'middle', weight: 700 })}`
+    // `dot`: drawn like an owner (a ring with a dot), no letter.
+    top += f.dot
+      ? `<circle cx="${r(head[0])}" cy="${r(head[1])}" r="7" fill="${PAPER}" stroke="${INK}" stroke-width="2"/><circle cx="${r(head[0])}" cy="${r(head[1])}" r="2.4" fill="${INK}"/>`
+      : `<circle cx="${r(head[0])}" cy="${r(head[1])}" r="9" fill="${PAPER}" stroke="${INK}" stroke-width="2.2"/>${txt(head[0], head[1] + 4.2, 11.5, f.mark ?? '', { anchor: 'middle', weight: 700 })}`
   }
 
   // The crew. One with a `wait` stands at the start of his route from then until he goes.

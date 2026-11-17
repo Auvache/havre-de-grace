@@ -58,6 +58,12 @@ when), `travel.mjs` (legs, routes, the car, the officer, trails),
     is all clear. Compared frame by frame with the commit before, only
     157.5–165.1 differ, and the only mover that changed is car2.
 
+**2026-11-17 (the user: "almost perfect", one change, nothing else moves).**
+In heist 3, You are a plain dot, drawn like the ushers in heist 5 (a ring
+with an ink dot, no Y), and You are no longer in the studio's crew key. The
+v2 plan's figures take a `dot` flag in atlas-plan.mjs; only conman-portland
+sets it.
+
 **Round of 2026-11-12 (the user's three notes; not yet watched).**
 - **No cars: "replace all of the cars (conmen and police) with the original
   dots".** Whoever drives is his own dot, as in the old film: the red car is
