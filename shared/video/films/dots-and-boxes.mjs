@@ -1,0 +1,496 @@
+/*
+ * Meet Me at the Horizon · Dots and Boxes — the film (v1, 2026-11-17).
+ *
+ * The user's brief (2026-11-17): "Think of a grid of dots all evenly spaced.
+ * There is a game I used to play with my sister as a kid. Each of us would
+ * take turns drawing one line that connected two dots. You could only go
+ * up/down/left/right (no diagonal). You could draw a line wherever you wanted
+ * to. If you closed a box … you would score a point. I want this video to show
+ * a grid (same colors as into the wild music video) and for the red player
+ * (me) to play against a black line/player (my monkey brain/enemy)."
+ *
+ * One sleepless night as one game of dots and boxes, on the album's paper in
+ * Into the Wild's three inks: the dots and the monkey brain in ink, him in red.
+ * Red draws first. A box closed is filled solid in its closer's ink and gets a
+ * tally mark in the margin of the plate (red on the left, black on the right);
+ * closing a box earns another line, so a chain is taken a line per sung word.
+ *
+ * The game is real: every move is legal, every box is scored to whoever drew
+ * its fourth side, and the board is played out to the last line. It is played
+ * once per score (`planFor`) by two simple players — take a box when one is
+ * there; otherwise draw a line that gives nothing away; when nothing is safe,
+ * give away as little as possible — and how they play follows the song
+ * (`CARELESS`): in the choruses the monkey brain gets drowsy and leaves boxes
+ * lying; in the fever of verses 3 and 4 it is him who slips. Everything else
+ * is the game. `SEED` picks the one game (of thousands played offline by
+ * tools/video-styles/dots/search.mjs) whose night goes the way the song does:
+ * nothing taken before the first chorus, red's first boxes as the sun "starts
+ * to wake", the monkey brain running away with the fever, red back in the
+ * second chorus, the monkey brain ahead all through the last verse, and red
+ * taking the lead only with the last chain, on the last "horizon".
+ *
+ * When: every line is drawn on a measured word (or a beat of the click in the
+ * intro and the gap after the first hook), `SLOTS` per section, 175 lines in
+ * all — the board's every edge. Red's pen is slow and straight; the monkey
+ * brain's is quick, darting, its lines a little shaky. After the last line
+ * the outro lets the monkey brain's ink sink back, and the red stays.
+ *
+ * Notes: docs/visualizers/meet-me-at-the-horizon.md.
+ */
+import { rng, r, clamp01, lerp, ramp, easeOut, easeInOut, easeOutBack, wobble } from '../kit.mjs'
+import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric } from '../album.mjs'
+import { filmOpening, inOpening } from '../opening.mjs'
+import { endCard } from '../ending.mjs'
+
+const { x: PX, y: PY, w: PW, h: PH } = COVER_SHEET.plate
+const CY = PY + PH / 2
+
+/* ── The board ────────────────────────────────────────────────────── */
+
+/** Dots across and down; boxes are one fewer each way. */
+export const COLS = 14
+export const ROWS = 7
+const BW = COLS - 1
+const BH = ROWS - 1
+/** The dot pitch, in sheet units. */
+const S = 96
+const GX = 800 - (BW * S) / 2
+const GY = CY - (BH * S) / 2
+const NH = BW * ROWS
+/** Every line on the board: 91 across, 84 down. */
+export const EDGES = NH + COLS * BH
+export const BOXES = BW * BH
+
+const hEdge = (i, j) => j * BW + i
+const vEdge = (i, j) => NH + j * COLS + i
+
+/** The two dots an edge joins, as [i, j] grid places. */
+function edgeDots(e) {
+  if (e < NH) { const i = e % BW; const j = (e - i) / BW; return [[i, j], [i + 1, j]] }
+  const k = e - NH
+  const i = k % COLS
+  const j = (k - i) / COLS
+  return [[i, j], [i, j + 1]]
+}
+
+/** The (one or two) boxes an edge is a side of. */
+const EDGE_BOXES = Array.from({ length: EDGES }, (_, e) => {
+  const out = []
+  if (e < NH) {
+    const i = e % BW
+    const j = (e - i) / BW
+    if (j > 0) out.push((j - 1) * BW + i)
+    if (j < BH) out.push(j * BW + i)
+  }
+  else {
+    const k = e - NH
+    const i = k % COLS
+    const j = (k - i) / COLS
+    if (i > 0) out.push(j * BW + i - 1)
+    if (i < BW) out.push(j * BW + i)
+  }
+  return out
+})
+
+const BOX_EDGES = Array.from({ length: BOXES }, (_, b) => {
+  const i = b % BW
+  const j = (b - i) / BW
+  return [hEdge(i, j), hEdge(i, j + 1), vEdge(i, j), vEdge(i + 1, j)]
+})
+
+const dotXY = ([i, j]) => [GX + i * S, GY + j * S]
+
+/* ── The players ──────────────────────────────────────────────────── */
+
+export const RED_P = 0
+export const BLACK_P = 1
+
+/*
+ * How likely a player is, when a safe line is there, to draw one that leaves a
+ * box on three sides anyway: [from, to, red, black]. Asleep-ish in the
+ * choruses (the monkey brain), feverish in verses 3 and 4 (him).
+ */
+const CARELESS = [
+  [52.0, 71.3, 0, 0.32],
+  [71.3, 106.7, 0.24, 0],
+  [106.7, 126.4, 0, 0.32],
+]
+const carelessAt = (p, t) => {
+  for (const [a, b, red, black] of CARELESS) if (t >= a && t < b) return p === RED_P ? red : black
+  return 0
+}
+
+/** The seed of the one game the film plays (tools/video-styles/dots/search.mjs). */
+export const SEED = 96
+
+/**
+ * Plays the whole game: one move per slot. Returns [{ e, p, t, closed: [box] }].
+ * Pure and deterministic for (slots, seed).
+ */
+export function playGame(slots, seed = SEED) {
+  const rand = rng(seed)
+  const drawn = new Int8Array(EDGES).fill(-1)
+  const sides = new Uint8Array(BOXES)
+  const owner = new Int8Array(BOXES).fill(-1)
+  const moves = []
+  let p = RED_P
+  let lastEdge = -1
+
+  const draw = (e, who, d = drawn, sd = sides) => {
+    d[e] = who
+    const closed = []
+    for (const b of EDGE_BOXES[e]) if (++sd[b] === 4) closed.push(b)
+    return closed
+  }
+  /** The edge left on a box with three sides. */
+  const missing = (b, d) => BOX_EDGES[b].find((x) => d[x] < 0)
+  /** How many boxes the other player takes, greedily, if `e` is drawn now. */
+  const gift = (e) => {
+    const d = drawn.slice()
+    const sd = sides.slice()
+    draw(e, 9, d, sd)
+    let n = 0
+    const queue = []
+    for (let b = 0; b < BOXES; b++) if (sd[b] === 3) queue.push(b)
+    while (queue.length) {
+      const b = queue.pop()
+      if (sd[b] !== 3) continue
+      const m = missing(b, d)
+      d[m] = 9
+      for (const nb of EDGE_BOXES[m]) {
+        sd[nb]++
+        if (sd[nb] === 4) n++
+        else if (sd[nb] === 3) queue.push(nb)
+      }
+    }
+    return n
+  }
+  const pickNear = (list) => {
+    if (lastEdge < 0) return list[Math.floor(rand() * list.length)]
+    const [a] = edgeDots(lastEdge)
+    let best = list[0]
+    let bd = Infinity
+    for (const e of list) {
+      const [c] = edgeDots(e)
+      const dd = Math.hypot(c[0] - a[0], c[1] - a[1])
+      if (dd < bd) { bd = dd; best = e }
+    }
+    return best
+  }
+
+  for (let k = 0; k < EDGES; k++) {
+    const t = slots[k]
+    const open = []
+    for (let e = 0; e < EDGES; e++) if (drawn[e] < 0) open.push(e)
+    const completing = open.filter((e) => EDGE_BOXES[e].some((b) => sides[b] === 3))
+    let e
+    if (completing.length) e = pickNear(completing)
+    else {
+      const safe = open.filter((x) => EDGE_BOXES[x].every((b) => sides[b] <= 1))
+      if (safe.length && !(rand() < carelessAt(p, t))) e = safe[Math.floor(rand() * safe.length)]
+      else if (safe.length) {
+        const giving = open.filter((x) => !safe.includes(x))
+        e = giving.length ? giving[Math.floor(rand() * giving.length)] : safe[Math.floor(rand() * safe.length)]
+      }
+      else {
+        let least = Infinity
+        let pool = []
+        for (const x of open) {
+          const g = gift(x)
+          if (g < least) { least = g; pool = [x] }
+          else if (g === least) pool.push(x)
+        }
+        e = pool[Math.floor(rand() * pool.length)]
+      }
+    }
+    const closed = draw(e, p)
+    for (const b of closed) owner[b] = p
+    moves.push({ e, p, t, closed })
+    lastEdge = e
+    if (!closed.length) p = 1 - p
+  }
+  return moves
+}
+
+/* ── When each line is drawn ──────────────────────────────────────── */
+
+/*
+ * How many lines each stretch of the song draws, 175 in all. Lines land on
+ * sung words (picked evenly through the stretch, first and last included),
+ * or on beats of the click where nothing is sung.
+ */
+const SLOTS = [
+  { lines: null, beats: [12.9, 16.9], n: 4 }, // the intro, on the click
+  { lines: [0, 7], n: 46 }, // verses 1 and 2: racing
+  { lines: [8, 11], n: 16 }, // chorus 1
+  { lines: [12, 19], n: 46 }, // verses 3 and 4: the fever
+  { lines: [20, 23], n: 16 }, // chorus 2
+  { lines: [24, 26], beats: [138.3, 141.3], n: 10 }, // the first "meet me", and the gap after it
+  { lines: [27, 30], n: 18 }, // verse 5
+  { lines: [31, 34], n: 12 }, // chorus 3
+  { lines: [35, 37], n: 7, endOn: 'horizon' }, // the last "meet me": the last line on the last "horizon"
+]
+
+export function slotsFor(score) {
+  const beat = 60 / (score.bpm ?? 55)
+  const phase = score.beatPhase ?? 0.48
+  const out = []
+  for (const seg of SLOTS) {
+    let cand = []
+    if (seg.lines) {
+      for (let li = seg.lines[0]; li <= seg.lines[1]; li++) {
+        for (const w of score.lines[li].words) cand.push({ t: w.t, text: w.text, li })
+      }
+    }
+    if (seg.beats) {
+      for (let k = Math.ceil((seg.beats[0] - phase) / beat); phase + k * beat < seg.beats[1]; k++) cand.push({ t: phase + k * beat })
+    }
+    cand.sort((a, b) => a.t - b.t)
+    if (seg.endOn) {
+      const last = cand.findLastIndex((c) => c.li === seg.lines[1] && /horizon/i.test(c.text ?? ''))
+      cand = cand.slice(0, last + 1)
+    }
+    // No two lines nearer than a sixth of a second.
+    const kept = []
+    for (const c of cand) if (!kept.length || c.t - kept.at(-1).t >= 0.16) kept.push(c)
+    const m = kept.length
+    if (m < seg.n) throw new Error(`dots-and-boxes: ${m} places for ${seg.n} lines in [${seg.lines ?? seg.beats}]`)
+    for (let i = 0; i < seg.n; i++) out.push(kept[seg.n === 1 ? m - 1 : Math.round((i * (m - 1)) / (seg.n - 1))].t)
+  }
+  if (out.length !== EDGES) throw new Error(`dots-and-boxes: ${out.length} slots for ${EDGES} lines`)
+  return out
+}
+
+/* ── The plan ─────────────────────────────────────────────────────── */
+
+/** How long a stroke takes: his are slow and even, the monkey brain's quick. */
+const DRAW = { [RED_P]: 0.34, [BLACK_P]: 0.13 }
+
+const plans = new WeakMap()
+export function planFor(score, seed = SEED) {
+  if (seed === SEED && plans.has(score)) return plans.get(score)
+  const slots = slotsFor(score)
+  const moves = playGame(slots, seed)
+  const rand = rng(seed * 7 + 3)
+  // Each move: which end the pen starts from, how long the stroke takes, and when its boxes fill.
+  const pens = { [RED_P]: null, [BLACK_P]: null }
+  const score2 = [0, 0]
+  moves.forEach((m, k) => {
+    const next = moves[k + 1]?.t ?? m.t + 1
+    m.dur = Math.max(0.08, Math.min(DRAW[m.p], (next - m.t) * 0.75))
+    const [a, b] = edgeDots(m.e).map(dotXY)
+    const at = pens[m.p]
+    const flip = at ? Math.hypot(at[0] - b[0], at[1] - b[1]) < Math.hypot(at[0] - a[0], at[1] - a[1]) : rand() < 0.5
+    m.from = flip ? b : a
+    m.to = flip ? a : b
+    m.prev = at
+    m.prevT = moves[k - 1] ? moves[k - 1].t + moves[k - 1].dur : m.t - 1
+    pens[m.p] = m.to
+    m.done = m.t + m.dur
+    m.wob = m.p === BLACK_P ? wobble(m.from[0], m.from[1], m.to[0], m.to[1], 4, m.e * 13 + 7) : `M${r(m.from[0])} ${r(m.from[1])}L${r(m.to[0])} ${r(m.to[1])}`
+    m.tally = []
+    for (const bx of m.closed) { score2[m.p]++; m.tally.push(score2[m.p]) }
+    m.score = [...score2]
+  })
+  const plan = { moves, slots, final: score2, seed }
+  if (seed === SEED) plans.set(score, plan)
+  return plan
+}
+
+/** The score at `time`: [red, black]. */
+export function scoreAt(plan, time) {
+  let s = [0, 0]
+  for (const m of plan.moves) { if (m.done > time) break; s = m.score }
+  return s
+}
+
+/* ── Drawing ──────────────────────────────────────────────────────── */
+
+const DOT_R = 6.5
+const LINE_W = 7
+
+/** The dots, popping on left to right as the black lifts. */
+function dotsSvg(time) {
+  let d = ''
+  let late = ''
+  for (let i = 0; i < COLS; i++) {
+    const u = easeOutBack(clamp01((time - 10.4 - i * 0.08) / 0.35))
+    if (u <= 0.01) continue
+    for (let j = 0; j < ROWS; j++) {
+      const [x, y] = dotXY([i, j])
+      if (u >= 0.999) d += `M${r(x)} ${r(y)}h0`
+      else late += `<circle cx="${r(x)}" cy="${r(y)}" r="${r(DOT_R * u, 2)}"/>`
+    }
+  }
+  return `<path d="${d}" stroke="${INK}" stroke-width="${DOT_R * 2}" stroke-linecap="round"/><g fill="${INK}">${late}</g>`
+}
+
+/** How far the monkey brain's ink has sunk back, after the last line. */
+const sink = (time, plan) => {
+  const end = plan.moves.at(-1).done
+  return easeInOut(ramp(time, end + 5, end + 13))
+}
+
+/** Tally marks in fives, down the plate's margin: red on the left, black on the right. */
+const TALLY = { top: GY + 6, row: 62, h: 40, pitch: 9 }
+function tallyMark(p, n) {
+  // n counts from 1. Five to a group, groups down a column, two columns a side (the outer first).
+  const g = Math.floor((n - 1) / 5)
+  const k = (n - 1) % 5
+  const col = Math.floor(g / 9)
+  const row = g % 9
+  const cx = p === RED_P ? (col === 0 ? 72 : 128) : (col === 0 ? 1528 : 1472)
+  const y0 = TALLY.top + row * TALLY.row
+  const x0 = cx - 1.5 * TALLY.pitch
+  if (k < 4) {
+    const x = x0 + k * TALLY.pitch
+    return { d: `M${r(x)} ${r(y0)}L${r(x + 1)} ${r(y0 + TALLY.h)}`, len: TALLY.h }
+  }
+  return { d: `M${r(x0 - 9)} ${r(y0 + TALLY.h - 6)}L${r(x0 + 3 * TALLY.pitch + 9)} ${r(y0 + 6)}`, len: 60 }
+}
+
+/** A pen's place at `time`: resting where its last line ended, or travelling to the next. */
+function penAt(plan, p, time) {
+  let last = null
+  let next = null
+  for (const m of plan.moves) {
+    if (m.p !== p) continue
+    if (m.t <= time) last = m
+    else { next = m; break }
+  }
+  if (last && time < last.done) {
+    const u = p === RED_P ? easeInOut(clamp01((time - last.t) / last.dur)) : easeOut(clamp01((time - last.t) / last.dur))
+    return { x: lerp(last.from[0], last.to[0], u), y: lerp(last.from[1], last.to[1], u), drawing: true }
+  }
+  const rest = last ? last.to : null
+  if (next) {
+    const start = next.from
+    // Red sets off in good time and glides; the monkey brain darts at the last moment.
+    const span = p === RED_P ? Math.min(0.9, next.t - next.prevT) : Math.min(0.22, next.t - next.prevT)
+    const u = clamp01((time - (next.t - span)) / Math.max(span, 0.01))
+    if (!rest) return { x: start[0], y: start[1], arrive: u }
+    const e = p === RED_P ? easeInOut(u) : easeOut(u)
+    return { x: lerp(rest[0], start[0], e), y: lerp(rest[1], start[1], e) }
+  }
+  return rest ? { x: rest[0], y: rest[1] } : null
+}
+
+/** The plate: dots, lines, boxes, tallies, pens. */
+export function dotsPlate({ time, score }) {
+  const plan = planFor(score)
+  const quiet = 1 - 0.72 * sink(time, plan)
+  const boxes = { [RED_P]: '', [BLACK_P]: '' }
+  const pops = { [RED_P]: '', [BLACK_P]: '' }
+  const lines = { [RED_P]: '', [BLACK_P]: '' }
+  const drawing = { [RED_P]: '', [BLACK_P]: '' }
+  const tallies = { [RED_P]: '', [BLACK_P]: '' }
+  const inset = 9
+  for (const m of plan.moves) {
+    if (m.t > time) break
+    const u = clamp01((time - m.t) / m.dur)
+    if (u >= 1) lines[m.p] += m.wob
+    else drawing[m.p] += `<path d="${m.wob}" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${r(1 - (m.p === RED_P ? easeInOut(u) : easeOut(u)), 3)}"/>`
+    if (time < m.done) continue
+    const since = time - m.done
+    for (const b of m.closed) {
+      const i = b % BW
+      const j = (b - i) / BW
+      const x = GX + i * S + inset
+      const y = GY + j * S + inset
+      const w = S - inset * 2
+      if (since >= 0.22) boxes[m.p] += `M${x} ${y}h${w}v${w}h${-w}z`
+      else {
+        const k = 0.45 + 0.55 * easeOutBack(since / 0.22)
+        const cx = x + w / 2
+        const cy = y + w / 2
+        pops[m.p] += `<rect x="${r(cx - (w * k) / 2)}" y="${r(cy - (w * k) / 2)}" width="${r(w * k)}" height="${r(w * k)}"/>`
+      }
+    }
+    m.tally.forEach((n) => {
+      const { d, len } = tallyMark(m.p, n)
+      const v = clamp01(since / 0.16)
+      tallies[m.p] += v >= 1 ? `<path d="${d}"/>` : `<path d="${d}" stroke-dasharray="${len + 2} ${len + 2}" stroke-dashoffset="${r((len + 2) * (1 - easeOut(v)), 1)}"/>`
+    })
+  }
+  const pen = (p) => {
+    const at = penAt(plan, p, time)
+    if (!at) return ''
+    let { x, y } = at
+    // The monkey brain never quite keeps still.
+    if (p === BLACK_P && !at.drawing) {
+      x += 2.6 * Math.sin(time * 41.3) + 1.4 * Math.sin(time * 17.9)
+      y += 2.6 * Math.cos(time * 37.1) + 1.4 * Math.sin(time * 23.3)
+    }
+    const o = at.arrive != null ? easeOut(at.arrive) : 1
+    if (o <= 0.01) return ''
+    const fill = p === RED_P ? RED : INK
+    const fade = p === BLACK_P ? quiet : 1
+    return `<g opacity="${r(o * fade, 3)}"><circle cx="${r(x)}" cy="${r(y)}" r="${at.drawing ? 11 : 9.5}" fill="${fill}"/><circle cx="${r(x)}" cy="${r(y)}" r="16" fill="none" stroke="${fill}" stroke-width="1.6" opacity="0.45"/></g>`
+  }
+  const blackO = quiet < 0.999 ? ` opacity="${r(quiet, 3)}"` : ''
+  return `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
+<g fill="${INK}"${blackO}><path d="${boxes[BLACK_P]}"/>${pops[BLACK_P]}</g>
+<g fill="${RED}"><path d="${boxes[RED_P]}"/>${pops[RED_P]}</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="${LINE_W}">
+<g stroke="${INK}"${blackO}><path d="${lines[BLACK_P]}"/>${drawing[BLACK_P]}</g>
+<g stroke="${RED}"><path d="${lines[RED_P]}"/>${drawing[RED_P]}</g>
+</g>
+${dotsSvg(time)}
+<g fill="none" stroke-linecap="round" stroke-width="4"><g stroke="${RED}">${tallies[RED_P]}</g><g stroke="${INK}">${tallies[BLACK_P]}</g></g>
+${pen(BLACK_P)}${pen(RED_P)}`
+}
+
+/** The film: the opening, then the album's cover sheet, the board, the lyric in the margin. */
+export function dotsFrame({ time, score, lockup = '', uid = 'dots' }) {
+  if (score.endCardAt != null && time >= score.endCardAt) return endCard({ now: time, from: score.endCardAt, lockup })
+  const plan = planFor(score)
+  const [red, black] = scoreAt(plan, time)
+  const clip = `${uid}-plate`
+  return {
+    label: inOpening(time) ? 'Opening' : `Red ${red} · Black ${black}`,
+    svg: `<defs><clipPath id="${clip}"><rect x="${PX}" y="${PY}" width="${PW}" height="${PH}"/></clipPath></defs>
+${paper(COVER_SHEET)}
+<g clip-path="url(#${clip})">${dotsPlate({ time, score })}</g>
+${marginLyric({ now: time, score, uid, sheet: COVER_SHEET })}
+${filmOpening({ time, uid, slug: 'meet-me-at-the-horizon' })}`,
+  }
+}
+
+/** The "Now" line on the page: the game's score. */
+export function dotsStateAt(score, time) {
+  if (time < 12) return ''
+  const [red, black] = scoreAt(planFor(score), time)
+  return `Red ${red} · Black ${black}`
+}
+
+/** For the docs and for checking: every run of boxes taken, who took it and when. */
+export function dotsRuns(score, seed = SEED) {
+  const plan = planFor(score, seed)
+  const runs = []
+  for (const m of plan.moves) {
+    if (!m.closed.length) continue
+    const last = runs.at(-1)
+    if (last && last.p === m.p && m.t - last.t1 < 4) { last.n += m.closed.length; last.t1 = m.done; last.score = m.score }
+    else runs.push({ p: m.p, n: m.closed.length, t0: m.t, t1: m.done, score: m.score })
+  }
+  return runs
+}
+
+/** The poster: the board nearly full, red climbing back, the monkey brain still ahead (33–38). */
+export const DOTS_POSTER = 176.5
+
+/** The jump-to list on the page. What each is: docs/visualizers/meet-me-at-the-horizon.md. */
+export const DOTS_BEATS = [
+  { at: 0, label: 'Opening' },
+  { at: 12, label: 'The board' },
+  { at: 17, label: 'Racing' },
+  { at: 65.3, label: 'First box', key: true },
+  { at: 79.8, label: 'The fever' },
+  { at: 95, label: 'Running away', key: true },
+  { at: 109.5, label: 'Back in it' },
+  { at: 129.3, label: 'Oh won’t you' },
+  { at: 139.6, label: 'The long chain', key: true },
+  { at: 154.6, label: 'A sliver of hope', key: true },
+  { at: 188.4, label: 'The horizon', key: true },
+  { at: 196, label: 'Morning' },
+]

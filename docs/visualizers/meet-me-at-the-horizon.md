@@ -1,12 +1,146 @@
-# Meet Me at the Horizon — two films
+# Meet Me at the Horizon — Dots and Boxes (and two earlier films)
 
 Track 7. [/visualizers/meet-me-at-the-horizon](/visualizers/meet-me-at-the-horizon)
-carries **two whole films of the same night**, switched with the Film row above
-the player (`?film=monkey-brain` opens the second): **Constellations** and
-**Monkey Brain**. Score: `app/config/meetMeAtTheHorizonScore.ts`. The song's
-core idea, from the brief: *Sleepless nights*.
+opens on **Dots and Boxes** (since 2026-11-17). The two earlier films of the same
+night, **Constellations** and **Monkey Brain**, stay on the Film row behind it
+(`?film=constellations`, `?film=monkey-brain`) until the user drops them. Score:
+`app/config/meetMeAtTheHorizonScore.ts`. The song's core idea, from the brief:
+*Sleepless nights*.
 
-## Decided by the user (2026-11-10)
+## Dots and Boxes
+
+Film: `shared/video/films/dots-and-boxes.mjs` (`dotsFrame`, `DOTS_BEATS`,
+`DOTS_POSTER`, `dotsStateAt` for the "Now" line, `dotsRuns` / `planFor` for
+checking). Review: `FILM=dots-and-boxes SONG=meet-me-at-the-horizon`. The game
+is chosen by `tools/video-styles/dots/search.mjs`. v1, 2026-11-17, built in one
+unattended run. **Not yet watched by the user.**
+
+### Decided by the user (2026-11-17)
+
+> Horizon: I like the constellation idea, but want to take a different
+> approach. Think of a grid of dots all evenly spaced. There is a game I used to
+> play with my sister as a kid. Each of us would take turns drawing one line
+> that connected two dots. You could only go up/down/left/right (no diagonal).
+> You could draw a line wherever you wanted to. If you closed a box (e.g. drew a
+> line that closed in a single box), you would score a point. I want this video
+> to show a grid (same colors as into the wild music video) and for the red
+> player (me) to play again a black line/player (my monkey brain/enemy). […]
+> Flesh out the full video and put it up on the main horizon page. […] make
+> assumptions and be bold.
+
+### What it does
+
+One sleepless night as one game of dots and boxes, on the album's paper in Into
+the Wild's inks: ink dots, him in red, the monkey brain in ink. Nothing else is
+on the sheet but the lyric in the margin and two tallies down the sides of the
+plate, red on the left and black on the right, a stroke per box, gated in fives
+the way it is done on paper.
+
+- **The board**: 14 × 7 dots, 13 × 6 = 78 boxes, 175 lines. The dots pop on left
+  to right as the black lifts. Red draws first, on the click, at 13.6 s.
+- **The pens**: each player is a dot of its ink that rests where its last line
+  ended. Red sets off in good time and glides to its next line, then draws it
+  slowly and straight (a third of a second); the monkey brain fidgets on the
+  spot, darts at the last moment, and its lines are quick and a little shaky.
+- **A box closed** is filled solid in its closer's ink (inset, so the grid still
+  shows), popping on from small, and a tally stroke goes down beside the plate.
+  Closing a box earns another line, so a chain is taken a line per sung word.
+- **The game is real.** Every line is legal, every box goes to whoever drew its
+  fourth side, the board is played out to the last line, and the tallies are
+  the score. Two simple players: take a box when there is one; otherwise draw a
+  line that gives nothing away; when nothing is safe, give away as little as
+  possible. **How carefully they play follows the song** (`CARELESS`): in the
+  choruses the monkey brain is drowsy (a third of the time it draws a line that
+  leaves a box on three sides); in the fever of verses 3 and 4 it is him who
+  slips. The game was then chosen from six thousand played (`SEED` = 96) for
+  the one whose night goes the way the song does.
+
+**The night, as played (seed 96):**
+
+| Time | Score | What happens |
+| --- | --- | --- |
+| 12–17 | 0–0 | The board; red's first line on the click, the monkey brain straight back. |
+| 17–52 | 0–0 | Verses 1 and 2: a line on nearly every word, both playing safe, nobody gives anything away. |
+| 66.3 | 1–0 | Chorus 1, "feel like you're still next to me": the monkey brain nods off and red takes the first two boxes. |
+| 72–73 | 4–0 | Into verse 3, red picks up two more. |
+| 80.4 | 4–1 | "My skin starts to crawl": the fever, and it is red who slips. |
+| 91–108 | 4–17 | The monkey brain runs away with it: fifteen boxes, thirteen of them in one run from 95.6 through "the house starts to creak" and "the windows are open". |
+| 110–124 | 10–22 | Chorus 2: back and forth, red gets some back. |
+| 127.7 | 10–24 | "Meet me at the horizon": the monkey brain takes two. |
+| 129–137 | 16–24 | "Oh won't you … meet me at the horizon": red takes six. |
+| 140–153 | 16–38 | Verse 5, "No, I don't need a friend … all alone": the monkey brain's long chain, fourteen boxes. 38 is its last. |
+| 154.8 | 17–38 | "When the dawning of day brings a sliver of hope": red opens a chain and **never gives the pen back again**. |
+| 155–188 | 17–38 → 38–38 | Chorus 3 and the last hook: red takes box after box, a line per word, the monkey brain only watching. Level on "Meet" (188.8). |
+| 189.2, 190.2 | 39–38, 40–38 | The lead on "at", the last box on "horizon". The board is full. |
+| 195–203 | 40–38 | Morning: the monkey brain's ink sinks back to grey and the red stays. End card on the last strike, 211.86. |
+
+### Jump to
+
+| Time | Label | What happens |
+| --- | --- | --- |
+| 0:00 | Opening | The mark, the title, the black lifts off the dots. |
+| 0:12 | The board | Dots pop on; red's first line at 13.6. |
+| 0:17 | Racing | A line on nearly every word; nobody gives an inch. |
+| 1:05 | **First box** | Red's first two, on "you're still next to me". |
+| 1:20 | The fever | "Skin starts to crawl": the monkey brain's first box. |
+| 1:35 | **Running away** | The monkey brain takes thirteen in a run (4–4 to 4–16). |
+| 1:50 | Back in it | Chorus 2, red gets some back. |
+| 2:09 | Oh won't you | Red takes six on the first hook. |
+| 2:20 | **The long chain** | Verse 5: fourteen to the monkey brain (16–38). |
+| 2:35 | **A sliver of hope** | Red's chain begins and runs to the end. |
+| 3:08 | **The horizon** | Level on "Meet", ahead on "at", 40–38 on "horizon". |
+| 3:16 | Morning | The black sinks back; the red stays. |
+
+The poster frame is 2:56.5: the board nearly full, red climbing, 33–38.
+
+### How it is built
+
+- **`playGame(slots, seed)`** plays the game: one move per slot, the rules above,
+  the players' policy and `CARELESS`. `planFor(score)` adds to each move which
+  end the pen starts from (the end nearer where that pen is), the stroke's
+  length in time, its path (a `wobble` for black), and the score after it.
+  A frame asks only which moves are at or before `time`.
+- **`SLOTS`**: how many lines each stretch draws, 175 in all, each on a measured
+  word picked evenly through the stretch (first and last included), or on the
+  click in the intro and the gap after the first hook. Verses 1–2 and 3–4 draw
+  46 lines each, choruses 16/16/12, the first hook 10, verse 5 18, the last hook
+  7, the last of them on the last sung "horizon".
+- **`SEED`** is chosen by `node tools/video-styles/dots/search.mjs [from] [to]`,
+  which plays every seed against the score and keeps the ones that pass
+  its `judge`: no box before chorus 1; red at least two in chorus 1; the monkey
+  brain at least five in verses 3–4 and two ahead after them; red at least two
+  in chorus 2; the monkey brain ahead into chorus 3 and the last hook; red
+  winning by four or fewer with the last line and a chain of four or more.
+  187 of 6000 pass; 96 was picked by hand for its sliver of hope.
+  `--show <seed>` prints a game's every box.
+- **If the score, `SLOTS` or `CARELESS` changes, the game changes** (a slot
+  moved is a different game from that move on). Re-run the search and re-check
+  the table above.
+- Cost: under 0.1 ms a frame, 14 KB of SVG at most. No `lib`.
+
+### Choices made without the user (to confirm or change)
+
+- **Red wins, 40–38**, on the last "horizon", after being behind from 1:20 to
+  3:09. The monkey brain is never let off lightly: it leads by 22 at 2:34.
+- **Boxes are filled solid**, not initialled: by the end the board is a red and
+  black mosaic of the night.
+- **The tallies** are the score; there are no numbers anywhere.
+- **The monkey brain's ink sinks back in the outro**, after the game: the board
+  stays, the red stays at full strength.
+- No gold, no sky: only paper, ink and red, as asked.
+
+### Soft spots
+
+- **Sync and motion are judged from stills only.** Whether a line per word in
+  the verses reads as racing or as noise, and whether red's long last chain (35
+  seconds of red only) reads as a comeback or as the game stalling, are for the
+  person watching. A faster or slower game is `SLOTS`; re-run the search after.
+- A box filled the instant its line is done reads well at tablet size; on a
+  phone the tallies are small (four units of stroke on a 1600 sheet).
+
+## The two earlier films
+
+### Decided by the user (2026-11-10)
 
 > Meet me at the horizon: constelations and monkey brain are both great ideas.
 > Flesh out full videos for both of them and put them both on the page.

@@ -57,6 +57,7 @@ const FILMS = {
   marquee: ['marquee.mjs', 'marqueeFrame'],
   crossword: ['crossword.mjs', 'crosswordFrame'],
   grain: ['grain.mjs', 'grainFrame'],
+  'dots-and-boxes': ['dots-and-boxes.mjs', 'dotsFrame'],
   constellations: ['constellations.mjs', 'constellationsFrame'],
   'monkey-brain': ['monkey-brain.mjs', 'monkeyBrainFrame'],
   'road-trip': ['road-trip.mjs', 'roadTripFrame'],

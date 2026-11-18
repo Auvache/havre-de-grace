@@ -10,7 +10,7 @@
         </h1>
       </header>
 
-      <VisualizerPlayer :film="danceCardFrame" name="The Dance Card" :score="GHOST_SCORE" :poster-at="119.6" :beats="DANCE_CARD_BEATS" />
+      <VisualizerPlayer :film="danceCardFrame" name="The Dance Card" :score="GHOST_SCORE" :poster-at="125.3" :beats="DANCE_CARD_BEATS" />
     </div>
   </div>
 </template>

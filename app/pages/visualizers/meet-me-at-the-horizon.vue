@@ -10,7 +10,7 @@
         </h1>
       </header>
 
-      <!-- Two whole films, until one is picked (?film=monkey-brain). -->
+      <!-- Dots and Boxes is the film; the two older ones stay on the row (?film=constellations, ?film=monkey-brain). -->
       <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2" role="group" aria-label="Film">
         <span class="label-text text-[0.6rem] muted-text">Film</span>
         <button
@@ -41,12 +41,14 @@
 
 <script setup lang="ts">
 /*
- * Meet Me at the Horizon: two films of one night, Constellations
- * (shared/video/films/constellations.mjs) and Monkey Brain
- * (shared/video/films/monkey-brain.mjs), both whole, until one is picked.
+ * Meet Me at the Horizon: Dots and Boxes (shared/video/films/dots-and-boxes.mjs),
+ * the film since 2026-11-17, first on the row; the two earlier films of the
+ * night, Constellations (constellations.mjs) and Monkey Brain
+ * (monkey-brain.mjs), stay on the row behind it.
  * Notes: docs/visualizers/meet-me-at-the-horizon.md.
  */
 import { MEET_ME_AT_THE_HORIZON_SCORE } from '~/config/meetMeAtTheHorizonScore'
+import { dotsFrame, dotsStateAt, DOTS_BEATS, DOTS_POSTER } from '~~/shared/video/films/dots-and-boxes.mjs'
 import { constellationsFrame, CONSTELLATIONS_BEATS, CONSTELLATIONS_POSTER } from '~~/shared/video/films/constellations.mjs'
 import { monkeyBrainFrame, monkeyBrainStateAt, MONKEY_BRAIN_BEATS, MONKEY_BRAIN_POSTER } from '~~/shared/video/films/monkey-brain.mjs'
 
@@ -56,6 +58,7 @@ useHead({ title: 'Meet Me at the Horizon — visualizer', meta: [{ name: 'robots
 interface FilmOption { key: string, name: string, film: typeof constellationsFrame, beats: typeof CONSTELLATIONS_BEATS, posterAt: number, status?: (time: number) => string }
 
 const FILMS: FilmOption[] = [
+  { key: 'dots-and-boxes', name: 'Dots and Boxes', film: dotsFrame, beats: DOTS_BEATS, posterAt: DOTS_POSTER, status: (t) => dotsStateAt(MEET_ME_AT_THE_HORIZON_SCORE, t) },
   { key: 'constellations', name: 'Constellations', film: constellationsFrame, beats: CONSTELLATIONS_BEATS, posterAt: CONSTELLATIONS_POSTER },
   { key: 'monkey-brain', name: 'Monkey Brain', film: monkeyBrainFrame, beats: MONKEY_BRAIN_BEATS, posterAt: MONKEY_BRAIN_POSTER, status: (t) => monkeyBrainStateAt(MEET_ME_AT_THE_HORIZON_SCORE, t) },
 ]

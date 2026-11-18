@@ -1,6 +1,7 @@
 /*
  * Ghost · The Dance Card — the machinery: people who are only their
- * footprints, and the ways feet go (2026-11-10).
+ * footprints, and the ways feet go (2026-11-10; sad feet, a red father and
+ * no tantrums from 2026-11-17).
  *
  * Nothing here knows the story (story.mjs). A person is a list of prints, laid
  * out once per score: where each foot comes down and when. A frame only asks
@@ -14,8 +15,8 @@
  * beat at 0.25 s. `bt(k)` is beat k; nearly every step in the film lands on
  * one, a half or a quarter.
  */
-import { rng, r, clamp01, lerp, easeOut } from '../../kit.mjs'
-import { INK, RED, SECOND_INK } from '../../album.mjs'
+import { r, clamp01, lerp, easeOut } from '../../kit.mjs'
+import { INK, RED } from '../../album.mjs'
 
 export const BPM = 110
 export const BEAT = 60 / BPM
@@ -72,7 +73,9 @@ export class Person {
   step(t, cx, cy, th, o = {}) {
     const foot = o.foot ?? this.foot
     const [rx, ry] = rgt(th)
-    const s = this.put(t, cx + rx * foot * this.w, cy + ry * foot * this.w, th + foot * (o.toe ?? 5), foot, o)
+    // `wide` < 1 brings the feet in; a negative `toe` turns the toes in.
+    const w = this.w * (o.wide ?? 1)
+    const s = this.put(t, cx + rx * foot * w, cy + ry * foot * w, th + foot * (o.toe ?? 5), foot, o)
     s.cx = cx
     s.cy = cy
     s.cth = th
@@ -312,31 +315,43 @@ export function sway(P, { k0, k1, every = 1, amp = 14, print }) {
   P.y = y0
 }
 
+/** Turn on the spot to face `target`: one foot, then the other. */
+export function faceTo(P, t, target, o = {}) {
+  const th = toward([P.x, P.y], target)
+  P.step(t, P.x, P.y, th, { foot: -1, ...o })
+  P.step(t + (o.gap ?? BEAT / 2), P.x, P.y, th, { foot: 1, ...o })
+  return th
+}
+
 /**
- * A tantrum: stamping on the spot, left, right, harder and faster as `I(t)`
- * climbs — a stamp a beat when it is low, two when it is up, four when it is
- * at its worst. `at(t)` is where (a child can stamp its way across the floor).
- * Below 0.45 the red goes out of the prints.
+ * Sad feet. The child stops: the feet come together, toes turned in, and
+ * then shuffle — small slow steps, a foot every `every` beats, each dragged
+ * along the floor (a scuff from where it was), turning a little further away
+ * each time. `away` is the heading to drift towards (away from him); `turn`
+ * how far round the feet come by the last shuffle.
+ *
+ *   sad(kid, { t0, n: 3, away: 60 })     the feet together at t0, then 3 shuffles
+ *   sad(kid, { times: [...], away })     shuffles on given times (on the words)
  */
-export function tantrum(P, { at, th, t0, t1, I, seed = 1 }) {
-  const rand = rng(seed)
-  let t = t0
-  let last = null
-  while (t < t1 - 0.02) {
-    const i = Math.max(0.05, I(t))
-    const [x, y] = typeof at === 'function' ? at(t) : at
-    const j = 8 + 18 * Math.min(i, 1.6)
-    last = P.step(t, x + (rand() - 0.5) * j, y + (rand() - 0.5) * j, (typeof th === 'function' ? th(t) : th) + (rand() - 0.5) * 46 * Math.min(1.3, i + 0.2), {
-      red: clamp01(i / 0.45),
-      stomp: i,
-      life: 0.5 + 0.5 * clamp01(1 - i),
-      air: 0.05,
-      toe: 10,
-      seed: Math.floor(rand() * 1000),
-    })
-    t += i >= 1.3 ? BEAT / 4 : i >= 0.5 ? BEAT / 2 : BEAT
+export function sad(P, { t0, n = 3, every = 2, away, turn, shuffle = 0.62, times, settle = true }) {
+  const fields = { sad: true, toe: -19, wide: 0.9, air: 0.4, life: 1.4 }
+  const from = P.th
+  const to = turn ?? away
+  // Turn the short way round.
+  const d = ((((to - from) % 360) + 540) % 360) - 180
+  const out = []
+  if (settle) {
+    out.push(P.step(t0, P.x, P.y, from, { ...fields, foot: -1, air: 0.25 }))
+    out.push(P.step(t0 + BEAT / 2, P.x, P.y, from, { ...fields, foot: 1, air: 0.25 }))
   }
-  return last
+  const ts = times ?? Array.from({ length: n }, (_, i) => t0 + BEAT * (settle ? 1.5 : 0) + i * every * BEAT)
+  const [ax, ay] = fwd(away)
+  ts.forEach((t, i) => {
+    const u = (i + 1) / ts.length
+    const step = P.len * shuffle
+    out.push(P.step(t, P.x + ax * step, P.y + ay * step, from + d * u, { ...fields, scuff: true }))
+  })
+  return out
 }
 
 /* ── The marks ────────────────────────────────────────────────────── */
@@ -355,19 +370,11 @@ const SHOE = {
   child: 'M-2 -30C10 -32 20 -24 20 -12C20 0 12 8 11 20C10 34 12 44 2 49C-8 52 -15 44 -15 32C-15 18 -20 6 -21 -8C-22 -22 -14 -29 -2 -30ZM5 -41a8 8 0 1 0 16 0a8 8 0 1 0 -16 0ZM-6 -45.5a6 6 0 1 0 12 0a6 6 0 1 0 -12 0ZM-15.2 -43a5.2 5.2 0 1 0 10.4 0a5.2 5.2 0 1 0 -10.4 0ZM-22.1 -37a4.6 4.6 0 1 0 9.2 0a4.6 4.6 0 1 0 -9.2 0ZM-26.5 -29a4 4 0 1 0 8 0a4 4 0 1 0 -8 0Z',
 }
 
-const GREY = SECOND_INK.ghost
-
-/** One person's look. `outline` is the ghost: never filled. */
+/** One person's look. `outline` is the ghost: never filled, and red — the one red thing on the sheet. */
 export const LOOKS = {
   dad: { shoe: SHOE.man, outline: true, wide: 1 },
   mom: { shoe: SHOE.woman, wide: 1 },
-  a: { shoe: SHOE.child, wide: 1.05 },
-  b: { shoe: SHOE.child, wide: 1.12 },
-}
-
-const mix = (a, b, u) => {
-  const ch = (hex, i) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16)
-  return `#${[0, 1, 2].map((i) => Math.round(lerp(ch(a, i), ch(b, i), u)).toString(16).padStart(2, '0')).join('')}`
+  kid: { shoe: SHOE.child, wide: 1.08 },
 }
 
 /** How long a print takes to come down. */
@@ -386,101 +393,98 @@ function presence(s, time) {
   return on * drop * (1 - age / s.life) ** 1.3
 }
 
+/** The father's line, in floor units at life size (the camera scales it with the floor). */
+const DAD_STROKE = 4.2
+
 /**
- * Everything on the floor at `time`, in world units: arrows under prints
- * under numbers under the red. `ghost(time)` is how much of the father there
- * is (he thins on "I'm a ghost").
+ * Everything on the floor at `time`, in world units: the dashed line of a
+ * step and the scuff of a dragged foot under the prints, the count over
+ * them. `ghost` is how much of the father there is (he thins on "I'm a ghost").
  */
 export function floorSvg(story, time, ghost = 1) {
   let arrows = ''
+  let scuffs = ''
   let nums = ''
-  let shocks = ''
-  const layers = { dad: '', mom: '', a: '', b: '' }
+  const layers = { dad: '', mom: '', kid: '' }
   for (const s of story.steps) {
-    if (s.t - (s.arrow ? s.air ?? 0.3 : 0) > time) continue
+    const lead = s.arrow || s.scuff ? s.air ?? 0.3 : 0
+    if (s.t - lead > time) continue
     const look = LOOKS[s.who]
-    const dadK = look.outline ? Math.max(0.34, ghost * (s.thin ?? 1)) : 1
+    // How much of him there is: his line thins (it stays red; it only goes pale as an old print fades).
+    const dadK = look.outline ? Math.max(0.3, ghost * (s.thin ?? 1)) : 1
+    const p = presence(s, time)
     // The dashed line of the step being taken, from where that foot was.
     if (s.arrow && s.px != null && time < s.t + 1.1) {
       const air = s.air ?? 0.3
       const u = easeOut(clamp01((time - (s.t - air)) / air))
-      const o = (1 - clamp01((time - s.t - 0.2) / 0.9)) * dadK
+      const o = (1 - clamp01((time - s.t - 0.2) / 0.9)) * lerp(0.5, 1, dadK)
       const d = Math.hypot(s.x - s.px, s.y - s.py)
       if (d > 8 && o > 0.01) {
         const ex = lerp(s.px, s.x, u)
         const ey = lerp(s.py, s.y, u)
-        arrows += `<path d="M${r(s.px)} ${r(s.py)}L${r(ex)} ${r(ey)}" stroke="${look.outline ? GREY : INK}" stroke-width="${look.outline ? 2 : 1.6}" stroke-dasharray="6 6" opacity="${r(o * 0.9, 2)}"/>`
+        arrows += `<path d="M${r(s.px)} ${r(s.py)}L${r(ex)} ${r(ey)}" stroke="${look.outline ? RED : INK}" stroke-width="${look.outline ? 2.2 : 1.6}" stroke-dasharray="6 6" opacity="${r(o * 0.9, 2)}"/>`
       }
     }
-    const p = presence(s, time)
+    // A dragged foot: a soft smear along the floor from where it was, drawn as the foot slides, fading with the print.
+    if (s.scuff && s.px != null) {
+      const air = s.air ?? 0.4
+      const u = easeOut(clamp01((time - (s.t - air)) / air))
+      // The smear outlasts the print: what is left of a sad stretch is the drag.
+      const o = time < s.t ? 1 : 1 - clamp01((time - s.t) / 5)
+      if (o > 0.01) {
+        const k = s.len / 100
+        const ex = lerp(s.px, s.x, u)
+        const ey = lerp(s.py, s.y, u)
+        scuffs += `<path d="M${r(s.px)} ${r(s.py)}L${r(ex)} ${r(ey)}" stroke-width="${r(26 * k, 1)}" opacity="${r(0.13 * o, 3)}"/>` +
+          `<path d="M${r(s.px)} ${r(s.py)}L${r(ex)} ${r(ey)}" stroke-width="${r(5 * k, 1)}" opacity="${r(0.28 * o, 3)}"/>`
+      }
+    }
     if (p <= 0.004) continue
     const k = s.len / 100
     const since = time - s.t
-    const S = s.stomp ?? 0
-    // Coming down: pressed on from a little large; a stamp from larger, and past its size and back.
+    // Coming down: pressed on from a little large. A dragged foot does not come down, it arrives.
     let scale = 1
-    if (since < 0.2) {
-      const u = clamp01(since / (S ? 0.16 : LAND))
-      scale = S ? 1 + (0.55 + 0.25 * Math.min(S, 1.6)) * (1 - easeOut(u)) - 0.07 * Math.sin(Math.PI * clamp01(since / 0.2)) : 1 + 0.2 * (1 - easeOut(u))
+    if (since < 0.2 && !s.scuff) {
+      const u = clamp01(since / LAND)
+      scale = 1 + 0.2 * (1 - easeOut(u))
       if (s.pop) scale += s.pop * 0.3 * (1 - easeOut(u))
     }
     const tf = `translate(${r(s.x)} ${r(s.y)}) rotate(${r(s.th)}) scale(${r(k * scale * s.foot * -1 * look.wide, 3)} ${r(k * scale, 3)})`
     if (look.outline) {
-      const o = p * dadK * (s.keep ? 0.92 : 1)
-      if (o > 0.01) layers.dad += `<path d="${look.shoe}" transform="${tf}" stroke-width="${r(3 / (k * scale), 2)}"${o < 0.995 ? ` opacity="${r(o, 3)}"` : ''}/>`
+      const o = p * lerp(0.72, 1, dadK)
+      const sw = DAD_STROKE * lerp(0.28, 1, dadK)
+      if (o > 0.01) layers.dad += `<path d="${look.shoe}" transform="${tf}" stroke-width="${r(sw / (k * scale), 2)}"${o < 0.995 ? ` opacity="${r(o, 3)}"` : ''}/>`
     } else {
-      const red = s.red ?? 0
-      layers[s.who] += `<path d="${look.shoe}" transform="${tf}"${red > 0.01 ? ` fill="${red > 0.99 ? RED : mix(INK, RED, red)}"` : ''}${p < 0.995 ? ` opacity="${r(p, 3)}"` : ''}/>`
+      // A sad foot presses lightly.
+      const o = p * (s.sad ? 0.88 : 1)
+      layers[s.who] += `<path d="${look.shoe}" transform="${tf}"${o < 0.995 ? ` opacity="${r(o, 3)}"` : ''}/>`
     }
     // The count, beside the foot, upright.
     if (s.num && p > 0.02) {
       const [rx, ry] = rgt(s.cth ?? s.th)
       const off = s.foot * (s.len * 0.2 + 15)
-      nums += `<text x="${r(s.x + rx * off)}" y="${r(s.y + ry * off + 5)}" opacity="${r(p * dadK * 0.85, 2)}">${s.num}</text>`
+      nums += `<text x="${r(s.x + rx * off)}" y="${r(s.y + ry * off + 5)}" opacity="${r(p * 0.85, 2)}">${s.num}</text>`
     }
-    // The stamp's shock: short strokes thrown outwards, gone in a third of a second.
-    if (S > 0.3 && since < 0.34 && (s.red ?? 0) > 0.3) shocks += shockSvg(s.x, s.y, s.len * 0.62, S, since / 0.34, s.seed ?? 1, s.red)
   }
-  for (const b of story.bursts) {
-    const since = time - b.t
-    if (since < 0 || since >= 0.42) continue
-    shocks += shockSvg(b.x, b.y, 30, b.s, since / 0.42, b.seed, 1, true)
-  }
-  return `<g fill="none" stroke-linecap="round">${arrows}</g>` +
-    `<g fill="none" stroke="${GREY}" stroke-linejoin="round">${layers.dad}</g>` +
-    `<g fill="${INK}">${layers.mom}${layers.a}${layers.b}</g>` +
-    `<g fill="${INK}" font-size="17" font-weight="600" text-anchor="middle">${nums}</g>` +
-    `<g fill="none" stroke="${RED}" stroke-linecap="round">${shocks}</g>`
-}
-
-/** Strokes thrown out from (x, y): `u` 0–1 through their life. */
-function shockSvg(x, y, r0, S, u, seed, red = 1, cry = false) {
-  const n = cry ? 7 + Math.round(2 * Math.min(S, 1.6)) : 6 + Math.round(2.5 * Math.min(S, 1.6))
-  const e = easeOut(u)
-  const reach = (cry ? 34 : 20) + 44 * Math.min(S, 1.8)
-  const a = r0 + reach * e * 0.75
-  const b = a + (9 + 20 * Math.min(S, 1.8)) * (1 - 0.55 * e)
-  let d = ''
-  for (let i = 0; i < n; i++) {
-    const th = ((i + (seed % 7) / 7) / n) * Math.PI * 2
-    const wob = 1 + 0.16 * Math.sin(i * 2.3 + seed)
-    d += `M${r(x + Math.cos(th) * a * wob)} ${r(y + Math.sin(th) * a * wob)}L${r(x + Math.cos(th) * b * wob)} ${r(y + Math.sin(th) * b * wob)}`
-  }
-  return `<path d="${d}" stroke-width="${r(2.2 + 1.5 * Math.min(S, 1.6), 1)}" opacity="${r((1 - u) ** 0.8 * clamp01(red) * (cry ? 0.9 : 1), 2)}"/>`
+  return `<g fill="none" stroke="${INK}" stroke-linecap="round">${scuffs}</g>` +
+    `<g fill="none" stroke-linecap="round">${arrows}</g>` +
+    `<g fill="none" stroke="${RED}" stroke-linejoin="round">${layers.dad}</g>` +
+    `<g fill="${INK}">${layers.mom}${layers.kid}</g>` +
+    `<g fill="${INK}" font-size="17" font-weight="600" text-anchor="middle">${nums}</g>`
 }
 
 /* ── After the story is laid out ──────────────────────────────────── */
 
 /**
- * The father near the fire: every print of his is thinner the closer it comes
- * down to a stamping or screaming child (within `near` he is almost not
- * there; beyond `far` he is whole).
+ * The father near the sadness: every print of his is thinner the closer it
+ * comes down to a sad child (within `near` he is almost not there; beyond
+ * `far` he is whole). `sources` are { t, x, y, s }.
  */
-export function thinNearFire(dadSteps, sources, { near = 75, far = 300, least = 0.42 } = {}) {
+export function thinNearFire(dadSteps, sources, { near = 75, far = 300, least = 0.42, window = 0.7 } = {}) {
   for (const s of dadSteps) {
     let k = 1
     for (const f of sources) {
-      if (Math.abs(f.t - s.t) > 0.7 || f.s < 0.3) continue
+      if (Math.abs(f.t - s.t) > window || f.s < 0.3) continue
       const d = Math.hypot(f.x - s.x, f.y - s.y)
       k = Math.min(k, lerp(least, 1, clamp01((d - near) / (far - near))))
     }
