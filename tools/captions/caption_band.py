@@ -8,10 +8,10 @@ frame counts as ON when more than 400 pixels of the band are near-white
 (> 235): the captions the user's editor burns in are white, and the background
 behind them (shirt, wall, guitar) has almost none. `--band` is the caption's y
 range in the 1080 x 1920 frame. Find it from a still with a caption showing;
-the default fits Insane, Okay and St George (text at about y 990).
+the default fits Insane, Okay and St. George (text at about y 990).
 
 Whisper's timestamps are not enough for this: the editor holds each caption
-until the next line, or nearly. On St George "Don't send angels, just the aid"
+until the next line, or nearly. On St. George "Don't send angels, just the aid"
 stays up for three seconds after Whisper says the line ended.
 """
 import argparse

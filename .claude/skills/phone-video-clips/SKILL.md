@@ -387,7 +387,7 @@ every clip (fixed by `refine`); they didn't like faded.
 # Splitting a full take: the cut rules
 
 First done (cutting only) and approved as "perfect": Insane, Okay (3:01 → 3 clips) and
-St George (2:36 → 3 clips), 26 Oct 2026, from `~/stefan/videos/*-full.MOV`.
+St. George (2:36 → 3 clips), 26 Oct 2026, from `~/stefan/videos/*-full.MOV`.
 Those already had captions burned in by the user's editor, so nothing was
 drawn; it was cutting only. A take without captions now goes through
 `short.mjs` (above), which captions each clip as it cuts it.
@@ -425,7 +425,7 @@ phone-video-captions.
   whether anyone stays, so 15–20 s of guitar before the voice loses them. Cut
   the intro down to the bar or two before the first line, leave out a solo or
   break of more than about 15 s, and cut a long outro to a few seconds after
-  the last line (St George's own 8 s ending stayed whole). Tell the user what
+  the last line (St. George's own 8 s ending stayed whole). Tell the user what
   was left out, with times, in case they want any of it back.
 - **Shorts loop**, so there is no video fade, just a hard cut. The audio gets
   a 50 ms fade in and a 0.3–1.5 s fade out (see `cut.py`).
@@ -463,18 +463,19 @@ They show what "best judgement" meant here, as a pattern to follow:
 | Insane, Okay 1 of 3 | 18.82–60.70 | 42 s | verse 1 to "…I wind up in therapy" | 19 s intro |
 | Insane, Okay 2 of 3 | 60.70–92.62 | 32 s | "When they can't fix…", the chorus | — |
 | Insane, Okay 3 of 3 | 110.39–161.44 | 51 s | verse 2, the final chorus | 18 s break; 20 s outro after |
-| St George 1 of 3 | 13.88–49.37 | 35 s | verse 1 to "…just the aid" | 14 s intro |
-| St George 2 of 3 | 49.37–84.88 | 36 s | verse 2 to "send fire streaking across the sky" | — |
-| St George 3 of 3 | 113.41–155.84 | 42 s | verse 3 to the end, outro kept | 28 s solo |
+| St. George 1 of 3 | 13.88–49.37 | 35 s | verse 1 to "…just the aid" | 14 s intro |
+| St. George 2 of 3 | 49.37–84.88 | 36 s | verse 2 to "send fire streaking across the sky" | — |
+| St. George 3 of 3 | 113.41–155.84 | 42 s | verse 3 to the end, outro kept | 28 s solo |
 
 ## Files
 
 - Output: `~/stefan/videos/ready/youtube/<Song Title> - <section>.mp4`, then
   its TikTok version by `versions.mjs`; named by what's
-  in the clip ("St George - verse 1", "Insane, Okay - verse 2 + final
-  chorus", "St George - verse 3 to end"), not "N of M", because clips can overlap.
-  Write the title the way the site writes it (`public/demos/playlists.json`
-  and `content/music/*.yml`). If the site doesn't have it, use the source
-  file's name ("St George").
+  in the clip ("St. George - verse 1", "Insane, Okay - verse 2 + final
+  chorus", "St. George - verse 3 to end"), not "N of M", because clips can overlap.
+  Write the title the way the site writes it (`public/demos/playlists.json`,
+  `content/music/*.yml` and `app/pages/seven-inch.vue`): "St. George", with
+  the period, even though its source files say "St George". If the site
+  doesn't have it, use the source file's name.
 - Move the full-length source to `originals/`; keep it unless the user says to delete it. When they
   do, use `trash`, not `rm`.

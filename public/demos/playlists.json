@@ -23,68 +23,10 @@
   ],
   "playlists": [
     {
-      "name": "Insane, Okay",
-      "tracks": [
-        {
-          "title": "parker master",
-          "file": "Insane Okay - parker master.wav"
-        },
-        {
-          "title": "live — 9/3/26",
-          "file": "Insane, Okay - live - 9_3_26, 10.03\u202fAM.m4a"
-        },
-        {
-          "title": "reference track",
-          "file": "reference-track.wav",
-          "note": "local only \u2014 git-ignored, not deployed"
-        },
-        {
-          "title": "claude master 1",
-          "file": "insane-okay-claude-master-1.wav",
-          "note": "mastered to The Wild Hunt, \u221210.8 LUFS"
-        },
-        {
-          "title": "claude master 4 \u2014 forward + tight",
-          "file": "insane-okay-claude-master-4.wav",
-          "note": "untouched demo, vocal +4.9 dB with \u22123/+4 dB rides"
-        },
-        {
-          "title": "claude master 14 \u2014 A: 4 + body",
-          "file": "insane-okay-claude-master-14.wav",
-          "note": "master 1's guitar low end (below ~800 Hz) only; guitar +3.1 dB louder"
-        },
-        {
-          "title": "claude master 19 \u2014 level",
-          "file": "insane-okay-claude-master-19.wav",
-          "note": "master 14 with the vocal back up to the reference's +6.1 dB over the guitar"
-        },
-        {
-          "title": "claude master 20 \u2014 level + low-mid half",
-          "file": "insane-okay-claude-master-20.wav",
-          "note": "19, vocal 150\u2013300 Hz trimmed halfway to the reference (\u22124.6 dB at 200 Hz)"
-        },
-        {
-          "title": "claude master 21 \u2014 level + low-mid full",
-          "file": "insane-okay-claude-master-21.wav",
-          "note": "19, vocal 150\u2013300 Hz trimmed all the way (\u22129 dB at 200 Hz)"
-        },
-        {
-          "title": "claude master 22 \u2014 level + room half",
-          "file": "insane-okay-claude-master-22.wav",
-          "note": "19, vocal in a fitted room at half the reference's tail"
-        },
-        {
-          "title": "claude master 24 \u2014 level + low-mid half + room half",
-          "file": "insane-okay-claude-master-24.wav",
-          "note": "20 and 22 combined"
-        }
-      ]
-    },
-    {
       "name": "The Hoax",
       "tracks": [
         {
-          "title": "live — 9/3/26",
+          "title": "live \u2014 9/3/26",
           "file": "The Hoax - live - 9_3_26, 10.12\u202fAM.m4a"
         },
         {

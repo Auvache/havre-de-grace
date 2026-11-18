@@ -1,6 +1,6 @@
 <!--
   A small row that plays the current record in the persistent player: its
-  cover, its title, a play button. Thank-you and the letter pages use it.
+  cover, its title, a play button. /thank-you uses it.
 -->
 
 <template>

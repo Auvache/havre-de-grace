@@ -8,7 +8,7 @@ Prints, per window, the five strongest onsets as `time(strength)` in time
 order, at least 0.25 s apart. Strength is spectral flux: how much new energy
 appears from one 10 ms hop to the next. The loudest one in a window is usually
 the downbeat of a bar; strong onsets spaced evenly (2.54 s apart on Insane,
-Okay, 2.08 s on St George) are the bar lines. Prefer those.
+Okay, 2.08 s on St. George) are the bar lines. Prefer those.
 
 `audio16k.wav` is what `lyrics.py transcribe` writes. Needs numpy, which the
 scratchpad venv already has because faster-whisper pulls it in.

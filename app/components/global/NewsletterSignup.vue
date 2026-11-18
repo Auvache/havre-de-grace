@@ -1,7 +1,7 @@
 <!--
   Kit (ConvertKit) mailing-list signup, as one underlined field with the action
-  in small capitals at its end (the 2026 refresh). Used on the homepage, Letters,
-  a letter page and /subscribe; a page has one signup at most. The request itself
+  in small capitals at its end (the 2026 refresh). Used on the homepage and
+  /subscribe; a page has one signup at most. The request itself
   is useNewsletterSignup, shared with /links.
 -->
 

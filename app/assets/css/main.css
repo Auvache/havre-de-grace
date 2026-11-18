@@ -365,15 +365,10 @@ html[data-theme="light"] .cta-solo.rounded-full:hover {
   max-width: 1080px;
 }
 
-/* Under a ShorelineBand title the page's own top padding is mostly spent. */
+/* Under a ShorelineBand title the page's own top padding is mostly spent:
+   48px at every width (64px on desktop until 2026-11-18). */
 .band + .reading {
-  padding-top: 64px;
-}
-
-@media (max-width: 640px) {
-  .band + .reading {
-    padding-top: 48px;
-  }
+  padding-top: 48px;
 }
 
 .lede {

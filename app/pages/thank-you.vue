@@ -1,7 +1,7 @@
 <!--
   Where Kit sends someone once they've clicked the link in the confirmation
   email (the "Clare form", after confirming). They're on the list, and the
-  first welcome email, "Your first 7-inch", is already on its way with the
+  first welcome email, "Welcome to Havre De Grace", is already on its way with the
   link to /seven-inch.
 
   Before confirming, nobody comes here: the site's signup says "check your
@@ -14,31 +14,18 @@
     <ShorelineBand title="You're in" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
 
     <div class="reading">
-      <p class="lede">Thank you for confirming. You're on the Havre De Grace mailing list.</p>
+      <p class="centre">
+        Thank you for confirming. Your 7-inch is on its way. Look for an email called "Welcome to Havre De
+        Grace" (check spam if it isn't there in a few minutes). After that:
+        shows, merch, and new music.
+      </p>
 
-      <ol class="steps">
-        <li>
-          <div>
-            Your 7-inch is on its way
-            <small>Look for an email called "Your first 7-inch": two demos that aren't out anywhere else. Not there in a few minutes? Check spam or promotions, and drag it to your inbox so the next one lands there.</small>
-          </div>
-        </li>
-        <li>
-          <div>
-            After that
-            <small>{{ letter.offerDetail }}</small>
-          </div>
-        </li>
-      </ol>
-
-      <WhileYouWait />
+      <WhileYouWait class="wait-gap" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { letter } from '~~/shared/data/letter'
-
 definePageMeta({ navOver: true })
 
 usePageSeo({
@@ -47,3 +34,15 @@ usePageSeo({
 })
 </script>
 
+<style scoped>
+/* Centred under the band's title, like /subscribe. */
+.centre {
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* The space the steps list used to leave above the record row. */
+.wait-gap {
+  margin-top: 56px;
+}
+</style>

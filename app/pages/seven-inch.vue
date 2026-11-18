@@ -1,6 +1,6 @@
 <!--
-  The list's welcome gift: a 7-inch single on the record player, two demos that
-  aren't out anywhere else. The first welcome email links here; confirming
+  The list's welcome gift: a 7-inch single on the record player, two demos from
+  the next album that aren't out anywhere else. The first welcome email links here; confirming
   lands on /thank-you, which points to that email.
 
   Unlisted, not private: nothing links to it, it's noindexed (nuxt.config.ts)
@@ -15,9 +15,7 @@
     heading="A 7-inch for the Havre De Grace mailing list"
     intro-title="You're in. Here's your 7-inch."
     :intro-lines="[
-      'Two demos that aren\'t out anywhere else.',
-      'Side A is All I Need. Flip it over for Skin and Bones.',
-      'Once a month I\'ll write about what I\'m working on and why.',
+      'Two demos from my next album. They aren\'t out anywhere else.',
     ]"
     intro-action="Play it"
   />
@@ -44,7 +42,7 @@ const side = (side: 'a' | 'b', title: string, slug: string, durationSec: number)
 })
 
 const single: ListenAlbum = {
-  title: 'All I Need / Skin and Bones',
+  title: 'Insane, Okay / St. George',
   slug: 'seven-inch',
   artist: 'Havre De Grace',
   year: 2026,
@@ -53,13 +51,13 @@ const single: ListenAlbum = {
   accent: '#d4a25a',
   credits: [],
   tracks: [
-    side('a', 'All I Need', 'all-i-need', 203.5),
-    side('b', 'Skin and Bones', 'skin-and-bones', 228.9),
+    side('a', 'Insane, Okay', 'insane-okay', 196.2),
+    side('b', 'St. George', 'st-george', 172.3),
   ],
 }
 
 usePageSeo({
   title: 'A 7-inch for the list | Havre De Grace',
-  description: 'Two unreleased demos from Havre De Grace, for the mailing list.',
+  description: 'Two unreleased demos from the next Havre De Grace album, for the mailing list.',
 })
 </script>

@@ -1,32 +1,25 @@
 <!--
-  The mailing list's own landing page: what comes, the field, what it costs you
-  (nothing, and one click to leave).
+  The mailing list's own landing page, all centred: the offer, the field, what
+  it costs you (nothing, and one click to leave). Linked from the footer.
 -->
 
 <template>
   <div>
-    <ShorelineBand title="Letters" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
+    <ShorelineBand title="Mailing list" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
 
-    <div class="reading">
-      <p class="lede">{{ letter.offerDetail }}</p>
-
-      <NewsletterSignup class="field" />
-      <p class="fine">
-        One click to confirm, one click to leave. One letter a month, and your
-        address goes nowhere else.
+    <div class="reading centre">
+      <p class="offer">
+        <template v-if="offerParts">{{ offerParts[0] }}<strong>{{ BOLD }}</strong>{{ offerParts[1] }}</template>
+        <template v-else>{{ letter.offerDetail }}</template>
       </p>
 
-      <ol class="steps">
-        <li v-for="item in expectations" :key="item.title">
-          <div>
-            {{ item.title }}
-            <small>{{ item.body }}</small>
-          </div>
-        </li>
-      </ol>
+      <NewsletterSignup centred class="field" />
+      <p class="fine">
+        One click to confirm, one click to leave. We don't share your address
+        with anyone else.
+      </p>
 
       <p class="fine">
-        See what you'd be getting: <NuxtLink to="/letters">read the letters</NuxtLink>.
         Already on the list and want off it? <NuxtLink to="/unsubscribe">Unsubscribe</NuxtLink>.
       </p>
     </div>
@@ -38,22 +31,14 @@ import { letter } from '~~/shared/data/letter'
 
 definePageMeta({ navOver: true })
 
-const expectations = [
-  {
-    title: 'What I\'m working on',
-    body: 'One letter a month about the songs in progress and what I\'m trying to do with them.',
-  },
-  {
-    title: 'And why',
-    body: 'Where the songs come from and what they\'re about.',
-  },
-  {
-    title: 'Shows and records',
-    body: 'Dates near you when there are any, and new records here before anywhere else. Never more than that.',
-  },
-]
+// The offer is shared (shared/data/letter.ts); here its heart is in bold. If
+// the wording changes and this phrase is gone, the line shows plain.
+const BOLD = 'unreleased demos from my next album'
+const offerParts = letter.offerDetail.includes(BOLD)
+  ? letter.offerDetail.split(BOLD)
+  : null
 
-const pageDescription = 'Join the Havre De Grace mailing list: a monthly newsletter from Stefan Auvache Bradley about what he\'s working on and why.'
+const pageDescription = 'Join the Havre De Grace mailing list: two unreleased demos from the next album, then news about music, merch and shows.'
 
 usePageSeo({
   title: `Mailing List | Havre De Grace`,
@@ -62,8 +47,19 @@ usePageSeo({
 </script>
 
 <style scoped>
+.centre {
+  text-align: center;
+}
+
+/* The offer at body size, on even lines. */
+.offer {
+  text-wrap: balance;
+}
+
+/* Centred as a block, but the email typed into it still reads from the left. */
 .field {
   margin-top: 44px;
+  text-align: left;
 }
 
 .fine {
