@@ -9,7 +9,9 @@ description: Turn raw performance videos in ~/stefan/videos/inbox into ready-to-
 ~/stefan/videos/
   inbox/        the user drops raw takes here, any length
   ready/        finished clips, ready to post, one folder per platform:
-    youtube/      the full-quality clip (short.mjs writes here); the user drags it into Studio
+    youtube/      the full-quality clip (short.mjs writes here). Claude copies the next batch to
+                  ~/Desktop/YouTube uploads/, the user uploads them to Studio as drafts, and Claude
+                  schedules them in Studio through Chrome (post-schedule.md)
     tiktok/       the same clip at 9.5 MB (versions.mjs), so Claude can upload it to Buffer
     instagram/    the user's: only they decide what goes in (never fill or empty it)
   posted/       youtube/, tiktok/, instagram/: versions that are up or scheduled
@@ -43,7 +45,11 @@ the Queue, Sent and Drafts tabs (a drafted clip counts as posted).
 Transcoding can shift a length by about 0.03 s. Two clips can have the same length (Andalusia
 snippet and Insane, Okay chorus are both 30.53 s), so use the caption too.
 
-The folder is the status: no log file. The other things at the top level
+**`~/stefan/videos/post-schedule.md` is the official posting plan** (since 17 Nov 2026):
+which clip goes up when on YouTube, TikTok and Instagram, the caption rules, the YouTube related video,
+and a status column. Read it before scheduling anything, and update it when a clip is scheduled or posted.
+A new clip goes into its table before it's posted. The folders say where each file has gone; the
+schedule says when. The other things at the top level
 (artichoke-*) are the user's; leave them. DaVinci Resolve may add a
 CacheClip or Resolve Project Backups folder here when a project points at this
 folder. Those were trashed on 28 Oct 2026; leave any new ones to the user.
@@ -393,8 +399,9 @@ phone-video-captions.
 
 ## What makes a good cut (the judgement the user delegated)
 
-- **15–30 s, capped at 30** (the user's rule from 28 Oct 2026; it replaced
-  30–55 s). Up to 40 s is allowed as a rare exception, when a moment can't be
+- **15–25 s is the target, 30 at the most** (30 s cap from 28 Oct 2026, which replaced
+  30–55 s. The 25 s target came on 17 Nov 2026: live clips of 25 s or less got about 1,000 YouTube views,
+  and home clips over 30 s got under 100). Up to 40 s is allowed as a rare exception, when a moment can't be
   split cleanly (Norma Jeane's pre-chorus runs straight into the chorus with a
   0.3 s gap, so that clip is 32.6 s). So a clip is usually one section: a
   verse, a chorus, or the second half of a verse into the chorus. A verse

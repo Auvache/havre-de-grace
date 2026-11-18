@@ -37,7 +37,9 @@
  *      voice leaves (bar 98) and turns letter by letter, every two beats, into
  *      MARILYN / MONROE in her hidden place; three letters never arrive, and
  *      the last hit cuts to the mark. Something's Got to Give is gone with the
- *      other titles.
+ *      other titles. (2026-11-17: the board dances almost whole from 4:05, and
+ *      from 4:31 a full board of black letters shows MARILYN MONROE whole in
+ *      red to the cut; see the finale below.)
  *   - Every change is on an eighth of the click. 95 BPM; the score's beat is
  *     at 0.066, the bar's strongest accent the beat after it, so bar 0 starts
  *     at 0.698. A measured word sits a few ms off the grid; the stream snaps
@@ -389,12 +391,14 @@ export function marqueeFilm(options = {}) {
       const rand = rng(seed++)
       // The letters go in groups on the eighths, most on the beats.
       const steps = Math.max(1, Math.floor((K - FLIP / 2) / EIGHTH) + 1)
+      b.off = new Map() // tile → when its letter goes
       b.grid.forEach((c, i) => {
         if (c === ' ') return
         let k = Math.floor(rand() * steps)
         const onBeat = Math.round((from + k * EIGHTH - D0) / EIGHTH) % 2 === 0
         if (!onBeat && rand() < 0.6) k = k + 1 < steps ? k + 1 : k - 1
         events[i].push([from + Math.max(0, k) * EIGHTH - SW, ' '])
+        b.off.set(i, from + Math.max(0, k) * EIGHTH)
       })
       b.whole = from
       b.gone = from + K
@@ -494,7 +498,45 @@ export function marqueeFilm(options = {}) {
     const NJ_L = wordAt(score, /^Norma/, 0)
     const NJ = layout(['', 'NORMA JEANE', ''])
     const njRing = surface(NJ, NJ_S, NJ_L)
-    const nj = board(NJ, NJ_L, 'NORMA JEANE', 'name', { from: NJ_S, ringFrom: njRing, twinkleFrom: NJ_L })
+    /*
+     * The way in (2026-11-17: "start the board one beat earlier, and start it
+     * with only one tile, then two. Catch up to the current animation by
+     * 0:20"). One tile from the beat before bar 5, changing on every eighth;
+     * a second two beats later; then the other eight join, faster and faster,
+     * each turning over on most eighths. From 17.4 every tile does what the
+     * surfacing above planned for it, so by 0:18 the board is the one it was.
+     * The first to start is the last to settle.
+     */
+    const NJ_0 = NJ_S - BEAT
+    {
+      const rand = rng(5150) // its own seed, so nothing after it changes
+      const tiles = []
+      NJ.forEach((c, i) => { if (c !== ' ') tiles.push(i) })
+      const lockOf = (i) => Math.max(...events[i].filter((e) => e[1] === NJ[i] && e[2] === undefined).map((e) => e[0] + SW))
+      const byLock = [...tiles].sort((a, b) => lockOf(b) - lockOf(a))
+      const [one, two, ...rest] = byLock
+      rest.reverse() // the rest join in the order they settle
+      const PAIR = NJ_0 + 3 * BEAT // the third joins here
+      const CATCH = onEighth(NJ_0 + 7.5 * BEAT) // from here every tile does what was planned
+      const join = new Map([[one, NJ_0], [two, NJ_0 + 2 * BEAT]])
+      rest.forEach((i, k) => join.set(i, onEighth(PAIR + 2.5 * Math.sqrt(k / rest.length))))
+      for (const i of tiles) {
+        const J = join.get(i)
+        const C = Math.min(CATCH, lockOf(i) - 2 * EIGHTH)
+        const kept = events[i].filter((e) => e[0] < -1 || e[0] + SW >= C - 1e-3)
+        let shown = ' '
+        for (let c = J; c < C - 1e-3; c += EIGHTH) {
+          // Alone or a pair, a new letter on every eighth; once others join, most eighths.
+          if (c > J && c >= PAIR - 1e-3 && rand() >= 0.6) continue
+          let l = pickFor(rand, i)
+          while (l === shown) l = pickFor(rand, i)
+          kept.push([c - SW, l, 'x'])
+          shown = l
+        }
+        events[i].splice(0, events[i].length, ...kept.sort((a, b) => a[0] - b[0]))
+      }
+    }
+    const nj = board(NJ, NJ_L, 'NORMA JEANE', 'name', { from: NJ_0, ringFrom: njRing, twinkleFrom: NJ_L })
     next = breakDown(nj, 4 * BEAT, NJ_L - NJ_S) // the name alone holds four beats, as in the schedule the user approved
     nj.until = next
 
@@ -535,7 +577,7 @@ export function marqueeFilm(options = {}) {
       const whole = Math.max(...lands)
       turn(grid, { S: first - FLIP, land, noise: false })
       for (const t of lands) if (t !== whole) flashes.push(t)
-      const b = board(grid, whole, title, 'word', { from: first })
+      const b = board(grid, whole, title, 'word', { from: first, landOf: (i) => nearEighth(land(i)) })
       next = breakDown(b, HOLD, breakTo - (whole + HOLD))
       b.until = next
       return b
@@ -588,12 +630,20 @@ export function marqueeFilm(options = {}) {
      * the last half of bar 84; the last change on its last eighth, held for
      * three eighths, then all out on beat 2 of bar 85, blank to "Goodbye".
      * Drawn by `pianoBuild()` below, after the dance.
+     *
+     * Second round, 2026-11-17: "don't pause it until 3:37 (on the nearest
+     * beat after that), and pause it on a blank marquee (only for a moment)
+     * until the chorus comes back in." The build is as it was, whole from the
+     * last half of bar 84, but the whole board keeps changing on every eighth
+     * past the piano's end to the beat at or after 3:37 (217.34), where it
+     * goes blank — no hold — and stays blank until GOODBYE lands.
      */
     const pianoAt = bar(82)
     const g3 = wordAt(score, /^Goodbye/, bar(85))
-    const freezeAt = bar(85) - EIGHTH
-    const blankAt = freezeAt + 3 * EIGHTH
-    boards.push({ at: pianoAt, from: pianoAt, until: g3, grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'pulse', freezeAt, blankAt })
+    const fullBy = bar(85) - EIGHTH // the ramp's last eighth, where it was frozen before
+    const blankAt = D0 + Math.ceil((217 - D0) / BEAT - 1e-6) * BEAT
+    const freezeAt = blankAt - EIGHTH // the last change
+    boards.push({ at: pianoAt, from: pianoAt, until: g3, grid: EMPTY, red: redOf(EMPTY), title: '', kind: 'pulse', fullBy, freezeAt, blankAt })
     next = g3
 
     // The last chorus: the words, then YOU / WANTED / MORE on "you", "wanted",
@@ -606,45 +656,30 @@ export function marqueeFilm(options = {}) {
     })
     const wanted = wordAt(score, /^wanted/, you)
     const more = wordAt(score, /^more/, wanted)
-    words(['YOU', 'WANTED', 'MORE'], [you, wanted, more], more + HOLD + 20 * EIGHTH, 'YOU WANTED MORE')
-
+    const ywm = words(['YOU', 'WANTED', 'MORE'], [you, wanted, more], more + HOLD + 20 * EIGHTH, 'YOU WANTED MORE')
     /*
-     * The finale: the board flashes hard; NORMA JEANE pops up on the middle
-     * row on the downbeat where the voice leaves (bar 98), and from the next
-     * bar its letters change one at a time, every two beats, into MARILYN on
-     * the row above and MONROE on the middle row — her hidden place, where
-     * the clues were. Three of the thirteen never arrive (two wrong, one
-     * blank), and the record's last hit cuts to the mark.
+     * The finale (2026-11-17, second round, replacing NORMA JEANE turning
+     * into MARILYN / MONROE): "From 4:09 on, the whole board should be
+     * flashing. We should never see norma jeane… The only red letters should
+     * be the letters in Marilyn Monroe when they are in their proper place.
+     * Think of the words spelled out, but never displayed all at once. Never
+     * more than 5-6 letters at a time. Sometimes 2-3. Always at least 1
+     * letter. All of the letters should be dancing/switching with the beat
+     * almost constantly… We should never see Marilyn Monroe totally spelled
+     * out."
+     *
+     * FILL, the beat at or after 4:05: the finale's flashing takes over from
+     * the dance, nearly every free tile on every eighth, YOU WANTED MORE still
+     * coming apart round its last letters. WHOLE, the beat at or after 4:09:
+     * every tile lit and changing to the cut, and her letters showing through
+     * in red in her place (drawn after the dance, below).
      */
-    const finaleAt = next
-    const popAt = bar(98)
-    turn(NJ, { S: popAt - FLIP, land: () => popAt, noise: false })
-    flashes.push(popAt)
-    const NAME_GRID = Array(N).fill(' ')
-    for (const [i, c] of HID) NAME_GRID[i] = c
-    const also = new Set()
-    NJ.forEach((c, i) => { if (c !== ' ') also.add(i) })
-    {
-      const rand = rng(77)
-      const changes = []
-      for (const i of new Set([...also, ...HKEYS])) if (NJ[i] !== NAME_GRID[i]) changes.push(i)
-      for (let k = changes.length - 1; k > 0; k--) { const j = Math.floor(rand() * (k + 1)); [changes[k], changes[j]] = [changes[j], changes[k]] }
-      // The three that never arrive are letters of the name, not stray letters of NORMA JEANE.
-      const letters = changes.filter((i) => NAME_GRID[i] !== ' ' && i % COLS !== HC) // never an initial
-      const unfinished = letters.slice(-3)
-      let k = 0
-      for (const i of changes) {
-        const at = popAt + BAR + k * 2 * BEAT
-        const u = unfinished.indexOf(i)
-        if (u === 2) { k++; continue } // still blank at the cut
-        let c = NAME_GRID[i]
-        if (u >= 0) c = NOISE[Math.floor(rand() * NOISE.length)]
-        events[i].push([at - FLIP + SW, c])
-        k++
-      }
-      if (popAt + BAR + k * 2 * BEAT > LAST) throw new Error('marquee: the name does not have time to form')
-    }
-    boards.push({ at: popAt, from: finaleAt, until: LAST, grid: NAME_GRID, red: redOf(NAME_GRID), also, title: 'MARILYN MONROE', kind: 'finale', ring: 'row', share: (k) => (k === 0 ? 0.95 : k % 2 === 0 ? 0.85 : 0.65) })
+    const FILL = D0 + Math.ceil((245 - D0) / BEAT - 1e-6) * BEAT
+    const WHOLE = D0 + Math.ceil((249 - D0) / BEAT - 1e-6) * BEAT
+    ywm.until = FILL
+    const finaleFree = (i, t) => !(ywm.grid[i] !== ' ' && t < ywm.off.get(i) + EIGHTH - 1e-3)
+    boards.push({ at: WHOLE, from: FILL, until: LAST, wholeAt: WHOLE, grid: EMPTY, red: redOf(EMPTY), title: 'MARILYN MONROE', kind: 'finale', finaleFree, share: (k) => (k % 2 === 0 ? 0.97 : 0.9) })
+    const popAt = WHOLE
 
     // The holds: from a board's first spin (the name: from when it is whole)
     // to the next event — where the dance runs.
@@ -722,7 +757,11 @@ export function marqueeFilm(options = {}) {
           if (e[0] < -1) { out.push(e); continue }
           const at = snap(e[0] + FLIP / 2) - FLIP / 2
           const last = out.at(-1)
-          if (last && Math.abs(last[0] - at) < 1e-6) out[out.length - 1] = [at, e[1], e[2]]
+          // Two that meet become the later — but the dance never overwrites a
+          // board's own letter (a sung word lands a few ms after the eighth it
+          // snaps to, while the dance still counts the tile as free).
+          const boardsOwn = (x) => x[2] === undefined || x[2] === 'red'
+          if (last && Math.abs(last[0] - at) < 1e-6) { if (!(boardsOwn(last) && (e[2] === 't' || e[2] === 'w'))) out[out.length - 1] = [at, e[1], e[2]] }
           else out.push([at, e[1], e[2]])
         }
         // A blank turning over onto a blank is no movement — unless a wave put it there.
@@ -757,6 +796,7 @@ export function marqueeFilm(options = {}) {
      * the song builds. It runs straight through a change of title.
      */
     const twLit = Array(N).fill(false)
+    let handoff = null
     const canFlip = (i, t) => t - FLIP + SW >= endAt[i] + 0.01
     const MOVES = [
       [0.4, ['ripple', 'rest', 'wave', 'ripple', 'rest']],
@@ -807,7 +847,15 @@ export function marqueeFilm(options = {}) {
         const free = []
         for (let i = 0; i < N; i++) {
           if (!canFlip(i, t)) continue
-          if (blockedAt(b, i, t) || blockedAt(b, i, t + GRID)) { if (twLit[i]) { put(i, t, ' '); twLit[i] = false } continue }
+          if (blockedAt(b, i, t) || blockedAt(b, i, t + GRID)) {
+            // A lit tile the board needs goes out — unless the board's own
+            // letter lands there: then that flip replaces it, and blanking it
+            // here would knock a letter out of the sung word (2026-11-17:
+            // GOODBYE lost four letters an eighth after it landed).
+            if (twLit[i] && !(b.landOf && b.grid[i] !== ' ' && b.landOf(i) <= t + 1e-6)) put(i, t, ' ')
+            twLit[i] = false
+            continue
+          }
           free.push(i)
         }
         const target = Math.round(free.length * (H ? 0.8 : 0.08 + 0.55 * E ** 1.4))
@@ -877,7 +925,10 @@ export function marqueeFilm(options = {}) {
           }
         }
       }
-      for (let i = 0; i < N; i++) if (twLit[i]) put(i, D0 + Math.ceil((on.at(-1)[1] - D0) / GRID) * GRID, ' ')
+      const endT = D0 + Math.ceil((on.at(-1)[1] - D0) / GRID) * GRID
+      // Straight into the finale's flashing, the lit tiles stay lit; otherwise they go out.
+      if (boards.some((x) => x.kind === 'finale' && Math.abs(x.from - on.at(-1)[1]) < 1e-3)) handoff = [...twLit]
+      else for (let i = 0; i < N; i++) if (twLit[i]) put(i, endT, ' ')
     }
 
     if (O.twinkle) dance()
@@ -906,9 +957,9 @@ export function marqueeFilm(options = {}) {
         .map((i) => [i, i === seedTile ? -1 : dist(i) + rand() * 160])
         .sort((x, y) => x[1] - y[1])
         .map(([i]) => i)
-      const steps = Math.round((b.freezeAt - b.from) / EIGHTH) // the eighths of the build, the freeze the last
+      const steps = Math.round((b.freezeAt - b.from) / EIGHTH) // every eighth with a change, the last before the blank
       const ALONE = 6 // the wink alone, three beats
-      const FULL = steps - 5 // the whole board for the last five eighths and the freeze
+      const FULL = Math.round((b.fullBy - b.from) / EIGHTH) - 5 // the whole board from five eighths before the piano stops
       const count = (k) => (k <= ALONE ? 1 : k >= FULL ? N : Math.round(1 + (N - 1) * ((k - ALONE) / (FULL - ALONE)) ** 3))
       const shown = Array(N).fill(' ')
       for (let k = 0; k <= steps; k++) {
@@ -925,7 +976,6 @@ export function marqueeFilm(options = {}) {
         }
       }
       for (let i = 0; i < N; i++) events[i].push([at(b.blankAt), ' ', 't'])
-      flashes.push(b.freezeAt) // the bulbs flash as the whole board lands
     }
     if (O.twinkle) pianoBuild()
 
@@ -936,14 +986,16 @@ export function marqueeFilm(options = {}) {
           // Flashing: on each eighth a share of the free tiles flip to a letter
           // and the rest go out, the share from the piano's figure or the
           // finale's beat. Runs to the cut.
-          const hi = b.kind === 'finale' ? until + 1 : until - 0.3
-          const lit = Array(N).fill(false)
+          const hi = b.kind === 'finale' ? b.wholeAt : until - 0.3
+          const lit = b.kind === 'finale' && handoff ? handoff : Array(N).fill(false)
           for (const t of eighthsIn(at - 0.001, hi)) {
             const pos = ((Math.round((t - D0) / EIGHTH) % 8) + 8) % 8
             const p = Math.max(b.share(pos, t), horn(t) ? (pos % 2 === 0 ? 0.97 : 0.88) : 0)
             for (let i = 0; i < N; i++) {
               if (t - FLIP + SW < endAt[i] + 0.01) continue
-              if (blocked(b, i, t)) { if (lit[i]) { put(i, t, ' '); lit[i] = false } continue }
+              const no = b.finaleFree ? !b.finaleFree(i, t) : blocked(b, i, t)
+              // A lit tile the board needs goes out, unless the name's own letter is landing on it.
+              if (no) { if (lit[i]) put(i, t, ' '); lit[i] = false; continue }
               if (rand() < p) { put(i, t, pickFor(rand, i)); lit[i] = true }
               else if (lit[i]) { put(i, t, ' '); lit[i] = false }
             }
@@ -952,6 +1004,61 @@ export function marqueeFilm(options = {}) {
           return
         }
       })
+
+      /*
+       * The whole board (see the finale above). On every eighth from WHOLE
+       * to the cut every tile is lit: the black ones change on every beat and
+       * on most eighths between. Her letters come and go in her place, in red,
+       * a few at a time — the count wanders between 1 and 6 by the beat, most
+       * often 2–4 — each staying one to three beats, turning over onto itself
+       * on the beat while it stays, then flipping back to a black letter. New
+       * ones are taken mostly in reading order, as if the name were being
+       * spelled, never more than six and never all thirteen.
+       */
+      const fin = boards.find((x) => x.kind === 'finale')
+      if (fin) {
+        for (const ev of events) ev.splice(0, ev.length, ...ev.filter((e) => e[0] < -1 || e[0] + SW < fin.wholeAt - 1e-3))
+        const rand = rng(1962)
+        const shown = Array(N).fill(' ')
+        const life = new Map() // red tile → the eighth it goes
+        let ptr = Math.floor(rand() * 13)
+        let want = 2
+        const black = (i, c) => {
+          let l = pickFor(rand, i)
+          while (l === shown[i]) l = pickFor(rand, i)
+          put(i, c, l)
+          shown[i] = l
+        }
+        for (let c = fin.wholeAt, k = 0; c < LAST + EIGHTH; c += EIGHTH, k++) {
+          const onBeat = k % 2 === 0
+          // How many of hers, set on the beat: a walk between 1 and 6 that leans to 2–4.
+          if (onBeat) {
+            const step = [-2, -1, -1, 0, 1, 1, 2][Math.floor(rand() * 7)]
+            want = Math.max(1, Math.min(6, want + step + (want > 4 ? -1 : want < 2 ? 1 : 0)))
+          }
+          // Those whose time is up go back to black — but never the last one before another comes.
+          for (const [i, end] of [...life]) if (k >= end) { life.delete(i); black(i, c) }
+          while (life.size < want) {
+            const free = HKEYS.filter((i) => !life.has(i) && shown[i] !== HID.get(i))
+            let i
+            if (rand() < 0.75) {
+              for (let n = 0; n < 13; n++) { const j = HKEYS[(ptr + n) % 13]; if (free.includes(j)) { i = j; ptr = (ptr + n + 1 + (rand() < 0.3 ? 1 : 0)) % 13; break } }
+            } else i = free[Math.floor(rand() * free.length)]
+            if (i === undefined) break
+            put(i, c, HID.get(i), 'red')
+            shown[i] = HID.get(i)
+            life.set(i, k + 2 * (1 + Math.floor(rand() * 3)) - (onBeat ? 0 : 1))
+          }
+          for (let i = 0; i < N; i++) {
+            if (life.has(i)) {
+              if (onBeat && shown[i] === HID.get(i) && c - FLIP + SW >= endAt[i] + 0.01) put(i, c, HID.get(i), 'red')
+              continue
+            }
+            if (c - FLIP + SW < endAt[i] + 0.01) continue // turned over this eighth already
+            if (onBeat || rand() < 0.85) black(i, c)
+          }
+        }
+      }
     }
 
     quantize()
@@ -1072,8 +1179,8 @@ ${openingSvg(t, uid)}`
     const out = plan.darks.some(([a, b]) => t >= a && t < b)
     const label = t < MARQUEE_OPENING.reveal[1] ? 'Opening'
       : t < plan.boards[0].at ? (t < plan.boards[0].from ? 'An empty marquee' : 'The letters settling into NORMA JEANE')
-        : held?.kind === 'pulse' ? (t < held.freezeAt ? 'The letters joining the piano, one tile to the whole board' : t < held.blankAt ? 'Every letter holds' : 'The board goes blank')
-          : held?.kind === 'finale' ? (t < held.at ? 'The letters flashing' : 'Her name forming out of NORMA JEANE, never finished')
+        : held?.kind === 'pulse' ? (t < held.fullBy - 5 * plan.EIGHTH ? 'The letters joining the piano, one tile to the whole board' : t < held.blankAt ? 'Every letter changing on the eighths' : 'A blank board, a breath before "Goodbye"')
+          : held?.kind === 'finale' ? (t < held.wholeAt ? 'Almost every letter dancing' : 'The whole board flashing, a few of her letters showing through in red')
             : held && t < held.at ? `The letters settling into ${held.title}${clue ? ', her name showing through in red' : ''}`
               : held && t >= (held.gone ?? Infinity) ? 'An empty marquee, letters blinking'
                 : held && t >= (held.whole ?? Infinity) ? `${held.title}, coming apart`
@@ -1096,6 +1203,7 @@ ${openingSvg(t, uid)}`
       clues: p.clues.map(([a]) => a),
       piano: p.pianoAt,
       finale: p.popAt,
+      fill: p.boards.find((b) => b.kind === 'finale')?.from,
       last: p.LAST,
       // Where the piano comes in (its level first reaches 4 of 9) and the two horn stretches.
       pianoIn: (() => { const k = [...(score.piano ?? '')].findIndex((d) => Number(d) >= 4); return k < 0 ? null : (score.beatPhase ?? 0) + k * p.BEAT })(),

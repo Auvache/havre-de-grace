@@ -191,8 +191,13 @@ export const GOODBYE_NORMA_JEANE_SCORE = {
    * credits run under the ring-out. 275.76: the last guitar/piano note, an
    * eighth after the beat at 275.44 (measured onset 275.77; was 275.3, the note
    * before it, which the ear heard as early). Absolute song time; not moved by TRIM.
+   *
+   * 2026-11-17: moved to 277.02 (4:37.0, on an eighth of the click), the
+   * user's ear: "come in around 4:37 (timed with the last guitar/piano note)".
+   * The mix shows no new tonal onset after 275.80 — 277.02 is 1.26 s into
+   * that note's ring-out, where the user hears it land.
    */
-  endCardAt: 275.76,
+  endCardAt: 277.02,
   /** 95.0 BPM, a beat at 0.066. Measured, and steady — the band played to a click. */
   bpm: 95,
   beatPhase: 0.066,

@@ -7,20 +7,20 @@ Score: `app/config/goodbyeNormaJeaneScore.ts`. The whole film from 2026-11-02.
 ## What it does
 
 The mark drawn on, the title drawn on, then the black lifts off an empty
-picture-house letter board. A second later, on the downbeat, her ten tiles
-start to spin and settle into NORMA JEANE on the first "Norma". Then her
+picture-house letter board. A beat before bar 5 one tile starts to spin,
+then a second, then the rest of her ten, and they settle into NORMA JEANE on
+the first "Norma". Then her
 films surface in release order, one after another, each assembling out of
 spinning letters, whole and still for three beats, and coming apart as the
 next begins. In each chorus the board puts the song's own words up, a row on
 each sung word: GOODBYE / NORMA / JEANE, then SEVENTEEN, then MORE / MORE /
 MORE, each dissolving slowly into the next. Under the piano solo before the last
 chorus there is no title: one tile winks, more and more join it on the
-eighths until every tile is changing, the whole board holds as the piano
-stops, and then it goes blank until "Goodbye". After YOU / WANTED / MORE the board flashes hard, NORMA JEANE pops
-up on the middle row where the voice leaves, and its letters turn one by one
-into MARILYN / MONROE in the places the red clues have used all along. Three
-letters never arrive; on the last hit, the mark. The board is never dark or
-still after the opening.
+eighths until every tile is changing, on past the piano's end to 3:37, and
+then it goes blank for a moment until "Goodbye". From 4:05 almost the whole
+board dances, and from 4:09 every tile flashes to the last hit, a few of
+MARILYN / MONROE's letters showing through in red in the places the clues
+used, never the whole name; then the mark. The board is never dark or still after the opening.
 
 ## The rules (2026-11-09)
 
@@ -107,7 +107,8 @@ them with it.
 | Last goodbye | The words, then YOU / WANTED / MORE. |
 | You wanted more | The last lyric on the board. |
 | The trumpet again | The second stretch: near full round YOU WANTED MORE and into the finale. |
-| **Her name** | NORMA JEANE pops up where the voice leaves and turns, letter by letter, into MARILYN / MONROE; never finished. |
+| The whole board dances | From 4:05, almost every tile on every eighth. |
+| **Her name, a few letters at a time** | From 4:09 the whole board flashes; 1–6 of her letters in red in her place, never all. |
 | The end | The last hit cuts to the mark. |
 
 The poster frame (before play) is GOODBYE / NORMA / JEANE whole in the first
@@ -320,3 +321,87 @@ is."
 - Frame labels: "The letters joining the piano…", "Every letter holds",
   "The board goes blank".
 
+
+## Second round — 2026-11-17
+
+The user: "1) at the very beginning (0:15 ish), start the board one beat
+earlier, and start it with only one tile, then two. Catch up to the current
+animation by 0:20. 2) … all of [the lyric boards] show the exact lyrics …
+roughly in time with when they are sung, then naturally be spun out/break
+down … They should still wink, but keep their letters until they break down.
+3) … don't pause it until 3:37 (on the nearest beat after that), and pause
+it on a blank marquee (only for a moment) until the chorus comes back in.
+4) after 4:05ish, have almost the whole marquee dancing for the rest of the
+time. 5) at 4:31 (on the nearest beat after that) show a full marquee in
+black with marilyn monroe shown in all red flashing and dancing (but keeping
+the correct letters) until the outro screen."
+
+- **The way in.** One tile from 12.70 (the beat before bar 5), a new letter
+  on every eighth; a second at 13.96; the other eight join from 14.59, faster
+  and faster, each turning on most eighths. From 17.43 every tile does what
+  the surfacing planned, so by 0:18 the board is the old one. The first tile
+  to start (N) is the last to settle. Its own seed, so nothing later moved.
+- **The sung words were losing letters — a bug.** GOODBYE lost four letters
+  an eighth after it landed, and chorus 2's B never showed. Two causes: the
+  dance blanked any tile it had lit that a word then landed on, and a word
+  sung a few ms after the eighth it snaps to was overwritten by the dance's
+  flip on that eighth (the dance still counted the tile free). Now a word's
+  letter is never blanked or overwritten; tiles of a row still to land are
+  cleared as before. Every lyric board (the hook, SEVENTEEN, MORE ×3, YOU
+  WANTED MORE, in all three choruses) is checked intact from landing to its
+  breakdown. Winks are unchanged (a letter turning over onto itself).
+- **The piano solo** builds as before (whole from 213.54) but there is no
+  hold: every tile keeps changing on every eighth past the piano's end to
+  217.02, and on the beat at 217.34 (the first after 3:37) the board goes
+  blank, 0.95 s before GOODBYE lands (218.28). The freeze flash is gone.
+- **From 4:05** (the beat at 245.12) the finale's flashing takes over from
+  the dance: 97% of the free tiles on the beats, 90% between. Left alone:
+  YOU WANTED MORE's letters until each goes (its breakdown is unchanged), the
+  middle row for a beat before NORMA JEANE pops up, the name's own letters,
+  and in the middle row the tiles between them and beside a black one, so
+  NORMA JEANE never runs into a dancing letter. The row ring is otherwise
+  gone; MARILYN's letters arrive red among dancing ones.
+- **4:31** (the beat at 271.01, bar 107's downbeat): every tile turns at
+  once — MARILYN / MONROE whole in red in her place (overriding "her name is
+  never spelled", the user's call), every other tile a black letter. To the
+  cut the black ones change on 90% of the eighths; the red ones keep their
+  letters and flash, all thirteen turning over onto themselves on every beat
+  and a pair running through the name on the eighths between.
+- 8,732 changes, every one on the eighth grid.
+
+### The ending, third round — 2026-11-17
+
+The user: "Everything is perfect except the ending. From 4:09 on, the whole
+board should be flashing. We should never see norma jeane (take that out)…
+The only red letters should be the letters in Marilyn Monroe when they are
+in their proper place. Think of the words spelled out, but never displayed
+all at once. Never more than 5-6 letters at a time. Sometimes 2-3. Always at
+least 1 letter. All of the letters should be dancing/switching with the beat
+almost constantly… We should never see Marilyn Monroe totally spelled out."
+
+This replaces the NORMA JEANE pop, its letter-by-letter turn into MARILYN /
+MONROE, and the full red name at 4:31 from the round above.
+
+- 245.12 (4:05) to 249.54: as in the round above, nearly every free tile
+  on every eighth while YOU WANTED MORE comes apart.
+- **From 249.54** (the beat at or after 4:09) to the cut: every tile lit.
+  The black letters change on every beat and on 85% of the eighths between.
+  Her letters come and go in red in her place (MARILYN on the top row from
+  column 4, MONROE under it): how many is set on each beat by a walk between
+  1 and 6 that leans to 2–4; each stays one to three beats, turning over
+  onto itself on the beat, then flips back to black. New ones are taken
+  mostly (75%) in reading order, so stretches of the name read in sequence.
+  Measured over the stretch, per eighth: 1 red 17%, 2 24%, 3 27%, 4 20%,
+  5 2%, 6 10%; never 0, never more than 6. The black letters in her place
+  are never her letter, so no red appears anywhere else.
+- 9,559 changes, every one on the eighth grid; every lyric board still
+  intact to its breakdown.
+
+### The cut — 2026-11-17
+
+"Move the closing screen to come in around 4:37 (timed with the last
+guitar/piano note in the song)." `endCardAt` 275.76 → **277.02**, an eighth
+of the click at 4:37.0; the whole board keeps flashing to it. Measured
+again first: the last tonal onset in the mix is still 275.76–275.80 (the
+note the cut was on), with nothing new in the ring-out after it, so 277.02
+is the user's ear, not a measured onset.

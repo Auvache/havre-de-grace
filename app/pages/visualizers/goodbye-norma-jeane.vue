@@ -28,7 +28,7 @@ const moments = marqueeMoments(GOODBYE_NORMA_JEANE_SCORE)
 
 const BEATS = [
   { at: 0, label: 'Opening' },
-  { at: 12, label: 'Norma Jeane', key: true },
+  { at: 11.5, label: 'Norma Jeane', key: true },
   { at: moments.titles[0]!.at - 3, label: 'The first film' },
   { at: moments.clues[0]! - 1, label: 'Clue 1' },
   { at: moments.pianoIn! - 2, label: 'The piano comes in' },
@@ -42,7 +42,8 @@ const BEATS = [
   { at: moments.hooks[2]! - 1.5, label: 'Last goodbye' },
   { at: moments.words.at(-1)!.at - 2, label: 'You wanted more' },
   { at: moments.horns[1]! - 1, label: 'The trumpet again' },
-  { at: moments.finale - 3, label: 'Her name', key: true },
+  { at: moments.fill! - 1, label: 'The whole board dances' },
+  { at: moments.finale - 1, label: 'Her name, a few letters at a time', key: true },
   { at: moments.last - 5, label: 'The end' },
 ]
 </script>
