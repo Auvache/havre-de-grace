@@ -38,10 +38,11 @@ the way it is done on paper.
 
 - **The board**: 14 × 7 dots, 13 × 6 = 78 boxes, 175 lines. The dots pop on left
   to right as the black lifts. Red draws first, on the click, at 13.6 s.
-- **The pens**: each player is a dot of its ink that rests where its last line
-  ended. Red sets off in good time and glides to its next line, then draws it
-  slowly and straight (a third of a second); the monkey brain fidgets on the
-  spot, darts at the last moment, and its lines are quick and a little shaky.
+- **The pens**: each player is a dot of its ink. Red rests where its last line
+  ended, sets off in good time and glides to its next line, then draws it
+  slowly and straight (a third of a second); the monkey brain darts about the
+  board erratically between its turns (below, round 2), and its lines are
+  quick and straight.
 - **A box closed** is filled solid in its closer's ink (inset, so the grid still
   shows), popping on from small, and a tally stroke goes down beside the plate.
   Closing a box earns another line, so a chain is taken a line per sung word.
@@ -117,6 +118,24 @@ The poster frame is 2:56.5: the board nearly full, red climbing, 33–38.
   moved is a different game from that move on). Re-run the search and re-check
   the table above.
 - Cost: under 0.1 ms a frame, 14 KB of SVG at most. No `lib`.
+
+### The black pen, round 2 (2026-11-23)
+
+The user: "This is almost there. I love the gameplay and the speed, but make
+the black dot less shakey and more eratic when it plays." So:
+
+- **Less shaky**: the black pen's constant jitter (two sines at 17–41 Hz) is
+  gone, and its lines are drawn straight, like red's (no more `wobble`).
+- **More erratic**: between its own lines it never sits still for long and
+  never moves in an even way (`flightsFor`, planned once per score with its
+  own rng, about 300 flights). It waits a moment, darts to another dot or the
+  middle of a line it is eyeing (mostly one to three dots away, one time in
+  seven right across the board), swerving on the way and overshooting before
+  it snaps back; sometimes it freezes for a second, sometimes it is off again
+  at once. Then it makes for the line it will draw at the last moment, as
+  before. After its last line it keeps on, calmer each time, as it sinks.
+- The game, the timing and red's pen are unchanged. **Not yet watched by the
+  user.**
 
 ### Choices made without the user (to confirm or change)
 

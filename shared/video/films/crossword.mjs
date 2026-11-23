@@ -1,7 +1,7 @@
 /*
  * Ivory · The Crossword — the film (2026-11-13).
  *
- * A large blank crossword on the album's paper, filled in as the song goes:
+ * A large blank crossword on a charcoal ground, filled in as the song goes:
  * the key words he sings, as he sings them, and in the interlude a block of
  * her name jumbled (VORYI, YRIOV…), every letter drawn on stroke by stroke the
  * way the opening draws the title. The camera pans to one part of the puzzle,
@@ -25,8 +25,8 @@
  *
  * Notes: docs/visualizers/ivory.md.
  */
-import { r, clamp01, ramp, lerp, easeInOut } from '../kit.mjs'
-import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric, easeCamera } from '../album.mjs'
+import { r, rng, clamp01, ramp, lerp, easeInOut } from '../kit.mjs'
+import { COVER_SHEET, INK, RED, marginLyric, easeCamera } from '../album.mjs'
 import { filmOpening, inOpening } from '../opening.mjs'
 import { endCard } from '../ending.mjs'
 import { LETTERS } from './crossword/letters.mjs'
@@ -37,6 +37,15 @@ const { x: PX, y: PY, w: PW, h: PH } = COVER_SHEET.plate
 const CX = PX + PW / 2
 const CY = PY + PH / 2
 const PENCIL = '#7a7262'
+/*
+ * The ground (the user, 2026-11-23): "dark charcoal black with a very slight
+ * chalky texture". The whole sheet, border and plate, is charcoal; the puzzle's
+ * squares stay paper, so the charcoal between its words reads as a real
+ * crossword's black squares. The lyric in the margin is chalk.
+ */
+const CHARCOAL = '#1f1e1c'
+const PLATE_MARK = '#34322e'
+const CHALK = '#e6e1d6'
 const CELL_PAPER = '#f6f1e6'
 const CAP = 30
 const GLYPH = CAP / 72.75
@@ -215,10 +224,55 @@ function libFor(ns) {
     if (n) nums += `<text x="${c * CELL + 5}" y="${rr * CELL + 15}">${n}</text>`
   }
   const glyphs = Object.entries(LETTERS).map(([ch, L]) => `<path id="${ns}-g${ch}" d="${L.d}"/>`).join('')
-  const lib = `<defs>${glyphs}<g id="${ns}-paper"><path d="${squares}" fill="${CELL_PAPER}"/></g>` +
+  const lib = `<defs>${glyphs}${chalkDefs(ns)}<g id="${ns}-paper"><path d="${squares}" fill="${CELL_PAPER}"/></g>` +
     `<g id="${ns}-rules"><path d="${squares}" fill="none" stroke="${INK}" stroke-width="2"/><g font-size="12.5" font-weight="500" fill="${PENCIL}">${nums}</g></g></defs>`
   libs.set(ns, lib)
   return lib
+}
+
+/*
+ * Chalk dust: two tiles of faint specks and scuffs at sizes that share no
+ * factor, so the repeat never shows, and a few broad smudges where a hand
+ * wiped the board. Deterministic, and in `lib`, so it is parsed once.
+ */
+function chalkTile(id, size, n, seed) {
+  const rand = rng(seed)
+  let dots = ''
+  let scuffs = ''
+  for (let i = 0; i < n; i++) {
+    const x = rand() * size
+    const y = rand() * size
+    const big = rand()
+    dots += `<circle cx="${r(x, 1)}" cy="${r(y, 1)}" r="${r(0.35 + big * big * 0.9, 2)}" opacity="${r(0.025 + rand() * 0.07, 3)}"/>`
+  }
+  for (let i = 0; i < n / 9; i++) {
+    const x = rand() * size
+    const y = rand() * size
+    const a = -0.5 + rand() * 0.6
+    const l = 2 + rand() * 7
+    scuffs += `M${r(x, 1)} ${r(y, 1)}l${r(Math.cos(a) * l, 1)} ${r(Math.sin(a) * l, 1)}`
+  }
+  return `<pattern id="${id}" width="${size}" height="${size}" patternUnits="userSpaceOnUse"><g fill="#fff">${dots}</g>` +
+    `<path d="${scuffs}" stroke="#fff" stroke-width="0.8" stroke-linecap="round" opacity="0.05"/></pattern>`
+}
+function chalkDefs(ns) {
+  const rand = rng(404)
+  let smudges = ''
+  for (let i = 0; i < 7; i++) {
+    const cx = 120 + rand() * 1360
+    const cy = 80 + rand() * 740
+    smudges += `<ellipse cx="${r(cx)}" cy="${r(cy)}" rx="${r(180 + rand() * 260)}" ry="${r(70 + rand() * 120)}" transform="rotate(${r(-18 + rand() * 30, 1)} ${r(cx)} ${r(cy)})" fill="url(#${ns}-smudge)" opacity="${r(0.5 + rand() * 0.5, 2)}"/>`
+  }
+  return chalkTile(`${ns}-chalkA`, 211, 300, 17) + chalkTile(`${ns}-chalkB`, 347, 520, 29) +
+    `<radialGradient id="${ns}-smudge"><stop offset="0" stop-color="#fff" stop-opacity="0.045"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>` +
+    `<g id="${ns}-ground"><rect width="1600" height="900" fill="${CHARCOAL}"/>${smudges}` +
+    `<rect width="1600" height="900" fill="url(#${ns}-chalkA)"/><rect width="1600" height="900" fill="url(#${ns}-chalkB)"/></g>`
+}
+
+/** The charcoal sheet and its plate mark (the album's `paper()`, in the dark). */
+const ground = (ns) => {
+  const { x, y, w, h } = COVER_SHEET.plate
+  return `<use href="#${ns}-ground"/><rect x="${x - 10}" y="${y - 10}" width="${w + 20}" height="${h + 20}" rx="5" fill="none" stroke="${PLATE_MARK}" stroke-width="3"/>`
 }
 
 function letterSvg(c, rr, ch, a, ns, fill) {
@@ -255,8 +309,7 @@ export function crosswordPlate({ time, score, ns }) {
     else ink += s
   }
 
-  return `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
-<g transform="translate(${r(CX - cam.x * cam.s, 2)} ${r(CY - cam.y * cam.s, 2)}) scale(${r(cam.s, 5)})"><use href="#${ns}-paper"/><use href="#${ns}-rules"/>${ink}${red}</g>`
+  return `<g transform="translate(${r(CX - cam.x * cam.s, 2)} ${r(CY - cam.y * cam.s, 2)}) scale(${r(cam.s, 5)})"><use href="#${ns}-paper"/><use href="#${ns}-rules"/>${ink}${red}</g>`
 }
 
 /** The film: the opening, the sheet, the puzzle, the lyric in the margin, the end card. */
@@ -270,9 +323,9 @@ export function crosswordFrame({ time, score, lockup = '', uid = 'xw' }) {
     label,
     lib: [libFor(ns)],
     svg: `<defs><clipPath id="${ns}-plate"><rect x="${PX}" y="${PY}" width="${PW}" height="${PH}"/></clipPath></defs>
-${paper(COVER_SHEET)}
+${ground(ns)}
 <g clip-path="url(#${ns}-plate)">${crosswordPlate({ time, score, ns })}</g>
-${marginLyric({ now: time, score: plan.lyric, uid: ns, sheet: COVER_SHEET })}
+${marginLyric({ now: time, score: plan.lyric, uid: ns, sheet: COVER_SHEET, fill: CHALK })}
 ${filmOpening({ time, uid: ns, slug: 'ivory', clock: CLOCK })}`,
   }
 }

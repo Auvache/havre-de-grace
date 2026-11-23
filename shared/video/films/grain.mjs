@@ -1,70 +1,93 @@
 /*
- * New York · Against the Grain — the film (v1, 2026-11-10).
+ * New York · Against the Grain — the film (v2, 2026-11-23).
  *
- * A crowd of small ink arrows, hundreds of them, all streaming toward a yellow
- * light off the right edge, in step with the record's click. One of them is a
- * little slow. On the first "don't" he stops, turns round and goes red, and
- * for the rest of the song he pushes the other way.
+ * The user (2026-11-23): "I like the main idea, but it needs something more
+ * engaging/more progression. Get rid of the sun and any yellow elements. I
+ * just want arrows all of the same size (with one bold red arrow) doing
+ * different things that represent going against the grain, sometimes falling
+ * inline, being ridiculed, persevering, etc. I don't want a crowd to follow
+ * until the end. Also, the whole board should move or 'pulse' with the beat
+ * of the song. I want some of the arrows to turn red at some points. Some can
+ * stay red, others turn back to black and follow the crowd. Be bold!"
  *
- *   Verse 1     Carried along, jostled, overtaken.
- *   Chorus 1    He stops and the crowd parts round him; on "don't" he turns
- *               and goes red. The second "don't" sends a ring out: nobody
- *               turns. He starts upstream.
- *   Break       Upstream. Two knots of the crowd run into him.
- *   Verse 2     On each city a light flares at another edge and the whole
- *               crowd swings to point at it, and tugs him that way. "Bargain,
- *               bend, abandon, exploit" are four ranks that ram him.
- *   Chorus 2    Each "don't" is a ring, and the arrows behind him that it
- *               reaches turn round and fall in: a wedge, him at its point.
- *   No          Seven refusals, seven rings, the wedge bigger each time. On
- *               "New York" the light flares and the crowd surges.
- *   Instr.      The crowd fights back: on every bar a rank of massed arrows
- *               charges down the plate and rams the wedge, each one driving
- *               it back toward the light and stripping a layer of followers,
- *               until he is alone at the light's mouth, still facing away.
- *   Chorus 3    He pushes off again, harder, and they fall in again.
- *   New York    Twelve "No"s, twelve rings. The band stops and so does the
- *               crowd. On the held "York" the last ring goes out slowly and
- *               the camera pulls back, one even move: everything that turned
- *               with him is one great arrow, pointing away. The light goes out.
+ * Seen from above: a crowd of identical ink arrows marching right, a step on
+ * every beat of the click, and the whole board pulsing with the beat (harder
+ * on the downbeat). One arrow, the same size but bold and red, faces the other
+ * way from the first frame and pushes upstream through all of it.
+ *
+ *   Intro       The march. He holds against it.
+ *   Verse 1     Ridiculed: on "They say" the ones round him turn, point and
+ *               wag; on "That easy dreams" a wider circle of them, jabbing on
+ *               the words.
+ *   Chorus 1    On "don't" one beside him turns red and faces his way; on the
+ *               second "don't" another. Three of them, upstream.
+ *   Break       The crowd mocks the second one until it gives in: black again,
+ *               turned round, swept away (falling in line).
+ *   Verse 2     The crowd swings five ways, one per city, and shoves; it
+ *               points at the first ally on "That the only way"; four ranks
+ *               ram them on "bargain, bend, abandon, exploit", and on
+ *               "abandon" the ally does. He is alone.
+ *   Chorus 2    On each "don't" arrows far from him turn red on their own,
+ *               five of them. The crowd mocks two: one holds, one gives in.
+ *   No          A ring from him on every "No", and on each of the first four
+ *               another arrow somewhere turns red. "New York": the crowd surges.
+ *   Instr.      The crowd fights back: on every bar a rank charges into one
+ *               of the reds. Six of them give in; he is driven back across
+ *               the plate, shaking, never turning. Two others hold.
+ *   Chorus 3    He pushes off again, harder. On "don't" the two who held come
+ *               to him; on the second "don't" five more turn red beside them
+ *               and stay: a small red flight. The crowd mocks them; nobody
+ *               cares.
+ *   New York    Only now does the crowd follow. Every "No" is a ring, and
+ *               every arrow it reaches turns round to face his way. The crowd
+ *               slows, stops dead with the band, and on the held "York" the
+ *               last ring takes everyone: the whole crowd marches his way,
+ *               parting ahead of the reds into one great arrowhead with them
+ *               at its tip, and the camera pulls back to see all of it.
+ *
+ * No yellow, no light, no sun: paper, ink and red. Every arrow is the same
+ * size; his is bold.
  *
  * HOW IT IS BUILT
  *
- * The frame is a pure function of the clock. Everything that needs a history
- * is worked out once per score (`planFor`): the stream's advance and his own
- * path are integrated into tables, and who turns on which ring, when, and
- * where they then stand in the wedge is simulated ring by ring.
+ * A pure function of the clock. The crowd is an endless lattice sliding by
+ * D(t), the click-stepped flow integrated once into a table. Everything else
+ * is a field laid over it, in closed form, per arrow, per frame: ranks
+ * (compression waves), ridicule (point at a target, wag, lean in, jab on the
+ * words), the coda's turning rings and the arrowhead, and room round every
+ * red (no arrow ever overlaps one). A red is a lattice arrow taken out of the
+ * lattice at its moment (`ACTORS`): it stands its ground, joins him, is shoved,
+ * and maybe gives in, when it turns back black and is carried off as a free
+ * arrow with the flow. Planned once per score (`planFor`).
  *
- * The stream is an endless lattice of arrows sliding right (`PHI`). The wedge
- * is a region in his frame, a half-width profile `prof(x')` behind his nose;
- * the stream is mapped round it (`|dy|' = (|dy|^p + h^p)^(1/p)`), so the crowd
- * parts at the nose, presses along the flanks and closes behind the barbs.
- * An arrow inside the region when a ring's front reaches it turns round and
- * from then on keeps its place relative to him. A rank of the crowd is a
- * compression wave run through the lattice. The red arrow is the only red
- * thing, with its rings; yellow is only ever a light.
+ * Notes: docs/visualizers/new-york.md.
  */
-import { clamp01, easeOut, easeInOut, easeOutBack, lerp } from '../kit.mjs'
-import { COVER_SHEET, INK, PAPER, RED, SECOND_INK, paper, marginLyric } from '../album.mjs'
+import { clamp01, easeOut, easeInOut, lerp, ramp } from '../kit.mjs'
+import { COVER_SHEET, INK, PAPER, RED, paper, marginLyric } from '../album.mjs'
 import { filmOpening, inOpening } from '../opening.mjs'
 import { endCard } from '../ending.mjs'
 
 const { x: PX, y: PY, w: PW, h: PH } = COVER_SHEET.plate
-const PR = PX + PW
-const PB = PY + PH
 const CX = PX + PW / 2
 const CY = PY + PH / 2
-const YELLOW = SECOND_INK['new-york']
 const TAU = Math.PI * 2
 
-/* ── The crowd's lattice ──────────────────────────────────────────── */
+/* ── Arrows ───────────────────────────────────────────────────────── */
 
+/** Every arrow: half its length, and its head. His is the same, only bold. */
+const AL = 15
+const AH = 9
+const AW = 6.5
+const W_INK = 3
+const W_HIM = 6.4
+
+/** The lattice: spacing, and the tile it repeats in (wider than the pulled-back view). */
 const SX = 58
 const SY = 50
-/** An ordinary arrow: half its length, and its head. */
-const AL = 15
-const AH = 8
-const AW = 6
+const NX = 66
+const NY = 46
+const WX = NX * SX
+const WY = NY * SY
 
 const hash = (i, j, k = 0) => {
   let h = (Math.imul(i, 374761393) + Math.imul(j, 668265263) + Math.imul(k + 1, 1274126177)) | 0
@@ -73,64 +96,32 @@ const hash = (i, j, k = 0) => {
   return (h >>> 0) / 4294967296
 }
 const smooth = (x) => { const u = clamp01(x); return u * u * (3 - 2 * u) }
-const clean = (s) => s.toLowerCase().replace(/[^a-z']/g, '')
-
-/* ── The wedge: the region the turned ones hold ───────────────────── */
-
-/** The room round him when he is alone. */
-const LENS_L = 80
-const LENS_H = 42
-/** The wedge starts this far ahead of his centre. */
-const NOSE = 42
-/** Half-width over length. */
-const K = 0.5
-/** The great arrow's shaft: its half-width and full length. */
-const WS = 360
-const LS_MAX = 1900
-const P = 2.5
-/** The formation's back is cut square: this much to fall from the barbs to the shaft. */
-const BARB = 30
-
-/**
- * Half the region's width at x' (behind him is positive), for a wedge of length Lw and a shaft of
- * length Ls. `sharp` is the formation itself, cut square behind the barbs; without it, the shape
- * the crowd flows round, which closes in behind the barbs gently (or they would whip across).
- */
-function prof(xp, Lw, Ls, sharp = false) {
-  let h = 0
-  const ax = xp < 0 ? -xp : xp
-  if (ax < LENS_L) h = LENS_H * Math.pow(1 - (ax / LENS_L) ** 2, 0.9)
-  if (Lw > 1) {
-    const s = xp + NOSE
-    if (s > 0) {
-      const tail = sharp ? BARB : 40 + 0.45 * K * Lw
-      const ws = Ls > 0 ? Math.min(WS, K * Lw) * smooth(Ls / 300) : 0
-      const end = Math.max(Lw + tail, Lw + BARB + Ls)
-      let w
-      if (s <= Lw) w = K * Math.pow(Lw, 0.15) * Math.pow(s, 0.85)
-      else if (s <= Lw + tail) w = lerp(K * Lw, ws, smooth((s - Lw) / tail))
-      else if (s <= end) w = ws
-      else w = ws * (1 - smooth((s - end) / (sharp ? BARB : 250)))
-      if (w > h) h = w
-    }
+const wrap = (v, c, W) => { const a = c - W / 2; return a + ((((v - a) % W) + W) % W) }
+const BASE = Array.from({ length: NX * NY }, (_, id) => {
+  const i = id % NX
+  const j = (id - i) / NX
+  return {
+    x: i * SX + (j & 1 ? SX / 2 : 0) + (hash(i, j, 1) - 0.5) * 14,
+    y: j * SY + (hash(i, j, 2) - 0.5) * 12,
+    n: (hash(i, j, 3) - 0.5) * 0.16,
+    ph: hash(i, j, 4) * TAU,
   }
-  return h
-}
+})
 
-/* ── The plan, from the score ─────────────────────────────────────── */
+/* ── The flow ─────────────────────────────────────────────────────── */
 
 const DT = 1 / 120
-/** Piecewise-linear keys [[t, v], …] read at t. */
+/** Piecewise-linear keys [[t, v], …] at t. */
 function keyed(keys, t) {
   if (t <= keys[0][0]) return keys[0][1]
   for (let i = 1; i < keys.length; i++) {
     if (t <= keys[i][0]) {
       const [t0, v0] = keys[i - 1]
       const [t1, v1] = keys[i]
-      return v0 + (v1 - v0) * (t - t0) / (t1 - t0)
+      return v0 + ((v1 - v0) * (t - t0)) / (t1 - t0)
     }
   }
-  return keys[keys.length - 1][1]
+  return keys.at(-1)[1]
 }
 const table = (T, t) => {
   const f = t / DT
@@ -138,725 +129,652 @@ const table = (T, t) => {
   return T[i] + (T[i + 1] - T[i]) * (f - i)
 }
 
-/** The five cities, where a light flares for each: by the compass, with New York in the east. */
-const CITIES = [
-  { name: 'memphis', x: 1010, y: PB - 24 },
-  { name: 'nashville', x: 1290, y: PB - 24 },
-  { name: 'austin', x: 520, y: PB - 24 },
-  { name: 'l.a', x: PX + 24, y: 610 },
-  { name: 'detroit', x: 1130, y: PY + 24 },
-]
+/* ── The plan, from the score ─────────────────────────────────────── */
 
+const clean = (s) => s.toLowerCase().replace(/[^a-z']/g, '')
 const plans = new WeakMap()
 function planFor(score) {
-  let plan = plans.get(score)
-  if (!plan) plans.set(score, plan = build(score))
-  return plan
+  let p = plans.get(score)
+  if (!p) { p = build(score); plans.set(score, p) }
+  return p
 }
 
 function build(score) {
+  const L = score.lines
   const beat = 60 / score.bpm
   const phase = score.beatPhase
-  const bar = (n) => phase + 4 * n * beat
-  const L = score.lines
-  const word = (li, text, nth = 0) => {
-    const hit = L[li]?.words.filter((w) => clean(w.text).replace(/'/g, '') === text.replace(/'/g, ''))[nth]
-    if (!hit) throw new Error(`grain: no "${text}" (${nth}) in line ${li} (${L[li]?.text})`)
-    return hit.t
+  /** The k-th sung `word` of line `li`. */
+  const w = (li, word, k = 0) => {
+    const hits = L[li].words.filter((x) => clean(x.text) === word)
+    if (!hits[k]) throw new Error(`grain: no "${word}" #${k} in line ${li}`)
+    return hits[k].t
   }
-  const refusals = (li) => L[li].words.filter((w) => /^(no|don't|won't|not)$/.test(clean(w.text))).map((w) => w.t)
-  const end = score.endCardAt
+  const nos = (li) => L[li].words.filter((x) => clean(x.text) === 'no').map((x) => x.t)
+  const downbeatsIn = (a, b) => {
+    const out = []
+    for (let k = Math.ceil((a - phase) / beat); phase + k * beat < b; k++) if (k % 4 === 0) out.push(phase + k * beat)
+    return out
+  }
 
-  /* The moments. */
   const T = {
-    stop: L[2].start - 1.2, // stopped, a second before the first chorus
-    turn: word(2, "don't"),
-    ring0: word(3, "don't"),
-    cities: CITIES.map((c) => word(4, c.name.replace('.', ''))),
-    shoves: ['bargain', 'bend', 'abandon', 'exploit'].map((w) => word(5, w)),
-    newYork1: word(9, 'new'),
-    drop: word(15, "i'm") - 0.2, // the band stops under "I'm not going to"
-    back: word(15, 'new') - 0.4, // and comes back under "New York"
-    york: word(15, 'york'),
-    end,
+    dont1: w(2, "don't"), dont2: w(3, "don't"),
+    they2: L[4].start, cities: [w(4, 'memphis'), w(4, 'nashville'), w(4, 'austin'), w(4, 'la'), w(4, 'detroit')],
+    only: L[5].start, bargain: w(5, 'bargain'), bend: w(5, 'bend'), abandon: w(5, 'abandon'), exploit: w(5, 'exploit'),
+    dont3: w(6, "don't"), dont4: w(7, "don't"),
+    nos1: nos(8), no1b: L[9].words[0].t, ny1: w(9, 'new'), york1: w(9, 'york'),
+    instr: score.sections.find((s) => s.id === 'break-2'),
+    dont5: w(10, "don't"), dont6: w(11, "don't"),
+    nos2: [...nos(12), ...nos(13), ...nos(14), L[15].words[0].t],
+    stop: 193.7, back: 195.0, york: w(15, 'york'), end: score.endCardAt ?? score.duration,
   }
-  const lights = [word(2, 'lights'), word(6, 'lights'), word(10, 'lights')]
-  /* "They say…": the ones round him turn to point at him, each time for longer and from further off. */
-  T.says = [
-    { t: L[0].start, until: L[0].start + 1.3, r: 250 },
-    { t: L[1].start, until: L[1].start + 1.3, r: 300 },
-    { t: L[4].start, until: T.cities[0] - 0.25, r: 460 },
-    { t: L[5].start, until: L[5].start + 1.7, r: 520 },
+  T.c0 = T.nos2[0]
+  T.turnAll = T.york
+  T.rev = T.york + 0.8
+
+  /* The flow: how fast the crowd marches (px/s on the sheet), stepped on the click. */
+  const SPEED = [
+    [0, 55], [38, 55], [39.5, 66], [57, 66], [58, 58], [68.4, 58], [69, 46], [87, 46], [88, 64], [108, 70],
+    [T.ny1, 70], [T.ny1 + 0.25, 150], [T.york1 + 1.6, 90], [T.instr.from, 112], [T.instr.to - 4, 112], [T.instr.to, 64],
+    [176.4, 60], [184.5, 0], [T.rev, 0], [T.rev + 1.5, -45], [T.rev + 4, -78], [T.end + 1, -78],
   ]
-  /* The light flares on "lights" and the crowd surges at it. */
-  const surge = (t) => {
-    let v = 0
-    for (const t0 of lights) {
-      const a = t - t0
-      if (a > 0 && a < 2) v += smooth(a / 0.3) * (1 - smooth((a - 0.6) / 1.2))
-    }
-    return v
+  /* Its direction: right, except in verse 2, where it swings once per city. */
+  const SWING = [0.85, -0.75, 0.55, -0.62, 0.35]
+  const angleAt = (t) => {
+    let a = 0
+    T.cities.forEach((tc, k) => { if (t >= tc) a = lerp(a, SWING[k], easeInOut(clamp01((t - tc) / 0.32))) })
+    return a * (1 - easeInOut(clamp01((t - (T.cities[4] + 1.6)) / 1.4)))
+  }
+  const step = (t) => {
+    if (t >= T.stop && t < T.back) return 0
+    const u = ((((t - phase) / beat) % 1) + 1) % 1
+    return 1 + 0.9 * Math.cos(TAU * (u - 0.16))
+  }
+  const N = Math.ceil((score.duration + 2) / DT)
+  const Dx = new Float64Array(N)
+  const Dy = new Float64Array(N)
+  for (let k = 1; k < N; k++) {
+    const t = (k - 0.5) * DT
+    const v = keyed(SPEED, t) * step(t)
+    const a = angleAt(t)
+    Dx[k] = Dx[k - 1] + v * Math.cos(a) * DT
+    Dy[k] = Dy[k - 1] + v * Math.sin(a) * DT
   }
 
-  /* Every ring: when, and how long the wedge is once it has passed. */
-  const rings = []
-  const grow = (t, to, o = {}) => rings.push({ t, to, ...o })
-  grow(T.ring0, 0, { reach: 330 }) // nobody turns
-  const c2 = [...refusals(6), ...refusals(7)]
-  grow(c2[0], 230); grow(c2[1], 330)
-  ;[400, 470, 540, 620].forEach((to, k) => grow(refusals(8)[k], to))
-  ;[700, 780, 860].forEach((to, k) => grow(refusals(9)[k], to))
-  const INSTR_FROM = rings.length
-  const c3 = [...refusals(10), ...refusals(11)]
-  grow(c3[0], 260); grow(c3[1], 360)
-  ;[440, 520, 600, 690].forEach((to, k) => grow(refusals(12)[k], to))
-  ;[790, 890, 1000, 1110].forEach((to, k) => grow(refusals(13)[k], to))
-  ;[1230, 1350, 1480, 1600].forEach((to, k) => grow(refusals(14)[k], to))
-  ;[1700, 1800, 1900].forEach((to, k) => grow(refusals(15)[k], to))
-  grow(T.york, 2000, { york: true })
+  const pl = { T, beat, phase, Dx, Dy, angleAt, speed: (t) => keyed(SPEED, t) }
+  pl.D = (t) => [table(Dx, t), table(Dy, t)]
 
-  /* The ranks that ram him: the two knots in the break, the four shoves, and the instrumental's eleven. */
-  const hits = []
-  const knot = (t, o) => hits.push({ t, push: 26, back: 10, ext: 150, m: 0.74, w: 52, ...o })
-  knot(bar(23), { ext: 120, push: 20 }); knot(bar(25)); knot(bar(27), { ext: 190, push: 30 })
-  T.shoves.forEach((t, k) => knot(t, { push: 30, back: 8, ext: 170 + 30 * k }))
-  const STRIP = [780, 700, 620, 540, 460, 380, 300, 220, 150, 80, 0]
-  const firstBar = Math.round((122.37 - phase) / (4 * beat)) + 1
-  STRIP.forEach((to, k) => hits.push({
-    t: bar(firstBar + k), push: 80, back: 0, ext: 260 + 55 * k, m: 0.8, w: 62 + 3 * k, to, wall: k >= 8, big: true,
-  }))
-  T.hit0 = bar(firstBar)
-  T.hitN = bar(firstBar + STRIP.length - 1)
-  T.instr = bar(firstBar - 1)
-
-  /* The wedge's length through the song: every ring adds, every big hit takes away. */
-  const steps = []
-  let at = 0
-  for (const [k, ring] of rings.entries()) {
-    if (k === INSTR_FROM) {
-      for (const h of hits) if (h.big) { steps.push({ t: h.t, d: h.to - at, dur: 0.5 }); at = h.to }
-    }
-    if (ring.to !== at) steps.push({ t: ring.t, d: ring.to - at, dur: ring.york ? 1.2 : 0.6 })
-    ring.from = at
-    at = ring.to
-  }
-  const LwAt = (t) => {
-    let v = 0
-    for (const s of steps) {
-      if (t <= s.t) break
-      v += s.d * smooth((t - s.t) / s.dur)
-    }
-    return v < 0 ? 0 : v
-  }
-  /* The York ring is slow, a held note: its front is the shaft's growing end. */
-  const YORK_C = 540
-  const LsAt = (t) => (t <= T.york ? 0 : Math.max(0, Math.min(LS_MAX, YORK_C * (t - T.york) - (2000 + BARB + NOSE))))
-
-  /* ── The stream's advance: Φ(t), integrated ── */
-  const V0 = SX / (2 * beat)
-  const speedKeys = [
-    [0, 1], [T.cities[0] - 0.6, 1], [T.cities[0], 0.3], [T.cities[4] + 2.1, 0.3], [T.cities[4] + 3.8, 1],
-    [T.newYork1, 1], [T.newYork1 + 1.2, 1.7], [T.instr, 2], [T.hitN + 1, 2], [T.hitN + 5, 1.5],
-    [c3[0], 1.5], [c3[0] + 14, 1], [T.drop - 0.12, 1], [T.drop + 0.06, 0], [T.back - 0.05, 0], [T.back + 0.12, 1.1],
-    [T.york, 1.1], [end, 0.8],
+  /* ── Ranks: compression waves that ram a red (by id) on a word or a downbeat. ── */
+  const ranks = [
+    { t: T.bargain, target: 'him', s: 150, a: 1 },
+    { t: T.bend, target: 'A', s: 150, a: 1 },
+    { t: T.abandon, target: 'A', s: 150, a: 1 },
+    { t: T.exploit, target: 'him', s: 170, a: 1 },
   ]
-  const n = Math.ceil(score.duration / DT) + 2
-  const PHI = new Float64Array(n)
-  const pulse = (t) => Math.cos(TAU * (t - phase) / beat - 0.7)
-  for (let i = 1; i < n; i++) {
-    const t = (i - 0.5) * DT
-    PHI[i] = PHI[i - 1] + V0 * keyed(speedKeys, t) * (1 + 0.9 * surge(t)) * (1 + 0.55 * pulse(t)) * DT
-  }
+  const bars = downbeatsIn(T.instr.from + 1.8, T.instr.to - 3.5)
+  // Who each bar of the instrumental rams. The ones marked "gives" give in.
+  const INSTR = ['N1', 'him', 'F', 'N2', 'him', 'C', 'G', 'him', 'N3', 'E', 'N4', 'him', 'him']
+  bars.forEach((t, k) => ranks.push({ t, target: INSTR[k % INSTR.length], s: 210, a: 1, big: k >= bars.length - 3 }))
+  pl.ranks = ranks
+  pl.bars = bars
 
-  /* ── His path: a velocity, integrated, plus the knocks ── */
-  const vKeys = [
-    [0, 26], [20, 26], [30, 21], [L[1].end - 0.5, 18], [L[1].end + 0.3, 3], [L[1].end + 1.2, 14], [T.stop - 0.9, 12], [T.stop, 0],
-    [T.ring0, 0], [T.ring0 + 0.5, -15], [L[4].start - 2.0, -15], [L[4].start - 1.1, 0],
-    [c2[0], 0], [c2[0] + 0.5, -16], [L[8].start - 2.2, -16], [L[8].start - 1.2, 0],
-    [T.newYork1 + 0.6, 0], [T.newYork1 + 1.6, 6], [T.instr, 6], [T.instr + 0.8, 0],
-    [c3[0], 0], [c3[0] + 0.5, -34], [c3[0] + 15, -34], [L[12].start - 2.2, -14], [L[12].start - 1.1, 0],
-    [T.york, 0], [T.york + 1.0, -22], [end, -22],
+  /* ── Ridicule: the crowd round a red turns to point at it and wags. ── */
+  const wordsIn = (a, b) => L.flatMap((l) => l.words.map((x) => x.t)).filter((t) => t >= a && t <= b)
+  const jeer = (target, from, to, R) => ({ target, from, to, R, jabs: wordsIn(from, to) })
+  pl.jeers = [
+    jeer('him', L[0].start - 0.2, L[0].end + 0.8, 190),
+    jeer('him', L[1].start - 0.2, L[1].end + 0.8, 290),
+    jeer('B', 57.8, 63.0, 190),
+    jeer('him', T.they2 - 0.1, T.cities[0] - 0.05, 250),
+    jeer('A', T.only - 0.1, T.bargain - 0.2, 200),
+    jeer('C', 90.6, 96.4, 175),
+    jeer('D', 99.6, 104.2, 175),
+    jeer('him', 159.2, 164.6, 300),
   ]
-  const RX = new Float64Array(n)
-  RX[0] = 18
-  for (let i = 1; i < n; i++) {
-    const t = (i - 0.5) * DT
-    const v = keyed(vKeys, t)
-    RX[i] = RX[i - 1] + v * (1 + (v < 0 ? 0.8 : 0.25) * pulse(t)) * DT
-  }
-  /* A lunge on every refusal from the first chorus-2 ring on; a recoil on every hit. */
-  const lunges = rings.filter((ring) => ring.to > 0 && !ring.york).map((ring) => ring.t)
-  const jostles = [word(0, 'lost'), word(0, 'rocks'), word(0, 'burning'), word(0, 'coals'), word(1, 'dreams'), word(1, 'submarines'), word(1, 'undermine'), word(1, 'goal')]
-  const redAt = (t) => {
-    let x = table(RX, t)
-    // His line stays between the same two rows of the crowd all song: an arrow cannot change sides of him.
-    const y = CY + 6 * Math.sin(0.043 * t + 1) + 3 * Math.sin(0.117 * t)
-    // What knocks him about is drawn on him alone (oy); the ones behind him hold their line.
-    let oy = 0
-    let kick = 0
-    for (const t0 of lunges) {
-      if (t > t0) x -= 10 * easeOutBack(clamp01((t - t0) / 0.28), 2.2)
-    }
-    for (const [k, h] of hits.entries()) {
-      if (t <= h.t) continue
-      const a = t - h.t
-      x += h.push * easeOut(clamp01(a / 0.4)) - h.back * easeInOut(clamp01((a - 0.5) / 1.3))
-      if (a < 1.6) {
-        const d = Math.exp(-a / 0.28)
-        oy += (k % 2 ? -1 : 1) * (h.big ? 16 : 8) * d * Math.sin(a * 9)
-        kick += (k % 2 ? 1 : -1) * (h.big ? 0.5 : 0.3) * d * Math.cos(a * 11)
+
+  /* ── Him ── */
+  // Where he means to be (his own progress); the ranks' pushes and kicks go on top.
+  const HK = [
+    [0, 1010, 432], [19.5, 1005, 432], [38.4, 990, 428], [57.6, 860, 420], [68.4, 845, 424], [81.2, 815, 426],
+    [88, 815, 426], [106.5, 700, 418], [121.5, 640, 420], [T.instr.to + 0.3, 640, 420], [T.dont6 + 2, 470, 424],
+    [176.4, 420, 426], [T.stop, 395, 426],
+  ]
+  const hk = (t) => {
+    if (t <= HK[0][0]) return [HK[0][1], HK[0][2]]
+    for (let i = 1; i < HK.length; i++) {
+      if (t <= HK[i][0]) {
+        const [t0, x0, y0] = HK[i - 1]
+        const [t1, x1, y1] = HK[i]
+        const u = easeInOut((t - t0) / (t1 - t0))
+        return [lerp(x0, x1, u), lerp(y0, y1, u)]
       }
     }
-    for (const t0 of lights) {
-      const a = t - t0
-      if (a > 0 && a < 3) x += 15 * smooth(a / 0.5) * (1 - smooth((a - 0.9) / 1.6))
-    }
-    // Alone at the mouth of the light: he shakes with the holding, and is still a second before he sings.
-    const hold = smooth((t - T.hitN - 0.8) / 1.5) * (1 - smooth((t - (c3[0] - 1.9)) / 0.6))
-    if (hold > 0) { oy += 2.6 * hold * Math.sin(t * 27); x += 1.8 * hold * Math.sin(t * 31 + 1) }
-    for (const [k, t0] of jostles.entries()) {
-      const a = t - t0
-      if (a <= 0 || a > 2) continue
-      const d = Math.exp(-a / 0.35)
-      oy += (k % 2 ? -1 : 1) * 15 * d * Math.sin(a * 7)
-      kick += (k % 2 ? -1 : 1) * 0.3 * d * Math.cos(a * 9)
-      x += 5 * d
-    }
-    for (const [k, t0] of T.cities.entries()) {
-      const a = t - t0
-      if (a <= 0 || a > 1.6) continue
-      const c = CITIES[k]
-      const p = easeOut(clamp01(a / 0.2)) * (1 - easeInOut(clamp01((a - 0.3) / 0.7)))
-      const dx = c.x - x
-      const dy = c.y - y
-      const m = Math.hypot(dx, dy) || 1
-      x += 26 * p * dx / m
-      oy += 26 * p * dy / m
-      kick += 0.45 * p * Math.sign(dy) * (dx < 0 ? 0.4 : 1)
-    }
-    return { x, y, oy, kick }
+    return [HK.at(-1)[1], HK.at(-1)[2]]
   }
 
-  /* Wave fronts: where each rank's apex is aimed, once his path is known. */
-  const WAVE_C = 430
-  for (const h of hits) {
-    const at0 = redAt(h.t - 0.001)
-    h.hitX = at0.x - NOSE - 10
-    h.cy = at0.y
-    h.launch = h.t - (h.hitX - (PX - 140)) / WAVE_C
-    h.slope = h.wall ? 0.12 : 0.6
+  /* ── The reds: who turns, when, where, and what becomes of them. ── */
+  // mode: 'hold' (stand its ground, edging upstream), 'beside' (with him, at `off`), 'free' (gave in).
+  const N1 = T.nos1
+  const ACTORS = [
+    { id: 'A', at: T.dont1, near: [40, -62], rel: true, segs: [['beside', T.dont1, { off: [36, -SY] }], ['free', T.abandon + 0.15]] },
+    { id: 'B', at: T.dont2, near: [40, 62], rel: true, segs: [['beside', T.dont2, { off: [36, SY] }], ['free', 63.0]] },
+    { id: 'C', at: T.dont3, near: [380, 250], segs: [['hold', T.dont3], ['beside', T.dont5, { off: [50, -SY], join: 3.2 }]] },
+    { id: 'D', at: T.dont3 + 0.2, near: [560, 650], segs: [['hold', T.dont3 + 0.2], ['free', 104.4]] },
+    { id: 'E', at: T.dont3 + 0.4, near: [1350, 270], segs: [['hold', T.dont3 + 0.4], ['beside', T.dont5 + 0.3, { off: [50, SY], join: 3.4 }]] },
+    { id: 'F', at: T.dont4, near: [240, 540], segs: [['hold', T.dont4]] },
+    { id: 'G', at: T.dont4 + 0.25, near: [1180, 680], segs: [['hold', T.dont4 + 0.25]] },
+    { id: 'N1', at: N1[0], near: [620, 160], segs: [['hold', N1[0]]] },
+    { id: 'N2', at: N1[1], near: [980, 700], segs: [['hold', N1[1]]] },
+    { id: 'N3', at: N1[2], near: [300, 330], segs: [['hold', N1[2]]] },
+    { id: 'N4', at: N1[3], near: [1420, 520], segs: [['hold', N1[3]]] },
+    ...[[100, -2 * SY], [100, 2 * SY], [104, 0], [156, -3 * SY], [156, 3 * SY]].map((off, k) => ({
+      id: `I${k + 1}`, at: T.dont6 + 0.12 * k, near: [off[0] + 20, off[1] * 1.05], rel: true,
+      segs: [['beside', T.dont6 + 0.12 * k, { off, join: 1.4 }]],
+    })),
+  ]
+  // The instrumental's ranks take whoever they ram, except him, C and E: those hold.
+  const KEEP = new Set(['him', 'C', 'E'])
+  for (const r of ranks) {
+    if (!(r.t > T.instr.from && !KEEP.has(r.target))) continue
+    const a = ACTORS.find((x) => x.id === r.target)
+    if (a && !a.segs.some(([m]) => m === 'free')) a.segs.push(['free', r.t + 0.5])
+  }
+  for (const a of ACTORS) {
+    a.segs = a.segs.map(([mode, t, o = {}]) => ({ mode, t, join: 1.6, ...o }))
+    a.end = a.segs.find((s) => s.mode === 'free')?.t ?? Infinity
+    a.hits = ranks.filter((r) => r.target === a.id && r.t > a.at && r.t < a.end + 0.6)
+  }
+  pl.actors = ACTORS
+  pl.byId = new Map(ACTORS.map((a) => [a.id, a]))
+
+  // His hits: a kick back on each, and in the instrumental a push that stays.
+  const hisHits = ranks.filter((r) => r.target === 'him')
+  const PUSH = (r) => (r.t > T.instr.from ? (r.big ? 70 : 115) : 32)
+  /*
+   * Every red, and he, keeps to a line midway between two rows of the crowd
+   * (the rows only ever move together), so no row ever runs through one of
+   * them: the crowd always knows which side to pass on.
+   */
+  pl.snap = (y, t) => y + cmod(pl.D(t)[1] + SY / 2 - y, SY)
+  const hisLine = pl.snap(HK[0][2], 0)
+  pl.him = (t) => {
+    let [x] = hk(Math.min(t, T.rev))
+    let y = hisLine + pl.D(t)[1] - pl.D(0)[1]
+    for (const r of hisHits) {
+      if (t < r.t) break
+      x += PUSH(r) * easeOut(clamp01((t - r.t) / 0.35))
+    }
+    // The cities tug him their way.
+    T.cities.forEach((tc, k) => {
+      const u = t - tc
+      if (u > 0 && u < 2) x += 22 * kick(u, 0.45) * Math.cos(SWING[k])
+    })
+    for (const r of hisHits) x += 26 * kick(t - r.t, 0.32)
+    // A lunge on every No.
+    for (const n of [...T.nos1, T.no1b, ...T.nos2]) x -= 16 * kick(t - n, 0.25)
+    // Jostled when mocked.
+    for (const j of pl.jeers) if (j.target === 'him') for (const jt of j.jabs) y += 5 * kick(t - jt, 0.2) * (hash(Math.round(jt * 100), 7) - 0.5) * 2
+    // From the turn on, he marches with everyone.
+    if (t > T.rev) x += pl.D(t)[0] - pl.D(T.rev)[0]
+    return [x, y]
+  }
+  pl.hisHits = hisHits
+
+  /* Where each red starts: the lattice arrow nearest its mark at that moment. */
+  const used = new Set()
+  for (const a of ACTORS) {
+    const [hx, hy] = pl.him(a.at)
+    const want = a.rel ? [hx + a.near[0], hy + a.near[1]] : a.near
+    const [dx, dy] = pl.D(a.at)
+    let best = -1
+    let bd = Infinity
+    for (let id = 0; id < BASE.length; id++) {
+      if (used.has(id)) continue
+      const x = wrap(BASE[id].x + dx, CX, WX)
+      const y = wrap(BASE[id].y + dy, CY, WY)
+      const d = Math.hypot(x - want[0], y - want[1])
+      if (d < bd) { bd = d; best = id }
+    }
+    used.add(best)
+    a.slot = best
+    a.start = [wrap(BASE[best].x + dx, CX, WX), wrap(BASE[best].y + dy, CY, WY)]
+  }
+  pl.slots = new Map(ACTORS.map((a) => [a.slot, a]))
+
+  // Anchors for each segment, in order (a segment starts where the last one had it).
+  for (const a of ACTORS) {
+    a.segs.forEach((s, k) => {
+      s.anchor = k === 0 ? a.start : actorPos(pl, a, s.t, k - 1)
+      s.Dy = pl.D(s.t)[1]
+      if (s.mode === 'hold') s.line = pl.snap(s.anchor[1], s.t)
+      if (s.mode === 'free') {
+        // Back in with the crowd, a little to one side of its line (never on it: that is where the reds are).
+        s.line = pl.snap(s.anchor[1], s.t) + (hash(a.slot, 5) < 0.5 ? -11 : 11)
+        // Carried off: easing up to the flow's speed over 1.2 s.
+        const ramp1 = 1.2
+        let ox = 0
+        let oy = 0
+        const tab = []
+        for (let t = s.t; t <= s.t + ramp1 + 1e-9; t += DT) {
+          const e = easeInOut((t - s.t) / ramp1)
+          const [x1, y1] = pl.D(t + DT)
+          const [x0, y0] = pl.D(t)
+          ox += e * (x1 - x0)
+          oy += e * (y1 - y0)
+          tab.push([ox, oy])
+        }
+        s.tab = tab
+        s.ramp = ramp1
+        s.D1 = pl.D(s.t + ramp1)
+      }
+    })
   }
 
-  const pl = { beat, phase, bar, T, lights, rings, hits, LwAt, LsAt, PHI, redAt, WAVE_C, YORK_C, V0, speedKeys, c3, pulse }
-  simulate(pl)
+  /*
+   * A red's room in the crowd: none while it crosses rows (stepping out of
+   * line, going to him), full once it stands on its line, shrinking away as it
+   * gives in.
+   */
+  for (const a of ACTORS) {
+    const gaps = [[a.at - 0.05, a.at + 0.55]]
+    a.segs.forEach((sg, k) => { if (k > 0 && sg.mode === 'beside') gaps.push([sg.t - 0.1, sg.t + sg.join + 0.05]) })
+    a.room = (t) => {
+      let r = 1 - smooth((t - a.end) / 0.6)
+      for (const [g0, g1] of gaps) r *= 1 - smooth((t - (g0 - 0.35)) / 0.35) * (1 - smooth((t - g1) / 0.45))
+      return r
+    }
+  }
+
+  /* The coda's rings: the call goes out from him on every No; each one turns the crowd it reaches. */
+  pl.c0 = pl.him(T.c0)
+  pl.rings = T.nos2.map((t, k) => ({ t, v: 560, max: 150 + 92 * (k + 1) }))
+  pl.rings.push({ t: T.turnAll, v: 760, max: 4200, slow: true })
+  pl.rings1 = [...T.nos1, T.no1b].map((t) => ({ t, v: 520, max: 210 }))
   return pl
 }
 
-/* ── The stream: where arrow (i, j) is, and which way it points ───── */
-
-const OUT = { x: 0, y: 0, a: 0, s: 1, bold: 0, ny: 0 }
-
-/**
- * Stream arrow (i, j) at t, written into OUT. `Lw`/`Ls` are the wedge the
- * stream is parting round (an arrow about to turn is held to the wedge as it
- * was when its ring set out). Returns false if it has been squeezed to nothing
- * (OUT is still where it would be).
- */
-function streamAt(pl, i, j, t, red, Lw, Ls, phi) {
-  let x = (i + (j & 1 ? 0.5 : 0)) * SX + (hash(i, j, 1) - 0.5) * 16 + phi
-  let y = CY + (j + 0.5) * SY + (hash(i, j, 2) - 0.5) * 14
-  let bold = 0
-  let tilt = 0.1 * Math.sin(t * 0.7 + hash(i, j, 3) * TAU + x * 0.004)
-  let dirx = 1
-  let diry = 0
-
-  // The ranks: a compression running down the lattice, faster than the stream.
-  for (const h of pl.hits) {
-    if (t < h.launch || t > h.t + 0.9) continue
-    const amp = smooth((t - h.launch) / 0.35) * (1 - smooth((t - h.t) / 0.8))
-    const lat = Math.abs(y - h.cy)
-    const side = 1 - smooth((lat - h.ext * 0.65) / (h.ext * 0.35))
-    if (side <= 0) continue
-    const u = x - (h.hitX - pl.WAVE_C * (h.t - t) - h.slope * lat)
-    const g = Math.exp(-(u * u) / (2 * h.w * h.w))
-    x -= h.m * amp * side * u * g
-    const core = amp * side * g
-    if (core > bold) bold = core
-  }
-
-  // "They say": the ones round him turn to tell him.
-  for (const say of pl.T.says) {
-    if (t < say.t - 0.05 || t > say.until + 0.9) continue
-    const dx = red.x - x
-    const dy = red.y - y
-    const m = Math.hypot(dx, dy)
-    if (m > say.r || m < 1) continue
-    const w = easeOut(clamp01((t - say.t + 0.05 * hash(i, j, 4)) / 0.3)) * (1 - easeInOut(clamp01((t - say.until) / 0.8))) * smooth((say.r - m) / (say.r * 0.45))
-    dirx += (dx / m - 1) * w
-    diry += (dy / m) * w
-  }
-
-  // The cities: the whole field swings to point at each in turn, and lunges at it.
-  if (t > pl.T.cities[0] - 0.1 && t < pl.T.cities[4] + 4) {
-    for (let k = 0; k < 5; k++) {
-      const t0 = pl.T.cities[k]
-      if (t < t0) break
-      const until = k < 4 ? pl.T.cities[k + 1] : t0 + 2.0
-      const w = easeOut(clamp01((t - t0) / 0.22)) * (1 - easeInOut(clamp01((t - until) / (k < 4 ? 0.22 : 1.3))))
-      if (w <= 0.001) continue
-      const c = CITIES[k]
-      const dx = c.x - x
-      const dy = c.y - y
-      const m = Math.hypot(dx, dy) || 1
-      const near = 0.72 + 0.28 * clamp01(1 - m / 1300)
-      dirx += (dx / m - 1) * w * near
-      diry += (dy / m) * w * near
-      const a = t - t0 - 0.04 * hash(i, j, 4)
-      if (a > 0 && a < 1) {
-        const p = easeOut(clamp01(a / 0.16)) * (1 - easeInOut(clamp01((a - 0.2) / 0.6)))
-        x += 15 * p * dx / m
-        y += 15 * p * dy / m
-      }
-    }
-  }
-
-  // Round him and his: the crowd parts at the nose and closes behind.
-  OUT.ny = y
-  const xp = x - red.x
-  let scale = 1
-  const h = prof(xp, Lw, Ls)
-  if (h > 0.5) {
-    const dy = y - red.y
-    const ady = dy < 0 ? -dy : dy
-    const sgn = dy < 0 ? -1 : 1
-    const out = Math.pow(Math.pow(ady, P) + Math.pow(h, P), 1 / P)
-    y = red.y + sgn * out
-    const dh = (prof(xp + 3, Lw, Ls) - prof(xp - 3, Lw, Ls)) / 6
-    tilt += sgn * Math.atan(0.9 * dh * Math.pow(h / out, P - 1))
-    // The deepest are squeezed out along a big wedge's flank, or the rim would be solid ink.
-    if (h > 70) {
-      const keep = clamp01(((ady / h) * 2.4 + 0.12 - hash(i, j, 5)) / 0.3)
-      scale = lerp(1, keep, smooth((h - 70) / 100))
-    }
-  }
-
-  // A ring going by: they shiver, even when they do not turn.
-  for (const ring of pl.rings) {
-    const a = t - ring.t
-    if (a <= 0 || a > ring.life) continue
-    const d = Math.hypot(x - red.x, y - red.y)
-    const f = d - ring.c * a
-    if (f > -90 && f < 40) tilt += (hash(i, j, 6) < 0.5 ? -1 : 1) * 0.55 * Math.exp(-(f * f) / 1800) * ring.fade(a)
-  }
-
-  OUT.x = x
-  OUT.y = y
-  OUT.a = Math.atan2(diry, dirx) + tilt
-  OUT.s = scale
-  OUT.bold = bold
-  return scale >= 0.12
+/** A blow, then letting go: 0 → 1 → 0 over about `tau` seconds. */
+function kick(u, tau) {
+  if (u <= 0) return 0
+  return (1 - Math.exp(-u / 0.045)) * Math.exp(-u / tau)
 }
 
-/* ── Who turns, when, and where they then stand ───────────────────── */
+/** A red's place at time t, in segment k (or whichever it is in). Sheet units, no camera. */
+function actorPos(pl, a, t, k = null) {
+  if (k == null) { k = 0; for (let i = 0; i < a.segs.length; i++) if (t >= a.segs[i].t) k = i }
+  const s = a.segs[k]
+  let p
+  if (s.mode === 'hold') {
+    // Standing its ground, edging upstream; every rank that rams it drives it back for good.
+    const dt = Math.max(0, t - s.t)
+    let x = s.anchor[0] - 9 * dt
+    const y = s.line + pl.D(t)[1] - s.Dy + 6 * Math.sin(dt * 0.7 + a.slot)
+    for (const r of a.hits) if (t > r.t && r.t >= s.t) x += 60 * easeOut(clamp01((t - r.t) / 0.35))
+    p = [Math.min(PX + PW - 50, Math.max(PX + 50, x)), y]
+  }
+  else if (s.mode === 'beside') {
+    const [hx, hy] = pl.him(t)
+    p = [hx + s.off[0], hy + s.off[1] + 3 * Math.sin(t * 1.7 + a.slot)]
+  }
+  else {
+    const u = t - s.t
+    let o
+    if (u <= 0) o = [0, 0]
+    else if (u < s.ramp) o = s.tab[Math.min(s.tab.length - 1, Math.floor(u / DT))]
+    else { const [x, y] = pl.D(t); const e = s.tab.at(-1); o = [e[0] + x - s.D1[0], e[1] + y - s.D1[1]] }
+    p = [s.anchor[0] + o[0], lerp(s.anchor[1], s.line, easeInOut(clamp01(u / s.ramp))) + pl.D(t)[1] - s.Dy]
+  }
+  for (const r of a.hits) p[0] += 30 * kick(t - r.t, 0.3)
+  // Coming into a segment: eased from where the last one had it.
+  if (k > 0 && s.mode !== 'free' && t < s.t + s.join) {
+    const prev = actorPos(pl, a, t, k - 1)
+    const e = easeInOut((t - s.t) / s.join)
+    p = [lerp(prev[0], p[0], e), lerp(prev[1], p[1], e)]
+  }
+  return p
+}
 
-/** The formation: ranks behind him, one straight down his own line. */
-const FX = 56
-const FY = 48
-const siteX = (a, b) => a * FX + (b & 1 ? FX / 2 : 0)
-const siteKey = (a, b) => a * 8192 + (b + 4096)
-/** How far an arrow will go to fall in. */
-const FALL_IN = 70
-/** And how far, for a place nobody is standing near. */
-const FAR = 1100
+/** How red a red is at t (0 = ink): on at its moment, off as it gives in. */
+function redness(a, t) {
+  return easeOut(clamp01((t - a.at) / 0.35)) * (1 - easeInOut(clamp01((t - a.end) / 0.8)))
+}
 
-function simulate(pl) {
-  const turned = new Map() // lattice key → follower
-  const taken = new Set() // formation sites
-  const followers = []
-  const key = (i, j) => i * 8192 + (j + 4096)
-  for (const ring of pl.rings) {
-    ring.reach = ring.reach ?? (ring.york ? NOSE + 2000 + BARB + LS_MAX + 250 : Math.max(280, ring.to * 1.2 + 140))
-    ring.c = ring.york ? pl.YORK_C : Math.max(720, ring.reach / 0.62)
-    ring.life = ring.reach / ring.c
-    const life = ring.life
-    ring.fade = (a) => smooth(a / 0.08) * (1 - smooth((a - life * 0.55) / (life * 0.45)))
-  }
-  // The ranks strip the wedge, a layer a hit, the back and the flanks first.
-  const strip = (h) => {
-    for (const f of followers) {
-      if (f.tc > h.t || f.ts < Infinity) continue
-      if (h.to > 0 && Math.abs(f.fy) < prof(f.fx, h.to, 0, true) - 8) continue
-      f.ts = h.t + 0.04 + clamp01(f.fx / 900) * 0.4 + f.seed * 0.18
-      taken.delete(f.site)
-    }
-  }
-  const pending = pl.hits.filter((h) => h.big)
-  for (const ring of pl.rings) {
-    while (pending.length && pending[0].t < ring.t) strip(pending.shift())
-    const reach = ring.reach
-    if (ring.to <= 0) continue
-    const Lw0 = pl.LwAt(ring.t)
-    const red0 = pl.redAt(ring.t)
-    const phi0 = table(pl.PHI, ring.t)
-    const LsEnd = ring.york ? LS_MAX : 0
-    const MARGIN = ring.to > 1600 ? 520 : 260
-    const wide = (ring.york ? Math.max(K * ring.to, WS) : K * ring.to) + MARGIN
-    const i0 = Math.floor((red0.x - 700 - phi0) / SX)
-    const i1 = Math.ceil((red0.x + reach + (ring.to > 1100 ? 1000 : 300) - phi0) / SX)
-    const j0 = Math.floor((red0.y - wide - 60 - CY) / SY)
-    const j1 = Math.ceil((red0.y + wide + 60 - CY) / SY)
-    // Everyone near enough to be asked: where each is, in his frame, when the ring's front reaches it.
-    const cands = []
-    for (let j = j0; j <= j1; j++) {
-      for (let i = i0; i <= i1; i++) {
-        if (turned.has(key(i, j))) continue
-        // A fixed point: the arrow drifts a little while the front comes out to it.
-        let tc = ring.t
-        let red = red0
-        for (let pass = 0; pass < 4; pass++) {
-          red = pl.redAt(tc)
-          streamAt(pl, i, j, tc, red, Lw0, 0, table(pl.PHI, tc))
-          tc = ring.t + Math.hypot(OUT.x - red.x, OUT.y - red.y) / ring.c
-        }
-        red = pl.redAt(tc)
-        streamAt(pl, i, j, tc, red, Lw0, 0, table(pl.PHI, tc))
-        const sx = OUT.x - red.x
-        const sy = OUT.y - red.y
-        if (Math.abs(sy) > prof(sx, ring.to, LsEnd) + MARGIN) continue
-        cands.push({ i, j, tc, sx, sy, ny: OUT.ny - red.y, a0: OUT.a, s0: OUT.s, used: false })
-      }
-    }
-    // The places to fill: every free site inside the wedge this ring makes, nearest him first.
-    const sites = []
-    const bMax = Math.ceil(wide / FY)
-    const aMax = Math.ceil((reach + 100) / FX)
-    for (let b = -bMax; b <= bMax; b++) {
-      for (let a = 0; a <= aMax; a++) {
-        if (taken.has(siteKey(a, b))) continue
-        const x = siteX(a, b)
-        const y = b * FY
-        if (Math.hypot(x, y) < 76) continue
-        if (Math.abs(y) > prof(x, ring.to, LsEnd, true) - 8) continue
-        sites.push({ a, b, x, y, d: Math.hypot(x, y) })
-      }
-    }
-    sites.sort((p, q) => p.d - q.d)
-    // First whoever is standing in the place (a coarse grid finds them). Then, for the places
-    // still empty (the hollow the crowd leaves behind the barbs, the flanks' new rows), whoever
-    // is nearest, from the crowd pressed along the rim or from outside: they come in to close the ranks.
-    const CELL = 80
-    const shown = new Map()
-    for (const c of cands) {
-      const g = Math.floor(c.sx / CELL) * 4096 + Math.floor(c.sy / CELL) + 2048
-      if (!shown.has(g)) shown.set(g, [])
-      shown.get(g).push(c)
-    }
-    const join = (site, best) => {
-      best.used = true
-      site.done = true
-      taken.add(siteKey(site.a, site.b))
-      const seed = hash(best.i, best.j, 7)
-      const fx = site.x + (seed - 0.5) * 6
-      const fy = site.y + (hash(best.i, best.j, 9) - 0.5) * 6
-      const f = {
-        i: best.i, j: best.j, tc: best.tc, t0: ring.t, Lw0, sx: best.sx, sy: best.sy, a0: best.a0, s0: best.s0,
-        fx, fy, fall: 0.7 + Math.hypot(best.sx - fx, best.sy - fy) / 350, ts: Infinity, seed, site: siteKey(site.a, site.b),
-      }
-      turned.set(key(best.i, best.j), f)
-      followers.push(f)
-    }
-    for (const site of sites) {
-      let best = null
-      let bestD = FALL_IN
-      const gx = Math.floor(site.x / CELL)
-      const gy = Math.floor(site.y / CELL)
-      for (let u = -1; u <= 1; u++) {
-        for (let v = -1; v <= 1; v++) {
-          const cell = shown.get((gx + u) * 4096 + gy + v + 2048)
-          if (!cell) continue
-          for (const c of cell) {
-            if (c.used || c.s0 < 0.5) continue
-            const d = Math.hypot(c.sx - site.x, c.sy - site.y)
-            if (d < bestD) { bestD = d; best = c }
-          }
-        }
-      }
-      if (best) join(site, best)
-    }
-    for (const site of sites) {
-      if (site.done) continue
-      let best = null
-      let bestD = FAR
-      for (const c of cands) {
-        if (c.used) continue
-        const d = Math.hypot(c.sx - site.x, c.sy - site.y)
-        if (d < bestD) { bestD = d; best = c }
-      }
-      if (best) join(site, best)
-    }
-  }
-  followers.sort((a, b) => a.tc - b.tc)
-  pl.turned = turned
-  pl.followers = followers
-  pl.key = key
+/*
+ * A rank: the crowd within S1 behind its front packed into C of the room, back
+ * to normal by S2 (a smooth, monotonic map, so no arrow ever passes another).
+ */
+const RANK = { S1: 300, S2: 820, C: 0.34 }
+function rankMap(s) {
+  const { S1, S2, C } = RANK
+  if (s <= S1) return s * C
+  if (s >= S2) return s
+  const u = (s - S1) / (S2 - S1)
+  const L = S2 - S1
+  const u2 = u * u
+  const u3 = u2 * u
+  return (2 * u3 - 3 * u2 + 1) * C * S1 + (u3 - 2 * u2 + u) * C * L + (-2 * u3 + 3 * u2) * S2 + (u3 - u2) * L
+}
+
+/* The great arrow's shape: half-width over length, and how soft its edge is. */
+const HEAD = 0.8
+const SOFT = 40
+const softplus = (u) => (u > 12 * SOFT ? u : SOFT * Math.log1p(Math.exp(u / SOFT)))
+const sigmoid = (u) => 1 / (1 + Math.exp(-u))
+/** v into [-m/2, m/2). */
+const cmod = (v, m) => ((((v + m / 2) % m) + m) % m) - m / 2
+
+/* ── The camera and the pulse ─────────────────────────────────────── */
+
+/** Still all song; from the turn, one even pull back as everything marches his way. */
+function camAt(pl, t) {
+  const u = easeInOut(ramp(t, pl.T.york + 0.2, pl.T.end - 0.3))
+  return { x: lerp(CX, CX + 90, u), y: CY, z: Math.exp(Math.log(0.46) * u) }
+}
+
+/** The whole board breathes on the beat: a little on every beat, more on the downbeat. */
+const PULSE = { intro: 0.006, 'verse-1': 0.007, 'chorus-1': 0.011, 'break-1': 0.008, 'verse-2': 0.007, 'chorus-2': 0.011, 'no-1': 0.013, 'break-2': 0.015, 'chorus-3': 0.012, 'no-2': 0.013, outro: 0.01 }
+function pulseAt(pl, score, t) {
+  const { T, beat, phase } = pl
+  if (t >= T.stop && t < T.back) return 1
+  const k = Math.floor((t - phase) / beat)
+  const since = t - (phase + k * beat)
+  const sec = score.sections.find((s) => t >= s.from && t < s.to)
+  const amp = (PULSE[sec?.id] ?? 0.008) * (k % 4 === 0 ? 1.7 : 1) * (t < 10 ? 0 : 1)
+  return 1 + amp * Math.exp(-since / 0.13)
 }
 
 /* ── Drawing ──────────────────────────────────────────────────────── */
 
 const f1 = (v) => Math.round(v * 10) / 10
 
-/** One arrow as path data: centre (x, y) on the plate, heading a, half-length l, head hl × hw. */
-function arrow(x, y, a, l, hl, hw) {
+/** One arrow as path data: centre (x, y), heading a, scale s. */
+function arrow(x, y, a, s) {
   const c = Math.cos(a)
-  const s = Math.sin(a)
+  const n = Math.sin(a)
+  const l = AL * s
+  const hl = AH * s
+  const hw = AW * s
   const tx = x + c * l
-  const ty = y + s * l
-  return `M${f1(x - c * l)} ${f1(y - s * l)}L${f1(tx)} ${f1(ty)}M${f1(tx - c * hl - s * hw)} ${f1(ty - s * hl + c * hw)}L${f1(tx)} ${f1(ty)}L${f1(tx - c * hl + s * hw)} ${f1(ty - s * hl - c * hw)}`
-}
-/** A far arrow: a stroke with a tick of a head, whole pixels. */
-function dash(x, y, a, l) {
-  const c = Math.cos(a) * l
-  const s = Math.sin(a) * l
-  return `M${Math.round(x - c)} ${Math.round(y - s)}L${Math.round(x + c)} ${Math.round(y + s)}`
+  const ty = y + n * l
+  return `M${f1(x - c * l)} ${f1(y - n * l)}L${f1(tx)} ${f1(ty)}M${f1(tx - c * hl - n * hw)} ${f1(ty - n * hl + c * hw)}L${f1(tx)} ${f1(ty)}L${f1(tx - c * hl + n * hw)} ${f1(ty - n * hl - c * hw)}`
 }
 
-/** The camera: still for the whole song, then one even pull-out from "York" to the end card. */
-function camAt(pl, t, red) {
-  const { T } = pl
-  if (t <= T.york) return { x: CX, y: CY, z: 1 }
-  const D = T.end - T.york
-  const a = t - T.york
-  const run = (v) => (v < 1 ? v * v / 2 : v - 0.5)
-  const u = clamp01(run(a) / run(D))
-  const z = Math.exp(Math.log(Z_END) * u)
-  // He goes from where he stands to the left of the plate, so the whole arrow fits behind him.
-  const red0 = pl.redAt(T.york)
-  const w = (1 - z) / (1 - Z_END)
-  const sx = lerp(red0.x, PX + 150, w)
-  const sy = lerp(red0.y, CY, w)
-  return { x: red.x + (CX - sx) / z, y: red.y + (CY - sy) / z, z }
+const mixHex = (a, b, u) => {
+  const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16))
+  const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16))
+  return `#${pa.map((v, i) => Math.round(lerp(v, pb[i], u)).toString(16).padStart(2, '0')).join('')}`
 }
-const Z_END = 0.31
-
-/** The light: a disc at the right edge and its rays. Fixed to the plate: it is a long way off. */
-function lightSvg(pl, t) {
-  const { T, lights, hits, beat, phase } = pl
-  const grow = smooth((t - T.instr) / (T.hitN - T.instr)) * (1 - smooth((t - pl.c3[0]) / 16))
-  let flare = 0
-  for (const t0 of lights) if (t > t0) flare = Math.max(flare, Math.exp(-(t - t0) / 0.9))
-  for (const t0 of [T.newYork1 + 0.5, T.back + 0.4]) if (t > t0 - 0.5) flare = Math.max(flare, smooth((t - t0 + 0.5) / 0.5) * Math.exp(-Math.max(0, t - t0) / 1.6))
-  for (const h of hits) if (h.big && t > h.t) flare = Math.max(flare, 0.5 * Math.exp(-(t - h.t) / 0.5))
-  const lw = pl.LwAt(t)
-  const out = smooth((t - T.york) / 6.5)
-  const strength = (1 - 0.5 * clamp01(lw / 1900) * (1 - grow)) * (1 - out)
-  if (strength <= 0.004) return ''
-  const R = (36 + 150 * grow + 10 * flare) * (1 - 0.5 * out)
-  const cx = PR - 30 + 0.72 * (R - 36)
-  const beatP = 0.5 + 0.5 * Math.cos(TAU * (t - phase) / beat)
-  const len = 50 + 26 * flare * 3 + 70 * grow + 7 * beatP
-  let rays = ''
-  const N = 13
-  for (let k = 0; k < N; k++) {
-    const ang = Math.PI / 2 + (k / (N - 1)) * Math.PI
-    const c = Math.cos(ang)
-    const s = Math.sin(ang)
-    const l = len * (k % 2 ? 0.72 : 1)
-    rays += `M${f1(cx + c * (R + 10))} ${f1(CY + s * (R + 10))}L${f1(cx + c * (R + 10 + l))} ${f1(CY + s * (R + 10 + l))}`
-  }
-  return `<g opacity="${f1(strength * 100) / 100}"><circle cx="${f1(cx)}" cy="${CY}" r="${f1(R)}" fill="${YELLOW}"/><path d="${rays}" stroke="${YELLOW}" stroke-width="${f1(5 + 3 * grow)}" stroke-linecap="round" fill="none"/></g>`
-}
-
-/** The cities' lights: small, at the edges, each flaring on its word. */
-function citiesSvg(pl, t) {
-  const { T } = pl
-  if (t < T.cities[0] - 0.05 || t > T.cities[4] + 4.2) return ''
-  let out = ''
-  const gone = 1 - smooth((t - (T.cities[4] + 2.2)) / 1.8)
-  for (const [k, c] of CITIES.entries()) {
-    const a = t - T.cities[k]
-    if (a <= 0) continue
-    const on = easeOutBack(clamp01(a / 0.25), 2.5)
-    const flare = Math.exp(-a / 0.5)
-    const R = 21 * on + 10 * flare
-    const dx = CX - c.x
-    const dy = CY - c.y
-    const base = Math.atan2(dy, dx)
-    let rays = ''
-    for (let q = -3; q <= 3; q++) {
-      const ang = base + q * 0.42
-      const l = (20 + 30 * flare) * (q % 2 ? 0.7 : 1)
-      rays += `M${f1(c.x + Math.cos(ang) * (R + 7))} ${f1(c.y + Math.sin(ang) * (R + 7))}L${f1(c.x + Math.cos(ang) * (R + 7 + l))} ${f1(c.y + Math.sin(ang) * (R + 7 + l))}`
-    }
-    const o = gone * (0.55 + 0.45 * flare)
-    out += `<g opacity="${f1(o * 100) / 100}"><circle cx="${f1(c.x)}" cy="${f1(c.y)}" r="${f1(R)}" fill="${YELLOW}"/><path d="${rays}" stroke="${YELLOW}" stroke-width="4" stroke-linecap="round" fill="none"/></g>`
-  }
-  return out
-}
-
-/** His heading: with the crowd, then round on the first "don't", for good. */
-function headingAt(pl, t, kick) {
-  const { T } = pl
-  const turn = easeOutBack(clamp01((t - T.turn) / 0.55), 1.4)
-  const steady = 0.06 * Math.sin(t * 1.3) + 0.04 * Math.sin(t * 2.9)
-  return Math.PI * turn + steady + kick
+const angLerp = (a, b, u) => {
+  const d = ((b - a + Math.PI) % TAU + TAU) % TAU - Math.PI
+  return a + d * u
 }
 
 /** The plate alone — what goes inside the sheet. */
 export function grainPlate({ time, score, probe = null }) {
-  // `probe`, if given, collects [id, x, y, heading, scale] for every arrow drawn: for a frame-to-frame continuity scan.
   const pl = planFor(score)
   const { T } = pl
   const t = time
-  const red = pl.redAt(t)
-  const cam = camAt(pl, t, red)
-  const z = cam.z
-  const far = z < 0.62
-  const px = (x) => CX + (x - cam.x) * z
-  const py = (y) => CY + (y - cam.y) * z
-  const gl = Math.pow(z, 0.85) // glyphs shrink a little slower than the ground
-  const phi = table(pl.PHI, t)
-  const Lw = pl.LwAt(t)
-  const Ls = pl.LsAt(t)
+  const cam = camAt(pl, t)
+  const Z = cam.z * pulseAt(pl, score, t)
+  const sx = (x) => CX + (x - cam.x) * Z
+  const sy = (y) => CY + (y - cam.y) * Z
+  const gs = Z
+  const [dx, dy] = pl.D(t)
+  const flowA = pl.angleAt(t)
+  const him = pl.him(t)
 
-  // What of the ground is on the plate.
-  const x0 = cam.x - (PW / 2 + 40) / z
-  const x1 = cam.x + (PW / 2 + 40) / z
-  const y0 = cam.y - (PH / 2 + 30) / z
-  const y1 = cam.y + (PH / 2 + 30) / z
+  /* The reds (and the ones who gave in), where they are now. */
+  const live = []
+  for (const a of pl.actors) {
+    if (t < a.at) continue
+    const free = t >= a.end
+    const p = actorPos(pl, a, t)
+    // Carried off by the flow, it wraps round the lattice's tile like everyone else.
+    if (free) { p[0] = wrap(p[0], cam.x, WX); p[1] = wrap(p[1], cam.y, WY) }
+    live.push({ a, p, red: redness(a, t), free })
+  }
+  // Room round each: eased in as it turns, smaller once it has given in.
+  const rooms = [{ x: him[0], y: him[1], r: 38 }]
+  for (const o of live) {
+    const r = 30 * o.a.room(t)
+    if (r > 0.5) rooms.push({ x: o.p[0], y: o.p[1], r, id: o.a.id })
+  }
 
-  // The light swallows what reaches it.
-  const growL = smooth((t - T.instr) / (T.hitN - T.instr)) * (1 - smooth((t - pl.c3[0]) / 16))
-  const RL = 36 + 150 * growL
-  const lcx = PR - 30 + 0.72 * (RL - 36)
-  const lightOn = z > 0.9
+  /* Ranks now in flight. */
+  const RV = 480
+  const ranks = []
+  for (const r of pl.ranks) {
+    if (t < r.t - 1.6 || t > r.t + 1.1) continue
+    const tg = r.target === 'him' ? him : (live.find((o) => o.a.id === r.target)?.p ?? him)
+    const env = smooth((t - (r.t - 1.6)) / 0.7) * (1 - smooth((t - (r.t + 0.2)) / 0.9))
+    ranks.push({ xf: tg[0] + RV * (t - r.t) - 30, y: tg[1], s: r.big ? 900 : r.s, a: r.a * env })
+  }
 
-  let thin = ''
-  let mid = ''
-  let bold = ''
-  const j0 = Math.floor((y0 - CY) / SY) - 1
-  const j1 = Math.ceil((y1 - CY) / SY)
-  const i0 = Math.floor((x0 - 40 - phi) / SX) - 1
-  const i1 = Math.ceil((x1 + 40 - phi) / SX)
-  const thinOut = far ? smooth((0.62 - z) / 0.25) * 0.42 : 0
-  for (let j = j0; j <= j1; j++) {
-    for (let i = i0; i <= i1; i++) {
-      const f = pl.turned.get(pl.key(i, j))
-      if (f) {
-        if (t >= f.tc) continue
-        if (!streamAt(pl, i, j, t, red, t >= f.t0 ? f.Lw0 : Lw, t >= f.t0 ? 0 : Ls, phi)) continue
-      } else if (!streamAt(pl, i, j, t, red, Lw, Ls, phi)) continue
-      const X = px(OUT.x)
-      const Y = py(OUT.y)
-      if (X < PX - 20 || X > PR + 20 || Y < PY - 20 || Y > PB + 20) continue
-      let s = OUT.s
-      if (lightOn) {
-        const d = Math.hypot(X - lcx, Y - CY)
-        if (d < RL + 6) s *= smooth((d - RL * 0.45) / (RL * 0.55 + 6))
-        if (s < 0.1) continue
+  /* Ridicule now. */
+  const jeers = []
+  for (const j of pl.jeers) {
+    if (t < j.from || t > j.to + 0.7) continue
+    const env = smooth((t - j.from) / 0.45) * (1 - smooth((t - j.to) / 0.7))
+    const tg = j.target === 'him' ? him : live.find((o) => o.a.id === j.target)?.p
+    if (!tg || env <= 0.001) continue
+    let jab = 0
+    for (const jt of j.jabs) jab = Math.max(jab, kick(t - jt, 0.18))
+    jeers.push({ x: tg[0], y: tg[1], R: j.R, env, jab })
+  }
+
+  /* The coda: who has turned (rings from where he stood on the first No), and the arrowhead ahead of the reds. */
+  const coda = t > T.c0 - 0.1
+  const c0 = pl.c0
+  // When an arrow turns: the first ring to reach it, judged from where it stood as that ring went out (fixed, so it turns once).
+  const ringD = coda ? pl.rings.map((r) => pl.D(r.t)) : []
+  const turnedAt = (b, x, y) => {
+    let best = Infinity
+    pl.rings.forEach((r, k) => {
+      const px = b ? wrap(b.x + ringD[k][0], cam.x, WX) : x
+      const py = b ? wrap(b.y + ringD[k][1], cam.y, WY) : y
+      const d = Math.hypot(px - c0[0], py - c0[1])
+      if (d <= r.max) best = Math.min(best, r.t + d / r.v)
+    })
+    return best
+  }
+  // The great arrow: from the turn on, the crowd draws in behind the reds into one "<".
+  const headK = easeInOut(ramp(t, T.york - 0.4, T.rev + 4))
+
+  /** Everything the crowd does to one arrow at raw place (x, y). */
+  const field = (x, y, b, ownId = null) => {
+    const x0 = x
+    const y0 = y
+    let op = 1
+    let a = flowA + b.n + 0.05 * Math.sin(1.1 * t + b.ph)
+    // Ranks: a compression wave, piling the crowd up at its front.
+    for (const r of ranks) {
+      const s = r.xf - x
+      if (s <= 0 || s >= RANK.S2) continue
+      const lat = Math.exp(-(((y - r.y) / r.s) ** 2)) * r.a
+      // Packed into a dense rank at its front, a gap behind, closing in on the one it is aimed at.
+      const d = s - rankMap(s)
+      x += d * lat
+    }
+    // Ridicule: turn to point at the one being mocked, lean in, wag, jab on the words.
+    let jw = 0
+    let ja = 0
+    for (const j of jeers) {
+      const d = Math.hypot(j.x - x, j.y - y)
+      const wgt = j.env * smooth((j.R - d) / (j.R * 0.45))
+      if (wgt > jw) {
+        jw = wgt
+        ja = Math.atan2(j.y - y, j.x - x)
+        x += (j.x - x) * Math.min(0.3, ((14 + 12 * j.jab) * wgt) / Math.max(d, 1))
       }
-      if (probe) probe.push([pl.key(i, j), X, Y, OUT.a, s])
-      if (far) {
-        if (thinOut > 0 && hash(i, j, 8) < thinOut) continue
-        thin += dash(X, Y, OUT.a, AL * gl * s)
-      } else if (OUT.bold > 0.3) mid += arrow(X, Y, OUT.a, AL * gl * s * 1.12, AH * gl * s * 1.15, AW * gl * s * 1.15)
-      else thin += arrow(X, Y, OUT.a, AL * gl * s, AH * gl * s, AW * gl * s)
     }
+    if (jw > 0) {
+      // Straight behind him the shorter way round is a coin toss: those few just stay as they are.
+      const dif = ((ja - a + Math.PI) % TAU + TAU) % TAU - Math.PI
+      const k = jw * smooth((Math.PI - Math.abs(dif)) / 0.7)
+      a += dif * k + 0.3 * Math.sin(TAU * 6.5 * t + b.ph) * k
+    }
+    // The coda: turned round to face his way, swinging the head in towards him.
+    if (coda) {
+      const tt = turnedAt(ownId ? null : b, x, y)
+      if (t > tt) a += easeInOut(clamp01((t - tt) / 0.45)) * (y0 < c0[1] ? Math.PI : -Math.PI)
+      /*
+       * The great arrow: nobody ahead of him, and behind him the crowd held
+       * inside a widening "<" with the reds at its tip. Whoever is outside is
+       * squeezed onto its edge by a soft-plus, and fades exactly as fast as it
+       * is squeezed, so the ink stays even and the edge stays clean.
+       */
+      if (headK > 0) {
+        const ax = him[0] - 40
+        const s0 = x - ax
+        x = lerp(x, ax + softplus(s0), headK)
+        op *= lerp(1, sigmoid(s0 / SOFT), headK)
+        const h = HEAD * Math.max(x - ax, 0)
+        const ddy = y - him[1]
+        const m = Math.abs(ddy)
+        const m2 = h - softplus(h - m)
+        y = him[1] + Math.sign(ddy) * lerp(m, m2, headK)
+        op *= lerp(1, sigmoid((h - m) / SOFT), headK)
+        // And nobody at all ahead of him.
+        op *= lerp(1, sigmoid((x - him[0] - 12) / 10), headK)
+      }
+    }
+    /*
+     * Room round him and every red: the crowd bulges to pass, sideways only,
+     * on the side it was already on (from where it would have been, `y0`),
+     * so nothing ever flips from one side to the other.
+     */
+    for (const rm of rooms) {
+      if (rm.id === ownId) continue
+      const u = (x - rm.x) / (rm.r * 2.2)
+      if (u <= -1 || u >= 1) continue
+      const h = rm.r * (1 - u * u) ** 2
+      const side = y0 < rm.y ? -1 : 1
+      const m = Math.max(0, side * (y - rm.y))
+      y = rm.y + side * Math.pow(m ** 2.5 + h ** 2.5, 1 / 2.5)
+    }
+    return [x, y, a, op]
   }
 
-  // The turned: each keeps its place behind him; the stripped are swept off downstream.
-  const sway = far ? 0 : 1
-  for (const f of pl.followers) {
-    if (f.tc > t) break
-    let x
-    let y
-    let a
-    let heavy = true
-    let fs = 1
-    if (t < f.ts) {
-      const fall = easeInOut(clamp01((t - f.tc) / f.fall))
-      x = red.x + f.sx + (f.fx - f.sx) * fall
-      y = red.y + f.sy + (f.fy - f.sy) * fall
-      fs = f.s0 + (1 - f.s0) * smooth((t - f.tc) / 0.4)
-      const turn = clamp01((t - f.tc) / 0.42)
-      if (turn < 1) {
-        const k = easeOutBack(turn, 1.6)
-        a = f.a0 + ((f.sy < 0 ? -Math.PI : Math.PI) - f.a0) * k
-        heavy = turn > 0.45
-      } else a = Math.PI + sway * 0.07 * Math.sin(t * 1.1 + f.seed * TAU)
-    } else {
-      const at0 = pl.redAt(f.ts)
-      const tau = t - f.ts
-      if (tau > 40) continue
-      x = at0.x + f.fx + (phi - table(pl.PHI, f.ts)) * (tau / (tau + 0.3))
-      y = at0.y + f.fy + (f.fy < 0 ? -1 : 1) * (24 + 50 * f.seed) * easeOut(clamp01(tau / 1.3))
-      const k = easeOutBack(clamp01(tau / 0.4), 1.4)
-      a = Math.PI * (1 - k) * (f.fy < 0 ? -1 : 1) + 0.25 * smooth(tau / 0.2) * Math.exp(-tau / 0.6) * Math.sin(tau * 9 + f.seed * 6)
-      heavy = tau < 0.18
-    }
-    if (x < x0 || x > x1 || y < y0 || y > y1) continue
-    const X = px(x)
-    const Y = py(y)
-    let s = fs
-    if (lightOn && !heavy) {
-      const d = Math.hypot(X - lcx, Y - CY)
-      if (d < RL + 6) s *= smooth((d - RL * 0.45) / (RL * 0.55 + 6))
-      if (s < 0.1) continue
-    }
-    if (probe) probe.push([pl.key(f.i, f.j), X, Y, a, s])
-    const d = arrow(X, Y, a, AL * gl * s, AH * gl * s, AW * gl * s)
-    if (heavy) bold += d
-    else thin += d
+  // The visible window in sheet units, with a margin.
+  const hw = (PW / 2) / Z + 60
+  const hh = (PH / 2) / Z + 60
+  let ink = ''
+  // Arrows fading into the great arrow's edge, by how faded.
+  const faint = ['', '', '', '']
+  for (let id = 0; id < BASE.length; id++) {
+    const b = BASE[id]
+    const act = pl.slots.get(id)
+    // A red is drawn as itself from its moment on (below).
+    if (act && t >= act.at) continue
+    const rx = wrap(b.x + dx, cam.x, WX)
+    const ry = wrap(b.y + dy, cam.y, WY)
+    if (Math.abs(rx - cam.x) > hw + 120 || Math.abs(ry - cam.y) > hh + 120) continue
+    const [x, y, a, op] = field(rx, ry, b)
+    if (op < 0.2) continue
+    if (Math.abs(x - cam.x) > hw || Math.abs(y - cam.y) > hh) continue
+    const X = sx(x)
+    const Y = sy(y)
+    if (op > 0.9) ink += arrow(X, Y, a, gs)
+    else faint[Math.min(3, Math.floor(op * 4))] += arrow(X, Y, a, gs)
+    if (probe) probe.push([id, X, Y, a, gs])
   }
 
-  // The rings.
-  let ringSvg = ''
-  for (const ring of pl.rings) {
-    const a = t - ring.t
-    if (a <= 0 || a > ring.life) continue
-    const o = ring.fade(a) * (ring.york ? 0.9 : 0.85)
+  /* The reds, and the ones who gave in (carried off as free arrows). */
+  let reds = ''
+  let mixed = ''
+  for (const o of live) {
+    const { a } = o
+    let [x, y] = o.p
+    let ang = Math.PI + 0.06 * Math.sin(t * 1.3 + a.slot)
+    // In the crowd for its first half second: eased out of its lattice place.
+    if (t < a.at + 0.5) {
+      const b = BASE[a.slot]
+      const [fx, fy, fa] = field(wrap(b.x + dx, cam.x, WX), wrap(b.y + dy, cam.y, WY), b, a.id)
+      const e = easeInOut((t - a.at) / 0.5)
+      x = lerp(fx, x, e)
+      y = lerp(fy, y, e)
+      ang = angLerp(fa, ang, easeInOut(clamp01((t - a.at) / 0.45)))
+    }
+    for (const r of a.hits) ang += 0.5 * kick(t - r.t, 0.3) * Math.sin(TAU * 9 * (t - r.t))
+    let fop = 1
+    if (o.free) {
+      // Given in: turned back round to go with the crowd, then just one of them.
+      const u = t - a.end
+      const [fx, fy, fa, op] = field(x, y, BASE[a.slot], a.id)
+      fop = op
+      const e = easeInOut(clamp01(u / 0.9))
+      x = lerp(x, fx, e)
+      y = lerp(y, fy, e)
+      ang = angLerp(ang, fa, easeInOut(clamp01(u / 0.55)))
+    }
+    if (fop < 0.2 || Math.abs(x - cam.x) > hw || Math.abs(y - cam.y) > hh) continue
+    const X = sx(x)
+    const Y = sy(y)
+    const d = arrow(X, Y, ang, gs)
+    if (o.red >= 0.999) reds += d
+    else if (o.red <= 0.001 && fop <= 0.9) faint[Math.min(3, Math.floor(fop * 4))] += d
+    else if (o.red <= 0.001) ink += d
+    else mixed += `<path d="${d}" stroke="${mixHex(INK, RED, o.red)}"/>`
+    if (probe) probe.push([a.id, X, Y, ang, gs])
+  }
+
+  /* Him: bold and red, facing upstream, shaken by every rank and every mocking word. */
+  let ha = Math.PI + 0.05 * Math.sin(t * 1.3) + 0.035 * Math.sin(t * 2.9)
+  for (const r of pl.hisHits) ha += 0.55 * kick(t - r.t, 0.35) * Math.sin(TAU * 8 * (t - r.t))
+  // Shaking with the holding, late in the instrumental.
+  ha += 0.06 * smooth((t - (T.instr.to - 12)) / 4) * (1 - smooth((t - T.instr.to) / 1.5)) * Math.sin(TAU * 11 * t)
+  for (const j of pl.jeers) if (j.target === 'him') for (const jt of j.jabs) ha += 0.12 * kick(t - jt, 0.18) * (hash(Math.round(jt * 100), 9) - 0.5) * 2
+  const HX = sx(him[0])
+  const HY = sy(him[1])
+  if (probe) probe.push(['him', HX, HY, ha, gs])
+
+  /* Rings: the call going out on each No. */
+  let rings = ''
+  for (const r of [...pl.rings1, ...pl.rings]) {
+    const u = t - r.t
+    if (u <= 0) continue
+    const R = r.v * u
+    if (R > r.max + 120 || (r.slow && R > 2600)) continue
+    const o = (1 - smooth((R - r.max) / 120)) * (r.slow ? 0.85 * (1 - smooth(u / 3.2)) : 0.7) * smooth(u / 0.08)
     if (o <= 0.01) continue
-    ringSvg += `<circle cx="${f1(px(red.x))}" cy="${f1(py(red.y))}" r="${f1(ring.c * a * z)}" fill="none" stroke="${RED}" stroke-width="${ring.york ? 3 : f1(2 + 2.2 * (1 - a / ring.life))}" opacity="${f1(o * 100) / 100}"/>`
+    const c = r.t >= T.c0 - 0.1 ? c0 : pl.him(r.t)
+    rings += `<circle cx="${f1(sx(c[0]))}" cy="${f1(sy(c[1]))}" r="${f1(R * Z)}" stroke-width="${f1((r.slow ? 4 : 2.6) * Math.max(Z, 0.6))}" opacity="${f1(o * 100) / 100}"/>`
   }
 
-  // Him.
-  const isRed = clamp01((t - T.turn) / 0.3)
-  const big = lerp(30, 40, easeOut(isRed))
-  const still = Math.abs(table(pl.PHI, t + 0.05) - phi) < 0.02
-  const breath = 1 + 0.035 * Math.sin(t * (still ? 5 : 2.6))
-  const heading = headingAt(pl, t, red.kick)
-  const rl = big * breath * Math.max(gl, 0.62)
-  const me = arrow(px(red.x), py(red.y + red.oy), heading, rl, rl * 0.56, rl * 0.42)
-  const meSvg = `<path d="${me}" fill="none" stroke="${isRed > 0.5 ? RED : INK}" stroke-width="${f1(lerp(5.6, 9, isRed) * Math.max(Math.pow(z, 0.6), 0.6))}" stroke-linecap="round" stroke-linejoin="round"/>`
-
-  const wThin = far ? 1.3 : 1.8
-  const wBold = Math.max(1.5, 3.4 * Math.pow(z, 0.62))
+  const wInk = f1(W_INK * Math.max(Math.pow(Z, 0.7), 0.5))
   return `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
-${lightSvg(pl, t)}${citiesSvg(pl, t)}
-<path d="${thin}" fill="none" stroke="${INK}" stroke-width="${wThin}" stroke-linecap="round" stroke-linejoin="round" opacity="${far ? f1(lerp(0.75, 0.5, smooth((0.62 - z) / 0.3)) * 100) / 100 : 0.75}"/>
-<path d="${mid}" fill="none" stroke="${INK}" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="${bold}" fill="none" stroke="${INK}" stroke-width="${f1(wBold)}" stroke-linecap="round" stroke-linejoin="round"/>
-${ringSvg}${meSvg}`
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<g stroke="${RED}" fill="none">${rings}</g>
+<path d="${ink}" stroke="${INK}" stroke-width="${wInk}"/>
+${faint.map((d, k) => (d ? `<path d="${d}" stroke="${INK}" stroke-width="${wInk}" opacity="${(k + 0.5) / 4}"/>` : '')).join('')}
+<g stroke-width="${wInk}">${mixed}</g>
+<path d="${reds}" stroke="${RED}" stroke-width="${wInk}"/>
+<path d="${arrow(HX, HY, ha, gs)}" stroke="${RED}" stroke-width="${f1(W_HIM * Math.max(Math.pow(Z, 0.7), 0.55))}"/>
+</g>`
 }
 
-/** What he is doing, for the page's "Now" line and the review sheet. */
+/** What is happening, for the page's "Now" line and the review sheet. */
 export function grainMood(score, time) {
-  const { T, c3 } = planFor(score)
+  const { T } = planFor(score)
   const L = score.lines
-  if (time < T.stop - 2.6) return 'carried along'
-  if (time < T.turn) return 'stops'
-  if (time < T.ring0) return 'turned'
-  if (time < L[4].start - 1.1) return 'upstream'
-  if (time < T.cities[4] + 3.8) return 'pulled five ways'
-  if (time < L[6].start) return 'shoved'
-  if (time < L[8].start - 1.2) return 'the first to follow'
-  if (time < T.newYork1) return 'no'
-  if (time < T.hit0 - 1) return 'the crowd surges'
-  if (time < T.hitN + 0.6) return 'driven back'
-  if (time < c3[0]) return 'alone at the light'
-  if (time < L[12].start - 1.1) return 'pushes off again'
-  if (time < T.drop) return 'no, no, no, no'
-  if (time < T.york) return 'the crowd stops'
-  return 'one great arrow'
+  const t = time
+  if (t < L[0].start - 0.3) return 'against the march'
+  if (t < T.dont1) return 'mocked'
+  if (t < 57.8) return 'one turns red, then two'
+  if (t < 63.4) return 'one gives in'
+  if (t < T.cities[0]) return 'pointed at'
+  if (t < T.only) return 'pulled five ways'
+  if (t < T.abandon) return 'shoved'
+  if (t < T.dont3) return 'abandoned'
+  if (t < T.nos1[0]) return 'reds of their own'
+  if (t < T.ny1) return 'no'
+  if (t < T.instr.from + 1.5) return 'the crowd surges'
+  if (t < T.instr.to - 4) return 'the crowd fights back'
+  if (t < T.dont5) return 'still standing'
+  if (t < T.dont6) return 'the two who held'
+  if (t < T.nos2[0]) return 'a red flight'
+  if (t < T.stop) return 'they turn'
+  if (t < T.york) return 'the crowd stops'
+  return 'everyone, his way'
 }
 
 /** The film: the opening, the album's sheet, the crowd, the lyric in the margin, the end card. */
@@ -874,19 +792,23 @@ ${filmOpening({ time, uid, slug: 'new-york' })}`,
   }
 }
 
+/** For checking: the plan. */
+export const grainPlan = (score) => planFor(score)
+
 /** The page's jump-to list. What each is: docs/visualizers/new-york.md. */
 export const GRAIN_BEATS = [
   { at: 0, label: 'Opening' },
-  { at: 12, label: 'Carried along' },
-  { at: 37, label: 'He turns', key: true },
-  { at: 49, label: 'Upstream' },
-  { at: 68, label: 'Five cities' },
-  { at: 80, label: 'Four shoves' },
-  { at: 88, label: 'The first to follow', key: true },
-  { at: 109, label: 'No' },
-  { at: 121, label: 'The crowd fights back', key: true },
-  { at: 150, label: 'Alone at the light' },
-  { at: 156, label: 'Again' },
-  { at: 177, label: 'Twelve nos' },
-  { at: 192, label: 'One great arrow', key: true },
+  { at: 12, label: 'Against the march' },
+  { at: 19.8, label: 'Mocked' },
+  { at: 39.4, label: 'One turns red', key: true },
+  { at: 57.6, label: 'Falling in line' },
+  { at: 68.6, label: 'Five ways' },
+  { at: 78.2, label: 'Abandoned', key: true },
+  { at: 88.4, label: 'Reds of their own' },
+  { at: 109.4, label: 'No' },
+  { at: 122, label: 'The crowd fights back', key: true },
+  { at: 150, label: 'Still standing' },
+  { at: 156.4, label: 'A red flight', key: true },
+  { at: 177.6, label: 'They turn' },
+  { at: 195.6, label: 'Everyone, his way', key: true },
 ]

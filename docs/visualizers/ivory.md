@@ -12,6 +12,21 @@ whole song (2026-11-13). Score: `app/config/ivoryScore.ts`. Film:
 | `shared/video/films/crossword/letters.mjs` | The alphabet in the titles' Hairline type, **baked**: `node tools/video-styles/titles/bake-letters.mjs`. |
 | `tools/video-styles/crossword/check.mjs` | Walks the film at 30 fps for the rules below. Run it after any change. |
 
+## The ground (2026-11-23)
+
+The user: "make the background for this one dark charcoal black with a very
+slight chalky texture." The whole sheet, border and plate, is charcoal
+(`CHARCOAL` #1f1e1c, plate mark #34322e); the puzzle's squares stay paper with
+ink rules, so the charcoal between its words reads as a real crossword's black
+squares. The lyric in the margin is chalk (#e6e1d6); red is unchanged.
+
+The texture is chalk dust, in `lib` so it is parsed once (`chalkDefs`): two
+pattern tiles of faint white specks and scuffs, 211 and 347 units (no common
+factor, so the repeat never shows), and seven broad smudges, all at 2.5–9.5%
+white. No filter: an feTurbulence over the full frame would be re-rasterised
+sixty times a second. The opening and the end card are unchanged. **Not yet
+watched by the user.**
+
 ## The story (the user's, 2026-11-02)
 
 He is in the crowd, she is on stage, and he falls for her in an instant. After

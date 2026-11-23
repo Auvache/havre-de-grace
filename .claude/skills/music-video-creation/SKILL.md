@@ -91,7 +91,7 @@ Inside a style module, never:
 | `tools/video-styles/live.mjs`, `live-align.py`, **`LIVE.md`** | **Live videos**: real camera footage cut to a mixed WAV, with the album opening and Andalusia's end card laid over it. Not SVG films. Read `LIVE.md` first: its status, file locations, per-song offsets, verification steps and the traps (one put the picture 9 s off with no error). |
 | `app/utils/clipTiming.ts` | The typed twin of the kit's timing functions, for Vue components. |
 | `shared/video/opening.mjs` | **The standard opening as one call** (`filmOpening({ time, uid, slug })`, the maze's clock by default): mark drawn on black, Hairline title, the black lifts. Films from 2026-11-10 on use it; the older films keep their own copies. |
-| `shared/video/films/grain.mjs` | New York's film (v1, 2026-11-10): a crowd of ink arrows heading for a yellow light, one red arrow against them, rings on every "No", a wedge of followers, and a pull-out to one great arrow. The reference for **hundreds of actors as one `<path>` per ink**, planned once per score and looked up, and for **a continuity scan** (`tools/video-styles/grain-check.mjs`: every arrow frame to frame at 60 fps). |
+| `shared/video/films/grain.mjs` | New York's film (v2, 2026-11-23): identical ink arrows marching on the click, the board pulsing on the beat, one bold red arrow against them; reds who are mocked, rammed by ranks, hold or give in; the crowd turning to follow only in the coda, into one great arrow. The reference for **hundreds of actors as one `<path>` per ink**, for **effects as a closed-form field over a lattice** (ranks as a monotonic compression map, ridicule, rings), for **actors that ride between the rows** so a crowd never flips sides round them, and for **a continuity scan** (`tools/video-styles/grain-check.mjs`: every arrow frame to frame at 60 fps). |
 | `shared/video/films/constellations.mjs`, `monkey-brain.mjs` | Meet Me at the Horizon's two films (v1, 2026-11-10; both on the page until one is picked): a star atlas whose sky wheels all song while a red pen joins stars into figures a stroke per sung word; and an EEG head where a red dot swings electrode to electrode over a hypnogram. The references for **a world under one slow rotation** and for **a strip chart that scrolls at one speed**. The page shows **two whole films on a switch** (`?film=`). |
 | `shared/video/films/dots-and-boxes.mjs` (+ `tools/video-styles/dots/search.mjs`) | Meet Me at the Horizon's film since 2026-11-17: a real game of dots and boxes, red (him) against black (the monkey brain), a line per slot on measured words. The reference for **a rule-bound game played once per score** (`playGame`) and **a seed searched offline for the game whose story fits the song** (the search's `judge`). |
 | `shared/video/films/road-trip.mjs` (+ `road-trip/`, `shared/video/geo/usa.mjs`) | Ship to Stockholm's film (v1, 2026-11-10): a paper road map of the United States and a red dot driving real back roads from New York to Seaside, Oregon, wrong turns and all. The reference for **real geography baked from open data** (`tools/video-styles/roadtrip/`) and **a route from a router**. Read `docs/visualizers/ship-to-stockholm.md` first. |
@@ -483,6 +483,14 @@ These are general. They cost rounds; none of them is obvious from a spec.
   wall (177°, coordinates to 0.1 px) jumped 2–5 px a frame whenever the camera
   moved slowly. Split it into quarter turns (`arcTo` in
   `conman-heists/atlas-plan.mjs`).
+- **The kit's easings do not clamp.** `easeInOut(1.1)` overshoots, and fed a
+  time that runs past its window it runs away (an arrow in New York flew up the
+  plate at 43 px a frame). Wrap the argument in `clamp01` unless a guard
+  already bounds it.
+- **A crowd flowing past an actor must never pass through its centre.** Radial
+  room flips an arrow from one side to the other there (New York v2: 96-unit
+  jumps and 180° spins). Put actors between the rows, push sideways only, and
+  take the side from where the arrow would have been. See `docs/visualizers/new-york.md`.
 - Join generated outlines with **quadratics through the midpoints**, not straight
   segments. A sampled coastline drawn as a polyline reads as a mountain range or
   as a bug.

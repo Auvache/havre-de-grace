@@ -10,7 +10,7 @@
         </h1>
       </header>
 
-      <VisualizerPlayer :film="grainFrame" name="Against the Grain" :score="NEW_YORK_SCORE" :poster-at="116.5" :beats="GRAIN_BEATS" :status="mood" />
+      <VisualizerPlayer :film="grainFrame" name="Against the Grain" :score="NEW_YORK_SCORE" :poster-at="168.6" :beats="GRAIN_BEATS" :status="mood" />
     </div>
   </div>
 </template>
