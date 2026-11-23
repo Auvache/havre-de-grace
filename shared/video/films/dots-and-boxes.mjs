@@ -24,17 +24,20 @@
  * lying; in the fever of verses 3 and 4 it is him who slips. Everything else
  * is the game. `SEED` picks the one game (of thousands played offline by
  * tools/video-styles/dots/search.mjs) whose night goes the way the song does:
- * nothing taken before the first chorus, red's first boxes as the sun "starts
- * to wake", the monkey brain running away with the fever, red back in the
- * second chorus, the monkey brain ahead all through the last verse, and red
- * taking the lead only with the last chain, on the last "horizon".
+ * nothing taken before the first chorus, red's first boxes at "a glimpse of
+ * the dawn", the monkey brain running away with the fever, red back in the
+ * second chorus and the first hook, the monkey brain's long chain through the
+ * last verse, and red's comeback from "relief in the dawn" without once giving
+ * the pen back: level at 3:26.7, ahead on the second-to-last line, the last
+ * box on the last line at 3:29.9 (since 2026-11-23 the game runs on through
+ * the outro to 3:30, on a board one column wider).
  *
  * When: every line is drawn on a measured word (or a beat of the click in the
- * intro and the gap after the first hook), `SLOTS` per section, 175 lines in
- * all — the board's every edge. Red's pen is slow and straight; the monkey
- * brain's is quick and erratic, never still for long, but its lines are as
- * straight as his (2026-11-23). After the last line
- * the outro lets the monkey brain's ink sink back, and the red stays.
+ * gap after the first hook and in the outro), `SLOTS` per section, 188 lines
+ * in all — the board's every edge. Red's pen is slow and straight; the monkey
+ * brain's starts calm and grows erratic as the song builds, but its lines are
+ * as straight as his (2026-11-23). After the last line the monkey brain's ink
+ * sinks back, and the red stays.
  *
  * Notes: docs/visualizers/meet-me-at-the-horizon.md.
  */
@@ -49,7 +52,7 @@ const CY = PY + PH / 2
 /* ── The board ────────────────────────────────────────────────────── */
 
 /** Dots across and down; boxes are one fewer each way. */
-export const COLS = 14
+export const COLS = 15
 export const ROWS = 7
 const BW = COLS - 1
 const BH = ROWS - 1
@@ -122,7 +125,7 @@ const carelessAt = (p, t) => {
 }
 
 /** The seed of the one game the film plays (tools/video-styles/dots/search.mjs). */
-export const SEED = 96
+export const SEED = 9146
 
 /**
  * Plays the whole game: one move per slot. Returns [{ e, p, t, closed: [box] }].
@@ -216,7 +219,7 @@ export function playGame(slots, seed = SEED) {
 /* ── When each line is drawn ──────────────────────────────────────── */
 
 /*
- * How many lines each stretch of the song draws, 175 in all. Lines land on
+ * How many lines each stretch of the song draws, 188 in all. Lines land on
  * sung words (picked evenly through the stretch, first and last included),
  * or on beats of the click where nothing is sung.
  */
@@ -230,7 +233,9 @@ const SLOTS = [
   { lines: [24, 26], beats: [138.3, 141.3], n: 10 }, // the first "meet me", and the gap after it
   { lines: [27, 30], n: 18 }, // verse 5
   { lines: [31, 34], n: 12 }, // chorus 3
-  { lines: [35, 37], n: 7, endOn: 'horizon' }, // the last "meet me": the last line on the last "horizon"
+  { lines: [35, 37], n: 7, endOn: 'horizon' }, // the last "meet me", up to the last "horizon"
+  // The outro, on the click (2026-11-23: the game lasts to 3:30): the last line on the beat at 209.9.
+  { lines: null, beats: [191.0, 210.2], n: 13 },
 ]
 
 export function slotsFor(score) {
@@ -302,7 +307,7 @@ const drawFor = (p, t) => (p === RED_P ? DRAW[RED_P] : lerp(0.28, DRAW[BLACK_P],
  */
 export const BOARD_AT = 12.6
 const IN = { [RED_P]: 14.4, [BLACK_P]: 15.4 }
-const HOME = { [RED_P]: [4, 3], [BLACK_P]: [9, 3] }
+const HOME = { [RED_P]: [4, 3], [BLACK_P]: [10, 3] }
 
 const plans = new WeakMap()
 export function planFor(score, seed = SEED) {
@@ -497,8 +502,9 @@ function dotsSvg(time) {
 
 /** How far the monkey brain's ink has sunk back, after the last line. */
 const sink = (time, plan) => {
+  // The last line is at 3:30, a breath before the end card: it sinks at once.
   const end = plan.moves.at(-1).done
-  return easeInOut(ramp(time, end + 5, end + 13))
+  return easeInOut(ramp(time, end + 0.3, end + 1.6))
 }
 
 /** A pen's place at `time`: coming in, waiting, drawing, or between its lines. */
@@ -629,7 +635,7 @@ export function dotsRuns(score, seed = SEED) {
 }
 
 /** The poster: the board nearly full, red climbing back, the monkey brain still ahead (33–38). */
-export const DOTS_POSTER = 176.5
+export const DOTS_POSTER = 199.5
 
 /** The jump-to list on the page. What each is: docs/visualizers/meet-me-at-the-horizon.md. */
 export const DOTS_BEATS = [
@@ -638,13 +644,14 @@ export const DOTS_BEATS = [
   { at: 14.2, label: 'Red, then black' },
   { at: 17.2, label: 'First line' },
   { at: 35, label: 'Racing' },
-  { at: 65.3, label: 'First box', key: true },
-  { at: 79.8, label: 'The fever' },
-  { at: 95, label: 'Running away', key: true },
-  { at: 109.5, label: 'Back in it' },
-  { at: 129.3, label: 'Oh won’t you' },
-  { at: 139.6, label: 'The long chain', key: true },
-  { at: 154.6, label: 'A sliver of hope', key: true },
-  { at: 188.4, label: 'The horizon', key: true },
-  { at: 196, label: 'Morning' },
+  { at: 58.3, label: 'First box', key: true },
+  { at: 87.6, label: 'The fever' },
+  { at: 98.6, label: 'Running away', key: true },
+  { at: 113.8, label: 'Back in it' },
+  { at: 127.8, label: 'Oh won’t you' },
+  { at: 139.8, label: 'The long chain', key: true },
+  { at: 163.6, label: 'Relief in the dawn', key: true },
+  { at: 188.4, label: 'The horizon' },
+  { at: 195.4, label: 'Morning' },
+  { at: 206.2, label: 'The last line', key: true },
 ]

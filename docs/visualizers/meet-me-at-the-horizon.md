@@ -37,7 +37,8 @@ on the sheet but the lyric in the margin. (There were tally marks down the
 sides of the plate, a stroke per box; the user took them out on 2026-11-23. The
 filled boxes are the score; the page's "Now" line still gives it in numbers.)
 
-- **The board**: 14 × 7 dots, 13 × 6 = 78 boxes, 175 lines. The black lifts
+- **The board**: 15 × 7 dots, 14 × 6 = 84 boxes, 188 lines (a column wider
+  since 2026-11-23, so the game lasts to 3:30; round 4, below). The black lifts
   off blank paper, the dots pop on left to right (12.6), red comes in alone
   (14.4), the monkey brain a second later (15.4); they move about a little,
   and red draws first on the first sung word, "No" (17.3). Round 3, below.
@@ -56,48 +57,51 @@ filled boxes are the score; the page's "Now" line still gives it in numbers.)
   possible. **How carefully they play follows the song** (`CARELESS`): in the
   choruses the monkey brain is drowsy (a third of the time it draws a line that
   leaves a box on three sides); in the fever of verses 3 and 4 it is him who
-  slips. The game was then chosen from six thousand played (`SEED` = 96) for
+  slips. The game was then chosen from ten thousand played (`SEED` = 9146) for
   the one whose night goes the way the song does.
 
-**The night, as played (seed 96):**
+**The night, as played (seed 9146, since 2026-11-23):**
 
 | Time | Score | What happens |
 | --- | --- | --- |
 | 12–17 | 0–0 | Blank paper; the board; red, then the monkey brain, waiting. |
 | 17–52 | 0–0 | Verses 1 and 2: plain turns at first, a line every second or so, quickening to a line on nearly every word; both playing safe, nobody gives anything away. |
-| 66.3 | 1–0 | Chorus 1, "feel like you're still next to me": the monkey brain nods off and red takes the first two boxes. |
-| 72–73 | 4–0 | Into verse 3, red picks up two more. |
-| 80.4 | 4–1 | "My skin starts to crawl": the fever, and it is red who slips. |
-| 91–108 | 4–17 | The monkey brain runs away with it: fifteen boxes, thirteen of them in one run from 95.6 through "the house starts to creak" and "the windows are open". |
-| 110–124 | 10–22 | Chorus 2: back and forth, red gets some back. |
-| 127.7 | 10–24 | "Meet me at the horizon": the monkey brain takes two. |
-| 129–137 | 16–24 | "Oh won't you … meet me at the horizon": red takes six. |
-| 140–153 | 16–38 | Verse 5, "No, I don't need a friend … all alone": the monkey brain's long chain, fourteen boxes. 38 is its last. |
-| 154.8 | 17–38 | "When the dawning of day brings a sliver of hope": red opens a chain and **never gives the pen back again**. |
-| 155–188 | 17–38 → 38–38 | Chorus 3 and the last hook: red takes box after box, a line per word, the monkey brain only watching. Level on "Meet" (188.8). |
-| 189.2, 190.2 | 39–38, 40–38 | The lead on "at", the last box on "horizon". The board is full. |
-| 195–203 | 40–38 | Morning: the monkey brain's ink sinks back to grey and the red stays. End card on the last strike, 211.86. |
+| 58.7, 59.8 | 2–0 | Chorus 1, "meets a glimpse of the dawn": the monkey brain nods off and red takes the first two boxes. |
+| 66.3 | 3–0 | "Feel like you're still next to me": one more. |
+| 74.7 | 3–1 | Verse 3: the monkey brain's first. |
+| 87.9–93.6 | 3–6 | "My blood runs too thick … the house starts to creak": the fever. |
+| 99.1–103.2 | 3–13 | "The windows are open … if I could only give in": seven in a run. The monkey brain runs away with it. |
+| 108.8–124.3 | 8–19 | Chorus 2: back and forth, red gets some back. |
+| 128.1–137.3 | 14–19 | The first hook, "Meet me at the horizon": red takes six. |
+| 140.1–160.6 | 14–41 | Verse 5 into chorus 3, "No, I don't need a friend … a sliver of hope … the sun starts to wake": the monkey brain's long chain, twenty-two boxes. 41 is its last. |
+| 162.1 | 14–41 | The monkey brain's last line. |
+| 164.2 | 15–41 | "The dark of the night finds relief in the dawn": red's chain begins, and **red never gives the pen back again**: twenty-nine boxes, a box with every line, to the end. |
+| 188.8–190.2 | 28–41 → 30–41 | "Meet me at the horizon": a box a word. |
+| 191–206 | → 41–41 | The outro, on the click: the voice is gone and red keeps on. Level at 206.7. |
+| 208.8, 209.9 | 42–41, 43–41 | The lead, then the last box on the last line (3:29.9). The board is full. |
+| 210.2–211.5 | 43–41 | The monkey brain's ink sinks back to grey and the red stays. End card on the last strike, 211.86. |
 
 ### Jump to
 
 | Time | Label | What happens |
 | --- | --- | --- |
-| 0:00 | Opening | The mark, the title, the black lifts off the dots. |
+| 0:00 | Opening | The mark, the title, the black lifts off. |
 | 0:12 | The board | Blank paper, then the dots pop on. |
 | 0:14 | Red, then black | Red comes in alone; a second later the monkey brain. |
 | 0:17 | First line | Red's first line on "No"; the two take turns. |
 | 0:35 | Racing | A line on nearly every word; nobody gives an inch. |
-| 1:05 | **First box** | Red's first two, on "you're still next to me". |
-| 1:20 | The fever | "Skin starts to crawl": the monkey brain's first box. |
-| 1:35 | **Running away** | The monkey brain takes thirteen in a run (4–4 to 4–16). |
-| 1:50 | Back in it | Chorus 2, red gets some back. |
-| 2:09 | Oh won't you | Red takes six on the first hook. |
-| 2:20 | **The long chain** | Verse 5: fourteen to the monkey brain (16–38). |
-| 2:35 | **A sliver of hope** | Red's chain begins and runs to the end. |
-| 3:08 | **The horizon** | Level on "Meet", ahead on "at", 40–38 on "horizon". |
-| 3:16 | Morning | The black sinks back; the red stays. |
+| 0:58 | **First box** | Red's first two, on "a glimpse of the dawn". |
+| 1:28 | The fever | "My blood runs too thick": the monkey brain gets going. |
+| 1:39 | **Running away** | Seven in a run (3–6 to 3–13). |
+| 1:54 | Back in it | Chorus 2, red gets some back. |
+| 2:08 | Oh won't you | Red takes six on the first hook. |
+| 2:20 | **The long chain** | Verse 5: twenty-two to the monkey brain (14–41). |
+| 2:44 | **Relief in the dawn** | Red's chain begins and runs to the end. |
+| 3:08 | The horizon | A box a word on the last "meet me at the horizon". |
+| 3:15 | Morning | The outro: red keeps on, on the click. |
+| 3:26 | **The last line** | Level, ahead, and 43–41 on the last line at 3:29.9. |
 
-The poster frame is 2:56.5: the board nearly full, red climbing, 33–38.
+The poster frame is 3:19.5: the board nearly full, red climbing, 36–41.
 
 ### How it is built
 
@@ -106,19 +110,24 @@ The poster frame is 2:56.5: the board nearly full, red climbing, 33–38.
   end the pen starts from (the end nearer where that pen is), the stroke's
   length in time, its straight path, and the score after it.
   A frame asks only which moves are at or before `time`.
-- **`SLOTS`**: how many lines each stretch draws, 175 in all, each on a measured
+- **`SLOTS`**: how many lines each stretch draws, 188 in all, each on a measured
   word picked evenly through the stretch (first and last included), or on the
-  click in the gap after the first hook. Nothing is drawn before the voice.
+  click in the gap after the first hook and in the outro. Nothing is drawn
+  before the voice.
   Verse 1 draws 21 and verse 2 29, each spread out at first and closing up
   (`build`); verses 3–4 draw 46, choruses 16/16/12, the first hook 10, verse 5 18, the last hook
-  7, the last of them on the last sung "horizon".
+  7, up to the last sung "horizon", and the outro 13 on the click, the last on
+  the beat at 209.9 (3:30).
 - **`SEED`** is chosen by `node tools/video-styles/dots/search.mjs [from] [to]`,
   which plays every seed against the score and keeps the ones that pass
   its `judge`: no box before chorus 1; red at least two in chorus 1; the monkey
   brain at least five in verses 3–4 and two ahead after them; red at least two
   in chorus 2; the monkey brain ahead into chorus 3 and the last hook; red
-  winning by four or fewer with the last line and a chain of four or more.
-  187 of 6000 pass; 96 was picked by hand for its sliver of hope.
+  winning by four or fewer with the last line and a chain of four or more;
+  red going ahead for good no sooner than 185 s (`lateLead`; a lead taken in
+  the outro scores higher). On the 15 × 7 board 347 of 10,000 pass; 9146 is
+  the best by the judge's own score (a 29-box last chain from 14–41, the lead
+  on the second-to-last line). The 14 × 7 board's game was seed 96.
   `--show <seed>` prints a game's every box.
 - **If the score, `SLOTS` or `CARELESS` changes, the game changes** (a slot
   moved is a different game from that move on). Re-run the search and re-check
@@ -177,10 +186,29 @@ timed with the first words of the song." So:
 - The user on round 3 (2026-11-23): "this is great for now. Also, remove the
   tally marks from the side." Done: the plate's sides are bare.
 
+### Round 4: the game lasts to 3:30 (2026-11-23)
+
+The user: "revamp the game so that it finishes at 3:30 (the last move). That
+might mean adding another row and column of dots and extending the time. I
+love the current pacing, the game just needs to last longer." So:
+
+- **One more column, not a row and a column.** The last line used to be on the
+  last "horizon" (3:10); twenty more seconds at the pace the game ends on (the
+  hooks', a line every second and a half) is about thirteen lines, and one
+  column adds exactly thirteen (175 → 188). A row as well would have added
+  forty-two, more than twice the pace. Every section before the outro draws
+  what it did. The board is 1344 wide at the same 96 spacing (it fits now the
+  tallies are gone).
+- **The outro is played on the click**, thirteen lines from 191.4 to the beat
+  at 209.9; the end card is still the last strike, 211.86. The monkey brain's
+  ink now sinks back in the second and a half between.
+- **A new game, the same night**: seed 9146 (above). The search's judge gained
+  `lateLead`.
+
 ### Choices made without the user (to confirm or change)
 
-- **Red wins, 40–38**, on the last "horizon", after being behind from 1:20 to
-  3:09. The monkey brain is never let off lightly: it leads by 22 at 2:34.
+- **Red wins, 43–41**, on the last line at 3:29.9, after being behind from 1:32
+  to 3:28. The monkey brain is never let off lightly: it leads by 27 at 2:41.
 - **Boxes are filled solid**, not initialled: by the end the board is a red and
   black mosaic of the night.
 - **No numbers on the film**: the filled boxes are the score (the tallies are
@@ -193,7 +221,7 @@ timed with the first words of the song." So:
 
 - **Sync and motion are judged from stills only.** Whether a line per word in
   the verses reads as racing or as noise, and whether red's long last chain (35
-  seconds of red only) reads as a comeback or as the game stalling, are for the
+  seconds of red only, 46 since round 4) reads as a comeback or as the game stalling, are for the
   person watching. A faster or slower game is `SLOTS`; re-run the search after.
 
 ## The two earlier films

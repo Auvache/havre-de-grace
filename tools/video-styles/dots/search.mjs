@@ -12,7 +12,7 @@ import { MEET_ME_AT_THE_HORIZON_SCORE as score } from '../../../app/config/meetM
 import { slotsFor, playGame, RED_P, BLACK_P } from '../../../shared/video/films/dots-and-boxes.mjs'
 
 const slots = slotsFor(score)
-const T = { chorus1: 52, verse3: 71.3, chorus2: 106.7, hook1: 126.4, verse5: 140.9, chorus3: 159, hook2: 178.6 }
+const T = { chorus1: 52, verse3: 71.3, chorus2: 106.7, hook1: 126.4, verse5: 140.9, chorus3: 159, hook2: 178.6, lateLead: 185, outro: 195.4 }
 
 function judge(moves) {
   const at = (t) => { const s = [0, 0]; for (const m of moves) { if (m.t >= t) break; for (const _ of m.closed) s[m.p]++ } return s }
@@ -23,6 +23,9 @@ function judge(moves) {
   let chain = 0
   for (let k = moves.length - 1; k >= 0 && moves[k].p === RED_P; k--) chain += moves[k].closed.length
   const before2 = at(T.hook2)
+  // When red goes ahead for good (since 2026-11-23 the game runs on through the outro to 3:30).
+  let lead = null
+  { const s = [0, 0]; for (const m of moves) { for (const _ of m.closed) s[m.p]++; if (s[0] > s[1]) lead ??= m.t; else lead = null } }
   const checks = {
     quietStart: at(T.chorus1)[0] + at(T.chorus1)[1] === 0,
     sunWakes: take(RED_P, T.chorus1, T.verse3) >= 2,
@@ -31,11 +34,13 @@ function judge(moves) {
     behind: at(T.chorus3)[1] > at(T.chorus3)[0] && before2[1] > before2[0],
     wins: final[0] > final[1] && final[0] - final[1] <= 4,
     lastIsRed: last.p === RED_P && chain >= 4,
+    lateLead: lead != null && lead >= T.lateLead,
   }
   const ok = Object.values(checks).every(Boolean)
   // Prefer a close finish, a long last chain, and a deep deficit before it.
-  const quality = ok ? chain * 2 + (before2[1] - before2[0]) * 1.5 - (final[0] - final[1]) * 2 : -1
-  return { ok, checks, quality, final, chain, before2, firstBox: moves.find((m) => m.closed.length)?.t }
+  // And the lead taken late, in the outro if it can be.
+  const quality = ok ? chain * 2 + (before2[1] - before2[0]) * 1.5 - (final[0] - final[1]) * 2 + (lead >= T.outro ? 6 : 0) : -1
+  return { ok, checks, quality, final, chain, before2, lead, firstBox: moves.find((m) => m.closed.length)?.t }
 }
 
 const args = process.argv.slice(2)
@@ -58,5 +63,5 @@ else {
   }
   good.sort((a, b) => b.quality - a.quality)
   console.log(`${good.length} of ${to - from + 1} pass. Failures by check:`, fails)
-  for (const g of good.slice(0, 10)) console.log(g.seed, g.quality.toFixed(1), 'final', g.final.join('–'), 'last chain', g.chain, 'before hook 2', g.before2.join('–'), 'first box', g.firstBox?.toFixed(2))
+  for (const g of good.slice(0, 10)) console.log(g.seed, g.quality.toFixed(1), 'final', g.final.join('–'), 'last chain', g.chain, 'before hook 2', g.before2.join('–'), 'lead', g.lead?.toFixed(2), 'first box', g.firstBox?.toFixed(2))
 }
