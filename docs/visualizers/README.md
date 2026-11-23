@@ -34,7 +34,7 @@ How to build or change one is the `music-video-creation` skill.
 | 4 | [Ivory](ivory.md) | Film, the crossword (whole song, 2026-11-13); on charcoal with chalk dust (2026-11-23) | `crossword.mjs` |
 | 5 | [Andalusia](andalusia.md) | Film, with the new opening; mp4 to re-render | `cartography.mjs` (album edition) |
 | 6 | [New York](new-york.md) | Film, v2 (2026-11-23), not yet watched: identical arrows, one bold red, reds who hold and reds who give in, the board pulsing on the beat, the crowd following only at the end | `grain.mjs` |
-| 7 | [Meet Me at the Horizon](meet-me-at-the-horizon.md) | Film, Dots and Boxes (2026-11-17), "almost there"; the black pen made erratic, not shaky (2026-11-23); the two earlier films stay on the Film row | `dots-and-boxes.mjs` (+ `constellations.mjs`, `monkey-brain.mjs`) |
+| 7 | [Meet Me at the Horizon](meet-me-at-the-horizon.md) | Film, Dots and Boxes (2026-11-17), "almost there"; the black pen made erratic, not shaky, then built up slowly from a calm start, with nothing drawn before the voice (2026-11-23); the two earlier films stay on the Film row | `dots-and-boxes.mjs` (+ `constellations.mjs`, `monkey-brain.mjs`) |
 | 8 | [Rocks in the Sea](rocks-in-the-sea.md) | Proposed stills (left alone 2026-11-10) | — |
 | 9 | [Ship to Stockholm](ship-to-stockholm.md) | Film, v1 (2026-11-10), not yet watched | `road-trip.mjs` |
 | 10 | [Ghost](ghost.md) | Film, v2 (2026-11-17): the story retold — dad red throughout, sad feet, no room, no hopscotch | `dance-card.mjs` |

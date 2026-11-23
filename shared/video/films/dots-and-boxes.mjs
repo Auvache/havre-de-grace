@@ -11,9 +11,9 @@
  *
  * One sleepless night as one game of dots and boxes, on the album's paper in
  * Into the Wild's three inks: the dots and the monkey brain in ink, him in red.
- * Red draws first. A box closed is filled solid in its closer's ink and gets a
- * tally mark in the margin of the plate (red on the left, black on the right);
- * closing a box earns another line, so a chain is taken a line per sung word.
+ * Red draws first. A box closed is filled solid in its closer's ink (no tally
+ * marks: the user took them out, 2026-11-23); closing a box earns another
+ * line, so a chain is taken a line per sung word.
  *
  * The game is real: every move is legal, every box is scored to whoever drew
  * its fourth side, and the board is played out to the last line. It is played
@@ -221,8 +221,9 @@ export function playGame(slots, seed = SEED) {
  * or on beats of the click where nothing is sung.
  */
 const SLOTS = [
-  { lines: null, beats: [12.9, 16.9], n: 4 }, // the intro, on the click
-  { lines: [0, 7], n: 46 }, // verses 1 and 2: racing
+  // Nothing before the voice (2026-11-23): red's first line is the first word.
+  { lines: [0, 3], n: 21, build: 1.8 }, // verse 1: taking turns, quickening
+  { lines: [4, 7], n: 29, build: 1.15 }, // verse 2: racing
   { lines: [8, 11], n: 16 }, // chorus 1
   { lines: [12, 19], n: 46 }, // verses 3 and 4: the fever
   { lines: [20, 23], n: 16 }, // chorus 2
@@ -256,7 +257,16 @@ export function slotsFor(score) {
     for (const c of cand) if (!kept.length || c.t - kept.at(-1).t >= 0.16) kept.push(c)
     const m = kept.length
     if (m < seg.n) throw new Error(`dots-and-boxes: ${m} places for ${seg.n} lines in [${seg.lines ?? seg.beats}]`)
-    for (let i = 0; i < seg.n; i++) out.push(kept[seg.n === 1 ? m - 1 : Math.round((i * (m - 1)) / (seg.n - 1))].t)
+    // Evenly through the stretch, or (`build`) spread out at first and closing up.
+    const g = seg.build ?? 1
+    let prev = -1
+    for (let i = 0; i < seg.n; i++) {
+      const x = seg.n === 1 ? 1 : i / (seg.n - 1)
+      const f = g === 1 ? x : 1 - (1 - x) ** g
+      const at = Math.min(m - (seg.n - i), Math.max(prev + 1, Math.round(f * (m - 1))))
+      out.push(kept[at].t)
+      prev = at
+    }
   }
   if (out.length !== EDGES) throw new Error(`dots-and-boxes: ${out.length} slots for ${EDGES} lines`)
   return out
@@ -264,8 +274,35 @@ export function slotsFor(score) {
 
 /* ── The plan ─────────────────────────────────────────────────────── */
 
-/** How long a stroke takes: his are slow and even, the monkey brain's quick. */
+/*
+ * How worked up the monkey brain is (the user, 2026-11-23: "slowly build up
+ * the speed/erratic behavior of the black dot … start by really taking turns,
+ * then ramp up the intensity as the song builds"). 0: it goes to its line and
+ * draws it, almost as calmly as he does. 1: the darting of flightsFor at full
+ * tilt, from the fever (verse 4) on.
+ */
+const HEAT = [[17.3, 0], [34.7, 0.2], [52.0, 0.45], [71.3, 0.7], [89.35, 1]]
+export function heatAt(t) {
+  if (t <= HEAT[0][0]) return HEAT[0][1]
+  for (let k = 1; k < HEAT.length; k++) {
+    const [b, hb] = HEAT[k]
+    if (t < b) { const [a, ha] = HEAT[k - 1]; return lerp(ha, hb, (t - a) / (b - a)) }
+  }
+  return HEAT.at(-1)[1]
+}
+
+/** How long a stroke takes: his are slow and even, the monkey brain's quick, once it is worked up. */
 const DRAW = { [RED_P]: 0.34, [BLACK_P]: 0.13 }
+const drawFor = (p, t) => (p === RED_P ? DRAW[RED_P] : lerp(0.28, DRAW[BLACK_P], heatAt(t)))
+
+/*
+ * Before the game (2026-11-23): the black lifts off blank paper, the board is
+ * drawn, red comes in alone, a second later the monkey brain; they move about
+ * a little, and red draws the first line on the first sung word.
+ */
+export const BOARD_AT = 12.6
+const IN = { [RED_P]: 14.4, [BLACK_P]: 15.4 }
+const HOME = { [RED_P]: [4, 3], [BLACK_P]: [9, 3] }
 
 const plans = new WeakMap()
 export function planFor(score, seed = SEED) {
@@ -274,41 +311,43 @@ export function planFor(score, seed = SEED) {
   const moves = playGame(slots, seed)
   const rand = rng(seed * 7 + 3)
   // Each move: which end the pen starts from, how long the stroke takes, and when its boxes fill.
-  const pens = { [RED_P]: null, [BLACK_P]: null }
+  // Each pen starts its first line from the end nearer where it waited.
+  const pens = { [RED_P]: dotXY(HOME[RED_P]), [BLACK_P]: dotXY(HOME[BLACK_P]) }
   const score2 = [0, 0]
   moves.forEach((m, k) => {
     const next = moves[k + 1]?.t ?? m.t + 1
-    m.dur = Math.max(0.08, Math.min(DRAW[m.p], (next - m.t) * 0.75))
+    m.dur = Math.max(0.08, Math.min(drawFor(m.p, m.t), (next - m.t) * 0.75))
     const [a, b] = edgeDots(m.e).map(dotXY)
     const at = pens[m.p]
-    const flip = at ? Math.hypot(at[0] - b[0], at[1] - b[1]) < Math.hypot(at[0] - a[0], at[1] - a[1]) : rand() < 0.5
+    const flip = Math.hypot(at[0] - b[0], at[1] - b[1]) < Math.hypot(at[0] - a[0], at[1] - a[1])
     m.from = flip ? b : a
     m.to = flip ? a : b
-    m.prev = at
-    m.prevT = moves[k - 1] ? moves[k - 1].t + moves[k - 1].dur : m.t - 1
     pens[m.p] = m.to
     m.done = m.t + m.dur
     // Both pens draw straight lines (the user, 2026-11-23: the black one "less shaky").
     m.wob = `M${r(m.from[0])} ${r(m.from[1])}L${r(m.to[0])} ${r(m.to[1])}`
-    m.tally = []
-    for (const bx of m.closed) { score2[m.p]++; m.tally.push(score2[m.p]) }
+    score2[m.p] += m.closed.length
     m.score = [...score2]
   })
   const plan = { moves, slots, final: score2, seed }
   plan.flights = flightsFor(moves, score, seed)
+  plan.redPre = redBefore(moves, seed)
   if (seed === SEED) plans.set(score, plan)
   return plan
 }
 
 /*
  * The monkey brain between its lines (the user, 2026-11-23: "less shaky and
- * more erratic"). It never sits still for long and never goes anywhere in a
- * straight, even way: it waits a moment, darts off to some other dot or the
- * middle of some other line (mostly near, now and then right across the
- * board), swerves on the way, overshoots and snaps back, freezes, darts again,
- * changes its mind; then makes for the line it will actually draw at the last
- * moment. After its last line it keeps on, slower and slower, as it sinks.
- * Planned once per score with its own rng, so every frame agrees.
+ * more erratic", then "slowly build up"). Worked up (`heatAt` near 1) it
+ * never sits still for long and never goes anywhere in a straight, even way:
+ * it waits a moment, darts off to some other dot or the middle of some other
+ * line (mostly near, now and then right across the board), swerves on the
+ * way, overshoots and snaps back, freezes, darts again; then makes for the
+ * line it will actually draw at the last moment. Calm (near 0) it rests where
+ * its line ended and glides to the next one in good time, so the two of them
+ * plainly take turns. Before the first line it wanders a little; after its
+ * last it keeps on, slower and slower, as it sinks. Planned once per score
+ * with its own rng, so every frame agrees.
  */
 const HALF = S / 2
 const clampX = (x) => Math.max(GX, Math.min(GX + BW * S, x))
@@ -318,9 +357,9 @@ function flightsFor(moves, score, seed) {
   const black = moves.filter((m) => m.p === BLACK_P)
   const legs = []
   const end = score.endCardAt ?? score.duration
-  const hop = (pos, far) => {
+  const hop = (pos, far, heat) => {
     // A half-grid point: a dot, or the middle of a line it is eyeing.
-    const reach = far ? 4 + Math.floor(rand() * 6) : 1 + Math.floor(rand() * 3)
+    const reach = far ? 4 + Math.floor(rand() * 6) : 1 + Math.floor(rand() * (1 + 2 * heat))
     const a = rand() * Math.PI * 2
     let x = Math.round((pos[0] + Math.cos(a) * reach * S - GX) / HALF) * HALF + GX
     let y = Math.round((pos[1] + Math.sin(a) * reach * S * 0.8 - GY) / HALF) * HALF + GY
@@ -329,38 +368,45 @@ function flightsFor(moves, score, seed) {
     if (Math.hypot(x - pos[0], y - pos[1]) < HALF * 0.9) x = clampX(x + (x > 800 ? -S : S))
     return [x, y]
   }
-  const leg = (t0, t1, from, to) => {
+  const leg = (t0, t1, from, to, heat) => {
     const len = Math.hypot(to[0] - from[0], to[1] - from[1]) || 1
     // A swerve to one side, and how far past it shoots before snapping back.
-    const bend = (rand() - 0.5) * Math.min(1.1, 140 / len) * len
+    const bend = (rand() - 0.5) * Math.min(1.1, 140 / len) * len * (0.15 + 0.85 * heat)
     const nx = -(to[1] - from[1]) / len
     const ny = (to[0] - from[0]) / len
-    legs.push({ t0, t1, from, to, c: [(from[0] + to[0]) / 2 + nx * bend, (from[1] + to[1]) / 2 + ny * bend], over: 0.6 + rand() * 2.2 })
+    legs.push({ t0, t1, from, to, c: [(from[0] + to[0]) / 2 + nx * bend, (from[1] + to[1]) / 2 + ny * bend], over: 0.6 + rand() * 2.2, heat })
   }
-  const pauseAt = (calm) => {
+  const pauseAt = (calm, heat) => {
     const u = rand()
     if (u < 0.12) return (0.7 + rand() * 0.9) * calm // freezes
-    if (u < 0.45) return (0.03 + rand() * 0.08) * calm // stutters: off again at once
+    if (u < 0.12 + 0.33 * heat) return (0.03 + rand() * 0.08) * calm // stutters: off again at once
     return (0.12 + rand() * 0.4) * calm
   }
-  for (let k = 0; k < black.length; k++) {
-    const prev = black[k - 1]
-    const next = black[k]
-    if (!prev) continue
-    let pos = prev.to
-    let t = prev.done
-    const last = Math.min(0.2, Math.max(0.08, (next.t - t) * 0.4))
+  const slow = (heat) => 1 + 2.2 * (1 - heat)
+  const durFor = (from, to, heat) => (0.07 + rand() * 0.12 + Math.hypot(to[0] - from[0], to[1] - from[1]) / 2600) * slow(heat)
+  /** From `pos` at `t`, darting about (or not) until it has to make for `next`. */
+  const between = (pos, t, next, heat, always = false) => {
+    // The last glide to its line: calm, unhurried and longer the further it is; worked up, a dart at the last moment.
+    const far = Math.hypot(next.from[0] - pos[0], next.from[1] - pos[1])
+    const last = Math.max(0.08, Math.min(lerp(0.35 + far / 1400, 0.2, heat), (next.t - t) * lerp(0.7, 0.4, heat)))
     const goAt = next.t - last
     for (;;) {
-      const p = pauseAt(1)
-      const to = hop(pos, rand() < 0.14)
-      const dur = 0.07 + rand() * 0.12 + Math.hypot(to[0] - pos[0], to[1] - pos[1]) / 2600
+      if (!always && rand() >= heat * 1.15) break
+      const p = pauseAt(1 + 1.5 * (1 - heat), heat)
+      const to = hop(pos, rand() < 0.14 * heat, heat)
+      const dur = durFor(pos, to, heat)
       if (t + p + dur > goAt - 0.05) break
-      leg(t + p, t + p + dur, pos, to)
+      leg(t + p, t + p + dur, pos, to, heat)
       pos = to
       t += p + dur
     }
-    leg(Math.max(t, goAt), next.t, pos, next.from)
+    leg(Math.max(t, goAt), next.t, pos, next.from, heat)
+  }
+  // Before the game: in, a look round, a slow wander.
+  if (black[0]) between(dotXY(HOME[BLACK_P]), IN[BLACK_P] + 0.7, black[0], 0.15, true)
+  for (let k = 1; k < black.length; k++) {
+    const prev = black[k - 1]
+    between(prev.to, prev.done, black[k], heatAt(prev.done))
   }
   // After its last line: on and on, calmer each time, as the morning takes it.
   const fin = black.at(-1)
@@ -369,11 +415,11 @@ function flightsFor(moves, score, seed) {
     let t = fin.done
     for (;;) {
       const calm = 1 + 2.5 * clamp01((t - fin.done) / 14)
-      const p = pauseAt(calm)
-      const to = hop(pos, rand() < 0.1)
-      const dur = (0.08 + rand() * 0.14 + Math.hypot(to[0] - pos[0], to[1] - pos[1]) / 2600) * Math.sqrt(calm)
+      const p = pauseAt(calm, 1)
+      const to = hop(pos, rand() < 0.1, 1)
+      const dur = durFor(pos, to, 1) * Math.sqrt(calm)
       if (t + p + dur > end) break
-      leg(t + p, t + p + dur, pos, to)
+      leg(t + p, t + p + dur, pos, to, 1)
       pos = to
       t += p + dur
     }
@@ -381,9 +427,27 @@ function flightsFor(moves, score, seed) {
   return legs
 }
 
+/** Red before its first line: alone a moment, a dot over, a pause, then to the line, slow and straight. */
+function redBefore(moves, seed) {
+  const rand = rng(seed * 17 + 5)
+  const first = moves.find((m) => m.p === RED_P)
+  if (!first) return []
+  const home = dotXY(HOME[RED_P])
+  const step = [home[0] + (rand() < 0.5 ? -S : S), home[1] + (rand() < 0.5 ? -S : S) * (rand() < 0.5 ? 1 : 0)]
+  const mk = (t0, t1, from, to) => ({ t0, t1, from, to, c: [(from[0] + to[0]) / 2, (from[1] + to[1]) / 2], over: 0, heat: 0 })
+  const t0 = IN[RED_P] + 0.9
+  const arrive = first.t - 0.12
+  const legs = [mk(t0, t0 + 0.8, home, step)]
+  const go = Math.max(t0 + 1.4, arrive - 1.0)
+  legs.push(mk(go, arrive, step, first.from))
+  return legs
+}
+
 /** Where a flight leg is at `u`: along its swerve, past the end and back. */
 function legAt(L, u) {
-  const e = easeOutBack(u, L.over)
+  // Calm, a glide; worked up, a dart that overshoots.
+  const h = L.heat ?? 1
+  const e = h >= 1 ? easeOutBack(u, L.over) : lerp(easeInOut(u), easeOutBack(u, L.over), h)
   const q = clamp01(e)
   const a = 1 - q
   // The swerve's quadratic, then the overshoot carried on along the arrival direction.
@@ -395,6 +459,12 @@ function legAt(L, u) {
   const n = Math.hypot(dx, dy) || 1
   const past = (e - 1) * Math.hypot(L.to[0] - L.from[0], L.to[1] - L.from[1])
   return { x: x + (dx / n) * past, y: y + (dy / n) * past }
+}
+
+/** For checking: where both pens are at `time` ([red, black], null before each comes in). */
+export function dotsPensAt(score, time) {
+  const plan = planFor(score)
+  return [penAt(plan, RED_P, time), penAt(plan, BLACK_P, time)]
 }
 
 /** The score at `time`: [red, black]. */
@@ -409,12 +479,12 @@ export function scoreAt(plan, time) {
 const DOT_R = 6.5
 const LINE_W = 7
 
-/** The dots, popping on left to right as the black lifts. */
+/** The dots, popping on left to right once the black has lifted off blank paper. */
 function dotsSvg(time) {
   let d = ''
   let late = ''
   for (let i = 0; i < COLS; i++) {
-    const u = easeOutBack(clamp01((time - 10.4 - i * 0.08) / 0.35))
+    const u = easeOutBack(clamp01((time - BOARD_AT - i * 0.1) / 0.35))
     if (u <= 0.01) continue
     for (let j = 0; j < ROWS; j++) {
       const [x, y] = dotXY([i, j])
@@ -431,26 +501,10 @@ const sink = (time, plan) => {
   return easeInOut(ramp(time, end + 5, end + 13))
 }
 
-/** Tally marks in fives, down the plate's margin: red on the left, black on the right. */
-const TALLY = { top: GY + 6, row: 62, h: 40, pitch: 9 }
-function tallyMark(p, n) {
-  // n counts from 1. Five to a group, groups down a column, two columns a side (the outer first).
-  const g = Math.floor((n - 1) / 5)
-  const k = (n - 1) % 5
-  const col = Math.floor(g / 9)
-  const row = g % 9
-  const cx = p === RED_P ? (col === 0 ? 72 : 128) : (col === 0 ? 1528 : 1472)
-  const y0 = TALLY.top + row * TALLY.row
-  const x0 = cx - 1.5 * TALLY.pitch
-  if (k < 4) {
-    const x = x0 + k * TALLY.pitch
-    return { d: `M${r(x)} ${r(y0)}L${r(x + 1)} ${r(y0 + TALLY.h)}`, len: TALLY.h }
-  }
-  return { d: `M${r(x0 - 9)} ${r(y0 + TALLY.h - 6)}L${r(x0 + 3 * TALLY.pitch + 9)} ${r(y0 + 6)}`, len: 60 }
-}
-
-/** A pen's place at `time`: resting where its last line ended, or travelling to the next. */
+/** A pen's place at `time`: coming in, waiting, drawing, or between its lines. */
 function penAt(plan, p, time) {
+  if (time < IN[p]) return null
+  const pop = clamp01((time - IN[p]) / 0.4)
   let last = null
   let next = null
   for (const m of plan.moves) {
@@ -460,32 +514,31 @@ function penAt(plan, p, time) {
   }
   if (last && time < last.done) {
     const u = p === RED_P ? easeInOut(clamp01((time - last.t) / last.dur)) : easeOut(clamp01((time - last.t) / last.dur))
-    return { x: lerp(last.from[0], last.to[0], u), y: lerp(last.from[1], last.to[1], u), drawing: true }
+    return { x: lerp(last.from[0], last.to[0], u), y: lerp(last.from[1], last.to[1], u), drawing: true, pop }
   }
-  const rest = last ? last.to : null
-  if (p === BLACK_P && last) {
-    // Its erratic flights (flightsFor): resting where the last one stopped, or on one.
-    let at = rest
-    for (const L of plan.flights) {
+  if (p === BLACK_P || !last) {
+    // The monkey brain's flights (flightsFor), or red before its first line (redBefore).
+    const legs = p === BLACK_P ? plan.flights : plan.redPre
+    let at = last ? last.to : dotXY(HOME[p])
+    for (const L of legs) {
       if (L.t0 > time) break
-      if (time < L.t1) return legAt(L, (time - L.t0) / (L.t1 - L.t0))
+      if (last && L.t1 <= last.done) continue
+      if (time < L.t1) return { ...legAt(L, (time - L.t0) / (L.t1 - L.t0)), pop }
       at = L.to
     }
-    return { x: at[0], y: at[1] }
+    return { x: at[0], y: at[1], pop }
   }
+  const rest = last.to
   if (next) {
-    const start = next.from
-    // Red sets off in good time and glides; the monkey brain darts at the last moment.
-    const span = p === RED_P ? Math.min(0.9, next.t - next.prevT) : Math.min(0.22, next.t - next.prevT)
-    const u = clamp01((time - (next.t - span)) / Math.max(span, 0.01))
-    if (!rest) return { x: start[0], y: start[1], arrive: u }
-    const e = p === RED_P ? easeInOut(u) : easeOut(u)
-    return { x: lerp(rest[0], start[0], e), y: lerp(rest[1], start[1], e) }
+    // Red sets off in good time and glides.
+    const span = Math.min(0.9, next.t - last.done)
+    const e = easeInOut(clamp01((time - (next.t - span)) / Math.max(span, 0.01)))
+    return { x: lerp(rest[0], next.from[0], e), y: lerp(rest[1], next.from[1], e), pop }
   }
-  return rest ? { x: rest[0], y: rest[1] } : null
+  return { x: rest[0], y: rest[1], pop }
 }
 
-/** The plate: dots, lines, boxes, tallies, pens. */
+/** The plate: dots, lines, boxes, pens. */
 export function dotsPlate({ time, score }) {
   const plan = planFor(score)
   const quiet = 1 - 0.72 * sink(time, plan)
@@ -493,7 +546,6 @@ export function dotsPlate({ time, score }) {
   const pops = { [RED_P]: '', [BLACK_P]: '' }
   const lines = { [RED_P]: '', [BLACK_P]: '' }
   const drawing = { [RED_P]: '', [BLACK_P]: '' }
-  const tallies = { [RED_P]: '', [BLACK_P]: '' }
   const inset = 9
   for (const m of plan.moves) {
     if (m.t > time) break
@@ -516,21 +568,17 @@ export function dotsPlate({ time, score }) {
         pops[m.p] += `<rect x="${r(cx - (w * k) / 2)}" y="${r(cy - (w * k) / 2)}" width="${r(w * k)}" height="${r(w * k)}"/>`
       }
     }
-    m.tally.forEach((n) => {
-      const { d, len } = tallyMark(m.p, n)
-      const v = clamp01(since / 0.16)
-      tallies[m.p] += v >= 1 ? `<path d="${d}"/>` : `<path d="${d}" stroke-dasharray="${len + 2} ${len + 2}" stroke-dashoffset="${r((len + 2) * (1 - easeOut(v)), 1)}"/>`
-    })
   }
   const pen = (p) => {
     const at = penAt(plan, p, time)
     if (!at) return ''
     const { x, y } = at
-    const o = at.arrive != null ? easeOut(at.arrive) : 1
-    if (o <= 0.01) return ''
+    // Coming in: a pop, from nothing.
+    const k = at.pop < 1 ? easeOutBack(at.pop, 2.2) : 1
+    if (k <= 0.01) return ''
     const fill = p === RED_P ? RED : INK
     const fade = p === BLACK_P ? quiet : 1
-    return `<g opacity="${r(o * fade, 3)}"><circle cx="${r(x)}" cy="${r(y)}" r="${at.drawing ? 11 : 9.5}" fill="${fill}"/><circle cx="${r(x)}" cy="${r(y)}" r="16" fill="none" stroke="${fill}" stroke-width="1.6" opacity="0.45"/></g>`
+    return `<g opacity="${r(Math.min(1, at.pop * 2.5) * fade, 3)}"><circle cx="${r(x)}" cy="${r(y)}" r="${r((at.drawing ? 11 : 9.5) * k, 2)}" fill="${fill}"/><circle cx="${r(x)}" cy="${r(y)}" r="${r(16 * k, 2)}" fill="none" stroke="${fill}" stroke-width="1.6" opacity="0.45"/></g>`
   }
   const blackO = quiet < 0.999 ? ` opacity="${r(quiet, 3)}"` : ''
   return `<rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${PAPER}"/>
@@ -541,7 +589,6 @@ export function dotsPlate({ time, score }) {
 <g stroke="${RED}"><path d="${lines[RED_P]}"/>${drawing[RED_P]}</g>
 </g>
 ${dotsSvg(time)}
-<g fill="none" stroke-linecap="round" stroke-width="4"><g stroke="${RED}">${tallies[RED_P]}</g><g stroke="${INK}">${tallies[BLACK_P]}</g></g>
 ${pen(BLACK_P)}${pen(RED_P)}`
 }
 
@@ -588,7 +635,9 @@ export const DOTS_POSTER = 176.5
 export const DOTS_BEATS = [
   { at: 0, label: 'Opening' },
   { at: 12, label: 'The board' },
-  { at: 17, label: 'Racing' },
+  { at: 14.2, label: 'Red, then black' },
+  { at: 17.2, label: 'First line' },
+  { at: 35, label: 'Racing' },
   { at: 65.3, label: 'First box', key: true },
   { at: 79.8, label: 'The fever' },
   { at: 95, label: 'Running away', key: true },

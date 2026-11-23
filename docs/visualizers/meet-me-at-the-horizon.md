@@ -13,7 +13,8 @@ Film: `shared/video/films/dots-and-boxes.mjs` (`dotsFrame`, `DOTS_BEATS`,
 `DOTS_POSTER`, `dotsStateAt` for the "Now" line, `dotsRuns` / `planFor` for
 checking). Review: `FILM=dots-and-boxes SONG=meet-me-at-the-horizon`. The game
 is chosen by `tools/video-styles/dots/search.mjs`. v1, 2026-11-17, built in one
-unattended run. **Not yet watched by the user.**
+unattended run; three rounds on the user's notes since (2026-11-23), the third
+"great for now".
 
 ### Decided by the user (2026-11-17)
 
@@ -32,23 +33,25 @@ unattended run. **Not yet watched by the user.**
 
 One sleepless night as one game of dots and boxes, on the album's paper in Into
 the Wild's inks: ink dots, him in red, the monkey brain in ink. Nothing else is
-on the sheet but the lyric in the margin and two tallies down the sides of the
-plate, red on the left and black on the right, a stroke per box, gated in fives
-the way it is done on paper.
+on the sheet but the lyric in the margin. (There were tally marks down the
+sides of the plate, a stroke per box; the user took them out on 2026-11-23. The
+filled boxes are the score; the page's "Now" line still gives it in numbers.)
 
-- **The board**: 14 × 7 dots, 13 × 6 = 78 boxes, 175 lines. The dots pop on left
-  to right as the black lifts. Red draws first, on the click, at 13.6 s.
+- **The board**: 14 × 7 dots, 13 × 6 = 78 boxes, 175 lines. The black lifts
+  off blank paper, the dots pop on left to right (12.6), red comes in alone
+  (14.4), the monkey brain a second later (15.4); they move about a little,
+  and red draws first on the first sung word, "No" (17.3). Round 3, below.
 - **The pens**: each player is a dot of its ink. Red rests where its last line
   ended, sets off in good time and glides to its next line, then draws it
   slowly and straight (a third of a second); the monkey brain darts about the
   board erratically between its turns (below, round 2), and its lines are
   quick and straight.
 - **A box closed** is filled solid in its closer's ink (inset, so the grid still
-  shows), popping on from small, and a tally stroke goes down beside the plate.
+  shows), popping on from small.
   Closing a box earns another line, so a chain is taken a line per sung word.
 - **The game is real.** Every line is legal, every box goes to whoever drew its
-  fourth side, the board is played out to the last line, and the tallies are
-  the score. Two simple players: take a box when there is one; otherwise draw a
+  fourth side, the board is played out to the last line, and the filled boxes
+  are the score. Two simple players: take a box when there is one; otherwise draw a
   line that gives nothing away; when nothing is safe, give away as little as
   possible. **How carefully they play follows the song** (`CARELESS`): in the
   choruses the monkey brain is drowsy (a third of the time it draws a line that
@@ -60,8 +63,8 @@ the way it is done on paper.
 
 | Time | Score | What happens |
 | --- | --- | --- |
-| 12–17 | 0–0 | The board; red's first line on the click, the monkey brain straight back. |
-| 17–52 | 0–0 | Verses 1 and 2: a line on nearly every word, both playing safe, nobody gives anything away. |
+| 12–17 | 0–0 | Blank paper; the board; red, then the monkey brain, waiting. |
+| 17–52 | 0–0 | Verses 1 and 2: plain turns at first, a line every second or so, quickening to a line on nearly every word; both playing safe, nobody gives anything away. |
 | 66.3 | 1–0 | Chorus 1, "feel like you're still next to me": the monkey brain nods off and red takes the first two boxes. |
 | 72–73 | 4–0 | Into verse 3, red picks up two more. |
 | 80.4 | 4–1 | "My skin starts to crawl": the fever, and it is red who slips. |
@@ -80,8 +83,10 @@ the way it is done on paper.
 | Time | Label | What happens |
 | --- | --- | --- |
 | 0:00 | Opening | The mark, the title, the black lifts off the dots. |
-| 0:12 | The board | Dots pop on; red's first line at 13.6. |
-| 0:17 | Racing | A line on nearly every word; nobody gives an inch. |
+| 0:12 | The board | Blank paper, then the dots pop on. |
+| 0:14 | Red, then black | Red comes in alone; a second later the monkey brain. |
+| 0:17 | First line | Red's first line on "No"; the two take turns. |
+| 0:35 | Racing | A line on nearly every word; nobody gives an inch. |
 | 1:05 | **First box** | Red's first two, on "you're still next to me". |
 | 1:20 | The fever | "Skin starts to crawl": the monkey brain's first box. |
 | 1:35 | **Running away** | The monkey brain takes thirteen in a run (4–4 to 4–16). |
@@ -99,12 +104,13 @@ The poster frame is 2:56.5: the board nearly full, red climbing, 33–38.
 - **`playGame(slots, seed)`** plays the game: one move per slot, the rules above,
   the players' policy and `CARELESS`. `planFor(score)` adds to each move which
   end the pen starts from (the end nearer where that pen is), the stroke's
-  length in time, its path (a `wobble` for black), and the score after it.
+  length in time, its straight path, and the score after it.
   A frame asks only which moves are at or before `time`.
 - **`SLOTS`**: how many lines each stretch draws, 175 in all, each on a measured
   word picked evenly through the stretch (first and last included), or on the
-  click in the intro and the gap after the first hook. Verses 1–2 and 3–4 draw
-  46 lines each, choruses 16/16/12, the first hook 10, verse 5 18, the last hook
+  click in the gap after the first hook. Nothing is drawn before the voice.
+  Verse 1 draws 21 and verse 2 29, each spread out at first and closing up
+  (`build`); verses 3–4 draw 46, choruses 16/16/12, the first hook 10, verse 5 18, the last hook
   7, the last of them on the last sung "horizon".
 - **`SEED`** is chosen by `node tools/video-styles/dots/search.mjs [from] [to]`,
   which plays every seed against the score and keeps the ones that pass
@@ -116,7 +122,10 @@ The poster frame is 2:56.5: the board nearly full, red climbing, 33–38.
   `--show <seed>` prints a game's every box.
 - **If the score, `SLOTS` or `CARELESS` changes, the game changes** (a slot
   moved is a different game from that move on). Re-run the search and re-check
-  the table above.
+  the table above. The exception: moves before 52 s can be moved freely while
+  there are still 50 of them, since nothing is careless before chorus 1 (that
+  is how round 3 took the intro's four lines into the verses and kept the
+  same game, move for move).
 - Cost: under 0.1 ms a frame, 14 KB of SVG at most. No `lib`.
 
 ### The black pen, round 2 (2026-11-23)
@@ -134,8 +143,39 @@ the black dot less shakey and more eratic when it plays." So:
   it snaps back; sometimes it freezes for a second, sometimes it is off again
   at once. Then it makes for the line it will draw at the last moment, as
   before. After its last line it keeps on, calmer each time, as it sinks.
-- The game, the timing and red's pen are unchanged. **Not yet watched by the
-  user.**
+- The game, the timing and red's pen are unchanged.
+
+### Round 3: a slow build (2026-11-23)
+
+The user: "slowly build up the speed/erratic behavior of the black dot. It
+starts out way too jumpy/hard to track. Start by really taking turns, then
+ramp up the intensity as the song builds. Also, don't start the first moves
+until the lyrics start. Instead, come into a blank screen, then draw the board,
+then bring in the red dot alone for a second, then the black dot. They can
+move around a little before the game starts, but red draws the first line
+timed with the first words of the song." So:
+
+- **Before the game**: the black lifts off blank paper; the dots pop on from
+  12.6 (`BOARD_AT`); red pops in alone at 14.4 and moves a dot over; the monkey
+  brain pops in at 15.4 and wanders slowly; red glides to its line and draws it
+  on "No" (17.3). The intro's four lines on the click are gone; they are
+  drawn in verses 1–2 instead, and the game is the same, move for move.
+- **The heat** (`HEAT`, `heatAt`): how worked up the monkey brain is, 0 at the
+  first word, 0.2 by verse 2, 0.45 by chorus 1, 0.7 by verse 3, 1 from verse 4
+  on. Calm, it rests where its line ended and glides to its next line in good
+  time (longer the further it goes), and draws at red's pace. As it heats up it
+  starts darting between turns: more often, quicker, further, swerving and
+  overshooting more, with stutters. At 1 it is round 2 exactly.
+- **The verses take turns**: verse 1 starts with a line every second or so and
+  quickens, verse 2 a line on nearly every word.
+- Fixed on the way: between two of its lines the black pen used to blink back
+  to where its last line *started* for the length of a pause. That was part of
+  "hard to track".
+- In numbers: the black pen's biggest move in one 60 fps frame before 1:00 is
+  now about 100 px, where it was 390. From the fever on it is as it was.
+  `dotsPensAt(score, time)` gives both pens, for checking.
+- The user on round 3 (2026-11-23): "this is great for now. Also, remove the
+  tally marks from the side." Done: the plate's sides are bare.
 
 ### Choices made without the user (to confirm or change)
 
@@ -143,7 +183,8 @@ the black dot less shakey and more eratic when it plays." So:
   3:09. The monkey brain is never let off lightly: it leads by 22 at 2:34.
 - **Boxes are filled solid**, not initialled: by the end the board is a red and
   black mosaic of the night.
-- **The tallies** are the score; there are no numbers anywhere.
+- **No numbers on the film**: the filled boxes are the score (the tallies are
+  gone, by the user's word).
 - **The monkey brain's ink sinks back in the outro**, after the game: the board
   stays, the red stays at full strength.
 - No gold, no sky: only paper, ink and red, as asked.
@@ -154,8 +195,6 @@ the black dot less shakey and more eratic when it plays." So:
   the verses reads as racing or as noise, and whether red's long last chain (35
   seconds of red only) reads as a comeback or as the game stalling, are for the
   person watching. A faster or slower game is `SLOTS`; re-run the search after.
-- A box filled the instant its line is done reads well at tablet size; on a
-  phone the tallies are small (four units of stroke on a 1600 sheet).
 
 ## The two earlier films
 
