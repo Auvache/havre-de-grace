@@ -321,6 +321,12 @@ is for a busy or light background:
   lyrics.txt if the session still has it. Trash the old captioned version
   once the new one is checked.
 
+**Caption lyrics only (23 Nov 2026).** Talk and mess-ups ("Mess up, start over", "Guitar solo",
+"Bridge again", "I'm still recording") are welcome in clips, but they get no caption: the user's
+rule is "remove any captions that aren't lyrics". Filler words sung while writing (placeholder lyrics
+on a new song) are sung, so they keep their captions. Leave talk lines out of `lyrics.txt`, or drop
+them from `timed.json` before rendering.
+
 ### Looks
 
 **clean-warm** is the user's favourite and short.mjs's default. They didn't

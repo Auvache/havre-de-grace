@@ -21,8 +21,10 @@ Own 100% of every master and every song, so each track is **one-stop**: one pers
 
 ### 1. Collect the royalties you're already owed
 
-- [ ] **SoundExchange:** register as both featured artist and rights owner, then add the 18 ISRCs below. It's free, and it pays for plays on Pandora, SiriusXM and internet radio, which DistroKid doesn't collect. Unclaimed money is held for about three years.
+- [ ] **SoundExchange:** register as both featured artist and rights owner, then add the 18 ISRCs below.
+  - _Nov 23, 2026: registration submitted (Both; solo artist name Havre De Grace; rights owner and payee Stefan Bradley, individual; direct deposit; W-9 signed, copy in `~/stefan/W-9 SoundExchange 2026-11-23.pdf`). Waiting on approval. Then log in to SoundExchange Direct and claim the 18 ISRCs._ It's free, and it pays for plays on Pandora, SiriusXM and internet radio, which DistroKid doesn't collect. Unclaimed money is held for about three years.
 - [ ] **MLC:** join the **Member Hub** as a self-administered songwriter, as yourself (no company needed). Then register all 18 works: you as writer, 100%, IPI 01363806247, plus each song's ISRC. The MLC user account already exists; the Hub doesn't yet.
+  - _Nov 23, 2026: Member Hub application submitted as a Self-Administered Songwriter, member name "Stefan Auvache Bradley" (no publisher IPI; the writer IPI goes on each work). MLC verifies in 1–3 business days and emails next steps. After that: tax and bank info (you type those), then register the 18 works._
 
 ### 2. Ownership agreements with Parker, Sam and Josh
 
