@@ -12,7 +12,7 @@
   <RecordPlayer
     :albums="[single]"
     format="seven"
-    heading="A 7-inch for the Havre De Grace mailing list"
+    heading="A 7-inch for readers of the Havre De Grace letter"
     intro-title="You're in. Here's your 7-inch."
     :intro-lines="[
       'Two demos from my next album. They aren\'t out anywhere else.',
@@ -58,6 +58,6 @@ const single: ListenAlbum = {
 
 usePageSeo({
   title: 'A 7-inch for the list | Havre De Grace',
-  description: 'Two unreleased demos from the next Havre De Grace album, for the mailing list.',
+  description: 'Two unreleased demos from the next Havre De Grace album, for readers of the letter.',
 })
 </script>

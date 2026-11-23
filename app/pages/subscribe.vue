@@ -1,19 +1,21 @@
 <!--
-  The mailing list's own landing page, all centred: the offer, the field, what
-  it costs you (nothing, and one click to leave). Linked from the footer.
+  The mailing list's own landing page, all centred: the field first, then the
+  offer and what it costs you (nothing, and one click to leave), all in the
+  same small text. Linked from the footer.
 -->
 
 <template>
   <div>
-    <ShorelineBand title="Mailing list" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
+    <ShorelineBand title="Follow Havre De Grace" image="/images/site/woods-wide-2400.jpg" image-position="50% 22%" />
 
     <div class="reading centre">
-      <p class="offer">
+      <NewsletterSignup centred class="field" />
+
+      <p class="fine offer">
         <template v-if="offerParts">{{ offerParts[0] }}<strong>{{ BOLD }}</strong>{{ offerParts[1] }}</template>
-        <template v-else>{{ letter.offerDetail }}</template>
+        <template v-else>{{ pitch }}</template>
       </p>
 
-      <NewsletterSignup centred class="field" />
       <p class="fine">
         One click to confirm, one click to leave. We don't share your address
         with anyone else.
@@ -27,21 +29,21 @@
 </template>
 
 <script setup lang="ts">
-import { letter } from '~~/shared/data/letter'
+import { pitch } from '~~/shared/data/letter'
 
 definePageMeta({ navOver: true })
 
 // The offer is shared (shared/data/letter.ts); here its heart is in bold. If
 // the wording changes and this phrase is gone, the line shows plain.
 const BOLD = 'unreleased demos from my next album'
-const offerParts = letter.offerDetail.includes(BOLD)
-  ? letter.offerDetail.split(BOLD)
+const offerParts = pitch.includes(BOLD)
+  ? pitch.split(BOLD)
   : null
 
-const pageDescription = 'Join the Havre De Grace mailing list: two unreleased demos from the next album, then news about music, merch and shows.'
+const pageDescription = 'Follow Havre De Grace: new songs and the stories behind them, plus two otherwise unreleased demos from the next album.'
 
 usePageSeo({
-  title: `Mailing List | Havre De Grace`,
+  title: `Follow Havre De Grace`,
   description: pageDescription,
 })
 </script>
@@ -51,14 +53,13 @@ usePageSeo({
   text-align: center;
 }
 
-/* The offer at body size, on even lines. */
+/* The offer, in the same small text as the fine print, on even lines. */
 .offer {
   text-wrap: balance;
 }
 
 /* Centred as a block, but the email typed into it still reads from the left. */
 .field {
-  margin-top: 44px;
   text-align: left;
 }
 
@@ -66,6 +67,11 @@ usePageSeo({
   margin-top: 18px;
   font-size: 15px;
   color: var(--soft);
+}
+
+/* Room between the field and the text under it. */
+.fine.offer {
+  margin-top: 36px;
 }
 
 .fine a {

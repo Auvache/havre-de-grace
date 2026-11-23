@@ -3,7 +3,7 @@
   is components/home/StillWater.vue, and this file is its SEO.
 
   The current record's cover is the whole first screen with one play button.
-  Below it: the mailing list, About, and the discography. A record links to
+  Below it: the letter, About, and the discography. A record links to
   the record player for now (recordHref in app/config/records.ts). The record, its picture and its words come from
   app/config/records.ts and content/music, so a new record is a config change.
 -->

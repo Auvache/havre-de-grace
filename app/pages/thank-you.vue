@@ -16,21 +16,29 @@
     <div class="reading">
       <p class="centre">
         Thank you for confirming. Your 7-inch is on its way. Look for an email called "Welcome to Havre De
-        Grace" (check spam if it isn't there in a few minutes). After that:
-        shows, merch, and new music.
+        Grace" (check spam if it isn't there in a few minutes). After that: new songs
+        and the stories behind them.
       </p>
 
-      <WhileYouWait class="wait-gap" />
+      <WhileYouWait
+        class="wait-gap"
+        :rows="[
+          { slug: CURRENT_RECORD, eyebrow: 'While you wait' },
+          { slug: 'i-want-to-be-yours-and-other-songs', eyebrow: 'Where it all started' },
+        ]"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { CURRENT_RECORD } from '~/config/records'
+
 definePageMeta({ navOver: true })
 
 usePageSeo({
   title: `You're in | Havre De Grace`,
-  description: 'Thank you for joining the Havre De Grace mailing list.',
+  description: 'Thank you for signing up for letters from Havre De Grace.',
 })
 </script>
 

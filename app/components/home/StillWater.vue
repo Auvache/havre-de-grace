@@ -1,6 +1,6 @@
 <!--
   The homepage's body (Still Water, docs/redesign/mockups/home.html);
-  pages/index.vue keeps the page's SEO. The record, the mailing list, About and the
+  pages/index.vue keeps the page's SEO. The record, the letter, About and the
   discography, all on bone, parted by a hairline that opens round a small
   diamond (RuleBreak; chosen on 2026-10-30 over a mist band, four other
   treatments and fifteen other marks).
@@ -36,10 +36,11 @@
 
     <section class="block">
       <div class="wrap letter">
-        <p class="eyebrow">The mailing list</p>
-        <h2 class="letter__h">Two demos from the next album</h2>
+        <p class="eyebrow">Follow Havre De Grace</p>
+        <h2 class="letter__h">{{ letter.headline }}</h2>
         <p class="letter__text">{{ letter.offerDetail }}</p>
         <NewsletterSignup label="Send it" centred class="letter__field" />
+        <NuxtLink to="/letters" class="letter__more">the letters</NuxtLink>
       </div>
     </section>
 
@@ -281,6 +282,14 @@ const bioQuote = (bioParagraphs.find((p) => p.emphasis)?.text ?? '').replace(/^"
 .letter__field {
   margin-top: 48px;
   text-align: left;
+}
+
+.letter__more {
+  display: inline-block;
+  margin-top: 28px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--soft);
 }
 
 @media (max-width: 640px) {

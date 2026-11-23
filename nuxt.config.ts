@@ -384,6 +384,8 @@ export default defineNuxtConfig({
         '/subscribe',
         '/unsubscribe',
         '/thank-you',
+        // Each letter is crawled from the archive, so only the archive is listed.
+        '/letters',
         '/links',
         '/logo',
         '/influences',

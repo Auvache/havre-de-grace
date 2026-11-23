@@ -38,7 +38,7 @@ const FOOTER_COLUMNS = [
   [
     { label: 'records', to: '/music' },
     { label: 'record player', to: '/listen' },
-    { label: 'mailing list', to: '/subscribe' },
+    { label: 'letters', to: '/letters' },
   ],
   [
     { label: 'about', to: '/about' },

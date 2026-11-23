@@ -52,7 +52,7 @@
             {{ letter.offer }}
           </h2>
           <p class="mt-1 text-[0.86rem] leading-snug text-[var(--links-muted)]">
-            {{ letter.offerDetail }}
+            {{ pitch }}
           </p>
         </div>
 
@@ -177,7 +177,7 @@ import bandsintownIcon from '~~/assets/images/bandsintown.png'
 import instagramIcon from '~~/assets/images/instagram.png'
 import youtubeIcon from '~~/assets/images/youtube.png'
 import type { ServiceKey } from '~/composables/useLinkHub'
-import { letter } from '~~/shared/data/letter'
+import { letter, pitch } from '~~/shared/data/letter'
 import { recordHref } from '~/config/records'
 
 definePageMeta({
