@@ -10,7 +10,7 @@
         </h1>
       </header>
 
-      <VisualizerPlayer :film="crosswordFrame" name="The Crossword" :score="IVORY_SCORE" :poster-at="60" :beats="CROSSWORD_BEATS" />
+      <VisualizerPlayer :film="crosswordFrame" name="The Crossword" :score="IVORY_SCORE" :poster-at="57" :beats="CROSSWORD_BEATS" />
     </div>
   </div>
 </template>

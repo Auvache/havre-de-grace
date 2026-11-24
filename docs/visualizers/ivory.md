@@ -1,16 +1,77 @@
 # Ivory — the crossword
 
 Track 4. [/visualizers/ivory](/visualizers/ivory) is **the crossword**, the
-whole song (2026-11-13). Score: `app/config/ivoryScore.ts`. Film:
-`shared/video/films/crossword.mjs` (`crosswordFrame`, `CROSSWORD_BEATS`).
+whole song (2026-11-13), with **every word of the lyric on the board and a
+butterfly in the interlude** since 2026-11-23. Score:
+`app/config/ivoryScore.ts`. Film: `shared/video/films/crossword.mjs`
+(`crosswordFrame`, `CROSSWORD_BEATS`).
 
 | File | Owns |
 | --- | --- |
-| `shared/video/films/crossword.mjs` | The film: when every word is written, the camera, the drawing. |
-| `shared/video/films/crossword/stations.mjs` | `STATIONS` (where the camera goes and what is written there), the grid search (`buildBeam`, which also packs the interlude's jumbles), its score (`judge`), the camera's shots (`shotsOf`) and which letters are red (`redAt`). |
-| `shared/video/films/crossword/layout.mjs` | The grid, **baked**: `node tools/video-styles/crossword/bake-layout.mjs 80` (about 20 s). |
+| `shared/video/films/crossword.mjs` | The film: when every word is written, the camera, the butterfly, the drawing. |
+| `shared/video/films/crossword/stations.mjs` | `STATIONS` (the nine blocks and the four long "Ivory"s: which lines, where on the sheet, when the camera moves), the grid search (`buildBeam`), its score (`judge`), where the one-letter words go (`placeSingles`) and the camera's shots (`shotsOf`). |
+| `shared/video/films/crossword/layout.mjs` | The grid, **baked**: `node tools/video-styles/crossword/bake-layout.mjs` (see "How the grid is made"). |
 | `shared/video/films/crossword/letters.mjs` | The alphabet in the titles' Hairline type, **baked**: `node tools/video-styles/titles/bake-letters.mjs`. |
 | `tools/video-styles/crossword/check.mjs` | Walks the film at 30 fps for the rules below. Run it after any change. |
+
+## The whole lyric, and the butterfly (2026-11-23)
+
+The user: "I like the concept and the way that the board works, but I want to
+revamp/expand it. Redesign the board to have all of the lyrics of the song.
+They should start writing in roughly when the word is sung (they should fill
+in at the same rate that they do now). The instrumental section needs work. I
+don't like the writing in 'ivory' over and over again. I am not sure what to
+do there. See if you can come up with something cool/interesting that fits the
+vibe of the rest of the video."
+
+What was done (Claude's choices where the user left them open; **not yet
+watched by the user**):
+
+- **Every word is on the board**: 199 words, each its own entry, each
+  starting on its own measured onset at 3.5 letters a second. Repeats are
+  written again ("that" four times in verse 1).
+- **The old "never more than three at once" rule is gone.** With every word
+  in, a fast line would have run a second late; the user asked for each to
+  start when it is sung. The most written at once is now six.
+- **One-letter words** ("a", "I"; thirteen of them). No crossword has a
+  one-letter entry, so each is written the way a solver gets a letter early:
+  into a square of a word sung soon after it in the same block, which that
+  word then writes round. Where no later word has the letter (the bridge has
+  no I at all) it is a square on its own beside the next word; five are.
+- **The interlude is a butterfly**, below. The sixteen jumbles of IVORY are
+  gone, and with them every red letter that was not her name.
+
+## The interlude: the butterfly
+
+Nothing is sung from 1:51 to 2:08 and the band drops to almost nothing, so
+nothing is written. Instead:
+
+- **1:51** As the fourth "Ivory" dies away a **red butterfly** is drawn on in
+  the black square at the end of her name, stroke by stroke like a letter,
+  then filled. (She has "blue butterfly wings" for eyes; red is hers in this
+  film, and the album's sheet has one red thing travelling.)
+- **1:52–2:07** It lifts off on a beat and the camera follows it in **one
+  slow glide** to the next block, fifteen seconds, the only long move in the
+  film, over the blank squares the bridge will fill. Two wingbeats to a beat
+  of the click; it bobs once a beat and never flies straight.
+- **2:07** It settles on **the five blank squares of her next name** and sits
+  there, wings breathing every four beats, while he sings that he could be the
+  one she loves. Words go in all round it; her squares stay blank.
+- **2:17** On "forgot how to breathe, oh" it goes, up and off the sheet. The
+  camera pushes in on the five empty squares, and at 2:21 he writes IVORY
+  where it sat: her name is what he has left.
+
+How: `FLIGHT` and `butterflyAt()` in `crossword.mjs`. In flight it is placed
+against the camera, not the board (from where it sat in the first frame to
+where it lands in the last, drawn towards the middle on the way), so it cannot
+leave the frame; `check.mjs` walks it. The bridge's block is framed to hold
+her next name's squares (`holds` on its station).
+
+Considered and dropped: the grid's blank squares spelling IVORY at a distance
+(still her name over again); chalk doodles of the lyric's nouns; a clue list
+or guesses at her real name (unsung words, which the user took out on
+2026-11-13); squares lit on the beat (drifts towards the look the guardrail
+forbids).
 
 ## The ground (2026-11-23)
 
@@ -35,80 +96,88 @@ her; he never learns her real one.
 
 ## What the film does
 
-A large blank crossword on the album's paper is filled in as the song goes.
+A large blank crossword on a charcoal ground is filled in as the song goes.
 
-- **Words.** Only the key words he sings, each starting on its measured
-  onset. Nothing unsung goes in, except:
-- **The interlude (1:52–2:06): her name, jumbled.** A dense block of sixteen
-  scrambles of IVORY (VORYI, YRIOV…, never IVORY itself, no two the same),
-  crossing each other as tightly as a real puzzle, written one a beat from
-  1:54.8. A jumble's letter is **red only where it stands in IVORY's position**
-  (I first, V second…); where two jumbles cross, red if it is right in either.
+- **Words.** Every word he sings, each starting on its measured onset.
+  Nothing unsung goes in.
 - **Every letter is drawn on** stroke by stroke, the way the opening draws the
   title (the Hairline skeleton masks; six skeletons were added to
   `stroke-letters.mjs` for it: F J P Q X Z).
 - **One rate: 3.5 letters a second**, for every word, IVORY included.
-- **Never more than three words at once.** A sung word waits (from its onset)
-  when three are already being written; a fill word goes where there is room,
-  never while an IVORY is being written.
 - **Every "Ivory" writes an IVORY, in red**: seven in the grid, written exactly
-  like the other words. Her name and the jumbles' right-placed letters are the
-  only red in the film. A word that
-  crosses one of her squares leaves it blank until her name is written, so
-  her name always goes in whole.
+  like the other words. Her name (and the butterfly) is the only red in the
+  film. A word that crosses one of her squares leaves it blank until her name
+  is written, so her name always goes in whole.
 - **No frame ever holds two written IVORYs** (until the final pull-back,
   which shows the whole finished puzzle).
-- **The camera** pans to a station, holds still while its words go in, then
-  pans on (cosine-eased, 2–4 s; at least 1.8 s, and late rather than quick
-  when the words before are still being written). Within a station an IVORY
-  gets its own shot, framed like any other. It moves for 50 s of the 182.
-- **The puzzle** is a winding chain that starts bottom left, crosses the sheet
-  and climbs, so the film moves from one side of it to the other and never
-  goes back. After the last "Ivory" the camera pulls back to the whole thing,
-  filled, and the end card comes on the last hit (182.42).
+- **Nine blocks.** A block is two lines of the lyric (three where "Oh, Ivory"
+  follows without a breath), packed into about 23 × 10 squares. **The camera**
+  pans to a block in the gap before it is sung, holds still while every word
+  of it goes in, then pans on (cosine-eased; it waits for the last word to
+  finish and keeps at least 1.8 s). A long "Ivory" sung on its own goes into
+  the block just written, and the camera pushes in on it.
+- **The last chorus** is four lines straight through, so the camera moves up
+  a block while he sings (2:34.7–2:36.7): the words either side of the move
+  are kept to the rows the two blocks share.
+- **The puzzle** is a snake, three columns of three blocks: up the left of
+  the sheet, down the middle, up the right. Within a block the words run
+  roughly in the order sung, so each block ends where the next begins. After
+  the last "Ivory" the camera pulls back to the whole thing, filled, a sheet
+  of the plate's own shape, and the end card comes on the last hit (182.42).
 
-Jump-to moments (`CROSSWORD_BEATS`): 0:00 Opening · 0:09 First words · 0:26
-Her eyes · **0:40 Ivory** · 0:46 California · 0:55 Ivory again · 1:04
-Flowers in her hair · 1:22 Beside her · **1:35 Ivory, third** · 1:41
-Paradise · 1:49 Ivory, fourth · **1:55 Her name, jumbled** · 2:09 Adam to her
-Eve · 2:21 Ivory, fifth · 2:28 Alaska · 2:40 Ivory, sixth · **2:52 The last
-Ivory** · **2:56 The whole puzzle**. Poster 1:00.
+Jump-to moments (`CROSSWORD_BEATS`): 0:00 Opening · 0:09 First words · 0:27
+Her eyes · **0:40 Ivory** · 0:45 California · 0:54 Ivory again · 1:04
+Flowers in her hair · 1:22 Beside her · **1:35 Ivory, third** · 1:40
+Paradise · 1:49 Ivory, fourth · **1:51 The butterfly** · 2:06 It lands on her
+name · 2:08 Adam to her Eve · **2:16 It goes** · 2:21 Ivory, fifth · 2:26 The
+last chorus · 2:44 Ivory, sixth · **2:53 The last Ivory** · **2:56 The whole
+puzzle**. Poster 0:57.
 
 ## How the grid is made, and why
 
-About seventy words cannot cover seven screens a frame apart if they are
-placed greedily: every greedy and randomised build tried bunched up, doubled
-back, or dead-ended between two close "Ivory"s. So:
+Two hundred words will not go into nine frames by placing them greedily in
+the order sung: a tight block boxes its last short words out (UP shares no
+letter with any other word of its two lines). What was tried on 2026-11-23 and
+failed: a beam over words in sung order; long words first; and always placing
+the word with the fewest places left (it only ever follows forced moves and
+knots itself). What works:
 
-1. **`buildBeam`**: words go in in the stations' order, each crossing one of
-   the last four placed (never side by side). A partial grid is ranked by how
-   far its front has moved along each station's heading (rightwards, wandering
-   ±26°), how far it has moved away from every IVORY, and how compact each
-   station stays; 300 kept per word. An IVORY within 13 columns and 7 rows of
-   another is never allowed.
-2. **`judge`**: two written IVORYs in any shot or move (with half a square of
-   margin) costs 1000; frames wider than wanted, frames that are mostly bare
-   paper, pans that hardly move or cross half the sheet, and going back over
-   old ground cost less. The bake keeps the cheapest of 80 seeded beams.
-   (A full square of margin made every grid fail, and the search then traded
-   away everything else: shots at half zoom and a grid that wound back on
-   itself. Half a square is right; `check.mjs` is the real test.)
-3. **The jumbles** go in through the same beam: a station's `jumble`
-   (`{ from, count }`) adds that many slots, each of which may cross any word
-   of its own block (and the two before it) and takes whichever scrambles fit
-   the letters it crosses. They are scored for crossings and for packing into
-   about 15 × 7 cells, so the block comes out as a dense lattice.
-4. **Framing** (`shotsOf`): every shot frames its own words (1.4 cells of
-   margin, 1.05–1.5×, wider only when they will not fit), then slides at most
-   three cells across and one and a half down towards more puzzle.
+1. **Block by block, many tries** (`buildBeam`). One try at a block puts its
+   words in in a shuffled order that leans long-first, each crossing a word of
+   its own block (the first few, a word of the block before: that is what
+   joins the puzzle up), never side by side, each taking one of its best few
+   places. A word with nowhere to go waits for the others; at most two may be
+   carried into the next block and cross its words instead. A try that leaves
+   a word over is thrown away. Each of the 8 grids kept so far gets 2,500
+   tries at the next block (up to four rounds for a hard block), and the 8
+   best whole blocks go on. If nothing joins on, the block before is built
+   again.
+2. **What a try is scored on**: staying in its box (never more than two
+   squares out sideways or one up or down, except where a word joins two
+   blocks); the scale the camera will need to frame every square written in
+   that shot; running along the block in the order sung; second crossings;
+   and letters left along the side the next block joins.
+3. **Her name** is never placed inside the frame of another block whose shot
+   writes an IVORY, nor within 15 columns and 8.5 rows of one already placed
+   (the reach of her own close shot).
+4. **`judge`** then scores each whole grid as the film will show it: two
+   written IVORYs in any shot or move costs 1000, a block framed wider than
+   1.06× costs by the square of how much. The bake keeps the cheapest.
+5. **One-letter words** are placed last (`placeSingles`), and **framing**
+   (`shotsOf`) is every square written in the shot with a little board round
+   it; her name alone is framed at 1.32× and the frame slides towards more
+   puzzle, never onto another IVORY.
 
-**Word choice is geometry.** Between two close "Ivory"s the linking words must
-be long and share letters with IVORY (TENNESSEE shares none). With the unsung
-words gone, nothing was sung between the sixth and last "Ivory", so the last
-chorus's AVOID, HEARTACHE and KEEP (sung just before the sixth) go in after
-her name in the grid, one held shot (`together`), and lead away to the last. A station's words are listed in grid order, which
-need not be the order they are written (SURE cannot cross WOMAN, so SUNRISE is
-placed first). Changing a station's words means re-baking and re-checking.
+To bake: a seed takes about a minute, so run ranges side by side and bake
+the winner alone, e.g. `FROM=1 DRY=1 node tools/video-styles/crossword/bake-layout.mjs 4 8 2500`
+(seeds 1–4) in several shells, then `FROM=<best> node … <best> 8 2500`.
+The baked grid is seed 26 of 64 (`FROM=26 node … 26 8 2500`): 69 squares
+across and 31 down, 575 of them, blocks framed at 0.97–1.06×. Then `node tools/video-styles/crossword/check.mjs`.
+
+**The box is flatter than the plate on purpose** (23 × 10 against a frame of
+about 24 × 12): the words that join two blocks need a row of spill above or
+below, and a row costs a 22 × 11 box seven per cent of its scale and this one
+nothing.
 
 ## How it got here (2026-11-13, one session)
 
@@ -138,6 +207,10 @@ git at `b709b51`.
    interlude became "a complex grid portion where every word is ivory, but
    the letters are mixed up", red "only if they are in the right position in
    the word", ending on jumbles alone (no true IVORY at its end).
+6. **Charcoal** (2026-11-23), above.
+7. **The whole lyric and the butterfly** (2026-11-23), above. Until then the
+   grid was about seventy key words in a winding chain, searched by a beam
+   that ranked how far its front had moved; that film is in git at `db89aae`.
 
 ## Decided by the user
 
@@ -147,24 +220,33 @@ git at `b709b51`.
   never used: no tiled board with coloured feedback rows, no keyboard, no
   green/yellow/grey, no win messages. A crossword is older than it and safe.
 - The simple approach of the maze and Conman is the one to follow (2026-11-10).
-- The crossword, filled with the lyric's key words and words of longing in the
-  gaps, every letter drawn on (2026-11-13).
-- An IVORY on every "Ivory", never two in one frame; pan, hold while a few
-  words go in, pan on; never more than two or three words at once
-  (2026-11-13).
-- One rate for every word, **3.5 letters a second** (2026-11-13).
+- The crossword, every letter drawn on (2026-11-13).
+- An IVORY on every "Ivory", never two in one frame; pan, hold while words go
+  in, pan on (2026-11-13).
+- One rate for every word, **3.5 letters a second** (2026-11-13; "the same
+  rate that they do now", 2026-11-23).
 - **Red is only her name**, in its letters; no highlight, box or wash on any
   word, hers included (2026-11-13).
-- A fuller screen: closer shots and more words (2026-11-13), then: no unsung
-  words at all (2026-11-13).
-- The interlude is her name jumbled; a jumble's letter red only where it
-  stands in IVORY (2026-11-13).
+- No unsung words at all (2026-11-13).
+- The ground is charcoal with a slight chalk texture (2026-11-23).
+- **All of the lyrics on the board**, each word starting roughly when it is
+  sung (2026-11-23).
+- No more writing "ivory" over and over in the instrumental (2026-11-23).
+
+Superseded: only the key words (2026-11-13, by all of the lyrics); never more
+than two or three words at once (2026-11-13, by words starting when sung);
+the interlude as her name jumbled (2026-11-13).
 
 ## Open
 
-- The final pull-back shows all seven IVORYs at once (asked, not answered).
-- With the fill words gone, frames are sparser again (the plain stations at
-  20–30% puzzle); the user chose that over unsung words.
-- Red on a jumble's right-placed letters is per-position colouring. It stays
-  inside the guardrail (one colour, a crossword, no rows or keyboard), but
-  keep it from drifting towards feedback-tile looks.
+- **The butterfly is Claude's answer to "come up with something"**, not yet
+  seen. Things the user may want to turn: red or the lyric's blue; whether it
+  sits through the bridge; whether it should come back at the end.
+- The butterfly is red and is not her name, which bends "red is only her
+  name". It stands for her, so it was let through.
+- Blocks are framed at 0.97–1.06×, against 1.05–1.5× before, and her name
+  alone at 1.32×: the price of every word. A square is about 64 px in a
+  1600-wide frame.
+- Five one-letter words are squares on their own, which no crossword has.
+- The final pull-back shows all seven IVORYs at once (asked 2026-11-13, not
+  answered).
