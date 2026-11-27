@@ -345,6 +345,11 @@ export default defineNuxtConfig({
     '/seven-inch': {
       robots: 'noindex, nofollow',
     },
+    // A live demo of Forty on the record player (pages/forty.vue). Unlisted
+    // like /seven-inch; its audio is covered by /forty/** in customHttp.json.
+    '/forty': {
+      robots: 'noindex, nofollow',
+    },
     // --- Unlisted ---
     // The private workbench. Not in the navigation, not in the sitemap (a
     // noindex rule drops the URL from it), not in the markdown mirrors or
@@ -398,6 +403,8 @@ export default defineNuxtConfig({
         '/listen',
         // Unlisted: the list's welcome gift, linked only from Kit.
         '/seven-inch',
+        // Unlisted: a live demo of Forty.
+        '/forty',
         // Unlisted and noindexed by the route rule above, but a static host
         // serves keys — a route that was never prerendered 404s however
         // private it is, and nothing links to these, so nothing crawls to them

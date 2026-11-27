@@ -84,6 +84,7 @@ const INCLUDE_LYRICS = true
 const EXCLUDED_ROUTES = new Set([
   '/links',
   '/seven-inch',
+  '/forty',
   '/logo',
   '/influences',
   '/tools',
