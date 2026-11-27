@@ -44,7 +44,7 @@ const single: ListenAlbum = {
       sideNumber: 1,
       slug: 'forty',
       title: 'Forty',
-      audioSrc: '/forty/forty.mp3',
+      audioSrc: '/forty/forty-mastered.mp3',
       durationSec: DURATION_SEC,
       durationLabel: formatDuration(DURATION_SEC),
       lyrics: [],
